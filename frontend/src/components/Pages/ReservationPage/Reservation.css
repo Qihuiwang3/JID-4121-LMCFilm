@@ -1,0 +1,87 @@
+.main-reservation-equipment-cart {
+    height: 100%;
+    width: 100%;
+    background-color: #FFFDF8;
+}
+
+.equipment-and-cart {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.equipment-container {
+    height: 600px;
+    width: 60%;
+    max-width: 1300px;
+    margin-left: 40px;
+    margin-top: 20px;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+
+.cart-container {
+    height: 600px;
+    width: 30%;
+    max-width: 750px;
+    margin-left: 40px;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #F3F5F3;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.all-cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cart-item {
+    padding-inline: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #E2E3E2;
+}
+
+.cart-first-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.cart-second-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.remove-equipment-item {
+    color: #A14F39A3;
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.equipment-checkout {
+    background-color: #3361AE;
+    border-radius: 37.5px;
+    width: 300px;
+    height: 75px;
+    line-height: 75px;
+    text-align: center;
+    color: white;
+    margin-right: 100px;
+
+}
+
+.Time-Button {
+    margin-top: 200px;
+    margin-right: 200px;
+}

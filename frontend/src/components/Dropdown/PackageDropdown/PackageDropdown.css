@@ -1,0 +1,43 @@
+.package-dropdown-content {
+    background-color: #DDE8EA5C;
+}
+
+.package-dropdown-header {
+    height: 30px;
+    line-height: 25px;
+    cursor: pointer;
+}
+
+.package-dropdown-item {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.package-expand-button {
+    background-color: #E2E3E2;
+    color: black;
+    border: none;
+    padding: 7px 30px;
+    cursor: pointer;
+    border-radius: 0;
+    max-height: 30px;
+}
+
+.package-reserve-button {
+    background-color: #1FA190;
+    color: white;
+    border: none;
+    padding: 7px 30px;
+    cursor: pointer;
+    border-radius: 0;
+    max-height: 30px;
+}
+
+.package-equipment-dropdown-item {
+    padding-inline: 10px;
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+}

@@ -1,0 +1,65 @@
+.time-selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.time-selection {
+    align-items: center;
+    gap: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.time-button {
+    border: 2px solid #0052cc;
+    border-radius: 230px;
+    padding: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon-container {
+    background-color: #0052cc;
+    border-radius: 50%;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    fill: #ffffff;
+    width: 32px;
+    height: 32px;
+}
+
+.react-datepicker-wrapper {
+    border: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    margin-top: 15px;
+    flex-grow: 1;
+    background: transparent;
+}
+
+.react-datepicker__input-container input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.react-datepicker {
+    font-size: 0.9rem;
+    border-radius: 4px;
+}
+
+.react-datepicker-popper {
+    z-index: 10;
+}

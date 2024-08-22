@@ -1,0 +1,151 @@
+body {
+  background-color: #FFFDF8; 
+  margin: 0; 
+}
+
+.rt-picker {
+  padding-left: 48px;
+  padding-top: 20px;
+}
+
+label {
+  font: Montserrat;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
+.rt-picker h2 {
+  margin-top: 8%;
+  font-size: 24px;
+  text-align: left;
+  color: #3361AE;
+}
+
+.rt-time {
+  display: flex;
+}
+
+.rt-time-picker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.rt-time-slot {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  align-items: center;
+}
+
+.rt-time-picker .rt-time-slot,
+.rt-time-picker .return  {
+  margin-bottom: 24px;
+  margin-top: 16px;
+  margin-left: 116px;
+}
+
+
+.rt-date-input-wrapper {
+  max-width: 130px;
+}
+
+.rt-time-input-wrapper {
+  max-width: 100px;
+}
+
+.rt-time-picker label {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10%;
+}
+
+.rt-date-input-wrapper,
+.rt-time-input-wrapper {
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-right: 48px;
+  margin-top: 30px;
+}
+
+.rt-picker .react-datepicker-wrapper {
+  width: auto;
+}
+
+.rt-picker .react-datepicker__input-container input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #e3e3e3;
+}
+
+.rt-confirm-button {
+  background-color: #0052cc;
+  color: white;
+  padding: 12px 70px;
+  font-size: 18px;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+  align-self: start;
+  align-self: flex-end;
+  margin-bottom: 5%;
+  margin-right: 150px;
+}
+
+.confirm-button:hover {
+  background-color: #003a99;
+}
+
+.rt-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  max-width: 150px;
+  margin-bottom: 16px;
+}
+
+.rt-time-input-wrapper {
+  margin-top: 51px;
+}
+
+.rt-button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.rt-picker react-datepicker__input-container input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #e3e3e3;
+}
+
+.rt-confirm-button:hover {
+  background-color: #003a99;
+}
+
+.rt-image-container {
+  flex-basis: 50%; 
+  display: flex;
+  justify-content: right; 
+  margin-right: 110px;
+  margin-bottom: 1%;
+}
+
+.rt-image-container img {
+  max-width: 100%; 
+  height: auto; 
+  width: auto;
+}
