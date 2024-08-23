@@ -26,3 +26,8 @@ Looking ahead, a primary challenge lies in migrating our data storage solution f
 <!-- Frontend Update -->
 
 1. You only need to run "npm install" to update packages. Other steps are the same from Initial Setup
+
+
+<!-- Backend -->
+
+1. Running command: "npm run dev"
