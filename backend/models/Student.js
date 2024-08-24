@@ -1,21 +1,13 @@
 const mongoose = require('mongoose')
 
 const studentSchema = new mongoose.Schema({
-    username: {
+    name: {
         type: String,
         required: true
     },
-    password: {
+    role: {
         type: String,
         required: true
-    },
-    roles: [{
-        type: String,
-        default: "Employee"
-    }],
-    active: {
-        type: Boolean,
-        default: true
     }
 })
 
