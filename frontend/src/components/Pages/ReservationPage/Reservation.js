@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import TimeSelectionButton from '../../Button/TimeSelectionButton/TimeSelectionButton.js';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown.js';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
-import './Reservation.css'
-
+import './Reservation.css';
+// import { getStudents } from '../../../connector.js';
+import axios from "axios";
 import { collection, onSnapshot } from 'firebase/firestore';
 import db from "../firebase";
 
@@ -36,6 +37,17 @@ function ReservationPage({ selectedDates }) {
         })
         return total.toFixed(2);
     }
+
+
+// Comment this out if you want to test backend function 
+    const testBackendStudent = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/students`);
+            console.log("students: ", res.data);
+        } catch (err) {
+            console.error('Error fetching students:', err);
+        }
+    };
 
     //on page load get equipment and define "packages"
     useEffect(() => {
@@ -149,7 +161,12 @@ function ReservationPage({ selectedDates }) {
             <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse", paddingTop: "10px" }}>
                 <div className="equipment-checkout"> Checkout </div>
             </div>
-
+            <button
+                className="bg-red-400 rounded-md p-2 font-bold"
+                onClick={() => testBackendStudent()}
+              >
+                Test
+              </button>
         </div >
     );
 
