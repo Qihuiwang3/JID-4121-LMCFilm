@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import TimeSelectionButton from '../../Button/TimeSelectionButton/TimeSelectionButton.js';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown.js';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
-import './Reservation.css'
+import './Reservation.css';
 
+// comment this out if you want to test backend function
+// import { getStudents } from '../../../connector.js';
 import { collection, onSnapshot } from 'firebase/firestore';
 import db from "../firebase";
 
@@ -36,6 +38,16 @@ function ReservationPage({ selectedDates }) {
         })
         return total.toFixed(2);
     }
+
+    // // comment this out if you want to test backend function
+    // const testBackendStudent = async () => {
+    //     try {
+    //         const students = await getStudents();
+    //         console.log("students: ", students)
+    //     } catch (error) {
+    //         console.error('Error fetching students:', error);
+    //     }
+    // };
 
     //on page load get equipment and define "packages"
     useEffect(() => {
@@ -150,6 +162,14 @@ function ReservationPage({ selectedDates }) {
                 <div className="equipment-checkout"> Checkout </div>
             </div>
 
+            {/* comment this out if you want to test backend function */}
+
+            {/* <button
+                className="bg-red-400 rounded-md p-2 font-bold"
+                onClick={() => testBackendStudent()}
+              >
+                Test
+              </button> */}
         </div >
     );
 
