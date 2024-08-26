@@ -35,23 +35,23 @@ const getCart = async () => {
     }
 };
 
-// const createCart = async (data) => {
-//     try {
-//         const res = await axios.post(`${BACKEND_URL}/carts`, data, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-//         return res.data;
-//     } catch (error) {
-//         console.log(error);
-//         throw error; 
-//     }
-// };
+const createCart = async (data) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/carts`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
 
 export {
     getStudents,
     createStudent,
     getCart,
-    // createCart
+    createCart
 };
