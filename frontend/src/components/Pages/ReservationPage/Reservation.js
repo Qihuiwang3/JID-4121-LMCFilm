@@ -6,7 +6,7 @@ import './Reservation.css';
 
 // comment this out if you want to test backend function
 // import { getStudents } from '../../../connector.js';
-import { createCart } from '../../../connector.js';
+// import { createCart } from '../../../connector.js';
 import { collection, onSnapshot } from 'firebase/firestore';
 import db from "../firebase";
 
@@ -50,19 +50,19 @@ function ReservationPage({ selectedDates }) {
     //     }
     // };
 
-    const createNewCart = async () => {
-        try {
-            const data = {
-                "itemId": "9999",
-                "price": 29.99,
-                "quantity": 2
-            }
-            const cart = await createCart(data);
-            console.log("cart: ", cart)
-        } catch (error) {
-            console.error('Error fetching students:', error);
-        }
-    }
+    // const createNewCart = async () => {
+    //     try {
+    //         const data = {
+    //             "itemId": "9999",
+    //             "price": 29.99,
+    //             "quantity": 2
+    //         }
+    //         const cart = await createCart(data);
+    //         console.log("cart: ", cart)
+    //     } catch (error) {
+    //         console.error('Error fetching students:', error);
+    //     }
+    // }
 
     //on page load get equipment and define "packages"
     useEffect(() => {
@@ -187,12 +187,12 @@ function ReservationPage({ selectedDates }) {
               </button> */}
 
 
-            <button
+            {/* <button
                 className="bg-red-400 rounded-md p-2 font-bold"
                 onClick={() => createNewCart()}
               >
                 Test
-              </button>
+              </button> */}
         </div >
     );
 
