@@ -11,6 +11,7 @@ const cors = require('cors');
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
 const corsOptions = require("./config/corsOptions");
+const classCodeRoutes = require('./routes/classCodeRoutes');
 
 // Connect to the database
 connectDB();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use("/", require("./routes/root"));
 app.use("/students", require("./routes/studentsRoutes"));
+app.use('/api', classCodeRoutes);
 app.use(errorHandler);
 
 mongoose.connection.once("open", () => {

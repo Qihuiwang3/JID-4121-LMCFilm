@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { withFuncProps } from "../../withFuncProps";
 import './EnterCode.css';
-import { collection, onSnapshot, DocumentData, addDoc } from 'firebase/firestore';
-import db from "../firebase";
 
 
 class EnterCode extends Component {
@@ -16,12 +14,12 @@ class EnterCode extends Component {
     }
 
     componentDidMount() {
-        onSnapshot(collection(db, "Class"), (snapshot) => {
-            const classTable = snapshot.docs
-            .map((doc) => doc.data())
-            .sort((a, b) => b.Score - a.Score);
-            this.setState({ classTable: classTable });
-        });
+        fetch('/api/class-code')
+            .then(res => res.json())
+            .then(data => {
+                this.setState({ classTable: data });
+            })
+            .catch(error => console.error('Error fetching class codes:', error));
     }
 
 
@@ -44,14 +42,13 @@ class EnterCode extends Component {
     }
 
     checkCodeExist = (input) => {
-        const codeExists = this.state.classTable.some(item => item.code === Number(input));
+        const codeExists = this.state.classTable.some(item => item.code === input);
         if (codeExists){
             this.props.navigate("/SelectClass");
         }
         else{
             this.setState({errorMessage: "The code does not exist" });
         }
-
     }
 
     render() {
