@@ -14,10 +14,10 @@ class EnterCode extends Component {
     }
 
     componentDidMount() {
-        fetch('/api/class-code')
+        fetch(`/api/class-code/${this.state.codeInput}`)
             .then(res => res.json())
             .then(data => {
-                this.setState({ classTable: data });
+                this.setState({ classTable: [data] });
             })
             .catch(error => console.error('Error fetching class codes:', error));
     }
@@ -41,14 +41,20 @@ class EnterCode extends Component {
         }
     }
 
-    checkCodeExist = (input) => {
-        const codeExists = this.state.classTable.some(item => item.code === input);
-        if (codeExists){
-            this.props.navigate("/SelectClass");
-        }
-        else{
-            this.setState({errorMessage: "The code does not exist" });
-        }
+    checkCodeExist = (codeInput) => {
+        fetch(`http://localhost:3500/api/class-code/${codeInput}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === codeInput) {
+                    this.props.navigate("/SelectClass");
+                } else {
+                    this.setState({ errorMessage: "The code does not exist" });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.setState({ errorMessage: "There was an error processing your request" });
+            });
     }
 
     render() {
