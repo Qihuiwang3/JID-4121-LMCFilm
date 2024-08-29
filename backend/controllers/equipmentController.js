@@ -5,7 +5,7 @@ const Equipment = require('../models/Equipment');
 // @route POST /equipment
 // @access Private
 const createEquipment = asyncHandler(async (req, res) => {
-    const { itemId, classCode, itemName, pricePerItem, quantity, bundleId } = req.body;
+    const { itemId, classCode, itemName, pricePerItem, quantity, bundleId, specialPrice } = req.body;
 
     const newEquipment = new Equipment({
         itemId,
@@ -13,7 +13,8 @@ const createEquipment = asyncHandler(async (req, res) => {
         itemName,
         pricePerItem,
         quantity,
-        bundleId
+        bundleId,
+        specialPrice 
     });
 
     const savedEquipment = await newEquipment.save();
@@ -31,7 +32,29 @@ const getEquipmentByClassCode = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: "No equipment found for this class code" });
     }
 
-    res.status(200).json(equipment);
+    // Group equipment
+    const equipmentByBundle = equipment.reduce((acc, item) => {
+        if (item.bundleId) {
+            if (!acc[item.bundleId]) {
+                acc[item.bundleId] = [];
+            }
+            acc[item.bundleId].push(item);
+        }
+        return acc;
+    }, {});
+
+    // Modify based on special pricing details
+    const response = equipment.map(item => {
+        if (item.bundleId && equipmentByBundle[item.bundleId].length > 1) {
+            return {
+                ...item.toObject(),
+                specialPrice: item.specialPrice || item.pricePerItem
+            };
+        }
+        return item.toObject();
+    });
+
+    res.status(200).json(response);
 });
 
 module.exports = { createEquipment, getEquipmentByClassCode };

@@ -1,3 +1,4 @@
+// backend/models/Equipment.js
 const mongoose = require('mongoose');
 
 const equipmentSchema = new mongoose.Schema({
@@ -24,6 +25,10 @@ const equipmentSchema = new mongoose.Schema({
     },
     bundleId: {
         type: String,
+        required: false,
+    },
+    bundlePrice: { 
+        type: Number,
         required: false,
     }
 });
