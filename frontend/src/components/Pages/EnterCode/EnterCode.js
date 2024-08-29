@@ -3,7 +3,7 @@ import { withFuncProps } from "../../withFuncProps";
 import './EnterCode.css';
 import { collection, onSnapshot, DocumentData, addDoc } from 'firebase/firestore';
 import db from "../firebase";
-
+import PayPal from "../../Functions/PayPal/PayPal";
 
 class EnterCode extends Component {
     constructor(props) {
@@ -11,53 +11,33 @@ class EnterCode extends Component {
         this.state = {
             codeInput: "",
             errorMessage: "Don't have code?",
-            classTable: []
+            classTable: [],
+            checkout: false,
         };
     }
 
-    componentDidMount() {
-        onSnapshot(collection(db, "Class"), (snapshot) => {
-            const classTable = snapshot.docs
-            .map((doc) => doc.data())
-            .sort((a, b) => b.Score - a.Score);
-            this.setState({ classTable: classTable });
-        });
+
+    setCheckOut = () => {
+        this.setState({ checkout: true })
     }
 
 
-    handleInputChange = (event) => {
-        this.setState({ codeInput: event.target.value });
-    }
 
-    handleSubmit = () => {
-        const { codeInput } = this.state;
-        // Check if codeInput meets length requirements
-        if (codeInput.length < 2) {
-            this.setState({ errorMessage: "Code must be at least 2 characters long" });
-        } 
-        else if (!/^\d+$/.test(codeInput)) {
-            this.setState({ errorMessage: "Code must contain only numeric characters" });
-        }
-        else {
-            this.checkCodeExist(codeInput)
-        }
-    }
-
-    checkCodeExist = (input) => {
-        const codeExists = this.state.classTable.some(item => item.code === Number(input));
-        if (codeExists){
-            this.props.navigate("/SelectClass");
-        }
-        else{
-            this.setState({errorMessage: "The code does not exist" });
-        }
-
-    }
 
     render() {
+        const { checkout } = this.state;
         return (
             <div className="body">
                 <div className="enterCodeContainer">
+                    {checkout ? (
+                            <PayPal />
+                        ) : (
+                        <button
+                            onClick={this.setCheckOut} 
+                        >
+                        Checkout
+                        </button>
+                    )}
                     <h1 className="enterCodeTitle">Enter Class Code</h1>
 
                     <input
@@ -74,7 +54,6 @@ class EnterCode extends Component {
                             </i>
                         }
                     </div>
-
                     <button className="submit-button" onClick={this.handleSubmit}>Submit</button>
                 </div>
             </div>
