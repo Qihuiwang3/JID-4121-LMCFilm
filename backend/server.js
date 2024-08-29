@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use("/", require("./routes/root"));
 app.use("/students", require("./routes/studentsRoutes"));
+app.use('/api', require('./routes/classCodeRoutes'));
 app.use("/carts", require("./routes/cartsRoutes"));
 app.use(errorHandler);
 
