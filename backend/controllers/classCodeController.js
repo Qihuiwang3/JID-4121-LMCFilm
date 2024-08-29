@@ -1,25 +1,29 @@
+const asyncHandler = require("express-async-handler");
 const ClassCode = require('../models/ClassCode');
 
-exports.createClassCode = async (req, res) => {
+// @desc Get a class code by code
+// @route GET /class-code/:code
+// @access Private
+const getClassCode = asyncHandler(async (req, res) => {
+    const classCode = await ClassCode.findOne({ code: req.params.code });
+    if (!classCode) {
+        return res.status(404).json({ error: "Class code not found" });
+    }
+    res.status(200).json(classCode);
+});
+
+// @desc Create new class code
+// @route POST /class-code
+// @access Private
+const createClassCode = asyncHandler(async (req, res) => {
     const { code } = req.body;
 
-    try {
-        const newClassCode = new ClassCode({ code });
-        await newClassCode.save();
-        res.status(201).json(newClassCode);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+    const newClassCode = new ClassCode({
+        code,
+    });
 
-exports.getClassCode = async (req, res) => {
-    try {
-        const classCode = await ClassCode.findOne({ code: req.params.code });
-        if (!classCode) {
-            return res.status(404).json({ error: "Class code not found" });
-        }
-        res.status(200).json(classCode);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+    const savedClassCode = await newClassCode.save();
+    res.status(201).json(savedClassCode);
+});
+
+module.exports = { getClassCode, createClassCode };

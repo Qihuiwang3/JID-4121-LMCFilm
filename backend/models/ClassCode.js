@@ -8,6 +8,4 @@ const classCodeSchema = new mongoose.Schema({
     },
 });
 
-const ClassCode = mongoose.model('ClassCode', classCodeSchema);
-
-module.exports = ClassCode;
+module.exports = mongoose.model('ClassCode', classCodeSchema);
