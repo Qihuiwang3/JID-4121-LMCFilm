@@ -26,4 +26,12 @@ const createClassCode = asyncHandler(async (req, res) => {
     res.status(201).json(savedClassCode);
 });
 
-module.exports = { getClassCode, createClassCode };
+// @desc Get all class codes
+// @route GET /class-codes
+// @access Private
+const getAllClassCodes = asyncHandler(async (req, res) => {
+    const classCodes = await ClassCode.find();
+    res.status(200).json(classCodes);
+});
+
+module.exports = { getClassCode, createClassCode, getAllClassCodes };
