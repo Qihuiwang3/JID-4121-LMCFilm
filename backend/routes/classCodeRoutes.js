@@ -1,5 +1,5 @@
 const express = require('express');
-const { createClassCode, getClassCode } = require('../controllers/classCodeController');
+const { createClassCode, getClassCode, getAllClassCodes } = require('../controllers/classCodeController');
 
 const router = express.Router();
 
