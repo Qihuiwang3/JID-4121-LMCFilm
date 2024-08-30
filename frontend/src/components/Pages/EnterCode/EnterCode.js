@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { withFuncProps } from "../../withFuncProps";
 import './EnterCode.css';
-import { collection, onSnapshot, DocumentData, addDoc } from 'firebase/firestore';
-import db from "../firebase";
-import PayPal from "../../Functions/PayPal/PayPal";
+
 
 class EnterCode extends Component {
     constructor(props) {
@@ -11,8 +9,7 @@ class EnterCode extends Component {
         this.state = {
             codeInput: "",
             errorMessage: "Don't have code?",
-            classTable: [],
-            checkout: false,
+            classTable: []
         };
     }
 
@@ -26,10 +23,23 @@ class EnterCode extends Component {
     }
 
 
-    setCheckOut = () => {
-        this.setState({ checkout: true })
+    handleInputChange = (event) => {
+        this.setState({ codeInput: event.target.value });
     }
 
+    handleSubmit = () => {
+        const { codeInput } = this.state;
+        // Check if codeInput meets length requirements
+        if (codeInput.length < 2) {
+            this.setState({ errorMessage: "Code must be at least 2 characters long" });
+        } 
+        else if (!/^\d+$/.test(codeInput)) {
+            this.setState({ errorMessage: "Code must contain only numeric characters" });
+        }
+        else {
+            this.checkCodeExist(codeInput)
+        }
+    }
 
     checkCodeExist = (codeInput) => {
         fetch(`http://localhost:3500/api/class-code/${codeInput}`)
@@ -48,19 +58,9 @@ class EnterCode extends Component {
     }
 
     render() {
-        const { checkout } = this.state;
         return (
             <div className="body">
                 <div className="enterCodeContainer">
-                    {checkout ? (
-                            <PayPal />
-                        ) : (
-                        <button
-                            onClick={this.setCheckOut} 
-                        >
-                        Checkout
-                        </button>
-                    )}
                     <h1 className="enterCodeTitle">Enter Class Code</h1>
 
                     <input
@@ -77,6 +77,7 @@ class EnterCode extends Component {
                             </i>
                         }
                     </div>
+
                     <button className="submit-button" onClick={this.handleSubmit}>Submit</button>
                 </div>
             </div>
