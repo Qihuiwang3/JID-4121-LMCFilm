@@ -1,8 +1,12 @@
 import React from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
+
+
+const clientId = process.env.REACT_APP_PAYPAL_CLIENT_ID;
+
 const initialOptions = {
-  "client-id": "your-client-id",
+  "client-id": clientId,
   currency: "USD",
 };
 
