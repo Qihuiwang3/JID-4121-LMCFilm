@@ -1,7 +1,6 @@
-// backend/models/Equipment.js
 const mongoose = require('mongoose');
 
-const equipmentSchema = new mongoose.Schema({
+const singleItemSchema = new mongoose.Schema({
     itemId: {
         type: String,
         required: true,
@@ -22,17 +21,7 @@ const equipmentSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         required: true,
-    },
-    bundleId: {
-        type: String,
-        required: false,
-    },
-    bundlePrice: { 
-        type: Number,
-        required: false,
     }
 });
 
-const Equipment = mongoose.model('Equipment', equipmentSchema);
-
-module.exports = Equipment;
+module.exports = mongoose.model('SingleItem', singleItemSchema);
