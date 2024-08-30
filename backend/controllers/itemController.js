@@ -34,6 +34,49 @@ const getSingleItemsByClassCode = asyncHandler(async (req, res) => {
     res.status(200).json(singleItems);
 });
 
+// @desc Purchase a single item and decrease its quantity
+// @route POST /purchase-single/:itemName
+// @access Private
+const purchaseSingleItem = asyncHandler(async (req, res) => {
+    const { itemName } = req.params;
+    const { quantity } = req.body;  // Quantity to purchase
+    const { classCode } = req.body;
+
+    const singleItem = await SingleItem.findOne({ itemName, classCode });
+
+    if (!singleItem) {
+        return res.status(404).json({ error: `Item ${itemName} not found for class code ${classCode}.` });
+    }
+
+    if (singleItem.quantity < quantity) {
+        return res.status(400).json({ error: `Not enough quantity available for ${itemName}. Available: ${singleItem.quantity}, Requested: ${quantity}` });
+    }
+
+    singleItem.quantity -= quantity;
+    await singleItem.save();
+
+    res.status(200).json({ message: `${quantity} units of ${itemName} purchased successfully. Remaining quantity: ${singleItem.quantity}` });
+});
+
+// @desc Return a single item and increase its quantity
+// @route POST /return-single/:itemName
+// @access Private
+const returnSingleItem = asyncHandler(async (req, res) => {
+    const { itemName } = req.params;
+    const { quantity, classCode } = req.body;  // Quantity to return
+
+    const singleItem = await SingleItem.findOne({ itemName, classCode });
+
+    if (!singleItem) {
+        return res.status(404).json({ error: `Item ${itemName} not found for class code ${classCode}.` });
+    }
+
+    singleItem.quantity += quantity;
+    await singleItem.save();
+
+    res.status(200).json({ message: `${quantity} units of ${itemName} returned successfully. Updated quantity: ${singleItem.quantity}` });
+});
+
 // @desc Create new bundle item
 // @route POST /bundle-item
 // @access Private
@@ -104,4 +147,34 @@ const purchaseBundleItem = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "Bundle purchased successfully!" });
 });
 
-module.exports = { createSingleItem, getSingleItemsByClassCode, createBundleItem, getBundleItemsByClassCode, purchaseBundleItem };
+// @desc Return a bundle item and increase quantity of each single item in the bundle
+// @route POST /return-bundle/:bundleId
+// @access Private
+const returnBundleItem = asyncHandler(async (req, res) => {
+    const { bundleId } = req.params;
+    const bundleItem = await BundleItem.findOne({ bundleId });
+
+    if (!bundleItem) {
+        return res.status(404).json({ error: "Bundle item not found" });
+    }
+    // Increase the quantity of each single item
+    for (const item of bundleItem.items) {
+        await SingleItem.updateOne(
+            { itemName: item.itemName, classCode: bundleItem.classCode },
+            { $inc: { quantity: item.quantity } }
+        );
+    }
+
+    res.status(200).json({ message: "Bundle returned successfully!" });
+});
+
+module.exports = { 
+    createSingleItem, 
+    getSingleItemsByClassCode, 
+    purchaseSingleItem, 
+    returnSingleItem, 
+    createBundleItem, 
+    getBundleItemsByClassCode, 
+    purchaseBundleItem, 
+    returnBundleItem 
+};
