@@ -1,43 +1,36 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
-export default function Paypal() {
-  const paypal = useRef();
+const initialOptions = {
+  "client-id": "your-client-id",
+  currency: "USD",
+};
 
-  useEffect(() => {
-    if (window.paypal) {
-      window.paypal
-        .Buttons({
-          createOrder: (data, actions, err) => {
-            return actions.order.create({
-              intent: "CAPTURE",
-              purchase_units: [
-                {
-                  description: "Cool looking table",
-                  amount: {
-                    currency_code: "CAD",
-                    value: 650.0,
-                  },
-                },
-              ],
-            });
-          },
-          onApprove: async (data, actions) => {
-            const order = await actions.order.capture();
-            console.log(order);
-          },
-          onError: (err) => {
-            console.log(err);
-          },
-        })
-        .render(paypal.current);
-    } else {
-      console.error("PayPal SDK is not loaded");
-    }
-  }, []);
-
+function Payment() {
   return (
-    <div>
-      <div ref={paypal}></div>
-    </div>
+    <PayPalScriptProvider options={initialOptions}>
+      <PayPalButtons
+        createOrder={(data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                description: "Cool looking table",
+                amount: {
+                  currency_code: "USD",
+                  value: "650.00",
+                },
+              },
+            ],
+          });
+        }}
+        onApprove={(data, actions) => {
+          return actions.order.capture().then((details) => {
+            console.log("Transaction completed by " + details.payer.name.given_name);
+          });
+        }}
+      />
+    </PayPalScriptProvider>
   );
 }
+
+export default Payment;
