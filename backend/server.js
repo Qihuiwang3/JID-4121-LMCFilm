@@ -25,7 +25,6 @@ app.use("/", require("./routes/root"));
 app.use("/students", require("./routes/studentsRoutes"));
 app.use('/api', require('./routes/classCodeRoutes'));
 app.use("/carts", require("./routes/cartsRoutes"));
-app.use('/api', require('./routes/equipmentRoutes'));
 app.use('/api', require('./routes/itemRoutes'));
 app.use(errorHandler);
 

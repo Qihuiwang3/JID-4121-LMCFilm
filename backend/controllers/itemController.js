@@ -1,24 +1,114 @@
 const asyncHandler = require("express-async-handler");
 const SingleItem = require('../models/SingleItem');
+const Item = require('../models/Item');
 const BundleItem = require('../models/BundleItem');
+
+// @desc Create or update a global item in the equipment checkout center
+// @route POST /item
+// @access Private
+const createGlobalItem = asyncHandler(async (req, res) => {
+    const { itemName, quantity, pricePerItem, itemIds } = req.body;
+    let item = await Item.findOne({ itemName });
+    if (item) {
+        item.quantity += quantity;
+        item.itemIds.push(...itemIds);
+    } else {
+        item = new Item({
+            itemName,
+            quantity,
+            pricePerItem,
+            itemIds, 
+        });
+    }
+    const savedItem = await item.save();
+    res.status(201).json(savedItem);
+});
+
+// @desc Pick up an item (remove itemId from global inventory)
+// @route POST /pickup-item/:itemName/:itemId
+// @access Private
+const pickUpItem = asyncHandler(async (req, res) => {
+    const { itemName, itemId } = req.params;
+
+    const item = await Item.findOne({ itemName });
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+    }
+
+    // Check if the itemId exists
+    const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
+    if (itemIndex === -1) {
+        return res.status(404).json({ error: `Item ID ${itemId} not found for item ${itemName}.` });
+    }
+
+    // Remove the itemId from the global inventory
+    item.itemIds.splice(itemIndex, 1);
+
+    await item.save();
+
+    res.status(200).json({ message: `Item ID ${itemId} picked up successfully.` });
+});
+
+// @desc Return an item (add itemId back to global inventory)
+// @route POST /return-item/:itemName/:itemId
+// @access Private
+const returnItem = asyncHandler(async (req, res) => {
+    const { itemName, itemId } = req.params;
+
+    const item = await Item.findOne({ itemName });
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+    }
+
+    // Add the itemId back to the global inventory
+    item.itemIds.push({ itemId });
+    await item.save();
+
+    res.status(200).json({ message: `Item ID ${itemId} returned successfully.` });
+});
+
+// @desc Remove an item from the database
+// @route DELETE /item/:itemName
+// @access Private
+const removeItem = asyncHandler(async (req, res) => {
+    const { itemName } = req.params;
+
+    const item = await Item.findOneAndDelete({ itemName });
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+    }
+
+    // Also remove any associated SingleItem or BundleItem records
+    await SingleItem.deleteMany({ itemName });
+    await BundleItem.updateMany(
+        { "items.itemName": itemName },
+        { $pull: { items: { itemName } } }
+    );
+
+    res.status(200).json({ message: `Item ${itemName} and all associated records removed successfully.` });
+});
+
+
 
 // @desc Create new single item
 // @route POST /single-item
 // @access Private
 const createSingleItem = asyncHandler(async (req, res) => {
-    const { itemId, classCode, itemName, pricePerItem, quantity } = req.body;
+    const { classCode, itemName } = req.body;
+    let item = await Item.findOne({ itemName });
+    if (!item) {
+        return res.status(404).json({ error: "Item not found in the equipment checkout center." });
+    }
 
     const newSingleItem = new SingleItem({
-        itemId,
         classCode,
         itemName,
-        pricePerItem,
-        quantity,
     });
 
     const savedSingleItem = await newSingleItem.save();
     res.status(201).json(savedSingleItem);
 });
+
 
 // @desc Get all single items for a specific class code
 // @route GET /single-items/:classCode
@@ -40,42 +130,44 @@ const getSingleItemsByClassCode = asyncHandler(async (req, res) => {
 const purchaseSingleItem = asyncHandler(async (req, res) => {
     const { itemName } = req.params;
     const { quantity } = req.body;  // Quantity to purchase
-    const { classCode } = req.body;
 
-    const singleItem = await SingleItem.findOne({ itemName, classCode });
+    const item = await Item.findOne({ itemName });
 
-    if (!singleItem) {
-        return res.status(404).json({ error: `Item ${itemName} not found for class code ${classCode}.` });
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
     }
 
-    if (singleItem.quantity < quantity) {
-        return res.status(400).json({ error: `Not enough quantity available for ${itemName}. Available: ${singleItem.quantity}, Requested: ${quantity}` });
+    if (item.quantity < quantity) {
+        return res.status(400).json({ error: `Not enough quantity available for ${itemName}. Available: ${item.quantity}, Requested: ${quantity}` });
     }
 
-    singleItem.quantity -= quantity;
-    await singleItem.save();
+    item.quantity -= quantity;
+    await item.save();
 
-    res.status(200).json({ message: `${quantity} units of ${itemName} purchased successfully. Remaining quantity: ${singleItem.quantity}` });
+    res.status(200).json({ message: `${quantity} units of ${itemName} purchased successfully. Remaining total quantity: ${item.quantity}` });
 });
+
+
 
 // @desc Return a single item and increase its quantity
 // @route POST /return-single/:itemName
 // @access Private
 const returnSingleItem = asyncHandler(async (req, res) => {
     const { itemName } = req.params;
-    const { quantity, classCode } = req.body;  // Quantity to return
+    const { quantity } = req.body;  // Quantity to return
 
-    const singleItem = await SingleItem.findOne({ itemName, classCode });
+    const item = await Item.findOne({ itemName });
 
-    if (!singleItem) {
-        return res.status(404).json({ error: `Item ${itemName} not found for class code ${classCode}.` });
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
     }
 
-    singleItem.quantity += quantity;
-    await singleItem.save();
+    item.quantity += quantity;
+    await item.save();
 
-    res.status(200).json({ message: `${quantity} units of ${itemName} returned successfully. Updated quantity: ${singleItem.quantity}` });
+    res.status(200).json({ message: `${quantity} units of ${itemName} returned successfully. Updated total quantity: ${item.quantity}` });
 });
+
 
 // @desc Create new bundle item
 // @route POST /bundle-item
@@ -83,10 +175,10 @@ const returnSingleItem = asyncHandler(async (req, res) => {
 const createBundleItem = asyncHandler(async (req, res) => {
     const { bundleId, classCode, bundleName, items, price } = req.body;
 
-    // Check if all items are available
+    // Check if all items are available in required quantity
     for (const item of items) {
-        const singleItem = await SingleItem.findOne({ itemName: item.itemName, classCode });
-        if (!singleItem || singleItem.quantity < item.quantity) {
+        const globalItem = await Item.findOne({ itemName: item.itemName });
+        if (!globalItem || globalItem.quantity < item.quantity) {
             return res.status(400).json({ error: `Item ${item.itemName} is not available in the required quantity.` });
         }
     }
@@ -102,6 +194,7 @@ const createBundleItem = asyncHandler(async (req, res) => {
     const savedBundleItem = await newBundleItem.save();
     res.status(201).json(savedBundleItem);
 });
+
 
 // @desc Get all bundle items for a specific class code
 // @route GET /bundle-items/:classCode
@@ -130,22 +223,23 @@ const purchaseBundleItem = asyncHandler(async (req, res) => {
 
     // Check if all items in the bundle are available
     for (const item of bundleItem.items) {
-        const singleItem = await SingleItem.findOne({ itemName: item.itemName, classCode: bundleItem.classCode });
-        if (!singleItem || singleItem.quantity < item.quantity) {
+        const globalItem = await Item.findOne({ itemName: item.itemName });
+        if (!globalItem || globalItem.quantity < item.quantity) {
             return res.status(400).json({ error: `Item ${item.itemName} is not available in the required quantity.` });
         }
     }
 
-    // Decrease the quantity of each single item
+    // Decrease the quantity of each item in the global Item model
     for (const item of bundleItem.items) {
-        await SingleItem.updateOne(
-            { itemName: item.itemName, classCode: bundleItem.classCode },
+        await Item.updateOne(
+            { itemName: item.itemName },
             { $inc: { quantity: -item.quantity } }
         );
     }
 
     res.status(200).json({ message: "Bundle purchased successfully!" });
 });
+
 
 // @desc Return a bundle item and increase quantity of each single item in the bundle
 // @route POST /return-bundle/:bundleId
@@ -157,18 +251,24 @@ const returnBundleItem = asyncHandler(async (req, res) => {
     if (!bundleItem) {
         return res.status(404).json({ error: "Bundle item not found" });
     }
-    // Increase the quantity of each single item
+
+    // Increase the quantity of each item in the global Item model
     for (const item of bundleItem.items) {
-        await SingleItem.updateOne(
-            { itemName: item.itemName, classCode: bundleItem.classCode },
+        await Item.updateOne(
+            { itemName: item.itemName },
             { $inc: { quantity: item.quantity } }
         );
     }
-
     res.status(200).json({ message: "Bundle returned successfully!" });
 });
 
+
+
 module.exports = { 
+    createGlobalItem,
+    returnItem,
+    pickUpItem,
+    removeItem,
     createSingleItem, 
     getSingleItemsByClassCode, 
     purchaseSingleItem, 
