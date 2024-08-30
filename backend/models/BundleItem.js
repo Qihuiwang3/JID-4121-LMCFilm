@@ -15,7 +15,7 @@ const bundleItemSchema = new mongoose.Schema({
         required: true,
     },
     items: [{
-        itemId: String,
+        itemName: String,
         quantity: Number
     }],
     price: {

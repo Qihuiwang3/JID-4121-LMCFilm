@@ -40,11 +40,11 @@ const getSingleItemsByClassCode = asyncHandler(async (req, res) => {
 const createBundleItem = asyncHandler(async (req, res) => {
     const { bundleId, classCode, bundleName, items, price } = req.body;
 
-    // Check if all items are available in required quantity
+    // Check if all items are available
     for (const item of items) {
-        const singleItem = await SingleItem.findOne({ itemId: item.itemId, classCode });
+        const singleItem = await SingleItem.findOne({ itemName: item.itemName, classCode });
         if (!singleItem || singleItem.quantity < item.quantity) {
-            return res.status(400).json({ error: `Item ${item.itemId} is not available in the required quantity.` });
+            return res.status(400).json({ error: `Item ${item.itemName} is not available in the required quantity.` });
         }
     }
 
@@ -87,16 +87,16 @@ const purchaseBundleItem = asyncHandler(async (req, res) => {
 
     // Check if all items in the bundle are available
     for (const item of bundleItem.items) {
-        const singleItem = await SingleItem.findOne({ itemId: item.itemId, classCode: bundleItem.classCode });
+        const singleItem = await SingleItem.findOne({ itemName: item.itemName, classCode: bundleItem.classCode });
         if (!singleItem || singleItem.quantity < item.quantity) {
-            return res.status(400).json({ error: `Item ${item.itemId} is not available in the required quantity.` });
+            return res.status(400).json({ error: `Item ${item.itemName} is not available in the required quantity.` });
         }
     }
 
     // Decrease the quantity of each single item
     for (const item of bundleItem.items) {
         await SingleItem.updateOne(
-            { itemId: item.itemId, classCode: bundleItem.classCode },
+            { itemName: item.itemName, classCode: bundleItem.classCode },
             { $inc: { quantity: -item.quantity } }
         );
     }
