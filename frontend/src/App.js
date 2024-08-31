@@ -5,6 +5,7 @@ import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
 import SelectClassPage from "./components/Pages/SelectClassPage/SelectClassPage";
+import Payment from "./components/Pages/Payment/Payment";
 
 
 class App extends Component {
@@ -28,10 +29,11 @@ class App extends Component {
       <Router>
         <TopNavBar/>
         <Routes>
-          <Route path="/" element={<EnterCode/>} />
-          <Route path="/SelectClass" element={<SelectClassPage/>} />
+          <Route path="/" element={<EnterCode />} />
+          <Route path="/SelectClass" element={<SelectClassPage />} />
           <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates}/>} />
           <Route path="/ReservationPage" element={<ReservationPage selectedDates={this.state.selectedDates}/>}/>
+          <Route path="/Payment" element={<Payment />}/>
         </Routes>
       </Router>
     );

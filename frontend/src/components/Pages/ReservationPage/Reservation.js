@@ -3,26 +3,21 @@ import TimeSelectionButton from '../../Button/TimeSelectionButton/TimeSelectionB
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown.js';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
-
-// comment this out if you want to test backend function
-// import { getStudents } from '../../../connector.js';
-// import { createCart } from '../../../connector.js';
+import { useNavigate } from 'react-router-dom';
 import { collection, onSnapshot } from 'firebase/firestore';
 import db from "../firebase";
 
 function ReservationPage({ selectedDates }) {
+    const navigate = useNavigate();
+
     const initialPickupDateTime = mergeDateAndTime(selectedDates.pickupDate, selectedDates.pickupTime);
     const initialReturnDateTime = mergeDateAndTime(selectedDates.returnDate, selectedDates.returnTime);
 
-    // define equipment array
     const [cameras, setCameras] = useState([]);
     const [lights, setLights] = useState([]);
     const [packages, setPackages] = useState([]);
-
-    //cart items
     const [cartItems, setCartItems] = useState([]);
 
-    //add to cart
     const addToCart = (id) => {
         if (!cartItems.includes(id)) {
             setCartItems([...cartItems, id]);
@@ -31,7 +26,6 @@ function ReservationPage({ selectedDates }) {
         }
     }
 
-    //total of items in cart
     const calculateTotal = () => {
         let total = 0;
         cartItems.forEach(item => {
@@ -40,31 +34,11 @@ function ReservationPage({ selectedDates }) {
         return total.toFixed(2);
     }
 
-    // // comment this out if you want to test backend function
-    // const testBackendStudent = async () => {
-    //     try {
-    //         const students = await getStudents();
-    //         console.log("students: ", students)
-    //     } catch (error) {
-    //         console.error('Error fetching students:', error);
-    //     }
-    // };
+    const handleCheckout = () => {
+        navigate('/Payment');
+    };
 
-    // const createNewCart = async () => {
-    //     try {
-    //         const data = {
-    //             "itemId": "9999",
-    //             "price": 29.99,
-    //             "quantity": 2
-    //         }
-    //         const cart = await createCart(data);
-    //         console.log("cart: ", cart)
-    //     } catch (error) {
-    //         console.error('Error fetching students:', error);
-    //     }
-    // }
 
-    //on page load get equipment and define "packages"
     useEffect(() => {
 
         onSnapshot(collection(db, "Equipment"), (snapshot) => {
@@ -167,32 +141,16 @@ function ReservationPage({ selectedDates }) {
 
                         ))}
                     </div>
-
                     <div style={{ textAlign: "right", paddingRight: "20px" }}> Total: ${calculateTotal()} </div>
                 </div>
-
             </div>
 
             <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse", paddingTop: "10px" }}>
-                <div className="equipment-checkout"> Checkout </div>
+                <div 
+                    className="equipment-checkout"
+                    onClick={() => handleCheckout()}
+                > Checkout </div>
             </div>
-
-            {/* comment this out if you want to test backend function */}
-
-            {/* <button
-                className="bg-red-400 rounded-md p-2 font-bold"
-                onClick={() => testBackendStudent()}
-              >
-                Test
-              </button> */}
-
-
-            {/* <button
-                className="bg-red-400 rounded-md p-2 font-bold"
-                onClick={() => createNewCart()}
-              >
-                Test
-              </button> */}
         </div >
     );
 
