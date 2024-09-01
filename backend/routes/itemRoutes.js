@@ -4,6 +4,8 @@ const {
     removeItem,
     returnItem,
     createGlobalItem,
+    getAllGlobalEquipment,
+    getItemByName,
     createSingleItem, 
     getSingleItemsByClassCode, 
     purchaseSingleItem, 
@@ -18,6 +20,12 @@ const router = express.Router();
 
 // Route to create global items in the equipment checkout center
 router.post('/item', createGlobalItem); 
+
+// Route to get all global equipment
+router.get('/items', getAllGlobalEquipment);
+
+// Route to get a specific item by item name
+router.get('/item/:itemName', getItemByName); 
 
 // Routes for picking up and returning items
 router.post('/pickup-item/:itemName/:itemId', pickUpItem);

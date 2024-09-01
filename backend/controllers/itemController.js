@@ -11,6 +11,8 @@ const createGlobalItem = asyncHandler(async (req, res) => {
     let item = await Item.findOne({ itemName });
     if (item) {
         item.quantity += quantity;
+        item.itemName = itemName;
+        item.pricePerItem = pricePerItem;
         item.itemIds.push(...itemIds);
     } else {
         item = new Item({
@@ -22,6 +24,34 @@ const createGlobalItem = asyncHandler(async (req, res) => {
     }
     const savedItem = await item.save();
     res.status(201).json(savedItem);
+});
+
+// @desc Get all global equipment
+// @route GET /items
+// @access Private
+const getAllGlobalEquipment = asyncHandler(async (req, res) => {
+    const items = await Item.find({});
+
+    if (!items || items.length === 0) {
+        return res.status(404).json({ error: "No items found in the equipment checkout center." });
+    }
+
+    res.status(200).json(items);
+});
+
+// @desc Get a specific item by item name
+// @route GET /item/:itemName
+// @access Private
+const getItemByName = asyncHandler(async (req, res) => {
+    const { itemName } = req.params;
+
+    const item = await Item.findOne({ itemName });
+
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+    }
+
+    res.status(200).json(item);
 });
 
 // @desc Pick up an item (remove itemId from global inventory)
@@ -265,6 +295,8 @@ const returnBundleItem = asyncHandler(async (req, res) => {
 
 module.exports = { 
     createGlobalItem,
+    getAllGlobalEquipment,
+    getItemByName,
     returnItem,
     pickUpItem,
     removeItem,
