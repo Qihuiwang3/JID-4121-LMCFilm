@@ -1,21 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import PackageEquipmentDropdown from '../PackageEquipmentDropdown/PackageEquipmentDropdown.js';
-
-import './PackageDropdown.css'
+import './PackageDropdown.css';
 
 function PackageDropdown({ id, title, pk, addItem }) {
-
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = () => {
-        setIsOpen(!isOpen)
+        setIsOpen(!isOpen);
     };
 
     return (
         <div className="package-dropdown">
-
             <div className="equipment-dropdown-header" onClick={toggleDropdown}>
                 <div>
                     {title}
@@ -28,13 +25,15 @@ function PackageDropdown({ id, title, pk, addItem }) {
             {isOpen && (
                 <div className="package-dropdown-content">
                     {pk.map((option, index) => (
-
                         <div className="package-dropdown-item" key={index}>
-
                             <PackageEquipmentDropdown
                                 id="i"
                                 title={(index + 1) + ". " + option.name + " | $" + option.price}
-                                equipment={option.equipments}
+                                equipment={option.equipments.map(equipment => ({
+                                    name: equipment.itemName,
+                                    itemID: equipment.itemId,
+                                    quantity: equipment.quantity
+                                }))}
                             />
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <button className="package-reserve-button" onClick={() => addItem(option)}> Reserve </button>
@@ -42,10 +41,9 @@ function PackageDropdown({ id, title, pk, addItem }) {
                         </div>
                     ))}
                 </div>
-            )
-            }
-        </div >
-    )
+            )}
+        </div>
+    );
 }
 
-export default PackageDropdown
+export default PackageDropdown;

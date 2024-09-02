@@ -28,15 +28,14 @@ function ReservationPage({ selectedDates }) {
     const calculateTotal = () => {
         let total = 0;
         cartItems.forEach(item => {
-            total += item.price
-        })
+            total += item.price;
+        });
         return total.toFixed(2);
     }
 
     const handleCheckout = () => {
         navigate('/Payment');
     };
-
 
     useEffect(() => {
         if (classCode) {
@@ -71,7 +70,6 @@ function ReservationPage({ selectedDates }) {
         }
     }, [classCode]);
 
-
     return (
         <div className="main-reservation-equipment-cart">
 
@@ -83,9 +81,7 @@ function ReservationPage({ selectedDates }) {
                 />
             </div>
 
-
             <div className="equipment-and-cart">
-
                 <div className="equipment-container">
                     <EquipmentDropdown
                         id="equipment"
@@ -104,6 +100,7 @@ function ReservationPage({ selectedDates }) {
                         pk={bundles.map(bundle => ({
                             name: bundle.bundleName,
                             price: bundle.price,
+                            equipments: bundle.items,
                             bundleId: bundle._id
                         }))}
                         addItem={addToCart}
@@ -117,24 +114,20 @@ function ReservationPage({ selectedDates }) {
 
                     <div className="all-cart-items">
                         {cartItems.map(id => (
-
-                            <div>
+                            <div key={id.itemId || id.bundleId}>
                                 <div className="cart-item">
-                                    <div key={id}>
+                                    <div>
                                         <div className="cart-first-row">
                                             <div>{id.name}</div>
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div style={{ color: "#9C9C9C" }}> ID: {id.itemID}</div>
+                                            <div style={{ color: "#9C9C9C" }}> ID: {id.itemId || id.bundleId}</div>
                                             <div className="remove-equipment-item" onClick={() => addToCart(id)}> Remove </div>
-
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         ))}
                     </div>
                     <div style={{ textAlign: "right", paddingRight: "20px" }}> Total: ${calculateTotal()} </div>
@@ -149,7 +142,6 @@ function ReservationPage({ selectedDates }) {
             </div>
         </div >
     );
-
 }
 
 function mergeDateAndTime(date, time) {

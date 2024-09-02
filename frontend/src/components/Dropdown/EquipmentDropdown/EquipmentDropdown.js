@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentDropdown.css'
 
-function EquipmentDropdown({ id, title, equipment, addItem }) {
+function EquipmentDropdown({title, equipment, addItem }) {
 
     const [isOpen, setIsOpen] = useState(false);
 

@@ -23,7 +23,7 @@ function PackageEquipmentDropdown({ id, title, equipment }) {
                 <div className="equipment-dropdown-content">
                     {equipment.map((option, index) => (
                         <div className="package-equipment-dropdown-item" key={index}>
-                            {index + 1}. {option.itemID} | {option.name}
+                            {index + 1}. {option.itemID} | {option.name} | Quantity: {option.quantity}
                         </div>
                     ))}
                 </div>
