@@ -3,19 +3,18 @@ import TimeSelectionButton from '../../Button/TimeSelectionButton/TimeSelectionB
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown.js';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
-import { useNavigate } from 'react-router-dom';
-import { collection, onSnapshot } from 'firebase/firestore';
-import db from "../firebase";
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function ReservationPage({ selectedDates }) {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { classCode } = location.state || {};
 
     const initialPickupDateTime = mergeDateAndTime(selectedDates.pickupDate, selectedDates.pickupTime);
     const initialReturnDateTime = mergeDateAndTime(selectedDates.returnDate, selectedDates.returnTime);
 
-    const [cameras, setCameras] = useState([]);
-    const [lights, setLights] = useState([]);
-    const [packages, setPackages] = useState([]);
+    const [equipment, setEquipment] = useState([]);
+    const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
     const addToCart = (id) => {
@@ -29,8 +28,8 @@ function ReservationPage({ selectedDates }) {
     const calculateTotal = () => {
         let total = 0;
         cartItems.forEach(item => {
-            total += item.price
-        })
+            total += item.price;
+        });
         return total.toFixed(2);
     }
 
@@ -38,44 +37,38 @@ function ReservationPage({ selectedDates }) {
         navigate('/Payment');
     };
 
-
     useEffect(() => {
+        if (classCode) {
+            // Fetch single items
+            fetch(`http://localhost:3500/api/single-items/${classCode}`)
+                .then(res => res.json())
+                .then(data => {
+                    const promises = data.map(singleItem =>
+                        fetch(`http://localhost:3500/api/item/${singleItem.itemName}`)
+                            .then(res => res.json())
+                            .then(itemDetails => ({
+                                ...singleItem,
+                                pricePerItem: itemDetails.pricePerItem,
+                            }))
+                    );
 
-        onSnapshot(collection(db, "Equipment"), (snapshot) => {
+                    Promise.all(promises)
+                        .then(equipmentWithPrices => {
+                            setEquipment(equipmentWithPrices);
+                        })
+                        .catch(error => console.error('Error fetching item prices:', error));
+                })
+                .catch(error => console.error('Error fetching equipment:', error));
 
-            // filter into arrays of equipment type
-            const cameras = snapshot.docs
-                .filter(doc => doc.data().hasOwnProperty("type") && doc.data().type === "camera")
-                .map((doc) => doc.data())
-                .sort((a, b) => b.Score - a.Score);
-            setCameras(cameras);
-
-            const lights = snapshot.docs
-                .filter(doc => doc.data().hasOwnProperty("type") && doc.data().type === "light")
-                .map((doc) => doc.data())
-                .sort((a, b) => b.Score - a.Score);
-            setLights(lights);
-
-            // create packages THESE ARE HARDCODED FOR NOW
-
-            const p1 = snapshot.docs
-                .map((doc) => doc.data())
-                .sort((a, b) => b.Score - a.Score)
-                .slice(0, 2);
-
-            const p2 = snapshot.docs
-                .filter(doc => doc.data().hasOwnProperty("type") && doc.data().type === "light")
-                .map((doc) => doc.data())
-                .sort((a, b) => b.Score - a.Score)
-                .reverse()
-                .slice(0, 2);
-
-            setPackages([{ equipments: p1, price: 14.99, name: "Package Bundle A", itemID: "952108" }, { equipments: p2, price: 20.99, name: "Package Bundle B", itemID: "987654" }])
-
-        });
-
-    }, [])
-
+            // Fetch bundles
+            fetch(`http://localhost:3500/api/bundle-items/${classCode}`)
+                .then(res => res.json())
+                .then(data => {
+                    setBundles(data);
+                })
+                .catch(error => console.error('Error fetching bundles:', error));
+        }
+    }, [classCode]);
 
     return (
         <div className="main-reservation-equipment-cart">
@@ -88,28 +81,28 @@ function ReservationPage({ selectedDates }) {
                 />
             </div>
 
-
             <div className="equipment-and-cart">
-
                 <div className="equipment-container">
                     <EquipmentDropdown
-                        id="cameras"
-                        title="Cameras"
-                        equipment={cameras}
-                        addItem={addToCart}
-                    />
-
-                    <EquipmentDropdown
-                        id="lights"
-                        title="Lights"
-                        equipment={lights}
+                        id="equipment"
+                        title="Available Equipment"
+                        equipment={equipment.map(item => ({
+                            name: item.itemName,
+                            price: item.pricePerItem,
+                            itemId: item._id
+                        }))}
                         addItem={addToCart}
                     />
 
                     <PackageDropdown
                         id="packages"
-                        title="Packages"
-                        pk={packages}
+                        title="Available Packages"
+                        pk={bundles.map(bundle => ({
+                            name: bundle.bundleName,
+                            price: bundle.price,
+                            equipments: bundle.items,
+                            bundleId: bundle._id
+                        }))}
                         addItem={addToCart}
                     />
                 </div>
@@ -121,24 +114,20 @@ function ReservationPage({ selectedDates }) {
 
                     <div className="all-cart-items">
                         {cartItems.map(id => (
-
-                            <div>
+                            <div key={id.itemId || id.bundleId}>
                                 <div className="cart-item">
-                                    <div key={id}>
+                                    <div>
                                         <div className="cart-first-row">
                                             <div>{id.name}</div>
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div style={{ color: "#9C9C9C" }}> ID: {id.itemID}</div>
+                                            <div style={{ color: "#9C9C9C" }}> ID: {id.itemId || id.bundleId}</div>
                                             <div className="remove-equipment-item" onClick={() => addToCart(id)}> Remove </div>
-
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         ))}
                     </div>
                     <div style={{ textAlign: "right", paddingRight: "20px" }}> Total: ${calculateTotal()} </div>
@@ -153,7 +142,6 @@ function ReservationPage({ selectedDates }) {
             </div>
         </div >
     );
-
 }
 
 function mergeDateAndTime(date, time) {
