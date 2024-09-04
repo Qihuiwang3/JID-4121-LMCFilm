@@ -6,38 +6,40 @@ import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
 import SelectClassPage from "./components/Pages/SelectClassPage/SelectClassPage";
 import Payment from "./components/Pages/Payment/Payment";
+import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
 
 
 class App extends Component {
-  state = {
-    selectedDates: {
-      pickupDate: new Date(),
-      pickupTime: new Date(),
-      returnDate: new Date(),
-      returnTime: new Date(),
-    }
-  };
+    state = {
+        selectedDates: {
+            pickupDate: new Date(),
+            pickupTime: new Date(),
+            returnDate: new Date(),
+            returnTime: new Date(),
+        }
+    };
 
-  setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
-    this.setState({
-      selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
-    });
-  };
-  
-  render() {
-    return (
-      <Router>
-        <TopNavBar/>
-        <Routes>
-          <Route path="/" element={<EnterCode />} />
-          <Route path="/SelectClass" element={<SelectClassPage />} />
-          <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates}/>} />
-          <Route path="/ReservationPage" element={<ReservationPage selectedDates={this.state.selectedDates}/>}/>
-          <Route path="/Payment" element={<Payment />}/>
-        </Routes>
-      </Router>
-    );
-  }
+    setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
+        this.setState({
+            selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
+        });
+    };
+
+    render() {
+        return (
+            <Router>
+                <TopNavBar />
+                <Routes>
+                    <Route path="/" element={<EnterCode />} />
+                    <Route path="/SelectClass" element={<SelectClassPage />} />
+                    <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
+                    <Route path="/ReservationPage" element={<ReservationPage selectedDates={this.state.selectedDates} />} />
+                    <Route path="/CartConfirmation" element={<CartConfirmation />} />
+                    <Route path="/Payment" element={<Payment />} />
+                </Routes>
+            </Router>
+        );
+    }
 }
 
 export default App;

@@ -17,11 +17,11 @@ function ReservationPage({ selectedDates }) {
     const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
-    const addToCart = (id) => {
-        if (!cartItems.includes(id)) {
-            setCartItems([...cartItems, id]);
+    const addToCart = (item) => {
+        if (!cartItems.includes(item)) {
+            setCartItems([...cartItems, item]);
         } else {
-            setCartItems(cartItems.filter(cartItems => cartItems !== id));
+            setCartItems(cartItems.filter(cartItems => cartItems !== item));
         }
     }
 
@@ -34,7 +34,7 @@ function ReservationPage({ selectedDates }) {
     }
 
     const handleCheckout = () => {
-        navigate('/Payment');
+        navigate('/CartConfirmation');
     };
 
     useEffect(() => {
@@ -91,6 +91,7 @@ function ReservationPage({ selectedDates }) {
                             price: item.pricePerItem,
                             itemId: item._id
                         }))}
+                        showReserve={true}
                         addItem={addToCart}
                     />
 
@@ -103,6 +104,7 @@ function ReservationPage({ selectedDates }) {
                             equipments: bundle.items,
                             bundleId: bundle._id
                         }))}
+                        showReserve={true}
                         addItem={addToCart}
                     />
                 </div>
@@ -135,7 +137,7 @@ function ReservationPage({ selectedDates }) {
             </div>
 
             <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse", paddingTop: "10px" }}>
-                <div 
+                <div
                     className="equipment-checkout"
                     onClick={() => handleCheckout()}
                 > Checkout </div>
