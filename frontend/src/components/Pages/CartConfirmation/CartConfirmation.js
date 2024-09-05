@@ -13,7 +13,11 @@ function CartConfirmation() {
     const [packages, setPackages] = useState({});
 
     const handleContinue = () => {
-        // navigate to payment page, pass in total price
+        // navigate to payment page, pass in total price, although not sure if "cartTotal" needs to be a useState variable
+        const cartTotal = calculateTotal();
+        // navigate('/Payment', { state: { cartTotal } });
+
+        // maybe that code here is correct, not sure ^
     };
 
     const calculateTotal = () => {
