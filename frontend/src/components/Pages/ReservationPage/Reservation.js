@@ -18,6 +18,7 @@ function ReservationPage({ selectedDates }) {
     const [cartItems, setCartItems] = useState([]);
 
     const addToCart = (item) => {
+
         if (!cartItems.includes(item)) {
             setCartItems([...cartItems, item]);
         } else {
@@ -34,7 +35,7 @@ function ReservationPage({ selectedDates }) {
     }
 
     const handleCheckout = () => {
-        navigate('/CartConfirmation');
+        navigate('/CartConfirmation', { state: { cartItems } });
     };
 
     useEffect(() => {
