@@ -50,12 +50,13 @@ function ReservationPage({ selectedDates }) {
                             .then(itemDetails => ({
                                 ...singleItem,
                                 pricePerItem: itemDetails.pricePerItem,
+                                quantity: itemDetails.quantity
                             }))
                     );
 
                     Promise.all(promises)
-                        .then(equipmentWithPrices => {
-                            setEquipment(equipmentWithPrices);
+                        .then(equipmentWithPricesQuantity => {
+                            setEquipment(equipmentWithPricesQuantity);
                         })
                         .catch(error => console.error('Error fetching item prices:', error));
                 })
@@ -90,7 +91,8 @@ function ReservationPage({ selectedDates }) {
                         equipment={equipment.map(item => ({
                             name: item.itemName,
                             price: item.pricePerItem,
-                            itemId: item._id
+                            itemId: item._id,
+                            quantity: item.quantity
                         }))}
                         showReserve={true}
                         addItem={addToCart}
@@ -125,7 +127,6 @@ function ReservationPage({ selectedDates }) {
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div style={{ color: "#9C9C9C" }}> ID: {id.itemId || id.bundleId}</div>
                                             <div className="remove-equipment-item" onClick={() => addToCart(id)}> Remove </div>
                                         </div>
                                     </div>

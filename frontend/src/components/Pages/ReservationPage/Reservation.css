@@ -59,7 +59,7 @@
 .cart-second-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: right;
 }
 
 .remove-equipment-item {

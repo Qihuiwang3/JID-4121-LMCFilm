@@ -15,11 +15,8 @@ function CartConfirmation() {
     const [packages, setPackages] = useState({});
 
     const handleContinue = () => {
-        // navigate to payment page, pass in total price, although not sure if "cartTotal" needs to be a useState variable
         const cartTotal = calculateTotal();
-        // navigate('/Payment', { state: { cartTotal } });
-
-        // maybe that code here is correct, not sure ^
+        navigate('/Payment', { state: { cartTotal } });
     };
 
     const handleBack = () => {
@@ -74,7 +71,7 @@ function CartConfirmation() {
                     <div className="cart-total">Total: ${calculateTotal()} </div>
 
                     <div className="button-footers">
-                        <div className="button-back" oncClick={() => handleBack()}> Back </div>
+                        <div className="button-back" onClick={() => handleBack()}> Back </div>
                         <div className="button-continue" onClick={() => handleContinue()}> Continue </div>
                     </div>
 

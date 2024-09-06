@@ -37,7 +37,7 @@ function PackageDropdown({ id, title, pk, addItem, showReserve }) {
                             />
 
                             {showReserve && (
-                                <div style={{ display: "flex", gap: "10px" }}>
+                                <div className="general-reserve-button">
                                     <button className="package-reserve-button" onClick={() => addItem(option)}> Reserve </button>
                                 </div>
                             )}
