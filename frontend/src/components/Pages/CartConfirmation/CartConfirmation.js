@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './CartConfirmation.css';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown';
@@ -7,6 +7,8 @@ import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown';
 function CartConfirmation() {
 
     const location = useLocation();
+    const navigate = useNavigate();
+
     const { cartItems } = location.state || {};
 
     const [equipment, setEquipment] = useState({});
@@ -19,6 +21,10 @@ function CartConfirmation() {
 
         // maybe that code here is correct, not sure ^
     };
+
+    const handleBack = () => {
+        navigate('/ReservationPage');
+    }
 
     const calculateTotal = () => {
         let total = 0;
@@ -68,7 +74,7 @@ function CartConfirmation() {
                     <div className="cart-total">Total: ${calculateTotal()} </div>
 
                     <div className="button-footers">
-                        <div className="button-back"> Back </div>
+                        <div className="button-back" oncClick={() => handleBack()}> Back </div>
                         <div className="button-continue" onClick={() => handleContinue()}> Continue </div>
                     </div>
 
