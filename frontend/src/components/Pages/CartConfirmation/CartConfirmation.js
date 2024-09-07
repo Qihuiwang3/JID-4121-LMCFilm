@@ -3,13 +3,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './CartConfirmation.css';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown';
+import axios from 'axios';
 
 function CartConfirmation() {
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { cartItems } = location.state || {};
+    const { cartItems, itemId } = location.state || {};
 
     const [equipment, setEquipment] = useState({});
     const [packages, setPackages] = useState({});
@@ -19,7 +20,8 @@ function CartConfirmation() {
         navigate('/Payment', { state: { cartTotal } });
     };
 
-    const handleBack = () => {
+    const handleBack = async () => {
+       // await axios.delete(`http://localhost:3500/api/carts/${itemId}`);
         navigate('/ReservationPage');
     }
 
@@ -45,6 +47,9 @@ function CartConfirmation() {
     useEffect(() => {
         filterCartContent();
     }, [cartItems])
+
+
+    
 
     return (
         <div className="cart-confirm-body">

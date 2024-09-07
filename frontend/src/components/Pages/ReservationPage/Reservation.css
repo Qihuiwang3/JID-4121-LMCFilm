@@ -75,10 +75,17 @@
     width: 300px;
     height: 75px;
     line-height: 75px;
+    cursor: pointer;
     text-align: center;
     color: white;
     margin-right: 100px;
 }
+
+.equipment-checkout:hover {
+    background-color: #003a99;
+  }
+
+
 
 .Time-Button {
     margin-top: 200px;

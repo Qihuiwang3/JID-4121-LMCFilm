@@ -45,9 +45,14 @@
     width: 300px;
     height: 75px;
     line-height: 75px;
+    cursor: pointer;
     text-align: center;
     color: white;
 }
+
+.button-back:hover {
+    background-color: #003a99;
+  }
 
 .button-continue {
     background-color: #3361AE;
@@ -55,6 +60,11 @@
     width: 300px;
     height: 75px;
     line-height: 75px;
+    cursor: pointer;
     text-align: center;
     color: white;
 }
+
+.button-continue:hover {
+    background-color: #003a99;
+  }
