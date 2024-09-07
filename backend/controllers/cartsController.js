@@ -25,4 +25,28 @@ const createCart = asyncHandler(async (req, res) => {
     res.status(201).json(savedCart);
 });
 
-module.exports = { getCart, createCart };
+
+const deleteCart = asyncHandler(async (req, res) => {
+    const { itemID } = req.params;
+
+    const deleteCart = await Cart.findByIdAndDelete(itemID);
+
+    res.status(200).json({ message: 'Cart deleted successfully' });
+    
+});
+
+
+const updateCart = asyncHandler(async (req, res) => {
+    const { itemId } = req.params;
+    const { price, quantity } = req.body;
+
+    const updatedCart = await Cart.findOneAndUpdate(
+        { itemId }, 
+        { price, quantity }, 
+        { new: true, runValidators: true } 
+    );
+
+    res.status(200).json(updatedCart);
+});
+
+module.exports = { getCart, createCart, deleteCart, updateCart };
