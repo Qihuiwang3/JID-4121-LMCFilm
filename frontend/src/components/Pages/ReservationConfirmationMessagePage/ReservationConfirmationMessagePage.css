@@ -1,0 +1,58 @@
+.confirmation-container {
+    height: 100%;
+    width: 100%;
+    background-color: #FFFDF8;
+}
+
+.header_text {
+    display: "flex";
+    padding-top: "100px";
+    margin-left: 40px;
+    margin-top: 115px;
+    justify-content: "space-between";
+    width: "60%";
+    padding-left: "50px";
+    /* font-family: 'Montserrat';
+    font-style: normal; */
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 46px;
+    color: #3361AE;
+}
+
+.confirm-text {
+    /* font-family: 'Montserrat';
+    font-style: normal; */
+    margin-top: 2%;
+    margin-left: 40px;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+    color: #000000;
+}
+
+.barcode-container {
+    display: flex;
+    align-items: center;
+    margin-top: 4%;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #FFFDF8;
+}
+
+
+.back-button {
+    background-color: #0052cc;
+    color: white;
+    padding: 12px 70px;
+    font-size: 18px;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    align-self: start;
+    align-self: flex-end;
+    margin-bottom: 5%;
+    margin-top: 4%;
+    margin-left: 5%;
+}
