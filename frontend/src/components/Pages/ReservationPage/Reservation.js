@@ -17,11 +17,12 @@ function ReservationPage({ selectedDates }) {
     const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
-    const addToCart = (id) => {
-        if (!cartItems.includes(id)) {
-            setCartItems([...cartItems, id]);
+    const addToCart = (item) => {
+
+        if (!cartItems.includes(item)) {
+            setCartItems([...cartItems, item]);
         } else {
-            setCartItems(cartItems.filter(cartItems => cartItems !== id));
+            setCartItems(cartItems.filter(cartItems => cartItems !== item));
         }
     }
 
@@ -34,7 +35,7 @@ function ReservationPage({ selectedDates }) {
     }
 
     const handleCheckout = () => {
-        navigate('/Payment');
+        navigate('/CartConfirmation', { state: { cartItems } });
     };
 
     useEffect(() => {
@@ -49,12 +50,13 @@ function ReservationPage({ selectedDates }) {
                             .then(itemDetails => ({
                                 ...singleItem,
                                 pricePerItem: itemDetails.pricePerItem,
+                                quantity: itemDetails.quantity
                             }))
                     );
 
                     Promise.all(promises)
-                        .then(equipmentWithPrices => {
-                            setEquipment(equipmentWithPrices);
+                        .then(equipmentWithPricesQuantity => {
+                            setEquipment(equipmentWithPricesQuantity);
                         })
                         .catch(error => console.error('Error fetching item prices:', error));
                 })
@@ -89,8 +91,10 @@ function ReservationPage({ selectedDates }) {
                         equipment={equipment.map(item => ({
                             name: item.itemName,
                             price: item.pricePerItem,
-                            itemId: item._id
+                            itemId: item._id,
+                            quantity: item.quantity
                         }))}
+                        showReserve={true}
                         addItem={addToCart}
                     />
 
@@ -103,6 +107,7 @@ function ReservationPage({ selectedDates }) {
                             equipments: bundle.items,
                             bundleId: bundle._id
                         }))}
+                        showReserve={true}
                         addItem={addToCart}
                     />
                 </div>
@@ -122,7 +127,6 @@ function ReservationPage({ selectedDates }) {
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div style={{ color: "#9C9C9C" }}> ID: {id.itemId || id.bundleId}</div>
                                             <div className="remove-equipment-item" onClick={() => addToCart(id)}> Remove </div>
                                         </div>
                                     </div>
@@ -135,7 +139,7 @@ function ReservationPage({ selectedDates }) {
             </div>
 
             <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse", paddingTop: "10px" }}>
-                <div 
+                <div
                     className="equipment-checkout"
                     onClick={() => handleCheckout()}
                 > Checkout </div>

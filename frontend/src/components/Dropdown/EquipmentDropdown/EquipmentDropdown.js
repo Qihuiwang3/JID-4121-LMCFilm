@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentDropdown.css'
 
-function EquipmentDropdown({title, equipment, addItem }) {
+function EquipmentDropdown({ title, equipment, addItem, showReserve }) {
 
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen)
     };
+
+    useEffect(() => {
+
+        console.log(equipment);
+
+    })
 
     return (
 
@@ -27,9 +33,12 @@ function EquipmentDropdown({title, equipment, addItem }) {
                 <div className="equipment-dropdown-content">
                     {equipment.map((option, index) => (
                         <div className="equipment-dropdown-item" key={index}>
-                            <div> {index + 1}. {option.name} | ${option.price}</div>
+                            <div> {index + 1}. {option.name} | ${option.price} | Quantity: {option.quantity} </div>
 
-                            <button className="equipment-reserve-button" onClick={() => addItem(option)}> Reserve </button>
+
+                            {showReserve && (
+                                <button className="equipment-reserve-button" onClick={() => addItem(option)}> Reserve </button>
+                            )}
 
                         </div>
                     ))}
