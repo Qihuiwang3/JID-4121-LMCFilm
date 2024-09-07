@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentDropdown.css'
 
-function EquipmentDropdown({ id, title, equipment, addItem }) {
+function EquipmentDropdown({title, equipment, addItem }) {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +27,7 @@ function EquipmentDropdown({ id, title, equipment, addItem }) {
                 <div className="equipment-dropdown-content">
                     {equipment.map((option, index) => (
                         <div className="equipment-dropdown-item" key={index}>
-                            <div> {index + 1}. {option.itemID} | {option.name} | ${option.price}</div>
+                            <div> {index + 1}. {option.name} | ${option.price}</div>
 
                             <button className="equipment-reserve-button" onClick={() => addItem(option)}> Reserve </button>
 

@@ -46,7 +46,7 @@ class EnterCode extends Component {
             .then(res => res.json())
             .then(data => {
                 if (data.code === codeInput) {
-                    this.props.navigate("/SelectClass");
+                    this.props.navigate("/ReservationPage", { state: { classCode: codeInput } });
                 } else {
                     this.setState({ errorMessage: "The code does not exist" });
                 }

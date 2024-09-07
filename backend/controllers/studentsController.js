@@ -13,10 +13,24 @@ const getStudents = asyncHandler(async (req, res) => {
 // @route POST /students
 // @access Private
 const createStudent = asyncHandler(async (req, res) => {
-    const { name, role } = req.body;
+    const { classCode, name, email, cellPhone, role } = req.body;
+
+    if (!classCode || !name || !email || !cellPhone || !role) {
+        res.status(400);
+        throw new Error('Please add all fields');
+    }
+
+    const studentExists = await Student.findOne({ email });
+    if (studentExists) {
+        res.status(400);
+        throw new Error('Student with this email already exists');
+    }
 
     const newStudent = new Student({
+        classCode,
         name,
+        email,
+        cellPhone,
         role
     });
 
