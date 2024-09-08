@@ -47,6 +47,7 @@
     line-height: 75px;
     text-align: center;
     color: white;
+    cursor: pointer;
 }
 
 .button-continue {
@@ -57,4 +58,5 @@
     line-height: 75px;
     text-align: center;
     color: white;
+    cursor: pointer;
 }
