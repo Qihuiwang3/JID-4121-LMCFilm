@@ -4,6 +4,7 @@ import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdow
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function ReservationPage({ selectedDates }) {
     const navigate = useNavigate();
@@ -34,8 +35,25 @@ function ReservationPage({ selectedDates }) {
         return total.toFixed(2);
     }
 
-    const handleCheckout = () => {
-        navigate('/CartConfirmation', { state: { cartItems } });
+    const handleCheckout = async () => {
+        let itemId = 12345;
+        const cartData = {
+            itemId: 12345, //example
+            price: 10.99,
+            quantity: 2  //example
+        };
+
+        try {
+            const response = await axios.post('http://localhost:3500/api/carts', cartData);
+            console.log('Cart created:', response.data);
+        } catch (error) {
+           
+            console.error('Backend not started:', error.message || error);
+        
+        } finally {
+            navigate('/CartConfirmation', { state: { cartItems, itemId } });
+        }
+
     };
 
     useEffect(() => {
