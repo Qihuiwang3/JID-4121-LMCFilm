@@ -50,6 +50,10 @@
     cursor: pointer;
 }
 
+.button-back:hover {
+    background-color: #003a99;
+  }
+
 .button-continue {
     background-color: #3361AE;
     border-radius: 37.5px;
@@ -60,3 +64,7 @@
     color: white;
     cursor: pointer;
 }
+
+.button-continue:hover {
+    background-color: #003a99;
+  }

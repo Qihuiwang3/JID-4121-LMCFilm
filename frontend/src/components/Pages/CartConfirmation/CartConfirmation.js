@@ -3,13 +3,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './CartConfirmation.css';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown';
+import axios from 'axios';
 
 function CartConfirmation() {
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { cartItems } = location.state || {};
+    const { cartItems, itemId } = location.state || {};
 
     const [equipment, setEquipment] = useState({});
     const [packages, setPackages] = useState({});
@@ -19,8 +20,18 @@ function CartConfirmation() {
         navigate('/Payment', { state: { cartTotal } });
     };
 
-    const handleBack = () => {
-        navigate('/ReservationPage');
+    const handleBack = async () => {
+        try {
+            await axios.delete(`http://localhost:3500/api/carts/${itemId}`);
+        } catch (error) {
+            
+            console.error('Backend not started:', error.message || error);
+            
+        
+        } finally {
+            
+            navigate('/ReservationPage');
+        }
     }
 
     const calculateTotal = () => {
