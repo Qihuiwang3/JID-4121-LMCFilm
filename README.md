@@ -29,9 +29,9 @@ Users can now enter a class code, select a class section, choose a reservation t
 <!-- Frontend Initial Setup -->
 
 1. make sure your local branch is up to date
-2. ```cd frontend
-3. run ```git install (this is to install the dependencies from liberary)
-4. run ```npm start (this is to ONLY start the frontend in port 3000)
+2. ```cd frontend```
+3. run ```git install``` (this is to install the dependencies from liberary)
+4. run ```npm start``` (this is to ONLY start the frontend in port 3000)
 
 <!-- Frontend Update -->
 
