@@ -1,4 +1,4 @@
-# JID-4121_LMCFilm
+# JID-4121_LMCFilm Equipment Checkin/Checkout System
 <!-- technology tools and platforms used, feature implemented for this version 0.0.0, including the rationale for selecting it, bugs fixed, and known issues. See the details in assignment description. -->
 
 This project was developed for the Georgia Tech LMC (Literature, Media, and Communication) department. It is an equipment check-in/check-out system that allows students to reserve equipment and pay online.
