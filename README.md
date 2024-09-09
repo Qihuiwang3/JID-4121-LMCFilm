@@ -1,10 +1,13 @@
 # JD_SLS4121_LMCFilm
 <!-- technology tools and platforms used, feature implemented for this version 0.0.0, including the rationale for selecting it, bugs fixed, and known issues. See the details in assignment description. -->
 
+This project was developed for the Georgia Tech LMC (Literature, Media, and Communication) department. It is an equipment check-in/check-out system that allows students to reserve equipment and pay online.
+
+Admins have the ability to create class codes, which grant students access to specific equipment or equipment bundles. Using these class codes, students can reserve and check out the necessary items for their projects or classes.
+
+The system streamlines the equipment reservation process, ensuring that both students and administrators can efficiently manage equipment availability and reservations.
+
 Our project is built on the MERN stack, which stands for MongoDB, Express.js, React.js, and Node.js. This architecture allows for seamless integration between the frontend and backend components, providing a robust and scalable foundation for our application. 
-
-Users can now enter a class code, select a class section, choose a reservation time, and add or remove necessary equipment, all seamlessly integrated into a shopping cart and checkout process. This user story was prioritized as it addresses a critical aspect of our system, ensuring that LMC users at GaTech can easily access and utilize the rental equipment system to meet their needs.
-
 
 # Release Notes
 
