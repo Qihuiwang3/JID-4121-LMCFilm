@@ -23,6 +23,11 @@ In this initial release, we focused on developing key features for the **Student
 - For this release, users can now enter a class code, select a class section, choose a reservation time, and add or remove necessary equipment. These actions are seamlessly integrated into a shopping cart and checkout process.
 - For this release, users can now make payments via PayPal and will receive a barcode and confirmation email upon completion.
 
+#### Bug Fixes
+
+- Fixed class login code to prevent any code from being submitted.
+- Fixed the filtering of equipment into packages and single items immediately after calling equipment API.
+
 #### Known Issues
 
 - Equipment in the shopping cart is not saved when users navigate back to make changes.
