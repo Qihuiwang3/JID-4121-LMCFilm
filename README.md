@@ -1,11 +1,21 @@
-# JID-4121_LMCFilm Equipment Checkin/Checkout System
+# JID-4121_Georgia Tech LMC Film Equipment Inventory System 
 <!-- technology tools and platforms used, feature implemented for this version 0.0.0, including the rationale for selecting it, bugs fixed, and known issues. See the details in assignment description. -->
 
-This project was developed for the Georgia Tech LMC (Literature, Media, and Communication) department. It is an equipment check-in/check-out system that allows students to reserve equipment and pay online.
+**Project Overview**
 
-Admins have the ability to create class codes, which grant students access to specific equipment or equipment bundles. Using these class codes, students can reserve and check out the necessary items for their projects or classes.
+This project was developed for the School of Literature, Media, and Communication at Georgia Tech. It is a **film equipment inventory system** that enables students to reserve equipment and complete payments online. Additionally, professors can manage the inventory as administrators.
 
-The system streamlines the equipment reservation process, ensuring that both students and administrators can efficiently manage equipment availability and reservations.
+**Highlight Features**
+
+**Class-Specific Equipment Access**
+
+The system allows professors to create class codes, limiting students to the specific equipment or packages required for their course. After logging in with their GT email and entering the class code, students can view and reserve the relevant equipment.
+
+**Pre-Configured Equipment Packages**
+
+Professors can create customized equipment packages for their classes, allowing students to reserve multiple items at once without individually searching the entire database. These packages simplify the reservation process, and students receive a discount at checkout when selecting a pre-configured package.
+
+These features simplify the reservation process, ensuring streamlined equipment management for both students and administrators.
 
 Our project is built on the MERN stack, which stands for MongoDB, Express.js, React.js, and Node.js. This architecture allows for seamless integration between the frontend and backend components, providing a robust and scalable foundation for our application. 
 
