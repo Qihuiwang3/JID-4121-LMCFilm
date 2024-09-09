@@ -29,7 +29,7 @@ Users can now enter a class code, select a class section, choose a reservation t
 <!-- Frontend Initial Setup -->
 
 1. make sure your local branch is up to date
-2. ```cd frontend```
+2. go to the frontend folder by ```cd frontend```
 3. run ```git install``` (this is to install the dependencies from liberary)
 4. run ```npm start``` (this is to ONLY start the frontend in port 3000)
 
@@ -39,5 +39,5 @@ Users can now enter a class code, select a class section, choose a reservation t
 
 
 <!-- Backend -->
-
-1. Running command: ```npm run dev
+1. got to the backend folder by ```cd backend```
+2. Running command: ```npm run dev```
