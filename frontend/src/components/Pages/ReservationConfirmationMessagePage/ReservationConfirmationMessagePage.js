@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ReservationConfirmationMessagePage.css';
 import { useNavigate } from 'react-router-dom';
 import Barcode from 'react-barcode';
+import emailjs from 'emailjs-com';
 
 function ReservationConfirmationMessagePage() {
     const [orderNumber, setOrderNumber] = useState('');
@@ -15,11 +16,11 @@ function ReservationConfirmationMessagePage() {
         const generatedOrderNumber = generateOrderNumber();
         setOrderNumber(generatedOrderNumber);
         
-            const cartTotal = calculateTotal();
+            
                 const templateParams = {
                     to_email: 'charlesdickens2424@outlook.com',
                     subject: 'Order Confirmation',
-                    message: `You have a new order. Total: ${cartTotal}`
+                    message: 'You have a new order'
                 };
            
            
@@ -31,7 +32,7 @@ function ReservationConfirmationMessagePage() {
                         console.error('Error sending email:', error);
                     });
            
-            navigate('/Payment', { state: { cartTotal } });
+            navigate('/Payment');
         
     
     }, []);
