@@ -6,6 +6,10 @@ const classCodeSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    professor: {
+        type: String,
+        require: true,
+    }
 });
 
 module.exports = mongoose.model('ClassCode', classCodeSchema);
