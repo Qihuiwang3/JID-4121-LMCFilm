@@ -1,0 +1,16 @@
+import { ActionTypes } from "../constants/action-types";
+
+const intialState = {
+  cart: [],
+};
+
+export const cartReducers = (state = intialState, { type, payload }) => {
+  switch (type) {
+    case ActionTypes.SET_CART_PRICE:
+      return { ...state, cart: payload };
+    case ActionTypes.UPDATE_CART_PRICE:
+      return { ...state, cart: payload };
+    default:
+      return state;
+  }
+};

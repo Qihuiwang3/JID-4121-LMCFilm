@@ -8,6 +8,8 @@ import SelectClassPage from "./components/Pages/SelectClassPage/SelectClassPage"
 import Payment from "./components/Pages/Payment/Payment";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
+import { Provider } from "react-redux";
+import store from "./components/redux/store";
 
 class App extends Component {
     state = {
@@ -27,19 +29,21 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
-        <TopNavBar />
-        <Routes>
-          <Route path="/" element={<EnterCode />} />
-          <Route path="/SelectClass" element={<SelectClassPage />} />
-          <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
-          <Route path="/ReservationPage" element={<ReservationPage selectedDates={this.state.selectedDates} />} />
-          <Route path="/Payment" element={<Payment />} />
-          <Route path="/CartConfirmation" element={<CartConfirmation />} />
-          <Route path="/Payment" element={<Payment />} />
-          <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
-        </Routes>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <TopNavBar />
+          <Routes>
+            <Route path="/" element={<EnterCode />} />
+            <Route path="/SelectClass" element={<SelectClassPage />} />
+            <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
+            <Route path="/ReservationPage" element={<ReservationPage selectedDates={this.state.selectedDates} />} />
+            <Route path="/Payment" element={<Payment />} />
+            <Route path="/CartConfirmation" element={<CartConfirmation />} />
+            <Route path="/Payment" element={<Payment />} />
+            <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
+          </Routes>
+        </Router>
+      </Provider>
     );
   }
 }
