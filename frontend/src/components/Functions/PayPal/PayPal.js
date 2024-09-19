@@ -10,7 +10,7 @@ const initialOptions = {
     currency: "USD",
 };
 
-function Payment({ cartTotalCost }) {
+function Paypal({ cartTotalCost }) {
     return (
         <PayPalScriptProvider options={initialOptions}>
             <PayPalButtons
@@ -21,7 +21,7 @@ function Payment({ cartTotalCost }) {
                                 description: "Cool looking table",
                                 amount: {
                                     currency_code: "USD",
-                                    value: { cartTotalCost },
+                                    value: cartTotalCost,
                                 },
                             },
                         ],
@@ -37,4 +37,4 @@ function Payment({ cartTotalCost }) {
     );
 }
 
-export default Payment;
+export default Paypal;
