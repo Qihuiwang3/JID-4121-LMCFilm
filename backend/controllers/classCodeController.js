@@ -16,15 +16,22 @@ const getClassCode = asyncHandler(async (req, res) => {
 // @route POST /class-code
 // @access Private
 const createClassCode = asyncHandler(async (req, res) => {
-    const { code } = req.body;
+    const { code, professor } = req.body;
+
+    const existingClassCode = await ClassCode.findOne({ code });
+    if (existingClassCode) {
+        return res.status(400).json({ error: "Class code already exists" });
+    }
 
     const newClassCode = new ClassCode({
         code,
+        professor
     });
 
     const savedClassCode = await newClassCode.save();
     res.status(201).json(savedClassCode);
 });
+
 
 // @desc Get all class codes
 // @route GET /class-codes
