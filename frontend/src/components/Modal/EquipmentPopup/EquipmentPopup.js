@@ -9,14 +9,13 @@ const EquipmentPopup = ({ show, handleClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // handle equipment submission logic
         console.log({
             itemID,
             itemName,
             price,
             category
         });
-        handleClose(); // Close modal after submitting
+        handleClose(); 
     };
 
     if (!show) {
@@ -27,12 +26,19 @@ const EquipmentPopup = ({ show, handleClose }) => {
         <div className="modal-overlay">
             <div className="modal-content">
                 <div className="modal-header">
-                    <h2>Add a New Equipment</h2>
-                    <button className="close-button" onClick={handleClose}>&times;</button>
+                    <h2 className="header-text">Add a New Equipment</h2>
+                    <button 
+                        className="close-button" 
+                        onClick={handleClose}
+                    >
+                        <div className='close-button-inner'>
+                            &times;
+                        </div>
+                    </button>
                 </div>
                 <form onSubmit={handleSubmit} className="modal-form">
                     <div className="form-group">
-                        <label>Item ID</label>
+                        <div>Item ID</div>
                         <input 
                             type="text" 
                             value={itemID} 
@@ -40,7 +46,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Item Name</label>
+                        <div>Item Name</div>
                         <input 
                             type="text" 
                             value={itemName} 
@@ -48,7 +54,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Price</label>
+                        <div>Price</div>
                         <input 
                             type="text" 
                             value={price} 
@@ -56,7 +62,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Category</label>
+                        <div>Category</div>
                         <select 
                             value={category} 
                             onChange={(e) => setCategory(e.target.value)}>
