@@ -1,0 +1,263 @@
+.content-container {
+    padding: 30px;
+    margin: 0 auto;
+    max-width: 1250px;
+    text-align: left;
+}
+
+.section-title {
+    color: #3361AE;
+    font-size: 40px;
+    font-weight: bold;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.add-class-button {
+    background-color: #3361AE;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    width: 180px;
+}
+
+.edit-button {
+    background-color: #3361AE;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    width: 180px;
+}
+
+.table-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.class-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 20px;
+}
+
+.class-table th, .class-table td {
+    padding: 15px;
+    text-align: left;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #3361AE;
+    border-width: 3px;
+}
+
+.class-table th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    border-bottom: 1px solid #3361AE;
+    font-size: 25px;
+    border-width: 3px;
+}
+
+.class-table th:last-child, .class-table td:last-child {
+    text-align: center;
+    width: 75px;
+}
+
+.class-table td img {
+    width: 20px;
+    cursor: pointer;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: blue;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.pagination-button {
+    font-size: 16px;
+    cursor: pointer;
+    background-color: white;
+    border-color: white;
+    color: blue;
+    margin: 0 5px;
+}
+
+.pagination-text {
+    font-size: 16px;
+    color: blue;
+    font-weight: bold;
+}
+
+.pagination-button:hover {
+    background-color: rgb(146, 144, 144);
+}
+
+.bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-left: 0px;
+}
+
+.back-button {
+    background-color: #335cae;
+    color: white;
+    padding: 12px 70px;
+    font-size: 18px;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    margin-bottom: 5%;
+    margin-top: 4%;
+    margin-left: 0px;
+}
+
+.save-button {
+    background-color: #3361AE;
+    color: white;
+    padding: 12px 70px;
+    font-size: 18px;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    margin-bottom: 5%;
+    margin-top: 4%;
+    margin-left: 900px;
+}
+
+.back-button:hover, .save-button:hover, .add-class-button:hover {
+    background-color: #003a99;
+}
+
+.clear-button {
+    background-color: brown;
+    color: white;
+    padding: 12px 70px;
+    font-size: 20px;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    margin-bottom: 5%;
+    margin-top: 4%;
+    margin-left: 0px;
+}
+
+.clear-button:hover {
+    background-color: blue;
+}
+
+.modal2-body {
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-size: 15px;
+    color: #3361AE;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-color: #3361AE;
+    background-color: #e0f7fa;
+    font-size: 16px;
+    width: 90%;
+}
+
+.input-group-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.input-group-row .input-group {
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.cancel-button, .submit-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.cancel-button:hover {
+    background-color: rgb(198, 196, 196);
+}
+
+.cancel-button {
+    background-color: transparent;
+    color: #3361AE;
+    border: 1px solid #3361AE;
+}
+
+.submit-button {
+    background-color: #3361AE;
+    color: white;
+}
+
+.add-class-button {
+    background-color: #3361AE;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal2-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #3361AE;
+    padding-left: 110px;
+    font-size: 25px;
+    padding-bottom: 2px;
+}
+
+.modal2-content {
+    background-color: #ffe9d3;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
