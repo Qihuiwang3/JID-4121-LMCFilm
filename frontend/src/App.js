@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ReservationTimePicker from "./components/Pages/ReservationTimePicker/ReservationTimePicker";
-import EnterCode from "./components/Pages/EnterCode/EnterCode";
-import ReservationPage from "./components/Pages/ReservationPage/Reservation";
-import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
-import SelectClassPage from "./components/Pages/SelectClassPage/SelectClassPage";
 import Payment from "./components/Pages/Payment/Payment";
+import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
+import EnterCode from "./components/Pages/EnterCode/EnterCode";
+import Equipment from "./components/Pages/Equipment/Equipment";
+import SelectClassPage from "./components/Pages/SelectClassPage/SelectClassPage";
+import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
+import ReservationTimePicker from "./components/Pages/ReservationTimePicker/ReservationTimePicker";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
@@ -41,6 +42,7 @@ class App extends Component {
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
+            <Route path="/Equipment" element={<Equipment />} />
           </Routes>
         </Router>
       </Provider>
