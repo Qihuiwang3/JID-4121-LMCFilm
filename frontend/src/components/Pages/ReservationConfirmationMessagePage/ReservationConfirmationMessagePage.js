@@ -35,7 +35,7 @@ function ReservationConfirmationMessagePage() {
 
     useEffect(() => {
         const generatedOrderNumber = generateOrderNumber();
-        sendEmail(generateOrderNumber)
+        sendEmail(generatedOrderNumber)
         setOrderNumber(generatedOrderNumber);
     
     }, []);
