@@ -43,27 +43,8 @@ function ReservationConfirmationMessagePage() {
 
     useEffect(() => {
         const generatedOrderNumber = generateOrderNumber();
-        // createOrder();
         setOrderNumber(generatedOrderNumber);
-        
-                const templateParams = {
-                    to_email: 'charlesdickens2424@outlook.com',
-                    subject: 'Order Confirmation',
-                    message: `You have a new order. `
-                };
-           
-           
-                emailjs.send('service_ydtf7yr', 'template_necdynr', templateParams, 'FqA2gtqDtehYJomld')
-                    .then((response) => {
-                        console.log('Email sent successfully:', response);
-                    })
-                    .catch((error) => {
-                        console.error('Error sending email:', error);
-                    });
-           
-                navigate('/Payment');
-        
-    
+        // createOrder();
     }, []);
 
     // Function to handle the back button click
