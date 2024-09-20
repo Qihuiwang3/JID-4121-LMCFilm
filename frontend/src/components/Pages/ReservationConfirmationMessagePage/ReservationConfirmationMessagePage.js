@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './ReservationConfirmationMessagePage.css';
 import { useNavigate } from 'react-router-dom';
 import Barcode from 'react-barcode';
+import emailjs from 'emailjs-com';
+
 
 function ReservationConfirmationMessagePage() {
     const [orderNumber, setOrderNumber] = useState('');
@@ -11,28 +13,30 @@ function ReservationConfirmationMessagePage() {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
     };
 
+    const sendEmail = (OrderNumber) => {
+        //const studentName = "John Doe"; // Replace with the actual student name or a dynamic value
+    
+        //const student = fetch(`http://localhost:3500/api/students/${studentName}`); Uncommit for backend, dont have actual email for students yet to test on 
+       
+        const templateParams = {
+            to_email: 'charlesDickens2424@outlook.com',
+            subject: OrderNumber,
+            message: 'You have a new order and Equipment to Reserve'
+        };
+        emailjs.send('service_ydtf7yr', 'template_necdynr', templateParams, 'FqA2gtqDtehYJomld')    
+            .then((response) => {
+                console.log('Email sent successfully:', response);
+            })
+            .catch((error) => {
+                console.log('Error sending email:', error);
+            });
+    
+};
+
     useEffect(() => {
         const generatedOrderNumber = generateOrderNumber();
+        sendEmail(generateOrderNumber)
         setOrderNumber(generatedOrderNumber);
-        
-            const cartTotal = calculateTotal();
-                const templateParams = {
-                    to_email: 'charlesdickens2424@outlook.com',
-                    subject: 'Order Confirmation',
-                    message: `You have a new order. Total: ${cartTotal}`
-                };
-           
-           
-                emailjs.send('service_ydtf7yr', 'template_necdynr', templateParams, 'FqA2gtqDtehYJomld')
-                    .then((response) => {
-                        console.log('Email sent successfully:', response);
-                    })
-                    .catch((error) => {
-                        console.error('Error sending email:', error);
-                    });
-           
-            navigate('/Payment', { state: { cartTotal } });
-        
     
     }, []);
 
