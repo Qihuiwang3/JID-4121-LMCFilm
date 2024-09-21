@@ -36,6 +36,8 @@ const EquipmentPopup = ({ show, handleClose }) => {
                         </div>
                     </button>
                 </div>
+                <hr className="header-divider" />
+                
                 <form onSubmit={handleSubmit} className="modal-form">
                     <div className="form-group">
                         <div>Item ID</div>
@@ -61,15 +63,14 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             onChange={(e) => setPrice(e.target.value)} 
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group-category">
                         <div>Category</div>
                         <select 
                             value={category} 
                             onChange={(e) => setCategory(e.target.value)}>
                             <option value="">Select Category</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="furniture">Furniture</option>
-                            <option value="tools">Tools</option>
+                            <option value="camera">Camera</option>
+                            <option value="light">Light</option>
                         </select>
                     </div>
                     <div className="modal-footer">

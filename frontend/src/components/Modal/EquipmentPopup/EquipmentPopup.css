@@ -23,14 +23,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    display: inline-block;
 }
 
 .close-button {
     background: none;
     border: none;
-    font-size: 26px;
+    font-size: 30px;
     cursor: pointer;
     color: #3361AE;
     margin-top: 5px;
@@ -39,15 +37,32 @@
 .modal-form .form-group {
     margin-bottom: 15px;
     color: #3361AE;
-
 }
 
-.modal-form input, .modal-form select {
-    width: 100%;
+.modal-form div {
+    margin-bottom: 5px;
+}
+
+.modal-form input{
+    width: 95%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #3361AE;
     border-radius: 5px;
     font-size: 14px;
+    background-color: #E7EFF2;
+}
+
+.form-group-category{
+    color: #3361AE;
+}
+
+.modal-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #3361AE;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #E7EFF2;
 }
 
 .modal-footer {
@@ -71,7 +86,7 @@
 }
 
 .submit-button {
-    background-color: #007bff;
+    background-color: #3361AE;
     color: white;
 }
 
@@ -84,9 +99,10 @@
     font-size: 28px;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.header-divider {
+    border: 0;
+    height: 1.5px;
+    background: #3361AE;
+    margin: 0 0 15px 0;
+    width: 100%;
 }
