@@ -8,15 +8,11 @@ class StudentTable extends Component {
         this.state = {
             records: [],
             columnDefs: [
-                { headerName: "Class", field: "classCode", sortable: true, filter: true, width: 230 },
-                { headerName: "Name", field: "name", sortable: true, filter: true, width: 130 },
-                { headerName: "Email", field: "email", sortable: true, filter: true, width: 230 },
-                { headerName: "Role", field: "role", sortable: true, filter: true, width: 120 },
-            ],
-            defaultColDef: {
-                sortable: true,
-                filter: true,
-            }
+                { headerName: "Class", field: "classCode", flex: 1 },
+                { headerName: "Name", field: "name", flex: 1 },
+                { headerName: "Email", field: "email", flex: 1 },
+                { headerName: "Role", field: "role", flex: 1 },
+            ]
         };
     }
 
@@ -39,6 +35,8 @@ class StudentTable extends Component {
                 rowData={this.state.records}
                 columnDefs={this.state.columnDefs}
                 defaultColDef={this.state.defaultColDef}
+                domLayout="autoHeight"
+                suppressHorizontalScroll={true}
             />
         );
     }

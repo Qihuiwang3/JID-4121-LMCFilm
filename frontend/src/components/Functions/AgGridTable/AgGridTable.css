@@ -13,4 +13,23 @@
 
 .ag-root-wrapper.ag-layout-normal {
     height: 88vh !important;
+    border: none;
+}
+
+.ag-header, .ag-advanced-filter-header {
+    background-color: transparent;
+    border-top: var(--ag-borders-critical) #3361AE;
+    border-bottom: var(--ag-borders-critical) #3361AE;
+}
+
+.ag-row {
+    border-bottom: var(--ag-row-border-style)  #3361AE var(--ag-row-border-width);
+}
+
+.ag-header-cell-resize::after {
+    background-color: transparent;
+}
+
+.ag-header-group-cell-label, .ag-cell-label-container {
+    font-size: 24px;
 }

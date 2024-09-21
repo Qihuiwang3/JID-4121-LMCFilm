@@ -10,7 +10,7 @@ class AgGridTable extends Component {
 
         return (
             <div className="body">
-                <div className="RecordPageContainer ag-theme-alpine" style={{ height: 500, width: '100%' }}>
+                <div className="RecordPageContainer ag-theme-alpine" style={{ width: '50%' }}>
                     <AgGridReact
                         rowData={rowData}
                         columnDefs={columnDefs}
