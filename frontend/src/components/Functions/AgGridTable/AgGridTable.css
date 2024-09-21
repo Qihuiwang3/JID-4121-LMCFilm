@@ -1,29 +1,20 @@
-.ag-body-horizontal-scroll-viewport::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
+html, body {
+    overflow: hidden;
 }
-
-.ag-body-horizontal-scroll-viewport {
-    -ms-overflow-style: none; /* For Internet Explorer and Edge */
-    scrollbar-width: none; /* For Firefox */
-}
-
-.main-page-body::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Opera */
-}
-
 .ag-root-wrapper.ag-layout-normal {
-    height: 88vh !important;
+    height: 60vh;
     border: none;
 }
 
 .ag-header, .ag-advanced-filter-header {
-    background-color: transparent;
-    border-top: var(--ag-borders-critical) #3361AE;
-    border-bottom: var(--ag-borders-critical) #3361AE;
+    background-color: #FFFDF8;
+    border-top: 2px solid #3361AE;
+    border-bottom: 2px solid #3361AE;
 }
 
 .ag-row {
-    border-bottom: var(--ag-row-border-style)  #3361AE var(--ag-row-border-width);
+    border-bottom: 2px solid #3361AE;
+    background-color: #FFFDF8;
 }
 
 .ag-header-cell-resize::after {
@@ -32,4 +23,8 @@
 
 .ag-header-group-cell-label, .ag-cell-label-container {
     font-size: 24px;
+}
+
+.ag-center-cols-viewport {
+    background-color: #FFFDF8;
 }
