@@ -1,14 +1,43 @@
 .student-title {
     font-size: 24px;
     font-weight: bold;
-    color: #3b5998;
+    color: #3361AE;
     position: fixed;
-    top: 8%;
+    top: 12%;
     left: 16.5%;
 }
 
-.search-bar-position {
+.search-bar-edit-container {
+    display: flex;
     position: fixed;
-    top: 22%;
+    top: 28%;
     left: 16.5%;
+    width: 100%;
+}
+
+.search-bar-position {
+    margin-right: 10px; 
+}
+
+.edit-btn {
+    border-radius: 5px;
+    margin-left: 5px;
+    width: 80px;
+    height: 30px;
+    background-color: #3361AE;
+    border: 2px solid #3361AE;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.edit-icon {
+    font-size: 16px;
+    margin-right: 5px;
+    margin-bottom: 2px;
 }

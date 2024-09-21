@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
 import { getStudents } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faEdit } from '@fortawesome/free-solid-svg-icons'; 
 import './StudentTable.css';
 
 class StudentTable extends Component {
@@ -35,8 +37,16 @@ class StudentTable extends Component {
         return (
             <>
                 <h2 className="student-title">Student</h2>
-                <div className="search-bar-position">
-                    <SearchBar />
+                <div className="search-bar-edit-container">
+                    <div className="search-bar-position">
+                        <SearchBar />
+                    </div>
+                    <div className="edit-btn-container">
+                        <button className="edit-btn">
+                            Edit
+                            <FontAwesomeIcon icon={faEdit} className="edit-icon" />
+                        </button>
+                    </div>
                 </div>
                 <AgGridTable
                     rowData={this.state.records}
