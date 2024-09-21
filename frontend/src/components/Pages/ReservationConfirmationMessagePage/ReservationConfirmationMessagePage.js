@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ReservationConfirmationMessagePage.css';
 import { useNavigate } from 'react-router-dom';
 import Barcode from 'react-barcode';
+import emailjs from 'emailjs-com';
 
 function ReservationConfirmationMessagePage() {
     const [orderNumber, setOrderNumber] = useState('');
@@ -11,29 +12,39 @@ function ReservationConfirmationMessagePage() {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
     };
 
+    // const createOrder = async () => {
+    //     const generatedOrderNumber = generateOrderNumber();
+    //     setOrderNumber(generatedOrderNumber);
+
+    //     const orderData = {
+    //         orderNumber: generatedOrderNumber,
+    //         email,
+    //         checkin,
+    //         checkout,
+    //         studentName
+    //     };
+
+    //     try {
+    //         const response = await fetch('http://localhost:3500/api/order', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(orderData)
+    //         });
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             console.log('Order created successfully:', data);
+    //         } else {
+    //             console.error('Error creating order:', data.error);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error submitting order:', error);
+    //     }
+    // };
+
     useEffect(() => {
         const generatedOrderNumber = generateOrderNumber();
         setOrderNumber(generatedOrderNumber);
-        
-            const cartTotal = calculateTotal();
-                const templateParams = {
-                    to_email: 'charlesdickens2424@outlook.com',
-                    subject: 'Order Confirmation',
-                    message: `You have a new order. Total: ${cartTotal}`
-                };
-           
-           
-                emailjs.send('service_ydtf7yr', 'template_necdynr', templateParams, 'FqA2gtqDtehYJomld')
-                    .then((response) => {
-                        console.log('Email sent successfully:', response);
-                    })
-                    .catch((error) => {
-                        console.error('Error sending email:', error);
-                    });
-           
-            navigate('/Payment', { state: { cartTotal } });
-        
-    
+        // createOrder();
     }, []);
 
     // Function to handle the back button click
