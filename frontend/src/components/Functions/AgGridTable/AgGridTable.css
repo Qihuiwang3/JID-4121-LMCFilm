@@ -1,0 +1,16 @@
+.ag-body-horizontal-scroll-viewport::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
+.ag-body-horizontal-scroll-viewport {
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    scrollbar-width: none; /* For Firefox */
+}
+
+.main-page-body::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
+.ag-root-wrapper.ag-layout-normal {
+    height: 88vh !important;
+}
