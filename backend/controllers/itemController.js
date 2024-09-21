@@ -7,10 +7,10 @@ const BundleItem = require('../models/BundleItem');
 // @route POST /item
 // @access Private
 const createGlobalItem = asyncHandler(async (req, res) => {
-    const { itemName, quantity, pricePerItem, itemIds } = req.body;
+    const { itemName, pricePerItem, itemIds } = req.body;
     let item = await Item.findOne({ itemName });
     if (item) {
-        item.quantity += quantity;
+        item.quantity += 1;
         item.itemName = itemName;
         item.pricePerItem = pricePerItem;
         const newItemIds = itemIds.map(id => ({
@@ -27,7 +27,7 @@ const createGlobalItem = asyncHandler(async (req, res) => {
         }));
         item = new Item({
             itemName,
-            quantity,
+            quantity: 1,
             pricePerItem,
             itemIds: newItemIds
         });
