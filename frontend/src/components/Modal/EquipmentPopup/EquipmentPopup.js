@@ -39,32 +39,32 @@ const EquipmentPopup = ({ show, handleClose }) => {
                 <hr className="header-divider" />
                 
                 <form onSubmit={handleSubmit} className="modal-form">
-                    <div className="form-group">
-                        <div>Item ID</div>
+                    <div >
+                        <div className='form-text'>Item ID</div>
                         <input 
                             type="text" 
                             value={itemID} 
                             onChange={(e) => setItemID(e.target.value)} 
                         />
                     </div>
-                    <div className="form-group">
-                        <div>Item Name</div>
+                    <div >
+                        <div className='form-text'>Item Name</div>
                         <input 
                             type="text" 
                             value={itemName} 
                             onChange={(e) => setItemName(e.target.value)} 
                         />
                     </div>
-                    <div className="form-group">
-                        <div>Price</div>
+                    <div >
+                        <div className='form-text'>Price</div>
                         <input 
                             type="text" 
                             value={price} 
                             onChange={(e) => setPrice(e.target.value)} 
                         />
                     </div>
-                    <div className="form-group-category">
-                        <div>Category</div>
+                    <div>
+                        <div className='form-text'>Category</div>
                         <select 
                             value={category} 
                             onChange={(e) => setCategory(e.target.value)}>
