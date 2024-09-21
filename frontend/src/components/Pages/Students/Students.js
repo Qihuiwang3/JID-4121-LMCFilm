@@ -1,10 +1,11 @@
 import React from "react";
 import StudentTable from '../../Functions/StudentTable/StudentTable'; 
+import './Students.css';
 
 const Students = () => {
     return (
         <div>
-            <h2>Student Records</h2>
+            <h2 className="student-title">Student</h2>
             <StudentTable /> 
         </div>
     );

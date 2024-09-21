@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
 import { getStudents } from '../../../connector.js';  
+import SearchBar from '../SearchBar/SearchBar'; 
 
 class StudentTable extends Component {
     constructor(props) {
@@ -31,13 +32,16 @@ class StudentTable extends Component {
 
     render() {
         return (
-            <AgGridTable
-                rowData={this.state.records}
-                columnDefs={this.state.columnDefs}
-                defaultColDef={this.state.defaultColDef}
-                domLayout="autoHeight"
-                suppressHorizontalScroll={true}
-            />
+            <>
+                <SearchBar />
+                <AgGridTable
+                    rowData={this.state.records}
+                    columnDefs={this.state.columnDefs}
+                    defaultColDef={this.state.defaultColDef}
+                    domLayout="autoHeight"
+                    suppressHorizontalScroll={true}
+                />
+            </>
         );
     }
 }

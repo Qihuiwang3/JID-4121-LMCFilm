@@ -32,7 +32,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <TopNavBar />
+          {/* <TopNavBar /> */}
           <Routes>
             <Route path="/" element={<EnterCode />} />
             <Route path="/SelectClass" element={<SelectClassPage />} />
