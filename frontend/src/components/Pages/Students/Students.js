@@ -5,7 +5,6 @@ import './Students.css';
 const Students = () => {
     return (
         <div className="student-container">
-            <h2 className="student-title">Student</h2>
             <StudentTable /> 
         </div>
     );

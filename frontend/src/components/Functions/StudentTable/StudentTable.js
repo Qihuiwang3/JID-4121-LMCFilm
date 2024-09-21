@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
 import { getStudents } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
+import './StudentTable.css';
 
 class StudentTable extends Component {
     constructor(props) {
@@ -33,6 +34,7 @@ class StudentTable extends Component {
     render() {
         return (
             <>
+                <h2 className="student-title">Student</h2>
                 <SearchBar />
                 <AgGridTable
                     rowData={this.state.records}
