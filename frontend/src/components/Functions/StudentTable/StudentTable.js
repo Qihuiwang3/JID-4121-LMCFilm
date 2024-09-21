@@ -35,7 +35,9 @@ class StudentTable extends Component {
         return (
             <>
                 <h2 className="student-title">Student</h2>
-                <SearchBar />
+                <div className="search-bar-position">
+                    <SearchBar />
+                </div>
                 <AgGridTable
                     rowData={this.state.records}
                     columnDefs={this.state.columnDefs}

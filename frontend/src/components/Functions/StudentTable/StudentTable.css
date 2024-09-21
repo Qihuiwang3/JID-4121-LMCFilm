@@ -2,4 +2,13 @@
     font-size: 24px;
     font-weight: bold;
     color: #3b5998;
+    position: fixed;
+    top: 8%;
+    left: 16.5%;
+}
+
+.search-bar-position {
+    position: fixed;
+    top: 22%;
+    left: 16.5%;
 }
