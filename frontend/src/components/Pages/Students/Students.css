@@ -4,3 +4,17 @@
     left: 25%;
     color: #3361AE;
 }
+
+.student-container {
+    width: 100%;
+    padding: 20px;
+    background-color: #fdfaf4;
+}
+
+.search-bar {
+    margin-bottom: 20px; /* Add margin to give some space between search bar and table */
+}
+
+.student-table {
+    margin-top: 20px;
+}
