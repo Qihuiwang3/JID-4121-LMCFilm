@@ -8,7 +8,7 @@ const Students = () => {
         <div className="student-container">
             <StudentTable /> 
             <div className="student-btn">
-                <BackButton />
+                <BackButton to="/"/>
             </div>
         </div>
     );
