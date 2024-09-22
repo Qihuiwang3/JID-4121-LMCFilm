@@ -13,7 +13,9 @@ const {
     createBundleItem, 
     getBundleItemsByClassCode, 
     purchaseBundleItem, 
-    returnBundleItem 
+    returnBundleItem,
+    toggleRepairStatus,
+    toggleHideStatus
 } = require('../controllers/itemController');
 
 const router = express.Router();
@@ -45,5 +47,13 @@ router.post('/bundle-item', createBundleItem);
 router.get('/bundle-items/:classCode', getBundleItemsByClassCode);
 router.post('/purchase-bundle/:bundleId', purchaseBundleItem);
 router.post('/return-bundle/:bundleId', returnBundleItem);
+
+// Route to toggle repair status by itemId
+// @route PATCH /item/:itemId/repair
+router.patch('/item/:itemId/repair', toggleRepairStatus);
+
+// Route to toggle hide status by itemId
+// @route PATCH /item/:itemId/hide
+router.patch('/item/:itemId/hide', toggleHideStatus);
 
 module.exports = router;
