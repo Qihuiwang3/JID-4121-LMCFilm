@@ -10,15 +10,21 @@ const Students = () => {
     const studentTableRef = useRef(null); 
 
     const toggleEditMode = () => {
+        console.log("isEditMode: ", isEditMode)
+        if (isEditMode) {
+            studentTableRef.current.loadRecords(); 
+        }
         setIsEditMode(!isEditMode); 
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (studentTableRef.current) {
-            studentTableRef.current.confirmDeleteRows();
+            await studentTableRef.current.confirmDeleteRows();
+            window.location.reload(); 
         }
         toggleEditMode();
     };
+    
 
     return (
         <div className="student-container">
