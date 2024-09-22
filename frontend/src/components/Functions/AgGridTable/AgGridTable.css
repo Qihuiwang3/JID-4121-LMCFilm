@@ -1,9 +1,18 @@
 html, body {
     overflow: hidden;
 }
+
+.page-container {
+    width: 70%;
+    height: 250px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
 .ag-root-wrapper.ag-layout-normal {
-    height: 39vh;
     border: none;
+    overflow-y: auto;
 }
 
 .ag-header, .ag-advanced-filter-header {
@@ -28,3 +37,4 @@ html, body {
 .ag-center-cols-viewport {
     background-color: #FFFDF8;
 }
+

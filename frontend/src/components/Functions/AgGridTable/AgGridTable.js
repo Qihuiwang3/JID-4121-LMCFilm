@@ -6,7 +6,7 @@ import './AgGridTable.css';
 
 const AgGridTable = ({ rowData, columnDefs, defaultColDef, domLayout, suppressHorizontalScroll }) => (
     <div className="body">
-        <div className="page-container ag-theme-alpine" style={{ width: '70%' }}>
+        <div className="page-container ag-theme-alpine">
             <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}
