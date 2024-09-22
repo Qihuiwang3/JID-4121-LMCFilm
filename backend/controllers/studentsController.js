@@ -37,4 +37,22 @@ const createStudent = asyncHandler(async (req, res) => {
     res.status(201).json(savedStudent);
 });
 
-module.exports = { getStudents, createStudent };
+// @desc Delete a student
+// @route DELETE /students/:id
+// @access Private
+const deleteStudent = asyncHandler(async (req, res) => {
+    const studentId = req.params.id;
+
+    const student = await Student.findById(studentId);
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    await Student.deleteOne({ _id: studentId });
+
+    res.status(200).json({ message: `Student ${studentId} deleted` });
+});
+
+module.exports = { getStudents, createStudent, deleteStudent };

@@ -5,5 +5,6 @@ const limiter = require('../middleware/rateLimiter');
 
 router.get('/', limiter, studentsController.getStudents);
 router.post('/', limiter, studentsController.createStudent);
+router.delete('/:id', limiter, studentsController.deleteStudent);
 
 module.exports = router;

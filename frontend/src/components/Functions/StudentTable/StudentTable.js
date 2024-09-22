@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents } from '../../../connector.js';  
+import { getStudents, deleteStudent} from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import EditButton from '../../Button/EditButton/EditButton'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -32,8 +32,14 @@ class StudentTable extends Component {
         }
     };
 
-    deleteRow = (data) => {
-        console.log("Deleting row:", data);
+    deleteRow = async (data) => {
+        try {
+            const id = data._id;
+            await deleteStudent(id);
+            this.loadRecords();
+        } catch (error) {
+            console.error("Error deleting student:", error);
+        }
     };
 
     render() {
@@ -51,7 +57,6 @@ class StudentTable extends Component {
                 field: "delete",
                 flex: 1,
                 cellRenderer: params => {
-                    console.log("Rendering Delete button for:", params.data);
                     return (
                         <button 
                             onClick={() => this.deleteRow(params.data)}
