@@ -34,7 +34,6 @@ class StudentTable extends Component {
         }
     };
 
-    // Generate columnDefs dynamically based on edit mode
     getColumnDefs = () => {
         const { isEditMode } = this.props;
         let baseColumnDefs = [
@@ -69,10 +68,15 @@ class StudentTable extends Component {
     render() {
         const { isEditMode, toggleEditMode } = this.props;
 
+        // This re-adjust the style when it's in edit mode
+        const containerStyles = {
+            left: isEditMode ? '0' : '',
+        };
+
         return (
             <>
                 <h2 className="student-title">Students</h2>
-                <div className="search-bar-edit-container">
+                <div className="search-bar-edit-container" style={containerStyles}>
                     <div className="search-bar-position">
                         <SearchBar />
                     </div>
