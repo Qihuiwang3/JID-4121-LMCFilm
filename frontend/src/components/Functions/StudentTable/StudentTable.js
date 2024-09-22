@@ -6,7 +6,6 @@ import EditButton from '../../Button/EditButton/EditButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './StudentTable.css';
-
 class StudentTable extends Component {
     constructor(props) {
         super(props);
@@ -28,51 +27,44 @@ class StudentTable extends Component {
     loadRecords = async () => {
         try {
             const records = await getStudents();
-            this.setState({ records });
+            // Add the 'delete' field to each record with a default value of 'Hi'
+            const updatedRecords = records.map(record => ({
+                ...record,
+                delete: 'Hi'
+            }));
+            this.setState({ records: updatedRecords });
         } catch (error) {
             console.error("Error loading records:", error);
         }
     };
 
     getColumnDefs = () => {
-        const { isEditMode } = this.props;
         let baseColumnDefs = [
             { headerName: "Class", field: "classCode", flex: 1 },
             { headerName: "Name", field: "name", flex: 1 },
             { headerName: "Email", field: "email", flex: 1 },
             { headerName: "Role", field: "role", flex: 1 },
-            { headerName: "Delete", flex: 1 },
+            {
+                headerName: "Delete",
+                field: "delete",
+                flex: 1,
+                hide: !this.props.isEditMode,  // Hide column when not in edit mode
+                    
+                cellRendererFramework: params => (
+                        <button onClick={() => this.deleteRow(params.data)}>
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    )
+                
+            }
         ];
-
-        // if (isEditMode) {
-        //     baseColumnDefs.push({
-        //         headerName: "Delete",
-        //         field: "delete",
-        //         flex: 0.6,
-        //         // cellRendererFramework: params => (
-        //         //     <button onClick={() => this.deleteRow(params.data)}>
-        //         //         <FontAwesomeIcon icon={faTrash} />
-        //         //     </button>
-        //         // )
-        //     });
-        // }
 
         return baseColumnDefs;
     };
 
-    // Function to delete a row
-    deleteRow = (rowData) => {
-        const updatedRecords = this.state.records.filter(record => record !== rowData);
-        this.setState({ records: updatedRecords });
-    };
-
     render() {
         const { isEditMode, toggleEditMode } = this.props;
-
-        // This re-adjust the style when it's in edit mode
-        const containerStyles = {
-            left: isEditMode ? '0' : '',
-        };
+        const containerStyles = { left: isEditMode ? '0' : '' };
 
         return (
             <>
@@ -87,8 +79,7 @@ class StudentTable extends Component {
                 </div>
                 <AgGridTable
                     rowData={this.state.records}
-                    // Dynamically set columnDefs
-                    columnDefs={this.getColumnDefs()} 
+                    columnDefs={this.getColumnDefs()}
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
                     suppressHorizontalScroll={true}
