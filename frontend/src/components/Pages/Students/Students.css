@@ -3,3 +3,9 @@
     padding: 20px;
     background-color: #fdfaf4;
 }
+
+.student-btn {
+    position: fixed;
+    top: 85%;
+    left: 16%;
+}
