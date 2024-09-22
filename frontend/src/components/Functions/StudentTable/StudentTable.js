@@ -12,6 +12,7 @@ class StudentTable extends Component {
         super(props);
         this.state = {
             records: [],
+            tempDeletedRows: [],
             defaultColDef: {
                 sortable: true,
                 resizable: true
@@ -26,19 +27,29 @@ class StudentTable extends Component {
     loadRecords = async () => {
         try {
             const records = await getStudents();
-            this.setState({ records });
+            this.setState({ records, tempDeletedRows: [] }); 
         } catch (error) {
             console.error("Error loading records:", error);
         }
     };
 
-    deleteRow = async (data) => {
+    tempDeleteRow = (data) => {
+        this.setState(prevState => ({
+            records: prevState.records.filter(record => record._id !== data._id),
+            tempDeletedRows: [...prevState.tempDeletedRows, data._id]
+        }));
+    };
+
+    confirmDeleteRows = async () => {
         try {
-            const id = data._id;
-            await deleteStudent(id);
+            const { tempDeletedRows } = this.state;
+            for (let id of tempDeletedRows) {
+                await deleteStudent(id); 
+            }
+            this.setState({ tempDeletedRows: [] });
             this.loadRecords();
         } catch (error) {
-            console.error("Error deleting student:", error);
+            console.error("Error saving deletions:", error);
         }
     };
 
@@ -59,7 +70,7 @@ class StudentTable extends Component {
                 cellRenderer: params => {
                     return (
                         <button 
-                            onClick={() => this.deleteRow(params.data)}
+                            onClick={() => this.tempDeleteRow(params.data)} 
                             className="trash-icon"
                         >
                             <FontAwesomeIcon icon={faTrash}  />
@@ -93,3 +104,4 @@ class StudentTable extends Component {
 }
 
 export default StudentTable;
+
