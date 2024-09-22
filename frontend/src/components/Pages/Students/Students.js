@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import StudentTable from '../../Functions/StudentTable/StudentTable'; 
 import BackButton from '../../Button/BackButton/BackButton'; 
 import CancelButton from '../../Button/CancelButton/CancelButton'; 
+import SaveButton from '../../Button/SaveButton/SaveButton'; 
 import './Students.css';
 
 const Students = () => {
@@ -17,7 +18,10 @@ const Students = () => {
 
             <div className="student-btn">
                 {isEditMode ? (
-                    <CancelButton onClick={toggleEditMode} />  
+                    <div className="bottom-btn-container">
+                        <CancelButton onClick={toggleEditMode} />  
+                        <SaveButton onClick={toggleEditMode} />
+                    </div>
                 ) : (
                     <BackButton to="/" />
                 )}

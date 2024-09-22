@@ -41,20 +41,21 @@ class StudentTable extends Component {
             { headerName: "Name", field: "name", flex: 1 },
             { headerName: "Email", field: "email", flex: 1 },
             { headerName: "Role", field: "role", flex: 1 },
+            { headerName: "Delete", flex: 1 },
         ];
 
-        if (isEditMode) {
-            baseColumnDefs.push({
-                headerName: "Delete",
-                field: "delete",
-                flex: 0.5,
-                cellRendererFramework: params => (
-                    <button onClick={() => this.deleteRow(params.data)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                )
-            });
-        }
+        // if (isEditMode) {
+        //     baseColumnDefs.push({
+        //         headerName: "Delete",
+        //         field: "delete",
+        //         flex: 0.6,
+        //         // cellRendererFramework: params => (
+        //         //     <button onClick={() => this.deleteRow(params.data)}>
+        //         //         <FontAwesomeIcon icon={faTrash} />
+        //         //     </button>
+        //         // )
+        //     });
+        // }
 
         return baseColumnDefs;
     };
@@ -86,7 +87,8 @@ class StudentTable extends Component {
                 </div>
                 <AgGridTable
                     rowData={this.state.records}
-                    columnDefs={this.getColumnDefs()} // Dynamically set columnDefs
+                    // Dynamically set columnDefs
+                    columnDefs={this.getColumnDefs()} 
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
                     suppressHorizontalScroll={true}

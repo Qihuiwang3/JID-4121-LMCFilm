@@ -9,3 +9,13 @@
     top: 85%;
     left: 16%;
 }
+
+.bottom-btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    position: fixed;
+    bottom: 20px; 
+    left: 17%;
+    right: 0;
+}
