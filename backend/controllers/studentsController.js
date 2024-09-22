@@ -13,9 +13,9 @@ const getStudents = asyncHandler(async (req, res) => {
 // @route POST /students
 // @access Private
 const createStudent = asyncHandler(async (req, res) => {
-    const { classCode, name, email, cellPhone, role } = req.body;
+    const { classCode, name, email, role } = req.body;
 
-    if (!classCode || !name || !email || !cellPhone || !role) {
+    if (!classCode || !name || !email || !role) {
         res.status(400);
         throw new Error('Please add all fields');
     }
@@ -30,7 +30,6 @@ const createStudent = asyncHandler(async (req, res) => {
         classCode,
         name,
         email,
-        cellPhone,
         role
     });
 
