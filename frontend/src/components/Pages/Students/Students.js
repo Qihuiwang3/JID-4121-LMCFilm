@@ -41,7 +41,9 @@ const Students = () => {
                         <SaveButton onClick={handleSave} />
                     </div>
                 ) : (
-                    <BackButton to="/" />
+                    <div className="bottom-btn-container">
+                        <BackButton to="/" />
+                    </div>
                 )}
             </div>
         </div>

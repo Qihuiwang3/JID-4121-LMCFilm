@@ -9,8 +9,8 @@
 
 .search-bar-edit-container {
     display: flex;
-    position: fixed;
-    top: 28%;
+    position: relative;
+    margin: 13% 0 2px 0;
     justify-content: space-around;
     width: 100%;
     gap: 175px;
@@ -21,4 +21,10 @@
     border: none;
     padding: 0;
     cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .search-bar-edit-container {
+        gap: 0%; 
+    }
 }
