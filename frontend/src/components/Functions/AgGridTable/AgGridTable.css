@@ -12,7 +12,7 @@ html {
 
 .page-container {
     width: 70%;
-    height: 250px;
+    height: 260px;
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none; 
