@@ -10,7 +10,6 @@ const Students = () => {
     const studentTableRef = useRef(null); 
 
     const toggleEditMode = () => {
-        console.log("isEditMode: ", isEditMode)
         if (isEditMode) {
             studentTableRef.current.loadRecords(); 
         }

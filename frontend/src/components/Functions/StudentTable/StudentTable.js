@@ -42,11 +42,19 @@ class StudentTable extends Component {
     };
 
     tempDeleteRow = (data) => {
-        this.setState(prevState => ({
-            records: prevState.records.filter(record => record._id !== data._id),
-            tempDeletedRows: [...prevState.tempDeletedRows, data._id]
-        }));
+        this.setState((prevState) => {
+            const updatedRecords = prevState.records.filter(record => record._id !== data._id);
+            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record._id !== data._id);
+    
+            return {
+                records: updatedRecords,
+                filteredRecords: updatedFilteredRecords, 
+                tempDeletedRows: [...prevState.tempDeletedRows, data._id]
+            };
+        });
     };
+    
+    
 
     confirmDeleteRows = async () => {
         try {
