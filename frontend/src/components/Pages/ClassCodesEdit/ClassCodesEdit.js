@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import './ClassCodesEdit.css';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -6,21 +7,65 @@ function ClassCodesEdit() {
     const location = useLocation();
     const navigate = useNavigate();
     const { classData: initialClassData } = location.state || {};
+    const [generatedCode, setGeneratedCode] = useState('');
+
 
     const [currentPage, setCurrentPage] = useState(1); 
     const rowsPerPage = 5; 
 
+    const generateRandomCode = () => {
+        return Math.floor(1000 + Math.random() * 9000);
+    };
+
     const [classData, setClassData] = useState([
-        { id: 1, class: 'LMC 3890 A', code: 7685, professor: 'John Thornton', PackageName: "Pack" },
-        { id: 2, class: 'LMC 3890 B', code: 8732, professor: 'John Thornton', PackageName: "Pack" },
-        { id: 3, class: 'LMC 2340 A', code: 9372, professor: 'John Thornton', PackageName: "Pack" },
-        { id: 4, class: 'LMC 2340 B', code: 2934, professor: 'John Thornton', PackageName: "Pack" },
-        { id: 5, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', PackageName: "Pack" },
-        { id: 6, class: 'LMC 2340 B', code: 2934, professor: 'John Thornton', PackageName: "Pack" },
-        { id: 7, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', PackageName: "Pack" }
+        { id: 1, class: 'LMC 3890 A', code: 7685, professor: 'John Thornton', packageName: "Pack" },
+        { id: 2, class: 'LMC 3890 B', code: 8732, professor: 'John Thornton', packageName: "Pack" },
+        { id: 3, class: 'LMC 2340 A', code: 9372, professor: 'John Thornton', packageName: "Pack" },
+        { id: 4, class: 'LMC 2340 B', code: 2934, professor: 'John Thornton', packageName: "Pack" },
+        { id: 5, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', packageName: "Pack" },
+        { id: 6, class: 'LMC 2340 B', code: 2934, professor: 'John Thornton', packageName: "Pack" },
+        { id: 7, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', packageName: "Pack" }
         
         
     ]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const [newClass, setNewClass] = useState({
+        class: '',
+        professor: '',
+        equipment: '',
+        packageID: '',
+        packageName: '',
+        price: '',
+        itemsInsidePackage: ''
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewClass(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+    
+    
+
+
+const openModal = () => {
+    const randomCode = generateRandomCode(); 
+    setGeneratedCode(randomCode); 
+    setIsModalOpen(true); 
+};
+const closeModal = () => {
+    setNewClass({
+        class: '',
+        professor: '',
+        packageName: ''
+    });
+ setIsModalOpen(false);
+}
 
     const [editId, setEditId] = useState(null); 
     const [editedClass, setEditedClass] = useState(""); 
@@ -55,24 +100,38 @@ function ClassCodesEdit() {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    // Handle row edit
+    
     const handleEditClick = (id, className) => {
         setEditId(id);
         setEditedClass(className);
     };
 
     
-    const handleSaveClick = (id) => {
-        setClassData(classData.map((row) =>
-            row.id === id ? { ...row, class: editedClass } : row
-        ));
-        setEditId(null); 
+    const handleSaveNewClass = () => {
+        const newEntry = {
+            id: classData.length + 1,  
+            class: newClass.class,
+            code: generatedCode,
+            professor: newClass.professor,
+            packageName: newClass.packageName
+        };
+    
+        
+        setClassData([...classData, newEntry]);
+    
+        
+        setNewClass({
+            class: '',
+            professor: '',
+            packageName: ''
+        });
+    
+        
+        setIsModalOpen(false);
     };
+    
 
-    const handleInputChange = (e) => {
-        setEditedClass(e.target.value);
-    };
-
+   
     const handleSave = () => {
         navigate("/ClassCodesAdmin", {
             state: { classData }
@@ -84,11 +143,12 @@ function ClassCodesEdit() {
     }
 
     return (
+        
         <div className="content-container">
             <h2 className="section-title">Edit Class Code</h2>
 
             <div className="top-buttons">
-                <button className="add-class-button">
+                <button className="add-class-button" onClick={openModal}>
                     Add New <span className="plus-icon">+</span>
                 </button>
             </div>
@@ -127,7 +187,7 @@ function ClassCodesEdit() {
                                         </>
                                     )}
                                     {editId === item.id && (
-                                        <button className="saveIn-button-inline" onClick={() => handleSaveClick(item.id)}>
+                                        <button className="saveIn-button-inline" onClick={() => handleSave(item.id)}>
                                             Save
                                         </button>
                                     )}
@@ -171,7 +231,61 @@ function ClassCodesEdit() {
                 <button className="cancel-button"onClick={handleCancel}>Cancel</button>
                 <button className="save-button"onClick={handleSave}>Save</button>
             </div>
+            {isModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Add New Class</h2>
+                            <button className="close-button" onClick={closeModal}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="disabled-group">
+                                <label>Code</label>
+                                <input type="text" value={generatedCode} readOnly disabled />
+                            </div>
+                            <div className="input-group-row">
+                                <div className="input-group">
+                                    <label>Class</label>
+                                    <input type="text" name="class" value={newClass.class} onChange={handleInputChange} />
+                                </div>
+                                <div className="input-group">
+                                    <label>Professor</label>
+                                    <input type="text" name="professor" value={newClass.professor} onChange={handleInputChange} />
+                                </div>
+                            </div>
+                            <div className="input-group">
+                                <label>Select Equipment for the Class</label>
+                                <input type="text" name="equipment" value={newClass.equipment} onChange={handleInputChange} />
+                            </div>
+                            <div className="input-group">
+                                <label>Package ID</label>
+                                <input type="text" name="packageID" value={newClass.packageID} onChange={handleInputChange} />
+                            </div>
+                            <div className="input-group-row">
+                                <div className="input-group">
+                                    <label>Package Name</label>
+                                    <input type="text" name="packageName" value={newClass.packageName} onChange={handleInputChange} />
+                                </div>
+                                <div className="input-group">
+                                    <label>Price</label>
+                                    <input type="text" name="price" value={newClass.price} onChange={handleInputChange} />
+                                </div>
+                            </div>
+                            <div className="input-group">
+                                <label>Items Inside Package</label>
+                                <input type="text" name="itemsInsidePackage" value={newClass.itemsInsidePackage} onChange={handleInputChange} />
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="cancelModal-button" onClick={closeModal}>Cancel</button>
+                            <button className="saveModal-button" onClick={handleSaveNewClass}>Add</button>
+                        </div>
+                    </div>
+                </div>
+            )}       
         </div>
+        
+        
     );
 }
 
