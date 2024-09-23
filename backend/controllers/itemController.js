@@ -7,19 +7,29 @@ const BundleItem = require('../models/BundleItem');
 // @route POST /item
 // @access Private
 const createGlobalItem = asyncHandler(async (req, res) => {
-    const { itemName, quantity, pricePerItem, itemIds } = req.body;
+    const { itemName, pricePerItem, itemIds } = req.body;
     let item = await Item.findOne({ itemName });
     if (item) {
-        item.quantity += quantity;
+        item.quantity += 1;
         item.itemName = itemName;
         item.pricePerItem = pricePerItem;
-        item.itemIds.push(...itemIds);
+        const newItemIds = itemIds.map(id => ({
+            itemId: id,
+            repair: false, 
+            hide: false 
+        }));
+        item.itemIds.push(...newItemIds);
     } else {
+        const newItemIds = itemIds.map(id => ({
+            itemId: id,
+            repair: false, 
+            hide: false 
+        }));
         item = new Item({
             itemName,
-            quantity,
+            quantity: 1,
             pricePerItem,
-            itemIds, 
+            itemIds: newItemIds
         });
     }
     const savedItem = await item.save();
@@ -291,6 +301,69 @@ const returnBundleItem = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "Bundle returned successfully!" });
 });
 
+// @desc Toggle the repair status of an item by itemId
+// @route PATCH /item/:itemId/repair
+// @access Private
+const toggleRepairStatus = asyncHandler(async (req, res) => {
+    const { itemId } = req.params;
+
+    const item = await Item.findOne({ "itemIds.itemId": itemId });
+    if (!item) {
+        return res.status(404).json({ error: `Item with ID ${itemId} not found.` });
+    }
+
+    const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
+    if (itemIndex === -1) {
+        return res.status(404).json({ error: `Item ID ${itemId} not found in the inventory.` });
+    }
+
+    const isUnderRepair = item.itemIds[itemIndex].repair;
+    item.itemIds[itemIndex].repair = !isUnderRepair;
+
+    if (!isUnderRepair && item.quantity > 0) {
+        item.quantity -= 1;
+    } else if (isUnderRepair) {
+        item.quantity += 1;
+    }
+
+    await item.save();
+
+    res.status(200).json({ 
+        message: `Repair status of item ID ${itemId} toggled to ${!isUnderRepair}. Current quantity: ${item.quantity}` 
+    });
+});
+
+// @desc Toggle the hide status of an item by itemId
+// @route PATCH /item/:itemId/hide
+// @access Private
+const toggleHideStatus = asyncHandler(async (req, res) => {
+    const { itemId } = req.params;
+
+    const item = await Item.findOne({ "itemIds.itemId": itemId });
+    if (!item) {
+        return res.status(404).json({ error: `Item with ID ${itemId} not found.` });
+    }
+
+    const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
+    if (itemIndex === -1) {
+        return res.status(404).json({ error: `Item ID ${itemId} not found in the inventory.` });
+    }
+
+    const isHidden = item.itemIds[itemIndex].hide;
+    item.itemIds[itemIndex].hide = !isHidden;
+
+    if (!isHidden && item.quantity > 0) {
+        item.quantity -= 1;
+    } else if (isHidden) {
+        item.quantity += 1;
+    }
+
+    await item.save();
+
+    res.status(200).json({ 
+        message: `Hide status of item ID ${itemId} toggled to ${!isHidden}. Current quantity: ${item.quantity}` 
+    });
+});
 
 
 module.exports = { 
@@ -307,5 +380,7 @@ module.exports = {
     createBundleItem, 
     getBundleItemsByClassCode, 
     purchaseBundleItem, 
-    returnBundleItem 
+    returnBundleItem,
+    toggleHideStatus,
+    toggleRepairStatus
 };

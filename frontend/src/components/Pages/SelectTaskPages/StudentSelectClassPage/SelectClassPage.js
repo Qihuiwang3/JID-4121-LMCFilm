@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './SelectClassPage.css';
 import { useNavigate } from 'react-router-dom';
-import film from '../../../Image/filmIcon.svg';
+import film from '../../../../Image/filmIcon.svg';
 
 const SelectClassPage = () => {
     const navigate = useNavigate();
