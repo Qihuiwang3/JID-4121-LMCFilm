@@ -66,7 +66,7 @@
     margin-left: 10px;
     width: 20px;
     height: 20px;
-    filter: brightness(0) invert(1); /* White pencil icon */
+    filter: brightness(0) invert(1); 
 }
 
 .edit-button:hover {
@@ -86,22 +86,22 @@
 
 .class-table th, .class-table td {
     padding: 15px;
-    text-align: center; /* Center-align the text */
+    text-align: center; 
     border-top: 3px solid #3361AE;
-    border-bottom: 2px solid #3361AE; /* Adjusted for a thicker horizontal line */
+    border-bottom: 3px solid #3361AE; 
 }
 
 .class-table th {
     background-color: #f9f9f9;
     font-weight: bold;
     font-size: 25px;
-    border-bottom: 3px solid #3361AE; /* Thicker line for headers */
-    text-align: center; /* Center-align the header text */
+    border-bottom: 3px solid #3361AE; 
+    text-align: center; 
 }
 
 .pagination-controls {
     display: flex;
-    justify-content: flex-end; /* Center the pagination controls */
+    justify-content: flex-end; 
     align-items: center;
     margin-top: 20px;
 }
@@ -111,25 +111,25 @@
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: #3361AE; /* Set the pagination arrows to blue */
-    margin: 0 5px; /* Spacing between buttons */
+    color: #3361AE; 
+    margin: 0 5px; 
     padding: 5px;
 }
 
 .pagination-button:disabled {
-    color: #ccc; /* Greyed out when disabled */
+    color: #ccc; 
     cursor: not-allowed;
 }
 
 .pagination-button:hover:not(:disabled) {
-    color: #003a99; /* Darker blue on hover */
+    color: #003a99; 
 }
 
 .pagination-text {
     font-size: 18px;
     font-weight: bold;
-    color: #3361AE; /* Pagination text in blue */
-    margin: 0 10px; /* Space between arrows and page number */
+    color: #3361AE; 
+    margin: 0 10px;
 }
 
 
@@ -139,7 +139,7 @@
     margin-top: 20px;
 }
 
-.back-button {
+.bk-button {
     background-color: #3361AE;
     color: white;
     padding: 15px 80px;
@@ -152,6 +152,6 @@
    
 }
 
-.back-button:hover {
-    background-color: #003a99; /* Darker blue on hover */
+.bk-button:hover {
+    background-color: #003a99; 
 }

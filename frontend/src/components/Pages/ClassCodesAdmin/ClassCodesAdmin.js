@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ClassCodesAdmin() {
     const navigate = useNavigate();
-    const [searchQuery, setSearchQuery] = useState(''); // State to track the search query
+    const [searchQuery, setSearchQuery] = useState(''); 
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
 
@@ -18,7 +18,7 @@ function ClassCodesAdmin() {
         { id: 7, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', PackageName: "Pack" }
     ]);
 
-    // Filter the class data based on the search query
+    
     const filteredClassData = classData.filter((item) =>
         item.class.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -36,12 +36,12 @@ function ClassCodesAdmin() {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    // Handle input change for the search query
+    
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
     };
 
-    // Handle Edit Class navigation (if needed)
+   
     const handleEditClass = () => {
         navigate("/ClassCodesEdit", { state: { classData } });
     };
@@ -58,7 +58,7 @@ function ClassCodesAdmin() {
                         className="search-class-input"
                         placeholder="Search by Class"
                         value={searchQuery}
-                        onChange={handleSearchChange} // Trigger search on input change
+                        onChange={handleSearchChange} 
                     />
                     <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Search Icon" />
                 </div>
@@ -118,10 +118,7 @@ function ClassCodesAdmin() {
                     </button>
                 </div>
             </div>
-
-            <div className="bottom-buttons">
-                <button className="back-button">Back</button>
-            </div>
+                <button className="bk-button">Back</button> 
         </div>
     );
 }
