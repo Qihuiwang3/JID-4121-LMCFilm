@@ -4,11 +4,13 @@ import ReservationTimePicker from "./components/Pages/ReservationTimePicker/Rese
 import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
-import SelectClassPage from "./components/Pages/SelectClassPage/SelectClassPage";
+import SelectClassPage from "./components/Pages/SelectTaskPages/StudentSelectClassPage/SelectClassPage";
 import Payment from "./components/Pages/Payment/Payment";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
 import Students from "./components/Pages/Students/Students";
+import ViewEquipment from "./components/Pages/SelectTaskPages/AdminViewEquipment/ViewEquipment";
+// import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
@@ -43,6 +45,8 @@ class App extends Component {
             <Route path="/Payment" element={<Payment />} />
             <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
             <Route path="/Students" element={<Students />} />
+            <Route path="/ViewEquipment" element={<ViewEquipment />} />
+            {/* <Route path="/SelectTask" element={<SelectTask />} /> */}
           </Routes>
         </Router>
       </Provider>
