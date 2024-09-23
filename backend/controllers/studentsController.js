@@ -55,4 +55,31 @@ const deleteStudent = asyncHandler(async (req, res) => {
     res.status(200).json({ message: `Student ${studentId} deleted` });
 });
 
-module.exports = { getStudents, createStudent, deleteStudent };
+// @desc Update student's role
+// @route PUT /students/:id/role
+// @access Private
+const updateStudent = asyncHandler(async (req, res) => {
+    const studentId = req.params.id;
+    const { role } = req.body;
+
+    // Validate role
+    if (!role || (role !== 'Student' && role !== 'Admin')) {
+        res.status(400);
+        throw new Error('Invalid role');
+    }
+
+    const student = await Student.findById(studentId);
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    student.role = role;
+
+    const updatedStudent = await student.save();
+
+    res.status(200).json(updatedStudent);
+});
+
+module.exports = { getStudents, createStudent, deleteStudent, updateStudent };
