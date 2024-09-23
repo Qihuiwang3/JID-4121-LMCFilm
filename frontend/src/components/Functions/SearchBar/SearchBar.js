@@ -10,7 +10,7 @@ const SearchBar = ({ onSearch }) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
     if (onSearch) {
-      onSearch(newQuery); // Call onSearch as the user types
+      onSearch(newQuery); 
     }
   };
 
@@ -20,7 +20,7 @@ const SearchBar = ({ onSearch }) => {
         type="text"
         placeholder="Search by Name"
         value={query}
-        onChange={handleChange} // Use onChange instead of onSubmit
+        onChange={handleChange}
         className="search-input"
       />
       <button type="button" className="search-button">

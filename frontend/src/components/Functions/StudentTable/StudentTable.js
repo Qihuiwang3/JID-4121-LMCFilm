@@ -3,9 +3,11 @@ import AgGridTable from '../AgGridTable/AgGridTable';
 import { getStudents, deleteStudent } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import EditButton from '../../Button/EditButton/EditButton'; 
+import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './StudentTable.css';
+
 
 class StudentTable extends Component {
     constructor(props) {
@@ -66,7 +68,6 @@ class StudentTable extends Component {
         );
         this.setState({ filteredRecords, searchQuery: query });
     };
-    
 
     render() {
         const { isEditMode, toggleEditMode } = this.props;
@@ -77,7 +78,13 @@ class StudentTable extends Component {
             { headerName: "Class", field: "classCode", flex: 1 },
             { headerName: "Name", field: "name", flex: 1 },
             { headerName: "Email", field: "email", flex: 1 },
-            { headerName: "Role", field: "role", flex: 1 },
+            {
+                headerName: "Role",
+                field: "role",
+                flex: 1,
+                cellEditor: isEditMode ? RoleDropdown : null,
+                editable: isEditMode
+            },
             isEditMode ? {
                 headerName: "Delete",
                 field: "delete",
