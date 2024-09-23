@@ -7,6 +7,7 @@ import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
 import SelectClassPage from "./components/Pages/SelectTaskPages/StudentSelectClassPage/SelectClassPage";
 import Payment from "./components/Pages/Payment/Payment";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
+import ClassCodesAdmin from "./components/Pages/ClassCodesAdmin/ClassCodesAdmin";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
 import ViewEquipment from "./components/Pages/SelectTaskPages/AdminViewEquipment/ViewEquipment";
 // import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
@@ -42,6 +43,7 @@ class App extends Component {
             <Route path="/Payment" element={<Payment />} />
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />
+            <Route path="/ClassCodesAdmin" element={<ClassCodesAdmin />} />
             <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
             <Route path="/ViewEquipment" element={<ViewEquipment />} />
             {/* <Route path="/SelectTask" element={<SelectTask />} /> */}
