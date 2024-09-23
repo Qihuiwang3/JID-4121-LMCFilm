@@ -46,7 +46,6 @@
 .modal-form input{
     width: 500px;
     padding: 8px;
-    border: 1px solid #3361AE;
     border-radius: 5px;
     font-size: 14px;
     background-color: #E7EFF2;
@@ -102,4 +101,25 @@
     background: #3361AE;
     margin: 0 0 15px 0;
     width: 100%;
+}
+
+.mui-textfield .MuiOutlinedInput-root {
+    padding: 0;
+    background-color: #E7EFF2;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #3361AE;
+
+}
+
+.css-ka7ti6-MuiAutocomplete-root .MuiAutocomplete-input {
+    border: none;
+}
+
+.css-20bmp1-MuiSvgIcon-root {
+    color: #3361AE;
+}
+
+.MuiAutocomplete-hasPopupIcon.css-ka7ti6-MuiAutocomplete-root .MuiOutlinedInput-root, .MuiAutocomplete-hasClearIcon.css-ka7ti6-MuiAutocomplete-root .MuiOutlinedInput-root {
+    height: 43px;
 }

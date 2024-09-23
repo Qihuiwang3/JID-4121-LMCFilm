@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material'; 
-import './EquipmentPopup.css';
+import './EquipmentPopup.css'; // Your external stylesheet
 
 const EquipmentPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
@@ -46,18 +46,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             value={itemID}
                             onChange={(e) => setItemID(e.target.value)} 
                             fullWidth
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    padding: 0,
-                                    backgroundColor: '#E7EFF2',
-                                    border: '1px solid #3361AE',
-                                    borderRadius: '5px',
-                                    fontSize: '14px',
-                                    '& fieldset': {
-                                        border: 'none',
-                                    },
-                                },
-                            }}
+                            className="mui-textfield" 
                         />
                     </div>
 
@@ -73,24 +62,11 @@ const EquipmentPopup = ({ show, handleClose }) => {
                                 <TextField 
                                     {...params}
                                     fullWidth
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            padding: 0,
-                                            backgroundColor: '#E7EFF2',
-                                            border: '1px solid #3361AE',
-                                            borderRadius: '5px',
-                                            fontSize: '14px',
-                                            '& fieldset': {
-                                                border: 'none',
-                                            },
-                                        },
-                                    }}
+                                    className="mui-textfield" 
                                 />
                             )}
-                            freeSolo
                             disableClearable
                         />
-
                     </div>
 
                     <div>
@@ -99,18 +75,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             fullWidth
-                            sx={{
-                                '& .MuiOutlinedInput-root': {
-                                    padding: 0,
-                                    backgroundColor: '#E7EFF2',
-                                    border: '1px solid #3361AE',
-                                    borderRadius: '5px',
-                                    fontSize: '14px',
-                                    '& fieldset': {
-                                        border: 'none',
-                                    },
-                                },
-                            }}
+                            className="mui-textfield" // Add the custom class here as well
                         />
                     </div>
                     
