@@ -2,26 +2,28 @@ import React, { useState } from 'react';
 import './ClassCodesEdit.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-
 function ClassCodesEdit() {
-    let va = 10;
     const location = useLocation();
     const navigate = useNavigate();
     const { classData: initialClassData } = location.state || {};
-    
-    const [classData, setClassData] = useState(initialClassData || []);
-
-   
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [isDeleteOneOpen, setIsDeleteOneOpen] = useState(false);
-    const [generatedCode, setGeneratedCode] = useState('');
 
     const [currentPage, setCurrentPage] = useState(1); 
     const rowsPerPage = 5; 
 
-   
+    const [classData, setClassData] = useState([
+        { id: 1, class: 'LMC 3890 A', code: 7685, professor: 'John Thornton', PackageName: "Pack" },
+        { id: 2, class: 'LMC 3890 B', code: 8732, professor: 'John Thornton', PackageName: "Pack" },
+        { id: 3, class: 'LMC 2340 A', code: 9372, professor: 'John Thornton', PackageName: "Pack" },
+        { id: 4, class: 'LMC 2340 B', code: 2934, professor: 'John Thornton', PackageName: "Pack" },
+        { id: 5, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', PackageName: "Pack" },
+        { id: 6, class: 'LMC 2340 B', code: 2934, professor: 'John Thornton', PackageName: "Pack" },
+        { id: 7, class: 'Buzz Studio', code: 3927, professor: 'John Thornton', PackageName: "Pack" }
+        
+        
+    ]);
 
+    const [editId, setEditId] = useState(null); 
+    const [editedClass, setEditedClass] = useState(""); 
 
     const totalPages = Math.max(1, Math.ceil(classData.length / rowsPerPage));
 
@@ -29,96 +31,66 @@ function ClassCodesEdit() {
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = classData.slice(indexOfFirstRow, indexOfLastRow);
 
-    const [newClass, setNewClass] = useState({
-        id: classData.length + 1, 
-        class: '',
-        code: '',
-        professor: ''
-    });
-
-    const handleDeleteRow = (id) => {
-        setIsDeleteOneOpen(true);
-        va = id;
-        const updatedClassData = classData.filter(item => item.id !== va); 
-        setClassData(updatedClassData); 
-    };
-
-    const handleDeleteRowOne = (id) => {
-        setIsDeleteOneOpen(false);
-        const updatedClassData = classData.filter(item => item.id !== va); 
-        setClassData(updatedClassData); 
-    }
-
-    // Handle page change
+    
     const goToNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
     };
+    const handleDeleteRow = (id) => {
+        
+        const updatedClassData = classData.filter(item => item.id !== id); 
+        setClassData(updatedClassData); 
+    
+        
+        const remainingRowsOnPage = updatedClassData.slice(indexOfFirstRow, indexOfLastRow);
+        
+        if (remainingRowsOnPage.length === 0 && currentPage > 1) {
+           
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
+    
+    
 
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-
-    
-    const handleAddClass = () => {
-        const randomCode = Math.floor(1000 + Math.random() * 9000); 
-        setGeneratedCode(randomCode);
-        setIsModalOpen(true); 
+    // Handle row edit
+    const handleEditClick = (id, className) => {
+        setEditId(id);
+        setEditedClass(className);
     };
 
     
-    const handleCloseModal = () => {
-        setIsModalOpen(false); // Close the modal
+    const handleSaveClick = (id) => {
+        setClassData(classData.map((row) =>
+            row.id === id ? { ...row, class: editedClass } : row
+        ));
+        setEditId(null); 
     };
 
-    
+    const handleInputChange = (e) => {
+        setEditedClass(e.target.value);
+    };
 
-
-    const handleClear = () => {
-        setIsDeleteOpen(true);
-    }
-
-    const clearAll = () => {
-        setIsDeleteOpen(false);
-        setClassData([]);
-    }
-
-    const handleDeleteCloseModal = () => {
-        setIsDeleteOpen(false);
-    }
-    const handleDeleteOneCloseModal = () => {
-        setIsDeleteOneOpen(false);
-    }
     const handleSave = () => {
         navigate("/ClassCodesAdmin", {
-            state: { classData } // Pass the full classData array
+            state: { classData }
         });
     };
 
-    const handleAddClassSubmit = () => {
-        const newClassEntry = {
-            id: classData.length + 1,
-            class: newClass.class,
-            code: generatedCode,  // Use the currently generated code
-            professor: newClass.professor
-        };
-    
-        // Update classData with the new class entry
-        setClassData((prevClassData) => [...prevClassData, newClassEntry]);
-    
-        
-        setNewClass({ class: '', professor: '' }); 
-        setIsModalOpen(false); 
-    };
-
-   
+    const handleCancel = () => {
+        navigate("/ClassCodesAdmin");
+    }
 
     return (
         <div className="content-container">
-            <h2 className="section-title">Class Code</h2>
+            <h2 className="section-title">Edit Class Code</h2>
 
             <div className="top-buttons">
-                <button className="add-class-button" onClick={handleAddClass}>Add New Class</button>
+                <button className="add-class-button">
+                    Add New <span className="plus-icon">+</span>
+                </button>
             </div>
 
             <div className="table-container">
@@ -128,22 +100,48 @@ function ClassCodesEdit() {
                             <th>Class</th>
                             <th>Code</th>
                             <th>Professors</th>
-                            <th>Delete</th> {/* Delete column is the last one */}
+                            <th>Package</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentRows.map((item, index) => (
                             <tr key={index}>
-                                <td>{item.class}</td>
+                                <td>
+                                    {editId === item.id ? (
+                                        <input
+                                            type="text"
+                                            value={editedClass}
+                                            onChange={handleInputChange}
+                                        />
+                                    ) : (
+                                        <>
+                                            {item.class}
+                                            <img
+                                                src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
+                                                alt="Edit"
+                                                className="edit-icon"
+                                                onClick={() => handleEditClick(item.id, item.class)}
+                                                style={{ marginLeft: '10px', cursor: 'pointer', width: '20px' }}
+                                            />
+                                        </>
+                                    )}
+                                    {editId === item.id && (
+                                        <button className="saveIn-button-inline" onClick={() => handleSaveClick(item.id)}>
+                                            Save
+                                        </button>
+                                    )}
+                                </td>
                                 <td>{item.code}</td>
                                 <td>{item.professor}</td>
+                                <td>{item.PackageName || "Pack"}</td>
                                 <td>
-                                <img
-                                    src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png"
-                                    alt="Delete"
-                                     className="delete-icon"
-                                     onClick={() => handleDeleteRow(item.id)} // Call delete function with the item's id
-/>
+                                    <img
+                                        src="https://cdn-icons-png.flaticon.com/512/1214/1214428.png"
+                                        alt="Delete"
+                                        className="delete-icon"
+                                        onClick={() => handleDeleteRow(item.id)} 
+                                    />
                                 </td>
                             </tr>
                         ))}
@@ -170,76 +168,9 @@ function ClassCodesEdit() {
             </div>
 
             <div className="bottom-buttons">
-                <button className="clear-button" onClick={handleClear}>Clear-All</button>
-                <button className="save-button" onClick={handleSave}>Save</button>
+                <button className="cancel-button"onClick={handleCancel}>Cancel</button>
+                <button className="save-button"onClick={handleSave}>Save</button>
             </div>
-
-            {/* Modal for adding new class */}
-            {isModalOpen && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h2>Add New Class</h2>
-                            <button className="close-button" onClick={handleCloseModal}>×</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="input-group">
-                                <label>Code</label>
-                                <input type="text" value={generatedCode} readOnly />
-                            </div>
-                            <div className="input-group-row">
-                                <div className="input-group">
-                                    <label>Class</label>
-                                    <input type="text" placeholder="Enter class" />
-                                </div>
-                                <div className="input-group">
-                                    <label>Professor</label>
-                                    <input type="text" placeholder="Enter professor" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="cancel-button" onClick={handleCloseModal}>Cancel</button>
-                            <button className="submit-button" onClick={handleAddClassSubmit}>Add Class</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-             {/* Modal for adding new class */}
-             {isDeleteOpen && (
-                <div className="modal-overlay">
-                    <div className="modal2-content">
-                        <div className="modal2-header">
-                            <h2>Attention!</h2>
-                        </div>
-                        <div className="modal2-body">
-                            <h2>Clearing out all information from the database will result in serious consequences if this is not what you intend. Are you sure you want to delete it?</h2>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="submit-button" onClick={handleDeleteCloseModal}>Cancel</button>
-                            <button className="submit-button" onClick={clearAll}>Yes</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {/* Modal for deleting class */}
-            {isDeleteOneOpen && (
-                <div className="modal-overlay">
-                    <div className="modal2-content">
-                        <div className="modal2-header">
-                            <h2>Attention!</h2>
-                        </div>
-                        <div className="modal2-body">
-                            <h2>You are about to delete this information from the database. Are you sure you want to delete it?</h2>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="submit-button" onClick={handleDeleteOneCloseModal}>Cancel</button>
-                            <button className="submit-button" onClick={handleDeleteRowOne}>Yes</button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
