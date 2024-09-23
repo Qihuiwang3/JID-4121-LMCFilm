@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents, deleteStudent} from '../../../connector.js';  
+import { getStudents, deleteStudent } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import EditButton from '../../Button/EditButton/EditButton'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,11 +12,13 @@ class StudentTable extends Component {
         super(props);
         this.state = {
             records: [],
+            filteredRecords: [],
             tempDeletedRows: [],
             defaultColDef: {
                 sortable: true,
                 resizable: true
-            }
+            },
+            searchQuery: ''
         };
     }
 
@@ -27,7 +29,11 @@ class StudentTable extends Component {
     loadRecords = async () => {
         try {
             const records = await getStudents();
-            this.setState({ records, tempDeletedRows: [] }); 
+            this.setState({ 
+                records,
+                filteredRecords: records, 
+                tempDeletedRows: [] 
+            });
         } catch (error) {
             console.error("Error loading records:", error);
         }
@@ -53,6 +59,15 @@ class StudentTable extends Component {
         }
     };
 
+    handleSearch = (query) => {
+        const { records } = this.state;
+        const filteredRecords = records.filter(record =>
+            record.name.toLowerCase().includes(query.toLowerCase())
+        );
+        this.setState({ filteredRecords, searchQuery: query });
+    };
+    
+
     render() {
         const { isEditMode, toggleEditMode } = this.props;
         const containerStyles = { left: isEditMode ? '0' : '' };
@@ -63,7 +78,6 @@ class StudentTable extends Component {
             { headerName: "Name", field: "name", flex: 1 },
             { headerName: "Email", field: "email", flex: 1 },
             { headerName: "Role", field: "role", flex: 1 },
-            
             isEditMode ? {
                 headerName: "Delete",
                 field: "delete",
@@ -74,7 +88,7 @@ class StudentTable extends Component {
                             onClick={() => this.tempDeleteRow(params.data)} 
                             className="trash-icon"
                         >
-                            <FontAwesomeIcon icon={faTrash}  />
+                            <FontAwesomeIcon icon={faTrash} />
                         </button>
                     );
                 }
@@ -86,14 +100,14 @@ class StudentTable extends Component {
                 <h2 className="student-title">Students</h2>
                 <div className="search-bar-edit-container" style={containerStyles}>
                     <div className="search-bar-position" style={searchBarStyle}>
-                        <SearchBar />
+                        <SearchBar onSearch={this.handleSearch} />
                     </div>
                     <div>
                         <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
                     </div>
                 </div>
                 <AgGridTable
-                    rowData={this.state.records}
+                    rowData={this.state.filteredRecords} 
                     columnDefs={columnDefs}
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
@@ -105,4 +119,3 @@ class StudentTable extends Component {
 }
 
 export default StudentTable;
-
