@@ -1,4 +1,6 @@
 import React from 'react';
+import './RoleDropdown.css';
+
 
 const RoleDropdown = (props) => {
   const handleChange = (event) => {
@@ -11,7 +13,7 @@ const RoleDropdown = (props) => {
     <select
       value={props.value}
       onChange={handleChange}
-      style={{ width: '100%' }}
+      className="dropdown"
     >
       <option value="Student">Student</option>
       <option value="Admin">Admin</option>
