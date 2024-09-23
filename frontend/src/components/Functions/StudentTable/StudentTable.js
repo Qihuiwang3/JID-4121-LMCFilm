@@ -148,7 +148,7 @@ class StudentTable extends Component {
             <>
                 <h2 className="student-title">Students</h2>
                 <div className="search-bar-edit-container" style={containerStyles}>
-                    <div className="search-bar-position" style={searchBarStyle}>
+                    <div style={searchBarStyle}>
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
                     <div>

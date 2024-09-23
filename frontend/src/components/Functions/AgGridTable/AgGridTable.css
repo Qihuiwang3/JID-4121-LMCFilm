@@ -18,6 +18,10 @@ html {
     scrollbar-width: none; 
 }
 
+.ag-root-wrapper {
+    border: transparent;
+}
+
 .ag-root-wrapper.ag-layout-normal {
     border: none;
     overflow-y: auto;
