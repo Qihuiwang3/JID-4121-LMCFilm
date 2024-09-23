@@ -43,10 +43,21 @@ const EquipmentPopup = ({ show, handleClose }) => {
                     <div>
                         <div className='form-text'>Item ID</div>
                         <TextField 
-                            variant="outlined"
                             value={itemID}
                             onChange={(e) => setItemID(e.target.value)} 
                             fullWidth
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    padding: 0,
+                                    backgroundColor: '#E7EFF2',
+                                    border: '1px solid #3361AE',
+                                    borderRadius: '5px',
+                                    fontSize: '14px',
+                                    '& fieldset': {
+                                        border: 'none',
+                                    },
+                                },
+                            }}
                         />
                     </div>
 
@@ -61,21 +72,45 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             renderInput={(params) => (
                                 <TextField 
                                     {...params}
-                                    variant="outlined"
                                     fullWidth
+                                    sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            padding: 0,
+                                            backgroundColor: '#E7EFF2',
+                                            border: '1px solid #3361AE',
+                                            borderRadius: '5px',
+                                            fontSize: '14px',
+                                            '& fieldset': {
+                                                border: 'none',
+                                            },
+                                        },
+                                    }}
                                 />
                             )}
                             freeSolo
+                            disableClearable
                         />
+
                     </div>
 
                     <div>
                         <div className='form-text'>Price</div>
                         <TextField
-                            variant="outlined"
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             fullWidth
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    padding: 0,
+                                    backgroundColor: '#E7EFF2',
+                                    border: '1px solid #3361AE',
+                                    borderRadius: '5px',
+                                    fontSize: '14px',
+                                    '& fieldset': {
+                                        border: 'none',
+                                    },
+                                },
+                            }}
                         />
                     </div>
                     
