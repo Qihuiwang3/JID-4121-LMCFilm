@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents, deleteStudent } from '../../../connector.js';  
+import { getStudents, deleteStudent, updateStudent } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import EditButton from '../../Button/EditButton/EditButton'; 
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './StudentTable.css';
-
 
 class StudentTable extends Component {
     constructor(props) {
@@ -16,6 +15,7 @@ class StudentTable extends Component {
             records: [],
             filteredRecords: [],
             tempDeletedRows: [],
+            updatedRoles: {}, // New state for tracking role changes
             defaultColDef: {
                 sortable: true,
                 resizable: true
@@ -34,7 +34,8 @@ class StudentTable extends Component {
             this.setState({ 
                 records,
                 filteredRecords: records, 
-                tempDeletedRows: [] 
+                tempDeletedRows: [],
+                updatedRoles: {} // Reset updated roles
             });
         } catch (error) {
             console.error("Error loading records:", error);
@@ -53,8 +54,6 @@ class StudentTable extends Component {
             };
         });
     };
-    
-    
 
     confirmDeleteRows = async () => {
         try {
@@ -63,7 +62,6 @@ class StudentTable extends Component {
                 await deleteStudent(id); 
             }
             this.setState({ tempDeletedRows: [] });
-            this.loadRecords();
         } catch (error) {
             console.error("Error saving deletions:", error);
         }
@@ -75,6 +73,31 @@ class StudentTable extends Component {
             record.name.toLowerCase().includes(query.toLowerCase())
         );
         this.setState({ filteredRecords, searchQuery: query });
+    };
+
+    handleRoleChange = (id, newRole) => {
+        this.setState(prevState => ({
+            updatedRoles: {
+                ...prevState.updatedRoles,
+                [id]: newRole
+            }
+        }));
+    };
+
+    saveChanges = async () => {
+        try {
+            const { updatedRoles } = this.state;
+            // Save role updates
+            for (let [id, role] of Object.entries(updatedRoles)) {
+                await updateStudent(id, { role });
+            }
+            // Save deleted rows
+            await this.confirmDeleteRows();
+            this.setState({ updatedRoles: {} }); // Reset updated roles
+            this.loadRecords(); // Refresh records
+        } catch (error) {
+            console.error("Error saving changes:", error);
+        }
     };
 
     render() {
@@ -91,7 +114,20 @@ class StudentTable extends Component {
                 field: "role",
                 flex: 1,
                 cellEditor: isEditMode ? RoleDropdown : null,
-                editable: isEditMode
+                editable: isEditMode,
+                cellRenderer: params => {
+                    if (isEditMode) {
+                        return (
+                            <RoleDropdown
+                                value={params.value}
+                                node={params.node}
+                                colDef={params.colDef}
+                                onChange={event => this.handleRoleChange(params.data._id, event.target.value)}
+                            />
+                        );
+                    }
+                    return params.value;
+                }
             },
             isEditMode ? {
                 headerName: "Delete",

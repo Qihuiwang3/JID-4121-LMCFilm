@@ -18,12 +18,10 @@ const Students = () => {
 
     const handleSave = async () => {
         if (studentTableRef.current) {
-            await studentTableRef.current.confirmDeleteRows();
-            window.location.reload(); 
+            await studentTableRef.current.saveChanges(); 
         }
         toggleEditMode();
     };
-    
 
     return (
         <div className="student-container">
