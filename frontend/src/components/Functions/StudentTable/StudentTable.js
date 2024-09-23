@@ -15,7 +15,7 @@ class StudentTable extends Component {
             records: [],
             filteredRecords: [],
             tempDeletedRows: [],
-            updatedRoles: {}, // New state for tracking role changes
+            updatedRoles: {},
             defaultColDef: {
                 sortable: true,
                 resizable: true
@@ -35,7 +35,7 @@ class StudentTable extends Component {
                 records,
                 filteredRecords: records, 
                 tempDeletedRows: [],
-                updatedRoles: {} // Reset updated roles
+                updatedRoles: {} 
             });
         } catch (error) {
             console.error("Error loading records:", error);
@@ -87,14 +87,12 @@ class StudentTable extends Component {
     saveChanges = async () => {
         try {
             const { updatedRoles } = this.state;
-            // Save role updates
             for (let [id, role] of Object.entries(updatedRoles)) {
-                await updateStudent(id, { role });
+                await updateStudent(id, role);
             }
-            // Save deleted rows
             await this.confirmDeleteRows();
-            this.setState({ updatedRoles: {} }); // Reset updated roles
-            this.loadRecords(); // Refresh records
+            this.setState({ updatedRoles: {} });
+            this.loadRecords();
         } catch (error) {
             console.error("Error saving changes:", error);
         }
