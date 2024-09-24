@@ -16,6 +16,14 @@ const itemSchema = new mongoose.Schema({
     },
     itemIds: [{
         itemId: String,
+        repair: {
+            type: Boolean,
+            default: false,
+        },
+        hide: {
+            type: Boolean,
+            default: false,
+        },
     }],
 });
 
