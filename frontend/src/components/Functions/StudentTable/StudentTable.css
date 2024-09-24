@@ -28,7 +28,6 @@
 .student-searchbar {
     display: inline-flex;
     align-items: center;
-    margin-right: 11%;
 }
 
 .student-edit {
@@ -38,10 +37,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 900px) {
-    .search-bar-edit-container {
-        gap: 0%; 
-    }
+@media (max-width: 800px) {
 
     .student-title {
         margin-top: 10%;
