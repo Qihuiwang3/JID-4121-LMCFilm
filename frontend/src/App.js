@@ -9,7 +9,8 @@ import Payment from "./components/Pages/Payment/Payment";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
 import ViewEquipment from "./components/Pages/SelectTaskPages/AdminViewEquipment/ViewEquipment";
-import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
+import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask";
+import Management from "./components/Pages/SelectTaskPages/AdminManagementPage/Management";
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
@@ -45,6 +46,7 @@ class App extends Component {
             <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
             <Route path="/ViewEquipment" element={<ViewEquipment />} />
             <Route path="/SelectTask" element={<SelectTask />} />
+            <Route path="/Management" element={<Management />} />
           </Routes>
         </Router>
       </Provider>
