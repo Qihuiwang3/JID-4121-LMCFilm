@@ -101,7 +101,7 @@ class StudentTable extends Component {
     render() {
         const { isEditMode, toggleEditMode } = this.props;
         const containerStyles = { left: isEditMode ? '0' : '' };
-        const searchBarStyle = isEditMode ? { marginRight: '80px' } : {};
+        const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
 
         const columnDefs = [
             { headerName: "Class", field: "classCode", flex: 1 },
@@ -146,12 +146,14 @@ class StudentTable extends Component {
 
         return (
             <>
-                <h2 className="student-title">Students</h2>
+                <div className="student-title">
+                    <h2>Students</h2>
+                </div>
                 <div className="search-bar-edit-container" style={containerStyles}>
-                    <div style={searchBarStyle}>
+                    <div className="student-searchbar" style={searchBarStyle}>
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
-                    <div>
+                    <div className="student-edit">
                         <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
                     </div>
                 </div>
