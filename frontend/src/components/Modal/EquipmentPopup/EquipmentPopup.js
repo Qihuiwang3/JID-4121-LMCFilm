@@ -6,7 +6,6 @@ const EquipmentPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
     const [itemName, setItemName] = useState('');
     const [price, setPrice] = useState('');
-    const [quantity, setQuantity] = useState('');
 
     const predefinedItems = ['Camera', 'Light', 'Tripod', 'Microphone'];
 
@@ -15,8 +14,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
         console.log({
             itemID,
             itemName,
-            price,
-            quantity
+            price
         });
         handleClose(); 
     };
@@ -86,23 +84,6 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             fullWidth
                             className="mui-textfield"
                             inputProps={{ min: "0", step: "0.01" }} 
-                        />
-                    </div>
-                    <div>
-                        <div className='form-text'>Quantity</div>
-                        <TextField
-                            value={quantity}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                // Ensure only numeric values are accepted
-                                if (/^\d*\.?\d*$/.test(value)) {
-                                    setQuantity(value);
-                                }
-                            }}
-                            type="number"
-                            fullWidth
-                            className="mui-textfield"
-                            inputProps={{ min: "0", step: "1" }} 
                         />
                     </div>
 
