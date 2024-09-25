@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material'; 
-import './EquipmentPopup.css'; // Your external stylesheet
+import './EquipmentPopup.css'; 
 
 const EquipmentPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
@@ -75,13 +75,13 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             fullWidth
-                            className="mui-textfield" // Add the custom class here as well
+                            className="mui-textfield"
                         />
                     </div>
                     
                     <div className="modal-footer">
                         <button type="button" className="cancel-button" onClick={handleClose}>Cancel</button>
-                        <button type="submit" className="submit-button">Add Equipment</button>
+                        <button type="submit" className="equipment-popup-submit-button">Add Equipment</button>
                     </div>
                 </form>
             </div>
