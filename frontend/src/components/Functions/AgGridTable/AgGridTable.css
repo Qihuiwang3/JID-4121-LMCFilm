@@ -12,10 +12,8 @@ html {
 
 .page-container {
     width: 70vw;
-    height: 260px;
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none; 
+    height: auto;
+    overflow-y: visible;
 }
 
 .ag-root-wrapper {
