@@ -25,6 +25,16 @@ const createStudent = async (data) => {
     }
 };
 
+const deleteStudent = async (id) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/students/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
 const getCart = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/carts`);
@@ -38,6 +48,34 @@ const getCart = async () => {
 const createCart = async (data) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/carts`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
+const createGlobalItem = async (data) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/item`, data, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const updateStudent = async (id, role) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${id}/role`, { role }, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -76,8 +114,11 @@ const createCartWithData = async (cartData) => {
 export {
     getStudents,
     createStudent,
+    deleteStudent,
     getCart,
+    updateStudent,
     createCart,
     getClassInfoByCode,
     createCartWithData,
+    createGlobalItem
 };

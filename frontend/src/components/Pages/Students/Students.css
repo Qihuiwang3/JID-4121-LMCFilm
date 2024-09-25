@@ -1,0 +1,20 @@
+.student-container {
+    width: 100%;
+    background-color: #FFFDF8;
+}
+
+.student-btn {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+    margin-left: 15%;
+}
+
+.bottom-btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    position: relative;
+}

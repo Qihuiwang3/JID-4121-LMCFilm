@@ -14,10 +14,6 @@ const studentSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    cellPhone: {
-        type: Number,
-        required: true
-    },
     role: {
         type: String,
         required: true

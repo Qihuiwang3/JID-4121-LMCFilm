@@ -1,0 +1,57 @@
+html {
+    overflow: hidden;
+}
+
+.ag-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFDF8;
+}
+
+.page-container {
+    width: 70vw;
+    height: auto;
+    overflow-y: visible;
+}
+
+.ag-root-wrapper {
+    border: transparent;
+}
+
+.ag-root-wrapper.ag-layout-normal {
+    border: none;
+    overflow-y: auto;
+}
+
+.ag-header, .ag-advanced-filter-header {
+    background-color: #FFFDF8;
+    border-top: 2px solid #3361AE;
+    border-bottom: 2px solid #3361AE;
+}
+
+.ag-row {
+    border-bottom: 2px solid #3361AE;
+    background-color: #FFFDF8;
+}
+
+.ag-header-cell-resize::after {
+    background-color: transparent;
+}
+
+.ag-header-group-cell-label, .ag-cell-label-container {
+    font-size: 24px;
+}
+
+.ag-center-cols-viewport {
+    background-color: #FFFDF8;
+}
+
+.ag-paging-page-size {
+    display: none; 
+}
+
+.ag-paging-panel {
+    background-color: #FFFDF8;
+}
