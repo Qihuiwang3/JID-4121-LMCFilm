@@ -53,7 +53,7 @@
 .modal-form select {
     width: 100%;
     padding: 8px;
-    border: 1.5px solid #3361AE;
+    border: 1px solid #3361AE;
     color: #3361AE;
     border-radius: 5px;
     font-size: 14px;
@@ -107,7 +107,7 @@
     background-color: #E7EFF2;
     border-radius: 5px;
     font-size: 14px;
-    border: 1.5px solid #3361AE;
+    border: 1px solid #3361AE;
 
 }
 .css-20bmp1-MuiSvgIcon-root {
