@@ -88,6 +88,17 @@ const createGlobalItem = async (data) => {
     }
 };
 
+const getClassCodes = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/class-codes/`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+
 export {
     getStudents,
     createStudent,
@@ -95,5 +106,6 @@ export {
     updateStudent,
     getCart,
     createCart,
-    createGlobalItem
+    createGlobalItem,
+    getClassCodes
 };
