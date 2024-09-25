@@ -110,6 +110,9 @@
     border: 1px solid #3361AE;
 
 }
+.mui-textfield .MuiOutlinedInput-notchedOutline {
+    border-color: transparent; 
+}
 .css-20bmp1-MuiSvgIcon-root {
     color: #3361AE;
 }

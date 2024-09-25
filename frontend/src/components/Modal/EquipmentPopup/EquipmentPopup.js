@@ -57,6 +57,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             onChange={(e) => setItemID(e.target.value)} 
                             fullWidth
                             className="mui-textfield" 
+                            
                         />
                     </div>
 
