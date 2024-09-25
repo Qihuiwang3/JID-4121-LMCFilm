@@ -1,0 +1,291 @@
+.content-container {
+    padding: 30px;
+    margin: 0 auto;
+    max-width: 1250px;
+}
+
+
+.section-title {
+    color: #3361AE;
+    font-size: 40px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 8px;
+}
+
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+
+.add-class-button {
+    background-color: #3361AE;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+
+
+
+
+.plus-icon {
+    font-size: 25px;
+    margin-left: 7px;
+}
+
+
+.table-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+
+.class-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-bottom: 20px;
+}
+
+
+.class-table th, .class-table td {
+    padding: 15px;
+    text-align: center;
+    border-top: 3px solid #3361AE;
+    border-bottom: 3px solid #3361AE;
+}
+
+
+.class-table th {
+    background-color: white !important;
+    
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
+}
+
+
+.class-table th:last-child, .class-table td:last-child {
+    text-align: center;
+}
+
+
+.edit-icon {
+    cursor: pointer;
+    width: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
+    filter: invert(37%) sepia(66%) saturate(1422%) hue-rotate(191deg) brightness(90%) contrast(99%); /* Blue filter */
+}
+
+
+.edit-input {
+    border: 1px solid #3361AE;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    width: 200px;
+}
+
+
+.delete-icon {
+    width: 20px;
+    cursor: pointer;
+}
+
+
+
+
+.pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
+
+.pagination-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #3361AE;
+    margin: 0 5px;
+    padding: 5px;
+}
+
+
+.pagination-button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+
+.pagination-button:hover:not(:disabled) {
+    color: #003a99;
+}
+
+
+.pagination-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #3361AE;
+    margin: 0 10px;
+}
+
+
+.bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+
+.cancel-button, .save-button {
+    background-color: #3361AE;
+    color: white;
+    padding: 10px 70px;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+
+.cancel-button:hover, .save-button:hover, .add-class-button:hover {
+    background-color: #2e4a7a;
+}
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    height: 700px;
+    width: 450px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.input-group label {
+    font-size: 14px;
+    color: #3361AE;
+    margin-bottom: 2px;
+}
+
+
+.input-group input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    border-color: #3361AE;
+    background-color: #e0f7fa;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.disabled-group label {
+    font-size: 14px;
+    color: #3361AE;
+    margin-bottom: 2px;
+}
+
+
+
+
+.disabled-group input {
+    padding: 5px;
+    cursor: not-allowed;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black;
+    border-color: #3361AE;
+    background-color: #c4c6c6;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+
+
+
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 24px;
+    color: #3361AE;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3361AE;
+    margin-bottom: 20px;
+}
+
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+
+
+
+.cancelModal-button {
+    background-color: transparent;
+    color: #3361AE;
+    border: 1px solid #3361AE;
+    padding: 10px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.cancelModal-button:hover {
+    background-color: #f0f0f0;
+}
+
+
+/* Save Button */
+.saveModal-button {
+    background-color: #ffffff;
+    color: #3361AE;
+    border: 1px solid #3361AE;
+    padding: 10px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.saveModal-button:hover {
+    background-color: #f0f0f0;
+}
