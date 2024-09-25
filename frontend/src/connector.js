@@ -7,7 +7,7 @@ const getStudents = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -21,7 +21,7 @@ const createStudent = async (data) => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -31,7 +31,7 @@ const deleteStudent = async (id) => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -45,7 +45,7 @@ const updateStudent = async (id, role) => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -56,7 +56,7 @@ const getCart = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -70,9 +70,20 @@ const createCart = async (data) => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
+
+const getItems = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/items`);
+        console.log(res.data)
+        return res.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
 
 const createGlobalItem = async (data) => {
     try {
@@ -88,6 +99,30 @@ const createGlobalItem = async (data) => {
     }
 };
 
+const updateItem = async (id, role) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/items/${id}/role`, { role }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const deleteGlobalItem = async (id) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/items/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export {
     getStudents,
     createStudent,
@@ -95,5 +130,8 @@ export {
     updateStudent,
     getCart,
     createCart,
-    createGlobalItem
+    getItems,
+    createGlobalItem,
+    deleteGlobalItem,
+    updateItem,
 };
