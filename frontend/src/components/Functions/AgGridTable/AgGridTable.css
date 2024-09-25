@@ -48,3 +48,7 @@ html {
     background-color: #FFFDF8;
 }
 
+.ag-paging-page-size {
+    display: none; 
+}
+
