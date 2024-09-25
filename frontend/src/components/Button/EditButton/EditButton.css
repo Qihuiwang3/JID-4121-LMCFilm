@@ -1,0 +1,19 @@
+.edit-btn {
+    border-radius: 5px;
+    width: 80px;
+    height: 30px;
+    background-color: #3361AE;
+    border: 2px solid #3361AE;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 8%;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.edit-icon {
+    font-size: 13px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}

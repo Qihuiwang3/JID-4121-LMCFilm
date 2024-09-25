@@ -13,9 +13,9 @@ const getStudents = asyncHandler(async (req, res) => {
 // @route POST /students
 // @access Private
 const createStudent = asyncHandler(async (req, res) => {
-    const { classCode, name, email, cellPhone, role } = req.body;
+    const { classCode, name, email, role } = req.body;
 
-    if (!classCode || !name || !email || !cellPhone || !role) {
+    if (!classCode || !name || !email || !role) {
         res.status(400);
         throw new Error('Please add all fields');
     }
@@ -30,7 +30,6 @@ const createStudent = asyncHandler(async (req, res) => {
         classCode,
         name,
         email,
-        cellPhone,
         role
     });
 
@@ -38,4 +37,49 @@ const createStudent = asyncHandler(async (req, res) => {
     res.status(201).json(savedStudent);
 });
 
-module.exports = { getStudents, createStudent };
+// @desc Delete a student
+// @route DELETE /students/:id
+// @access Private
+const deleteStudent = asyncHandler(async (req, res) => {
+    const studentId = req.params.id;
+
+    const student = await Student.findById(studentId);
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    await Student.deleteOne({ _id: studentId });
+
+    res.status(200).json({ message: `Student ${studentId} deleted` });
+});
+
+// @desc Update student's role
+// @route PUT /students/:id/role
+// @access Private
+const updateStudent = asyncHandler(async (req, res) => {
+    const studentId = req.params.id;
+    const { role } = req.body;
+
+    // Validate role
+    if (!role || (role !== 'Student' && role !== 'Admin')) {
+        res.status(400);
+        throw new Error('Invalid role');
+    }
+
+    const student = await Student.findById(studentId);
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    student.role = role;
+
+    const updatedStudent = await student.save();
+
+    res.status(200).json(updatedStudent);
+});
+
+module.exports = { getStudents, createStudent, deleteStudent, updateStudent };
