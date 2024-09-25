@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setClassCode } from "../../redux/actions/classActions";
 import './EnterCode.css';
+import { getClassInfoByCode } from "../../../connector";
 
 const EnterCode = () => {
     const [codeInput, setCodeInput] = useState("");
@@ -24,21 +25,19 @@ const EnterCode = () => {
         }
     };
 
-    const checkCodeExist = (codeInput) => {
-        fetch(`http://localhost:3500/api/class-code/${codeInput}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.code === codeInput) {
-                    dispatch(setClassCode(codeInput));
-                    navigate("/SelectClass");
-                } else {
-                    setErrorMessage("The code does not exist");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                setErrorMessage("There was an error processing your request");
-            });
+    const checkCodeExist = async (codeInput) => {
+        try {
+            const data = await getClassInfoByCode(codeInput);
+            if (data && data.code === codeInput) {
+                dispatch(setClassCode(codeInput));
+                navigate("/SelectClass");
+            } else {
+                setErrorMessage("The code does not exist");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setErrorMessage("There was an error processing your request");
+        }
     };
 
     return (

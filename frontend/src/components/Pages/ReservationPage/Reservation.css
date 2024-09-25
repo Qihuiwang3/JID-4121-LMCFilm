@@ -11,7 +11,7 @@
 }
 
 .equipment-container {
-    height: 600px;
+    height: auto;
     width: 60%;
     max-width: 1300px;
     margin-left: 40px;
@@ -24,7 +24,7 @@
 
 
 .cart-container {
-    height: 600px;
+    height: auto;
     width: 30%;
     max-width: 750px;
     margin-left: 40px;

@@ -49,9 +49,35 @@ const createCart = async (data) => {
     }
 };
 
+const getClassInfoByCode = async (codeInput) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/class-code/${codeInput}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching class info:', error);
+        throw error;
+    }
+};
+
+const createCartWithData = async (cartData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/carts`, cartData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error creating cart:', error);
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
     getCart,
-    createCart
+    createCart,
+    getClassInfoByCode,
+    createCartWithData,
 };

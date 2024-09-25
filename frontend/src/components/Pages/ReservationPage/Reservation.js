@@ -6,7 +6,7 @@ import './Reservation.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
-import axios from 'axios';
+import { createCartWithData } from '../../../connector.js';
 
 function ReservationPage() {
     const navigate = useNavigate();
@@ -45,12 +45,11 @@ function ReservationPage() {
     const handleCheckout = async () => {
         const cartData = { cartItems };
         try {
-            const response = await axios.post('http://localhost:3500/api/carts', cartData);
-            console.log('Cart created:', response.data);
-        } catch (error) {
-            console.error('Backend not started:', error.message || error);
-        } finally {
+            const response = await createCartWithData(cartData);
+            console.log('Cart created:', response);
             navigate('/CartConfirmation', { state: { cartItems } });
+        } catch (error) {
+            console.error('Error creating cart:', error);
         }
     };
 

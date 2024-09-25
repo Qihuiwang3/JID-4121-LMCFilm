@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'; 
 import { setClassCode } from "../../../redux/actions/classActions";
 import film from '../../../../Image/filmIcon.svg';
+import { getClassInfoByCode } from '../../../../connector';
 
 const SelectClassPage = () => {
   const [classInfo, setClassInfo] = useState(null);
@@ -17,15 +18,16 @@ const SelectClassPage = () => {
   const classCode = classCodeFromRedux;
 
   useEffect(() => {
-    fetch(`http://localhost:3500/api/class-code/${classCode}`)
-        .then((res) => res.json())
-        .then((data) => {
-            setClassInfo(data);
-        })
-        .catch((error) => {
-            console.error('Error fetching class info:', error);
-            setErrorMessage('Error fetching class information');
-        });
+    const fetchClassInfo = async () => {
+      try {
+        const data = await getClassInfoByCode(classCode);
+        setClassInfo(data);
+      } catch (error) {
+        setErrorMessage('Error fetching class information');
+      }
+    };
+
+    fetchClassInfo();
   }, [classCode]);
   
   const handleConfirms = () => {
@@ -42,7 +44,7 @@ const SelectClassPage = () => {
   };
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate('/'); 
   };
   
   if (errorMessage) {
