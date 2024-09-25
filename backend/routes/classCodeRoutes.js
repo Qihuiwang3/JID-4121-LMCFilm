@@ -9,4 +9,5 @@ router.delete('/class-code/:code', deleteClassCode);
 router.put('/class-code/:code', updateClassCode);
 // Route to get all class codes
 router.get('/class-codes', getAllClassCodes);
+
 module.exports = router;

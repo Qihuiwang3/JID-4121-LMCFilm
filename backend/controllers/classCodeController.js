@@ -43,7 +43,7 @@ const deleteClassCode = async (req, res) => {
             return res.status(404).json({ message: "Class code not found" });
         }
     } catch (error) {
-        res.status(500).json({ message: "Server error", error });
+        res.status(500).json({ message: "Server error ", error });
     }
 };
 
@@ -52,9 +52,9 @@ const updateClassCode = async (req, res) => {
   
     try {
       const updatedClassCode = await ClassCode.findOneAndUpdate(
-        { code }, // Find by the class code
-        { className }, // Update the className
-        { new: true } // Return the updated document
+        { code },
+        { className }, 
+        { new: true } 
       );
   
       if (!updatedClassCode) {

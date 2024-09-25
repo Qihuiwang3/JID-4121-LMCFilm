@@ -19,6 +19,7 @@ const classCodeSchema = new mongoose.Schema({
         type: String,
         require: false,
     }
+    
 });
 
 module.exports = mongoose.model('ClassCode', classCodeSchema);
