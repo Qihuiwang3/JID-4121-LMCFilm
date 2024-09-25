@@ -25,6 +25,31 @@ const createStudent = async (data) => {
     }
 };
 
+const deleteStudent = async (id) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/students/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
+const updateStudent = async (id, role) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${id}/role`, { role }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
+
 const getCart = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/carts`);
@@ -52,6 +77,8 @@ const createCart = async (data) => {
 export {
     getStudents,
     createStudent,
+    deleteStudent,
+    updateStudent,
     getCart,
     createCart
 };
