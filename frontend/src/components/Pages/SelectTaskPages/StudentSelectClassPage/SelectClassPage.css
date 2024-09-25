@@ -1,12 +1,11 @@
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Creates two columns */
-  gap: 20px; /* Adjust the gap between cards as needed */
-  padding: 170px; /* Padding around the whole grid */
-  justify-content: center; /* This centers the grid horizontally */
-  align-items: start; /* Aligns items to the top of the container */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px; 
+  padding: 170px; 
+  justify-content: center; 
+  align-items: start;
 }
-
 
 .select-class-header {
   margin-left: 50px;
@@ -60,30 +59,34 @@
   margin-left: 10%;
 }
 
-.confirmBtn {
-  background-color: #0052cc;
+.confirmBtn, .backBtn {
+  background-color: #3361AE;
   color: white;
   padding: 12px 70px;
   font-size: 18px;
   border: none;
   border-radius: 22px;
   cursor: pointer;
-  align-self: start;
-  align-self: flex-end;
   margin-bottom: 5%;
-  margin-right: 150px;
 }
 
-.confirmBtn:hover {
+.confirmBtn:hover, .backBtn:hover {
   background-color: #003a99;
 }
 
-.confirmBtnContainer {
+.btnContainer {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
+  justify-content: space-between;
   width: 100%;
+  padding: 20px;
+}
+
+.backBtn {
+  margin-left: 2%; 
+}
+
+.confirmBtn {
+  margin-right: 5%;
 }
 
 .class-info.selected {

@@ -17,7 +17,6 @@
     margin-left: 40px;
     margin-top: 20px;
     padding: 10px;
-
     display: flex;
     flex-direction: column;
     gap: 25px;
@@ -69,21 +68,36 @@
     border-radius: 0;
 }
 
-.equipment-checkout {
-    background-color: #3361AE;
-    border-radius: 37.5px;
-    width: 300px;
-    height: 75px;
-    line-height: 75px;
-    cursor: pointer; 
-    text-align: center;
-    color: white;
-    margin-right: 100px;
+.equipment-button-container {
+    display: flex;
+    align-items: space-between;
+    padding: 20px;
+    width: 100%;
 }
 
-.equipment-checkout:hover {
+.equipment-back, .equipment-checkout {
+    background-color: #3361AE;
+    color: white;
+    padding: 12px 70px;
+    font-size: 18px;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    align-self: start;
+    margin-bottom: 5%;
+}
+
+.equipment-back:hover, .equipment-checkout:hover {
     background-color: #003a99;
-  }
+}
+.equipment-back {
+    margin-right: auto;
+    margin-left: 2%;
+}
+
+.equipment-checkout {
+    margin-right: 5%;
+}
 
 .Time-Button {
     margin-top: 200px;

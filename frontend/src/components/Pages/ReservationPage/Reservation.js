@@ -1,31 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import TimeSelectionButton from '../../Button/TimeSelectionButton/TimeSelectionButton.js';
+import TimeSelectionButton from '../../Button/TimeSelectionButton/TimeSelectionButton.js';  // Keep the TimeSelectionButton
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown.js';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
 import axios from 'axios';
 
-function ReservationPage({ selectedDates }) {
+function ReservationPage() {
     const navigate = useNavigate();
-    const location = useLocation();
-    const { classCode } = location.state || {};
+    const dispatch = useDispatch();
 
-    const initialPickupDateTime = mergeDateAndTime(selectedDates.pickupDate, selectedDates.pickupTime);
-    const initialReturnDateTime = mergeDateAndTime(selectedDates.returnDate, selectedDates.returnTime);
+    const classCode = useSelector(state => state.classData.classCode);
+    const selectedDates = useSelector(state => state.classData.selectedDates);
+
+    const [pickupDateTime, setPickupDateTime] = useState(new Date(selectedDates?.pickupDateTime || new Date()));
+    const [returnDateTime, setReturnDateTime] = useState(new Date(selectedDates?.returnDateTime || new Date()));
 
     const [equipment, setEquipment] = useState([]);
     const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
-    const addToCart = (item) => {
+    useEffect(() => {
+        dispatch(setSelectedDates(pickupDateTime, returnDateTime));
+    }, [pickupDateTime, returnDateTime, dispatch]);
 
+    const addToCart = (item) => {
         if (!cartItems.includes(item)) {
             setCartItems([...cartItems, item]);
         } else {
             setCartItems(cartItems.filter(cartItems => cartItems !== item));
         }
-    }
+    };
 
     const calculateTotal = () => {
         let total = 0;
@@ -33,27 +40,23 @@ function ReservationPage({ selectedDates }) {
             total += item.price;
         });
         return total.toFixed(2);
-    }
+    };
 
     const handleCheckout = async () => {
-        let itemId = 12345;
-        const cartData = {
-            itemId: 12345, //example
-            price: 10.99,
-            quantity: 2  //example
-        };
-
+        const cartData = { cartItems };
         try {
             const response = await axios.post('http://localhost:3500/api/carts', cartData);
             console.log('Cart created:', response.data);
         } catch (error) {
-           
             console.error('Backend not started:', error.message || error);
-        
         } finally {
-            navigate('/CartConfirmation', { state: { cartItems, itemId } });
+            navigate('/CartConfirmation', { state: { cartItems } });
         }
+    };
 
+    const handleBack = () => {
+        dispatch(setClassCode(classCode));
+        navigate('/Reservation', { state: { classCode } });
     };
 
     useEffect(() => {
@@ -92,12 +95,13 @@ function ReservationPage({ selectedDates }) {
 
     return (
         <div className="main-reservation-equipment-cart">
-
             <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%" }}>
                 <h1 style={{ paddingLeft: "50px", color: "#3361AE" }}> Reservation </h1>
                 <TimeSelectionButton
-                    initialPickupDateTime={initialPickupDateTime}
-                    initialReturnDateTime={initialReturnDateTime}
+                    initialPickupDateTime={pickupDateTime}
+                    initialReturnDateTime={returnDateTime} 
+                    onPickupDateTimeChange={setPickupDateTime} 
+                    onReturnDateTimeChange={setReturnDateTime} 
                 />
             </div>
 
@@ -131,10 +135,7 @@ function ReservationPage({ selectedDates }) {
                 </div>
 
                 <div className="cart-container">
-                    <h1 style={{ paddingLeft: "20px", color: "#3361AE" }}>
-                        Cart
-                    </h1>
-
+                    <h1 style={{ paddingLeft: "20px", color: "#3361AE" }}>Cart</h1>
                     <div className="all-cart-items">
                         {cartItems.map(id => (
                             <div key={id.itemId || id.bundleId}>
@@ -145,33 +146,23 @@ function ReservationPage({ selectedDates }) {
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div className="remove-equipment-item" onClick={() => addToCart(id)}> Remove </div>
+                                            <div className="remove-equipment-item" onClick={() => addToCart(id)}>Remove</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div style={{ textAlign: "right", paddingRight: "20px" }}> Total: ${calculateTotal()} </div>
+                    <div style={{ textAlign: "right", paddingRight: "20px" }}>Total: ${calculateTotal()}</div>
                 </div>
             </div>
 
-            <div style={{ width: "100%", display: "flex", flexDirection: "row-reverse", paddingTop: "10px" }}>
-                <div
-                    className="equipment-checkout"
-                    onClick={() => handleCheckout()}
-                > Checkout </div>
+            <div className='equipment-button-container'>
+                <div className="equipment-back" onClick={handleBack}>Back</div>
+                <div className="equipment-checkout" onClick={() => handleCheckout()}> Checkout </div>
             </div>
-        </div >
+        </div>
     );
-}
-
-function mergeDateAndTime(date, time) {
-    const merged = new Date(date);
-    merged.setHours(time.getHours());
-    merged.setMinutes(time.getMinutes());
-    merged.setSeconds(time.getSeconds());
-    return merged;
 }
 
 export default ReservationPage;
