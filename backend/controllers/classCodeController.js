@@ -16,7 +16,7 @@ const getClassCode = asyncHandler(async (req, res) => {
 // @route POST /class-code
 // @access Private
 const createClassCode = asyncHandler(async (req, res) => {
-    const { code, professor } = req.body;
+    const { code, professor, className, packageName } = req.body;
 
     const existingClassCode = await ClassCode.findOne({ code });
     if (existingClassCode) {
@@ -25,12 +25,48 @@ const createClassCode = asyncHandler(async (req, res) => {
 
     const newClassCode = new ClassCode({
         code,
-        professor
+        professor,
+        className, 
+        packageName
     });
 
     const savedClassCode = await newClassCode.save();
     res.status(201).json(savedClassCode);
 });
+
+const deleteClassCode = async (req, res) => {
+    try {
+        const { code } = req.params; 
+
+        const deletedClass = await ClassCode.findOneAndDelete({ code });
+        if (!deletedClass) {
+            return res.status(404).json({ message: "Class code not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+const updateClassCode = async (req, res) => {
+    const { code, className } = req.body;
+  
+    try {
+      const updatedClassCode = await ClassCode.findOneAndUpdate(
+        { code }, // Find by the class code
+        { className }, // Update the className
+        { new: true } // Return the updated document
+      );
+  
+      if (!updatedClassCode) {
+        return res.status(404).json({ error: "Class code not found" });
+      }
+  
+      res.json(updatedClassCode);
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred while updating class code" });
+    }
+  };
+
 
 
 // @desc Get all class codes
@@ -41,4 +77,4 @@ const getAllClassCodes = asyncHandler(async (req, res) => {
     res.status(200).json(classCodes);
 });
 
-module.exports = { getClassCode, createClassCode, getAllClassCodes };
+module.exports = { getClassCode, createClassCode, getAllClassCodes, deleteClassCode, updateClassCode };
