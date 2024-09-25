@@ -6,6 +6,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
     const [itemName, setItemName] = useState('');
     const [price, setPrice] = useState('');
+    const [quantity, setQuantity] = useState('');
 
     const predefinedItems = ['Camera', 'Light', 'Tripod', 'Microphone'];
 
@@ -14,7 +15,8 @@ const EquipmentPopup = ({ show, handleClose }) => {
         console.log({
             itemID,
             itemName,
-            price
+            price,
+            quantity
         });
         handleClose(); 
     };
@@ -73,11 +75,37 @@ const EquipmentPopup = ({ show, handleClose }) => {
                         <div className='form-text'>Price</div>
                         <TextField
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Ensure only numeric values are accepted
+                                if (/^\d*\.?\d*$/.test(value)) {
+                                    setPrice(value);
+                                }
+                            }}
+                            type="number"
                             fullWidth
                             className="mui-textfield"
+                            inputProps={{ min: "0", step: "0.01" }} 
                         />
                     </div>
+                    <div>
+                        <div className='form-text'>Quantity</div>
+                        <TextField
+                            value={quantity}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                // Ensure only numeric values are accepted
+                                if (/^\d*\.?\d*$/.test(value)) {
+                                    setQuantity(value);
+                                }
+                            }}
+                            type="number"
+                            fullWidth
+                            className="mui-textfield"
+                            inputProps={{ min: "0", step: "1" }} 
+                        />
+                    </div>
+
                     
                     <div className="modal-footer">
                         <button type="button" className="cancel-button" onClick={handleClose}>Cancel</button>
