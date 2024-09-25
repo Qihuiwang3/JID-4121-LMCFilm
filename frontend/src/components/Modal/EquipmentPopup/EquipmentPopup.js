@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material'; 
 import './EquipmentPopup.css'; 
+import { createGlobalItem } from '../../../connector.js'; 
 
 const EquipmentPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
     const [itemName, setItemName] = useState('');
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState(0);
 
     const predefinedItems = ['Camera', 'Light', 'Tripod', 'Microphone'];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({
-            itemID,
+
+        const data = {
             itemName,
-            price
-        });
-        handleClose(); 
+            pricePerItem: price,
+            itemIds: [itemID] 
+        };
+
+        try {
+            const response = await createGlobalItem(data);
+            console.log('Global item created:', response);
+
+            handleClose();
+        } catch (error) {
+            console.error('Error creating global item:', error);
+        }
     };
 
     if (!show) {
@@ -86,7 +96,6 @@ const EquipmentPopup = ({ show, handleClose }) => {
                             inputProps={{ min: "0", step: "0.01" }} 
                         />
                     </div>
-
                     
                     <div className="modal-footer">
                         <button type="button" className="cancel-button" onClick={handleClose}>Cancel</button>
