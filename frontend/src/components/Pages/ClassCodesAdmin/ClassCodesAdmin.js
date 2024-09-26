@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { getClassCodes } from '../../../connector.js';
 import BackButton from '../../Button/BackButton/BackButton'; 
 
-
-
 function ClassCodesAdmin() {
     const navigate = useNavigate();
     const [classData, setClassData] = useState([]);
@@ -13,6 +11,8 @@ function ClassCodesAdmin() {
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
 
+    // New state for placeholder management
+    const [placeholderText, setPlaceholderText] = useState("Search by Class");
 
     useEffect(() => {
         const fetchClassData = async () => {
@@ -20,84 +20,79 @@ function ClassCodesAdmin() {
                 const data = await getClassCodes(); 
                 setClassData(data); 
             } catch (error) {
-                console.error('Error fetching class codes:', error);
+                
             }
         };
         fetchClassData(); 
     }, []);
 
-
-   
     const [filteredClassData, setFilteredClassData] = useState(classData || []);
 
-
-    // useEffect to filter the class data based on the search term
     useEffect(() => {
         const filteredData = classData.filter((item) => {
             const className = item.className || ''; 
             return className.toLowerCase().includes(searchQuery.toLowerCase());
         });
-
-
         setFilteredClassData(filteredData);
-        setCurrentPage(1); // 
+        setCurrentPage(1); 
     }, [searchQuery, classData]);
-   
 
-    const totalPages = Math.max(1, Math.ceil(filteredClassData.length / rowsPerPage));
+
+    const validClassData = filteredClassData.filter(item => item.className && item.code && item.professor);
+    const totalPages = Math.max(1, Math.ceil(validClassData.length / rowsPerPage));
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = filteredClassData.slice(indexOfFirstRow, indexOfLastRow);
-
+    const currentRows = validClassData.slice(indexOfFirstRow, indexOfLastRow);
 
     const goToNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
     };
 
-
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
+    
+    const handleFocus = () => {
+        setPlaceholderText("");
+    };
 
-   
+    const handleBlur = () => {
+        setSearchQuery(''); 
+        setPlaceholderText("Search by Class");
+    };
+
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
     };
 
-
-   
     const handleEditClass = () => {
-        navigate("/", { state: { classData } });
+        navigate("/ClassCodesEdit", { state: { classData } });
     };
-
 
     return (
         <div className="content-container">
             <h2 className="section-title">Class Code</h2>
 
-
             <div className="top-buttons">
-               
                 <div className="search-class-container">
                     <input
                         type="text"
                         className="search-class-input"
-                        placeholder="Search by Class"
+                        placeholder={placeholderText} 
                         value={searchQuery}
+                        onFocus={handleFocus} 
+                        onBlur={handleBlur}  
                         onChange={handleSearchChange}
                     />
                     <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Search Icon" />
                 </div>
 
-
-               
                 <button className="edit-button" onClick={handleEditClass}>
                     Edit
                     <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Pencil Icon" />
                 </button>
             </div>
-
 
             <div className="table-container">
                 <table className="class-table">
@@ -116,7 +111,7 @@ function ClassCodesAdmin() {
                                     <td>{item.className}</td>
                                     <td>{item.code}</td>
                                     <td>{item.professor}</td>
-                                    <td>{item.packageName}</td>
+                                    <td>{item.packageName || "N/A"}</td>
                                 </tr>
                             ))
                         ) : (
@@ -128,7 +123,6 @@ function ClassCodesAdmin() {
                         )}
                     </tbody>
                 </table>
-
 
                 <div className="pagination-controls">
                     <button
@@ -152,6 +146,5 @@ function ClassCodesAdmin() {
         </div>
     );
 }
-
 
 export default ClassCodesAdmin;

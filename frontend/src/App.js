@@ -7,6 +7,7 @@ import Equipment from "./components/Pages/Equipment/Equipment";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
 import ReservationTimePicker from "./components/Pages/ReservationTimePicker/ReservationTimePicker";
 import ClassCodesAdmin from "./components/Pages/ClassCodesAdmin/ClassCodesAdmin";
+import ClassCodesEdit from "./components/Pages/ClassCodesEdit/ClassCodesEdit";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
 import Students from "./components/Pages/Students/Students";
 import ViewEquipment from "./components/Pages/SelectTaskPages/AdminViewEquipment/ViewEquipment";
@@ -46,6 +47,7 @@ class App extends Component {
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/ClassCodesAdmin" element={<ClassCodesAdmin />} />
+            <Route path="/ClassCodesEdit" element={<ClassCodesEdit />} />
             <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
             <Route path="/Equipment" element={<Equipment />} />
             <Route path="/Students" element={<Students />} />

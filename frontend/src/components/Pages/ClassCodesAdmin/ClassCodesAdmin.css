@@ -60,6 +60,11 @@
    
 }
 
+.search-class-container img:hover {
+    filter: brightness(0) saturate(100%) invert(10%) sepia(66%) saturate(6562%) hue-rotate(213deg) brightness(97%) contrast(100%);
+    cursor: pointer;
+}
+
 
 .edit-button {
     background-color: #3361AE;
@@ -125,6 +130,8 @@
     border-bottom: 3px solid #3361AE;
     text-align: center;
 }
+
+
 
 
 .pagination-controls {
