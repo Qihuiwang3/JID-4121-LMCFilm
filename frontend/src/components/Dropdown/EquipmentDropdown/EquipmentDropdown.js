@@ -13,8 +13,6 @@ function EquipmentDropdown({ title, equipment, addItem, showReserve }) {
 
     useEffect(() => {
 
-        console.log(equipment);
-
     })
 
     return (
