@@ -40,7 +40,7 @@ class App extends Component {
             <Route path="/" element={<EnterCode />} />
             <Route path="/SelectClass" element={<SelectClassPage />} />
             <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
-            <Route path="/ReservationPage" element={<ReservationPage selectedDates={this.state.selectedDates} />} />
+            <Route path="/ReservationPage" element={<ReservationPage/>} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />
