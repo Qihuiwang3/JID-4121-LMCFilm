@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setClassCode } from "../../redux/actions/classActions";
 import './EnterCode.css';
-import { getClassInfoByCode } from "../../../connector";
+import { getClassInfoByCode, addClassCode } from "../../../connector";
 
 const EnterCode = () => {
     const [codeInput, setCodeInput] = useState("");
     const [errorMessage, setErrorMessage] = useState("Don't have code?");
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
     const handleInputChange = (event) => {
         setCodeInput(event.target.value);
     };
+
+    const studentInfo = useSelector((state) => state.studentData);
 
     const handleSubmit = () => {
         if (codeInput.length < 2) {
@@ -29,14 +32,23 @@ const EnterCode = () => {
         try {
             const data = await getClassInfoByCode(codeInput);
             if (data && data.code === codeInput) {
-                dispatch(setClassCode(codeInput));
-                navigate("/SelectClass");
+                await addClassCode(studentInfo.email, codeInput);
+                dispatch(setClassCode(codeInput)); 
+                setLoading(false);
+                navigate("/SelectClass", { state: { studentInfo } });
             } else {
                 setErrorMessage("The code does not exist");
             }
         } catch (error) {
-            console.error('Error:', error);
             setErrorMessage("There was an error processing your request");
+        }
+    };
+
+    const handleNext = () => {
+        if (studentInfo.classCodes && studentInfo.classCodes.length > 0) {
+            navigate("/SelectClass", { state: { studentInfo } }); 
+        } else {
+            setErrorMessage("No class codes found in your account. Please enter a new code.");
         }
     };
 
@@ -44,7 +56,6 @@ const EnterCode = () => {
         <div className="body">
             <div className="enterCodeContainer">
                 <h1 className="enterCodeTitle">Enter Class Code</h1>
-
                 <input
                     className="input-field"
                     type="text"
@@ -55,8 +66,11 @@ const EnterCode = () => {
                 <div className="error">
                     {errorMessage && <i>{errorMessage}</i>}
                 </div>
-
                 <button className="submit-button" onClick={handleSubmit}>Submit</button>
+            </div>
+
+            <div className="enter-btnContainer">
+                <button className="enter-confirmBtn" onClick={handleNext}>Confirm</button>
             </div>
         </div>
     );
