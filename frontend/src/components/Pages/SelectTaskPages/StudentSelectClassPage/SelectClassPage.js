@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './SelectClassPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'; 
 import { setClassCode } from "../../../redux/actions/classActions";
 import film from '../../../../Image/filmIcon.svg';
@@ -12,10 +12,13 @@ const SelectClassPage = () => {
   const [selectedClassId, setSelectedClassId] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const studentInfo = useSelector(state => state.studentData);
+  const location = useLocation();
+  const reduxStudentInfo = useSelector(state => state.studentData);
+  const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
   useEffect(() => {
     const fetchAndValidateClasses = async () => {
+      console.log(studentInfo);
       if (studentInfo && studentInfo.classCodes) {
         const uniqueClassCodes = [...new Set(studentInfo.classCodes)]; 
         const validClasses = [];

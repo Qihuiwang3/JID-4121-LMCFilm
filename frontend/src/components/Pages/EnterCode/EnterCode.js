@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setClassCode } from "../../redux/actions/classActions";
+import { setStudentInfo } from "../../redux/actions/studentActions";
 import './EnterCode.css';
 import { getClassInfoByCode, addClassCode } from "../../../connector";
 
@@ -9,7 +9,6 @@ const EnterCode = () => {
     const [codeInput, setCodeInput] = useState("");
     const [errorMessage, setErrorMessage] = useState("Don't have code?");
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
     const handleInputChange = (event) => {
@@ -33,9 +32,10 @@ const EnterCode = () => {
             const data = await getClassInfoByCode(codeInput);
             if (data && data.code === codeInput) {
                 await addClassCode(studentInfo.email, codeInput);
-                dispatch(setClassCode(codeInput)); 
-                setLoading(false);
-                navigate("/SelectClass", { state: { studentInfo } });
+                const updatedClassCodes = [...studentInfo.classCodes, codeInput];
+                const updatedStudentInfo = { ...studentInfo, classCodes: updatedClassCodes };
+                dispatch(setStudentInfo(updatedStudentInfo)); 
+                navigate("/SelectClass", { state: { updatedStudentInfo } });
             } else {
                 setErrorMessage("The code does not exist");
             }
