@@ -33,7 +33,6 @@ const createClassCode = asyncHandler(async (req, res) => {
     res.status(201).json(savedClassCode);
 });
 
-
 // @desc Get all class codes
 // @route GET /class-codes
 // @access Private
@@ -65,4 +64,18 @@ const updateClassCode = asyncHandler(async (req, res) => {
     res.status(200).json(updatedClassCode);
 });
 
-module.exports = { getClassCode, createClassCode, getAllClassCodes, updateClassCode };
+// @desc Delete a class code by code
+// @route DELETE /class-code/:code
+// @access Private
+const deleteClassCode = asyncHandler(async (req, res) => {
+    const { code } = req.params;
+    const classCode = await ClassCode.findOneAndDelete({ code });
+
+    if (!classCode) {
+        return res.status(404).json({ error: "Class code not found" });
+    }
+
+    res.status(200).json({ message: `Class code ${code} deleted successfully` });
+});
+
+module.exports = { getClassCode, createClassCode, getAllClassCodes, updateClassCode, deleteClassCode };
