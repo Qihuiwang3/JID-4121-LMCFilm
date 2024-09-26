@@ -1,0 +1,92 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates two columns */
+    gap: 20px; /* Adjust the gap between cards as needed */
+    padding: 170px; /* Padding around the whole grid */
+    justify-content: center; /* This centers the grid horizontally */
+    align-items: start; /* Aligns items to the top of the container */
+  }
+  
+  
+  .select-class-header {
+    margin-left: 50px;
+    margin-top: 8%;
+    font-size: 24px;
+    text-align: left;
+    color: #3361AE;
+    margin-bottom: -7rem; 
+  }
+  
+  .class-container {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10%;
+    margin-left: -55px;
+    width: 315px;
+    height: 80px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+    
+  .class-icon {
+    flex: 0 0 95px;
+    background-color: #E7EFF2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: auto;
+    
+  }
+  .class-icon img {
+    transform: scale(0.65);
+  }
+    
+  .class-info {
+    background-color: #FFFFFF; 
+    color: #000000;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 220px;
+  }
+    
+  .class-name, .instructor-name {
+    margin: 0;
+    line-height: 1.4;
+    font-family: 'Lato'; 
+    font-size: 15px;
+    margin-left: 10%;
+  }
+  
+  .confirmBtn {
+    background-color: #0052cc;
+    color: white;
+    padding: 12px 70px;
+    font-size: 18px;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+    align-self: start;
+    align-self: flex-end;
+    margin-bottom: 5%;
+    margin-right: 150px;
+  }
+  
+  .confirmBtn:hover {
+    background-color: #003a99;
+  }
+  
+  .confirmBtnContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .class-info.selected {
+    background-color: #3361AE;
+    color: #FFFFFF;
+  }
