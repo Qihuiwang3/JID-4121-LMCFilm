@@ -142,8 +142,12 @@ function ClassCodesAdmin() {
                     </button>
                 </div>
             </div>
-            <BackButton to="/ViewEquipment" />
-        </div>
+           
+            <div className="bottom-btn-container">
+                        <BackButton to="/ViewEquipment" />
+                    </div>
+
+            </div>
     );
 }
 
