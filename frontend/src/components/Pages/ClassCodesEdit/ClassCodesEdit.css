@@ -9,15 +9,15 @@
     color: #3361AE;
     font-size: 40px;
     font-weight: bold;
-    padding-top: 10px;
-    padding-bottom: 8px;
+    padding-top: 19px;
+    padding-bottom: 5px;
 }
 
 
 .top-buttons {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 1px;
 }
 
 
@@ -29,12 +29,8 @@
     cursor: pointer;
     border-radius: 5px;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: bolder;
 }
-
-
-
-
 
 
 .plus-icon {
@@ -49,7 +45,7 @@
 }
 
 
-.class-table {
+.class1-table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
@@ -57,7 +53,7 @@
 }
 
 
-.class-table th, .class-table td {
+.class1-table th, .class1-table td {
     padding: 15px;
     text-align: center;
     border-top: 3px solid #3361AE;
@@ -65,7 +61,7 @@
 }
 
 
-.class-table th {
+.class1-table th {
     background-color: white !important;
     
     font-weight: bold;
@@ -74,8 +70,13 @@
 }
 
 
-.class-table th:last-child, .class-table td:last-child {
+.class1-table th:last-child, .class1-table td:last-child {
     text-align: center;
+}
+
+ .class1-table td:first-child {
+    text-align: left;
+    padding-left: 71px;
 }
 
 
@@ -84,7 +85,11 @@
     width: 20px;
     margin-right: 10px;
     vertical-align: middle;
-    filter: invert(37%) sepia(66%) saturate(1422%) hue-rotate(191deg) brightness(90%) contrast(99%); /* Blue filter */
+    filter: brightness(0) saturate(100%) invert(25%) sepia(53%) saturate(1300%) hue-rotate(190deg) brightness(117%) contrast(85%);
+}
+
+.edit-icon:hover {
+    filter: brightness(0) saturate(100%) invert(17%) sepia(77%) saturate(2620%) hue-rotate(209deg) brightness(89%) contrast(107%);
 }
 
 
@@ -98,11 +103,15 @@
 
 
 .delete-icon {
+    filter: brightness(0) saturate(100%) invert(25%) sepia(53%) saturate(1300%) hue-rotate(190deg) brightness(117%) contrast(85%);
     width: 20px;
     cursor: pointer;
 }
 
-
+.delete-icon:hover {
+    filter: brightness(0) saturate(100%) invert(17%) sepia(77%) saturate(2620%) hue-rotate(209deg) brightness(89%) contrast(107%);
+    cursor: pointer;
+}
 
 
 .pagination-controls {
@@ -217,8 +226,6 @@
 }
 
 
-
-
 .disabled-group input {
     padding: 5px;
     cursor: not-allowed;
@@ -231,11 +238,6 @@
     width: 100%;
     margin-bottom: 10px;
 }
-
-
-
-
-
 
 .modal-header {
     display: flex;
@@ -256,8 +258,6 @@
 }
 
 
-
-
 .cancelModal-button {
     background-color: transparent;
     color: #3361AE;
@@ -274,7 +274,6 @@
 }
 
 
-/* Save Button */
 .saveModal-button {
     background-color: #ffffff;
     color: #3361AE;

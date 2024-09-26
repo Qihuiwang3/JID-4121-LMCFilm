@@ -97,6 +97,45 @@ const getClassCodes = async () => {
         throw error;
     }
 };
+const createClassCode = async (newClassCode) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/class-code/`, {
+            code: newClassCode.code,
+            professor: newClassCode.professor,
+            className: newClassCode.className
+        });
+        return res.data; 
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
+
+const deleteClassCode = async (classCode) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/class-code/${classCode}`);
+        return res.data; 
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
+
+const updateClassCode = async (updatedClass) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/class-code`, {
+            code: updatedClass.code,
+            className: updatedClass.className,
+        });
+        return res.data; 
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
 
 
 export {
@@ -107,5 +146,9 @@ export {
     getCart,
     createCart,
     createGlobalItem,
-    getClassCodes
+    getClassCodes,
+    createClassCode,
+    deleteClassCode,
+    updateClassCode
+
 };
