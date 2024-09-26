@@ -20,13 +20,14 @@ function ClassCodesEdit() {
 
     const [classData, setClassData] = useState(initialClassData || []);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    
 
     // State to keep track of newly added classes that aren't saved to the database yet
     const [newClassData, setNewClassData] = useState([]);
     const [deletedClassCodes, setDeletedClassCodes] = useState([]); 
 
     const [newClass, setNewClass] = useState({
-        class: '',
+        className: '',
         professor: '',
         packageName: ''
     });
@@ -47,14 +48,16 @@ function ClassCodesEdit() {
 
     const closeModal = () => {
         setNewClass({
-            class: '',
+            className: '',
             professor: '',
             packageName: ''
         });
         setIsModalOpen(false);
     };
 
-    const [editedClass, setEditedClass] = useState("");
+    
+
+    
     const validClassData = classData.filter(item => item.className && item.code && item.professor);
     const totalPages = Math.max(1, Math.ceil(validClassData.length / rowsPerPage));
 
@@ -83,15 +86,12 @@ function ClassCodesEdit() {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    const handleEditClick = (code, className) => {
-        setEditCode(code);
-        setEditedClass(className);
-    };
+    
 
     const handleAddNewClassToScreen = () => {
         const newEntry = {
             code: generatedCode,
-            className: newClass.class,
+            className: newClass.className,
             professor: newClass.professor,
             packageName: newClass.packageName
         };
@@ -153,23 +153,46 @@ function ClassCodesEdit() {
     };
 
     const [pendingUpdates, setPendingUpdates] = useState([]);
-    const [editCode, setEditCode] = useState(null);
 
-    const handleSave = (code) => {
-        const updatedClass = classData.map((row) =>
-            row.code === code ? { ...row, className: editedClass } : row
-        );
 
-        setClassData(updatedClass);
+    const [IsEditModalOpen, setIsEditModalOpen] = useState(false); // Edit Modal state
+const [editClassData, setEditClassData] = useState({}); // State to store class data for editing
 
-        setPendingUpdates([...pendingUpdates, { code, className: editedClass }]);
+// Function to open the edit modal
+const openEditModal = (code) => {
+    const classToEdit = classData.find((item) => item.code === code);
+    setEditClassData(classToEdit); // Set the class data to be edited
+    setIsEditModalOpen(true); // Open the modal
+};
 
-        setEditCode(null);
-    };
+// Function to close the edit modal
+const closeEditModal = () => {
+    setIsEditModalOpen(false); // Close the modal
+};
+
+// Function to handle input changes within the modal
+const handleEditClassChange = (e) => {
+    const { name, value } = e.target;
+    setEditClassData((prevData) => ({ ...prevData, [name]: value })); // Update the class data
+};
+
+// Function to save the edited class data
+const handleSaveEditedClass = () => {
+    const updatedClassDataArray = classData.map((item) =>
+        item.code === editClassData.code ? editClassData : item
+    );
+    setClassData(updatedClassDataArray); // Update the class data
+    setPendingUpdates([...pendingUpdates, editClassData]); // Add to pending updates
+    setIsEditModalOpen(false); // Close the modal after saving
+};
+    
+
+    
+    
 
     return (
         <div className="content-container">
-            <h2 className="section-title">Edit Class Code</h2>
+            <h2 className="section1-title">Edit Class Code</h2>
 
             <div className="top-buttons">
                 <button className="add-class-button" onClick={openModal}>
@@ -192,30 +215,15 @@ function ClassCodesEdit() {
                         {currentRows.map((item, index) => (
                             <tr key={index}>
                                 <td>
-                                    {editCode === item.code ? (
-                                        <input
-                                            type="text"
-                                            value={editedClass}
-                                            onChange={handleInputChange}
-                                        />
-                                    ) : (
-                                        <>
-                                            <img
-                                                src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
-                                                alt="Edit"
-                                                className="edit-icon"
-                                                onClick={() => handleEditClick(item.code, item.className)}
-                                                style={{ marginLeft: '10px', cursor: 'pointer', width: '20px' }}
+                                    <img
+                                     src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
+                                     alt="Edit"
+                                     className="edit-icon"
+                                     onClick={() => openEditModal(item.code)}
+                                     style={{ marginLeft: '10px', cursor: 'pointer', width: '20px' }}
                                             />
-                                            {item.className}
-                                        </>
-                                    )}
-                                    {editCode === item.code && (
-                                        <button className="saveIn-button-inline" onClick={() => handleSave(item.code)}>
-                                            Save
-                                        </button>
-                                    )}
-                                </td>
+                                     {item.className} </td>
+                                                                  
                                 <td>{item.code}</td>
                                 <td>{item.professor}</td>
                                 <td>{item.packageName || "N/A"}</td>
@@ -256,40 +264,111 @@ function ClassCodesEdit() {
                 <SaveButton onClick={handleSaveToBackend} />
             </div>
 
-            {isModalOpen && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h2>Add New Class</h2>
-                            <button className="close-button" onClick={closeModal}>×</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="disabled-group">
-                                <label>Code</label>
-                                <input type="text" value={generatedCode} readOnly disabled />
-                            </div>
-                            <div className="input-group-row">
-                                <div className="input-group">
-                                    <label>Class</label>
-                                    <input type="text" name="class" value={newClass.className} onChange={handleInputChange} />
-                                </div>
-                                <div className="input-group">
-                                    <label>Professor</label>
-                                    <input type="text" name="professor" value={newClass.professor} onChange={handleInputChange} />
-                                </div>
-                            </div>
-                            <div className="input-group">
-                                <label>Package Name</label>
-                                <input type="text" name="packageName" value={newClass.packageName} onChange={handleInputChange} />
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button className="cancelModal-button" onClick={closeModal}>Cancel</button>
-                            <button className="saveModal-button" onClick={handleAddNewClassToScreen}>Add</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+     {IsEditModalOpen && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h2>Edit</h2>
+        <button className="close-button" onClick={closeEditModal}>×</button>
+      </div>
+      <div className="modal-body">
+        <div className="input-group">
+          <label>Code</label>
+          <input type="text" value={editClassData.code} readOnly disabled className="modal-input" />
+        </div>
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Class</label>
+            <input type="text" name="className" value={editClassData.className} onChange={handleEditClassChange} className="modal-input" />
+          </div>
+          <div className="input-group">
+            <label>Professor</label>
+            <input type="text" name="professor" value={editClassData.professor} onChange={handleEditClassChange} className="modal-input" />
+          </div>
+        </div>
+        <div className="input-group">
+          <label>Select Equipment For This Class</label>
+          <input type="text" name="equipment" value={editClassData.equipment} onChange={handleEditClassChange} className="modal-input" />
+        </div>
+        <div className="input-group">
+          <label>Package ID</label>
+          <input type="text" name="packageID" value={editClassData.packageID} onChange={handleEditClassChange} className="modal-input" />
+        </div>
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Package Name</label>
+            <input type="text" name="packageName" value={editClassData.packageName} onChange={handleEditClassChange} className="modal-input" />
+          </div>
+          <div className="input-group">
+            <label>Price</label>
+            <input type="text" name="price" value={editClassData.price} onChange={handleEditClassChange} className="modal-input" />
+          </div>
+        </div>
+        <div className="input-group">
+          <label>Select Items Inside the Package</label>
+          <input type="text" name="itemsInsidePackage" value={editClassData.itemsInsidePackage} onChange={handleEditClassChange} className="modal-input" />
+        </div>
+      </div>
+      <div className="modal-footer">
+        <button className="cancelModal-button" onClick={closeEditModal}>Cancel</button>
+        <button className="saveModal-button" onClick={handleSaveEditedClass}>Add</button>
+      </div>
+    </div>
+  </div>
+)}
+ {isModalOpen && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h2>Add New</h2>
+        <button className="close-button" onClick={closeModal}>×</button>
+      </div>
+      <div className="modal-body">
+        <div className="input-group">
+          <label>Code</label>
+          <input type="text" value={generatedCode} readOnly disabled className="modal-input" />
+        </div>
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Class</label>
+            <input type="text" name="className" value={newClass.className} onChange={handleInputChange} className="modal-input" />
+          </div>
+          <div className="input-group">
+            <label>Professor</label>
+            <input type="text" name="professor" value={newClass.professor} onChange={handleInputChange} className="modal-input" />
+          </div>
+        </div>
+        <div className="input-group">
+          <label>Select Equipment For This Class</label>
+          <input type="text" name="equipment" value={newClass.equipment} onChange={handleInputChange} className="modal-input" />
+        </div>
+        <div className="input-group">
+          <label>Package ID</label>
+          <input type="text" name="packageID" value={newClass.packageID} onChange={handleInputChange} className="modal-input" />
+        </div>
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Package Name</label>
+            <input type="text" name="packageName" value={newClass.packageName} onChange={handleInputChange} className="modal-input" />
+          </div>
+          <div className="input-group">
+            <label>Price</label>
+            <input type="text" name="price" value={newClass.price} onChange={handleInputChange} className="modal-input" />
+          </div>
+        </div>
+        <div className="input-group">
+          <label>Select Items Inside the Package</label>
+          <input type="text" name="itemsInsidePackage" value={newClass.itemsInsidePackage} onChange={handleInputChange} className="modal-input" />
+        </div>
+      </div>
+      <div className="modal-footer">
+        <button className="cancelModal-button" onClick={closeModal}>Cancel</button>
+        <button className="saveModal-button" onClick={handleAddNewClassToScreen}>Add</button>
+      </div>
+    </div>
+  </div>
+)}
+
         </div>
     );
 }

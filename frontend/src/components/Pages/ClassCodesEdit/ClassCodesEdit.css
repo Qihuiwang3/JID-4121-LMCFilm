@@ -5,12 +5,14 @@
 }
 
 
-.section-title {
+.section1-title {
     color: #3361AE;
-    font-size: 40px;
+    font-size: 35px;
     font-weight: bold;
-    padding-top: 19px;
-    padding-bottom: 5px;
+    margin-top: 6%;
+    padding-top: 21px;
+    padding-bottom: 7px;
+    padding-left: 70px;
 }
 
 
@@ -24,7 +26,7 @@
 .add-class-button {
     background-color: #3361AE;
     color: white;
-    padding: 10px 20px;
+    padding: 5px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
@@ -40,6 +42,7 @@
 
 
 .table-container {
+    
     position: relative;
     margin-bottom: 20px;
 }
@@ -54,18 +57,19 @@
 
 
 .class1-table th, .class1-table td {
-    padding: 15px;
+    padding: 10px;
+    
     text-align: center;
-    border-top: 3px solid #3361AE;
-    border-bottom: 3px solid #3361AE;
+    border-top: 2px solid #3361AE;
+    border-bottom: 2px solid #3361AE;
 }
 
 
 .class1-table th {
-    background-color: white !important;
+   
     
     font-weight: bold;
-    font-size: 25px;
+    font-size: 18px;
     text-align: center;
 }
 
@@ -77,6 +81,10 @@
  .class1-table td:first-child {
     text-align: left;
     padding-left: 71px;
+}
+
+.class1-table tbody tr:hover {
+    background-color: #f0f8ff; /* Change this to your desired hover color */
 }
 
 
@@ -155,11 +163,13 @@
 .bottom-buttons {
     display: flex;
     justify-content: space-between;
+    padding-left: 75px;
     margin-top: 20px;
+    width: 1105px;
 }
 
 
-.cancel-button, .save-button {
+ .save-button {
     background-color: #3361AE;
     color: white;
     padding: 10px 70px;
@@ -172,8 +182,24 @@
     transition: background-color 0.3s ease;
 }
 
+.cancel-button {
+    background-color: #C38E7D;
+    color: black;
+    padding: 10px 70px;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px; 
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
 
-.cancel-button:hover, .save-button:hover, .add-class-button:hover {
+.cancel-button:hover {
+    background-color: #C38E7D; 
+}
+
+ .save-button:hover, .add-class-button:hover {
     background-color: #2e4a7a;
 }
 
@@ -190,101 +216,111 @@
     align-items: center;
     z-index: 1000;
 }
+/* Modal Content Styling */
 .modal-content {
-    background-color: white;
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
-    height: 700px;
-    width: 450px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    width: 300px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
-.input-group label {
-    font-size: 14px;
-    color: #3361AE;
-    margin-bottom: 2px;
-}
-
-
-.input-group input {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    border-color: #3361AE;
-    background-color: #e0f7fa;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-
-.disabled-group label {
-    font-size: 14px;
-    color: #3361AE;
-    margin-bottom: 2px;
-}
-
-
-.disabled-group input {
-    padding: 5px;
-    cursor: not-allowed;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    color: black;
-    border-color: #3361AE;
-    background-color: #c4c6c6;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
+/* Modal Header Styling */
 .modal-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 24px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #3361AE;
+}
+
+.modal-header h2 {
+    font-size: 30px;
     color: #3361AE;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #3361AE;
-    margin-bottom: 20px;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #3361AE;
 }
 
 
+
+/* Input Group Styling */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    width: 475px;
+    margin-bottom: 10px; /* Shorten the gap between the fields */
+}
+
+.input-group-row {
+    display: flex;
+    gap: 10px; /* Small gap between fields with two inputs */
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 350;
+    color: #3361AE;
+    border-color: #3361AE;
+    margin-bottom: 5px;
+}
+
+.modal-input {
+    padding: 10px;
+    border: 1px solid #3361AE;
+    border-radius: 5px;
+    background-color: #e7eff2;
+    font-size: 14px;
+    width: 100%;
+}
+
+input[readonly] {
+    cursor: not-allowed; /* Not allowed cursor */
+}
+
+
+
+
+.input-group-row .modal-input {
+    width: calc(50% + 97px); /* Ensure no excessive gap between the two input fields */
+}
+
+/* Modal Footer */
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 15px;
+    padding-top: 10px;
+    gap: 10px;
 }
 
+.cancelModal-button, .saveModal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
 
 .cancelModal-button {
-    background-color: transparent;
+    background-color: white;
     color: #3361AE;
-    border: 1px solid #3361AE;
-    padding: 10px 30px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
 }
-
-
-.cancelModal-button:hover {
-    background-color: #f0f0f0;
-}
-
 
 .saveModal-button {
-    background-color: #ffffff;
+    background-color: white;
     color: #3361AE;
     border: 1px solid #3361AE;
-    padding: 10px 30px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
+}
+.saveModal-button:hover {
+    background-color: lightgrey;
 }
 
-
-.saveModal-button:hover {
-    background-color: #f0f0f0;
+.saveModal-button:hover, .cancelModal-button:hover {
+    opacity: 0.9;
 }
