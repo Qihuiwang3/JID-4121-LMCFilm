@@ -12,12 +12,8 @@ const classCodeSchema = new mongoose.Schema({
     },
     className: {
         type: String,
-        require: false,
+        require: true,
         
-    },
-    packageName: {
-        type: String,
-        require: false,
     }
     
 });
