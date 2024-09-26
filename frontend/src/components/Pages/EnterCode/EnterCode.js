@@ -1,88 +1,65 @@
-import React, { Component } from "react";
-import { withFuncProps } from "../../withFuncProps";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setClassCode } from "../../redux/actions/classActions";
 import './EnterCode.css';
+import { getClassInfoByCode } from "../../../connector";
 
+const EnterCode = () => {
+    const [codeInput, setCodeInput] = useState("");
+    const [errorMessage, setErrorMessage] = useState("Don't have code?");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-class EnterCode extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            codeInput: "",
-            errorMessage: "Don't have code?",
-            classTable: []
-        };
-    }
+    const handleInputChange = (event) => {
+        setCodeInput(event.target.value);
+    };
 
-    componentDidMount() {
-        fetch(`/api/class-code/${this.state.codeInput}`)
-            .then(res => res.json())
-            .then(data => {
-                this.setState({ classTable: [data] });
-            })
-            .catch(error => console.error('Error fetching class codes:', error));
-    }
-
-
-    handleInputChange = (event) => {
-        this.setState({ codeInput: event.target.value });
-    }
-
-    handleSubmit = () => {
-        const { codeInput } = this.state;
-        // Check if codeInput meets length requirements
+    const handleSubmit = () => {
         if (codeInput.length < 2) {
-            this.setState({ errorMessage: "Code must be at least 2 characters long" });
-        } 
-        else if (!/^\d+$/.test(codeInput)) {
-            this.setState({ errorMessage: "Code must contain only numeric characters" });
+            setErrorMessage("Code must be at least 2 characters long");
+        } else if (!/^\d+$/.test(codeInput)) {
+            setErrorMessage("Code must contain only numeric characters");
+        } else {
+            checkCodeExist(codeInput);
         }
-        else {
-            this.checkCodeExist(codeInput)
+    };
+
+    const checkCodeExist = async (codeInput) => {
+        try {
+            const data = await getClassInfoByCode(codeInput);
+            if (data && data.code === codeInput) {
+                dispatch(setClassCode(codeInput));
+                navigate("/SelectClass");
+            } else {
+                setErrorMessage("The code does not exist");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setErrorMessage("There was an error processing your request");
         }
-    }
+    };
 
-    checkCodeExist = (codeInput) => {
-        fetch(`http://localhost:3500/api/class-code/${codeInput}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.code === codeInput) {
-                    this.props.navigate("/ReservationPage", { state: { classCode: codeInput } });
-                } else {
-                    this.setState({ errorMessage: "The code does not exist" });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.setState({ errorMessage: "There was an error processing your request" });
-            });
-    }
+    return (
+        <div className="body">
+            <div className="enterCodeContainer">
+                <h1 className="enterCodeTitle">Enter Class Code</h1>
 
-    render() {
-        return (
-            <div className="body">
-                <div className="enterCodeContainer">
-                    <h1 className="enterCodeTitle">Enter Class Code</h1>
-
-                    <input
-                        className="input-field"
-                        type="text"
-                        value={this.state.codeInput}
-                        onChange={this.handleInputChange}
-                        placeholder="Code"
-                        />
-                    <div className="error">
-                        {this.state.errorMessage && 
-                            <i>
-                                {this.state.errorMessage}
-                            </i>
-                        }
-                    </div>
-
-                    <button className="submit-button" onClick={this.handleSubmit}>Submit</button>
+                <input
+                    className="input-field"
+                    type="text"
+                    value={codeInput}
+                    onChange={handleInputChange}
+                    placeholder="Code"
+                />
+                <div className="error">
+                    {errorMessage && <i>{errorMessage}</i>}
                 </div>
-            </div>
-        );
-    }
-}
 
-export default withFuncProps(EnterCode);
+                <button className="submit-button" onClick={handleSubmit}>Submit</button>
+            </div>
+        </div>
+    );
+};
+
+export default EnterCode;

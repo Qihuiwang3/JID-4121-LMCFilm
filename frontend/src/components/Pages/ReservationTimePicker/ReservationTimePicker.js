@@ -1,20 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedDates } from '../../redux/actions/classActions'; 
 import 'react-datepicker/dist/react-datepicker.css';
 import './ReservationTimePicker.css';
 import tdesign_film from '../../../Image/tdesign_film.svg';
 
-function ReservationTimePicker({ onConfirm }) {
-    const [pickupDate, setPickupDate] = useState(new Date());
-    const [pickupTime, setPickupTime] = useState(new Date());
-    const [returnDate, setReturnDate] = useState(new Date());
-    const [returnTime, setReturnTime] = useState(new Date());
+function ReservationTimePicker() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const classCode = useSelector((state) => state.classData.classCode);
+    const selectedDates = useSelector(state => state.classData.selectedDates);
+
+    const pickupDateTime = new Date(selectedDates?.pickupDateTime || Date.now());
+    const returnDateTime = new Date(selectedDates?.returnDateTime || Date.now());
+
+    const [pickupDate, setPickupDate] = useState(new Date(pickupDateTime.getFullYear(), pickupDateTime.getMonth(), pickupDateTime.getDate()));
+    const [pickupTime, setPickupTime] = useState(new Date(pickupDateTime));
+    const [returnDate, setReturnDate] = useState(new Date(returnDateTime.getFullYear(), returnDateTime.getMonth(), returnDateTime.getDate()));
+    const [returnTime, setReturnTime] = useState(new Date(returnDateTime));
 
     const handleConfirm = () => {
-        onConfirm(pickupDate, pickupTime, returnDate, returnTime);
+        const combinedPickupDateTime = new Date(
+            pickupDate.getFullYear(),
+            pickupDate.getMonth(),
+            pickupDate.getDate(),
+            pickupTime.getHours(),
+            pickupTime.getMinutes()
+        );
+    
+        const combinedReturnDateTime = new Date(
+            returnDate.getFullYear(),
+            returnDate.getMonth(),
+            returnDate.getDate(),
+            returnTime.getHours(),
+            returnTime.getMinutes()
+        );
+    
+        dispatch(setSelectedDates(combinedPickupDateTime, combinedReturnDateTime));
+    
         navigate('/ReservationPage');
+    };
+
+    const handleBack = () => {
+        navigate('/SelectClass', { state: { classCode } });
     };
 
     function blockTheDateBefore(date, interval) {
@@ -25,7 +55,6 @@ function ReservationTimePicker({ onConfirm }) {
     }
 
     const minPickupTime = blockTheDateBefore(new Date(), 15);
-
 
     const minReturnDate = new Date(
         pickupDate.getFullYear(),
@@ -99,6 +128,7 @@ function ReservationTimePicker({ onConfirm }) {
                 </div>
             </div>
             <div className="rt-button-container">
+                <button className="rt-backBtn" onClick={handleBack}>Back</button>
                 <button className="rt-confirm-button" onClick={handleConfirm}>Confirm</button>
             </div>
         </div>
