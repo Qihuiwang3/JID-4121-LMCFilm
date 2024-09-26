@@ -9,6 +9,7 @@ import ReservationTimePicker from "./components/Pages/ReservationTimePicker/Rese
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
 import Students from "./components/Pages/Students/Students";
 import ViewEquipment from "./components/Pages/SelectTaskPages/AdminViewEquipment/ViewEquipment";
+import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 // import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
@@ -48,7 +49,7 @@ class App extends Component {
             <Route path="/Equipment" element={<Equipment />} />
             <Route path="/Students" element={<Students />} />
             <Route path="/ViewEquipment" element={<ViewEquipment />} />
-            {/* <Route path="/SelectTask" element={<SelectTask />} /> */}
+            <Route path="/SelectTask" element={<SelectTask />} />
           </Routes>
         </Router>
       </Provider>
