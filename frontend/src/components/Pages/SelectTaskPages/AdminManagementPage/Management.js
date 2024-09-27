@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './Management.css';
 import { useNavigate } from 'react-router-dom';
 import film from '../../../../Image/filmIcon.svg';
+import Button from '../../../Button/Button';
 
 const Management = () => {
   const navigate = useNavigate();
@@ -18,6 +19,11 @@ const Management = () => {
           navigate(taskRoutes[selectedClassId]);
       }
   }
+  
+  const handleBack = () => {
+    navigate('/SelectTask'); 
+  };
+
 
   const handleClick = (id) => {
       setSelectedClassId(id);
@@ -29,28 +35,29 @@ const Management = () => {
   ];
 
   return (
-      <>
-        <h1 className="select-class-header">Management</h1>
-        <div className="grid-container">
+      <div className='admin-main-content'>
+        <h1 className="admin-select-class-header">Management</h1>
+        <div className="admin-grid-container">
           {classes.map((classItem) => (
               <div key={classItem.id}
-                   className={`class-container ${selectedClassId === classItem.id ? 'selected' : ''}`} // Highlight selected
+                   className={`admin-class-container ${selectedClassId === classItem.id ? 'selected' : ''}`} // Highlight selected
                    onClick={() => handleClick(classItem.id)}>
-                <div className="class-icon">
+                <div className="admin-class-icon">
                   <img className='image' src={film} alt="Class Icon" />
                 </div>
-                <div className={`class-info ${selectedClassId === classItem.id ? 'selected' : ''}`}>
-                  <div className="class-name">{classItem.name}</div>
+                <div className={`admin-class-info ${selectedClassId === classItem.id ? 'selected' : ''}`}>
+                  <div className="admin-class-name">{classItem.name}</div>
                 </div>
               </div>
           ))}
         </div>
-        {selectedClassId && (
-            <div className="confirmBtnContainer">
-                <button className="confirmBtn" onClick={handleConfirms}>Confirm</button>
-            </div>
-        )}
-      </>
+        <div className="btnContainer">
+          <Button type="back" onClick={handleBack}>Back</Button>
+          {selectedClassId && (
+            <Button type="next" onClick={handleConfirms}>Next</Button>
+          )}
+        </div>
+      </div>
     );
 }
 
