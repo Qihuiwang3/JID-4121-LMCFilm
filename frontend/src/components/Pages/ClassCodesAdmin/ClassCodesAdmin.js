@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ClassCodesAdmin.css';
 import { useNavigate } from 'react-router-dom';
-import { getClassCodes } from '../../../connector.js';
+import { getClassCodes, getBundleItemsByClassCode} from '../../../connector.js';
 import BackButton from '../../Button/BackButton/BackButton'; 
 
 function ClassCodesAdmin() {
@@ -14,17 +14,93 @@ function ClassCodesAdmin() {
     // New state for placeholder management
     const [placeholderText, setPlaceholderText] = useState("Search by Class");
 
-    useEffect(() => {
-        const fetchClassData = async () => {
-            try {
-                const data = await getClassCodes(); 
-                setClassData(data); 
-            } catch (error) {
-                
-            }
+    
+    // Function to get the package name (bundleName) for each class code
+// Function to get the package name (bundleName) for each class code
+// Function to get the bundle item for each class code (returning all data)
+// Function to fetch bundle item details by class code
+const getBundleItemDetails = async (classCode) => {
+    try {
+        // Fetch bundle items by class code
+        const bundleItems = await getBundleItemsByClassCode(classCode);
+
+        // Check if bundleItems exist and access the first bundle item (since bundleItems is an array)
+        if (bundleItems && bundleItems.length > 0) {
+            const bundleItem = bundleItems[0]; // First bundle item
+            return {
+                bundleId: bundleItem.bundleId,  // Add bundleId
+                classCode: bundleItem.classCode, // Add classCode
+                bundleName: bundleItem.bundleName,
+                price: bundleItem.price,
+                items: bundleItem.items,
+                // Add any other fields here that are relevant to the bundle
+            };
+        } else {
+            
+            return {
+                bundleId: "N/A",
+                classCode: classCode, // If no bundle, still show the original classCode
+                bundleName: "N/A",
+                price: "N/A",
+                items: [],
+                // Default values for missing data
+            };
+        }
+    } catch (error) {
+        
+        return {
+            bundleId: "N/A",
+            classCode: classCode, // Show the original classCode on error
+            bundleName: "N/A",
+            price: "N/A",
+            items: [],
+            // Default error handling for missing data
         };
-        fetchClassData(); 
-    }, []);
+    }
+};
+
+// Function to fetch and set the full bundle item details for each class code
+const fetchAndSetPackageNames = async (classData) => {
+    const updatedClassData = await Promise.all(
+        classData.map(async (classItem) => {
+            const bundleDetails = await getBundleItemDetails(classItem.code);
+            
+            // Map additional details from the bundle item to the class item
+            return { 
+                ...classItem, 
+                bundleId: bundleDetails.bundleId,    // Add bundleId field
+                classCode: bundleDetails.classCode,  // Add classCode field
+                packageName: bundleDetails.bundleName, // Add bundle name
+                price: bundleDetails.price,           // Add price field
+                items: bundleDetails.items            // Add items array
+                // You can add additional fields from bundleItem here
+            };
+        })
+    );
+    
+    // Update classData with new bundle details
+    setClassData(updatedClassData);
+};
+
+
+// In the useEffect or wherever the data is being fetched
+useEffect(() => {
+    const fetchClassData = async () => {
+        try {
+            const data = await getClassCodes(); 
+            setClassData(data); // Set the class data
+
+            // Fetch and set package names for each class code
+            await fetchAndSetPackageNames(data);
+        } catch (error) {
+            
+        }
+    };
+
+    fetchClassData(); 
+}, []);
+
+   
 
     const [filteredClassData, setFilteredClassData] = useState(classData || []);
 
@@ -111,7 +187,7 @@ function ClassCodesAdmin() {
                                     <td>{item.className}</td>
                                     <td>{item.code}</td>
                                     <td>{item.professor}</td>
-                                    <td>{item.packageName || "N/A"}</td>
+                                    <td>{item.packageName ? item.packageName : "Cap"}</td>
                                 </tr>
                             ))
                         ) : (

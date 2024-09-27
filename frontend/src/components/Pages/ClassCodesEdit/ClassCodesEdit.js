@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ClassCodesEdit.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; // Import axios for API requests
-import { createClassCode, deleteClassCode, updateClassCode } from '../../../connector.js';
+import { createClassCode, deleteClassCode, updateClassCode, createBundleItem} from '../../../connector.js';
 import SaveButton from '../../Button/SaveButton/SaveButton.js';
 
 function ClassCodesEdit() {
@@ -29,16 +29,29 @@ function ClassCodesEdit() {
     const [newClass, setNewClass] = useState({
         className: '',
         professor: '',
-        packageName: ''
+        bundleId: '',
+        packageName: '',  
+        price: '',     
     });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewClass(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+    
+        // Convert the value to a number if it's the 'price' field
+        if (name === "price") {
+            setNewClass(prevState => ({
+                ...prevState,
+                [name]: Number(value) // Convert the value to a number
+            }));
+        } else {
+            setNewClass(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
     };
+    
+    
 
     const openModal = () => {
         const randomCode = generateRandomCode();
@@ -50,7 +63,9 @@ function ClassCodesEdit() {
         setNewClass({
             className: '',
             professor: '',
-            packageName: ''
+            packageName: '',
+            price: '',
+            bundleId: '',
         });
         setIsModalOpen(false);
     };
@@ -93,7 +108,10 @@ function ClassCodesEdit() {
             code: generatedCode,
             className: newClass.className,
             professor: newClass.professor,
-            packageName: newClass.packageName
+            packageName: newClass.packageName,
+            price: newClass.price,
+            bundleId: newClass.bundleId,
+
         };
 
         setClassData([...classData, newEntry]);
@@ -102,7 +120,9 @@ function ClassCodesEdit() {
         setNewClass({
             className: '',
             professor: '',
-            packageName: ''
+            bundleId: '',
+            packageName: '',  
+            price: '', 
         });
 
         setIsModalOpen(false);
@@ -111,37 +131,56 @@ function ClassCodesEdit() {
     // Send new classes to the backend when "Save" is clicked on the main screen
     const handleSaveToBackend = async () => {
         try {
+            // Loop through new class data and create both ClassCode and BundleItem
             for (let newClass of newClassData) {
+                // Create ClassCode
                 await createClassCode({
                     code: newClass.code,
                     professor: newClass.professor,
                     className: newClass.className,
-                    packageName: newClass.packageName
                 });
-            }
-            setNewClassData([]);
-        } catch (error) {  
-        }
 
+                
+                // Create BundleItem for each new class if relevant data exists
+                if(newClass.code && newClass.bundleId && newClass.bundleName && newClass.price) {
+                    await createBundleItem({
+                        bundleId: newClass.bundleId,      // Ensure this is generated/handled correctly
+                        classCode: newClass.code,   
+                        price: newClass.price,       // Use the same class code
+                        bundleName: newClass.packageName,  // Provided bundle name
+                        // Items should be an array of item objects
+                                   // Price for the bundle
+                    });
+                }
+            }
+            setNewClassData([]); // Clear new class data once saved
+        } catch (error) {  
+            console.error('Error saving class codes or bundle items:', error);
+        }
+    
         try {
-            // Delete all marked class codes
+            // Handle deletion of class codes
             for (const code of deletedClassCodes) {
                 await deleteClassCode(code); 
             }
-
             setDeletedClassCodes([]); 
         } catch (error) {
+            console.error('Error deleting class codes:', error);
         }
-
+    
         try {
+            // Handle updates to class codes
             const updatePromises = pendingUpdates.map((updatedClass) =>
-                updateClassCode(updatedClass) 
+                updateClassCode(updatedClass)
             );
-            await Promise.all(updatePromises); 
-
-            setPendingUpdates([]); 
+            await Promise.all(updatePromises);
+            setPendingUpdates([]);
         } catch (error) {
+            console.error('Error updating class codes:', error);
         }
+
+    
+    
 
         navigate("/ClassCodesAdmin", {
             state: { classData }
@@ -159,11 +198,12 @@ function ClassCodesEdit() {
 const [editClassData, setEditClassData] = useState({}); // State to store class data for editing
 
 // Function to open the edit modal
-const openEditModal = (code) => {
+const openEditModal = async (code) => {
     const classToEdit = classData.find((item) => item.code === code);
     setEditClassData(classToEdit); // Set the class data to be edited
     setIsEditModalOpen(true); // Open the modal
 };
+
 
 // Function to close the edit modal
 const closeEditModal = () => {
@@ -292,7 +332,7 @@ const handleSaveEditedClass = () => {
         </div>
         <div className="input-group">
           <label>Package ID</label>
-          <input type="text" name="packageID" value={editClassData.packageID} onChange={handleEditClassChange} className="modal-input" />
+          <input type="text" name="bundleId" value={editClassData.bundleId} onChange={handleEditClassChange} className="modal-input" />
         </div>
         <div className="input-group-row">
           <div className="input-group">
@@ -306,7 +346,7 @@ const handleSaveEditedClass = () => {
         </div>
         <div className="input-group">
           <label>Select Items Inside the Package</label>
-          <input type="text" name="itemsInsidePackage" value={editClassData.itemsInsidePackage} onChange={handleEditClassChange} className="modal-input" />
+          <input type="text" name="itemsInsidePackage" value={editClassData.items} onChange={handleEditClassChange} className="modal-input" />
         </div>
       </div>
       <div className="modal-footer">
@@ -344,7 +384,7 @@ const handleSaveEditedClass = () => {
         </div>
         <div className="input-group">
           <label>Package ID</label>
-          <input type="text" name="packageID" value={newClass.packageID} onChange={handleInputChange} className="modal-input" />
+          <input type="text" name="bundleId" value={newClass.bundleId} onChange={handleInputChange} className="modal-input" />
         </div>
         <div className="input-group-row">
           <div className="input-group">

@@ -136,6 +136,31 @@ const updateClassCode = async (updatedClass) => {
     }
 };
 
+const getBundleItemsByClassCode = async (classCode) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/bundle-items/${classCode}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const createBundleItem = async (bundleItemData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/bundle-item`, {
+            bundleId: bundleItemData.bundleId,
+            classCode: bundleItemData.code,
+            bundleName: bundleItemData.bundleName,
+            price: bundleItemData.className
+        });
+        return res.data; 
+    } catch (error) {
+        console.log(error);
+        throw error; 
+    }
+};
+
 
 
 export {
@@ -149,6 +174,8 @@ export {
     getClassCodes,
     createClassCode,
     deleteClassCode,
-    updateClassCode
+    updateClassCode,
+    getBundleItemsByClassCode,
+    createBundleItem
 
 };
