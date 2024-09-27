@@ -82,8 +82,15 @@ label {
   background-color: #e3e3e3;
 }
 
-.rt-confirm-button {
-  background-color: #0052cc;
+.rt-button-container {
+  display: flex;
+  align-items: space-between;
+  padding: 20px;
+  width: 100%;
+}
+
+.rt-confirm-button, .rt-backBtn {
+  background-color: #3361AE;
   color: white;
   padding: 12px 70px;
   font-size: 18px;
@@ -91,21 +98,20 @@ label {
   border-radius: 22px;
   cursor: pointer;
   align-self: start;
-  align-self: flex-end;
   margin-bottom: 5%;
-  margin-right: 150px;
 }
 
-.confirm-button:hover {
+.rt-backBtn {
+  margin-right: auto;
+  margin-left: 2%;
+}
+
+.rt-confirm-button {
+  margin-right: 5%;
+}
+
+.rt-confirm-button:hover, .rt-backBtn:hover {
   background-color: #003a99;
-}
-
-.rt-button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px;
-  width: 100%;
 }
 
 .react-datepicker__input-container {
@@ -117,11 +123,6 @@ label {
   margin-top: 51px;
 }
 
-.rt-button-container {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
 
 .rt-picker react-datepicker__input-container input {
   width: 100%;
@@ -130,10 +131,6 @@ label {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #e3e3e3;
-}
-
-.rt-confirm-button:hover {
-  background-color: #003a99;
 }
 
 .rt-image-container {

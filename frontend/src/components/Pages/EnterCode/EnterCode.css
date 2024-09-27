@@ -8,7 +8,7 @@
 }
 
 .enterCodeContainer {
-    display: flex; /* Add this line */
+    display: flex; 
     flex-direction: column;
     align-items: center;
     border-radius: 10px;
@@ -59,4 +59,26 @@
     margin: 10px 0px 30px 30px;
     align-self: flex-start;
 }
+
+.enter-btnContainer {
+    display: flex;
+    width: 100vw;
+}
+
+.enter-confirmBtn {
+  background-color: #3361AE;
+  color: white;
+  padding: 12px 70px;
+  font-size: 18px;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+  margin-bottom: 5%;
+  margin-right: 5%;
+  margin-left: auto;
+}
+
+.enter-confirmBtn:hover {
+    background-color: #003a99;
+  }
 
