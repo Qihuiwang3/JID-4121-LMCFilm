@@ -4,7 +4,6 @@
     max-width: 1250px;
 }
 
-
 .section1-title {
     color: #3361AE;
     font-size: 35px;
@@ -15,13 +14,11 @@
     padding-left: 70px;
 }
 
-
 .top-buttons {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1px;
 }
-
 
 .add-class-button {
     background-color: #3361AE;
@@ -34,19 +31,15 @@
     font-weight: bolder;
 }
 
-
 .plus-icon {
     font-size: 25px;
     margin-left: 7px;
 }
 
-
 .table-container {
-    
     position: relative;
     margin-bottom: 20px;
 }
-
 
 .class1-table {
     width: 100%;
@@ -55,38 +48,31 @@
     margin-bottom: 20px;
 }
 
-
 .class1-table th, .class1-table td {
     padding: 10px;
-    
     text-align: center;
     border-top: 2px solid #3361AE;
     border-bottom: 2px solid #3361AE;
 }
 
-
 .class1-table th {
-   
-    
     font-weight: bold;
     font-size: 18px;
     text-align: center;
 }
 
-
 .class1-table th:last-child, .class1-table td:last-child {
     text-align: center;
 }
 
- .class1-table td:first-child {
+.class1-table td:first-child {
     text-align: left;
     padding-left: 71px;
 }
 
 .class1-table tbody tr:hover {
-    background-color: #f0f8ff; /* Change this to your desired hover color */
+    background-color: #f0f8ff;
 }
-
 
 .edit-icon {
     cursor: pointer;
@@ -100,7 +86,6 @@
     filter: brightness(0) saturate(100%) invert(17%) sepia(77%) saturate(2620%) hue-rotate(209deg) brightness(89%) contrast(107%);
 }
 
-
 .edit-input {
     border: 1px solid #3361AE;
     border-radius: 5px;
@@ -108,7 +93,6 @@
     font-size: 16px;
     width: 200px;
 }
-
 
 .delete-icon {
     filter: brightness(0) saturate(100%) invert(25%) sepia(53%) saturate(1300%) hue-rotate(190deg) brightness(117%) contrast(85%);
@@ -121,14 +105,12 @@
     cursor: pointer;
 }
 
-
 .pagination-controls {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     margin-top: 20px;
 }
-
 
 .pagination-button {
     background-color: transparent;
@@ -140,17 +122,14 @@
     padding: 5px;
 }
 
-
 .pagination-button:disabled {
     color: #ccc;
     cursor: not-allowed;
 }
 
-
 .pagination-button:hover:not(:disabled) {
     color: #003a99;
 }
-
 
 .pagination-text {
     font-size: 18px;
@@ -158,7 +137,6 @@
     color: #3361AE;
     margin: 0 10px;
 }
-
 
 .bottom-buttons {
     display: flex;
@@ -168,8 +146,7 @@
     width: 1105px;
 }
 
-
- .save-button {
+.save-button {
     background-color: #3361AE;
     color: white;
     padding: 10px 70px;
@@ -188,7 +165,7 @@
     padding: 10px 70px;
     font-size: 16px;
     border: none;
-    border-radius: 50px; 
+    border-radius: 50px;
     cursor: pointer;
     display: inline-block;
     text-align: center;
@@ -196,13 +173,12 @@
 }
 
 .cancel-button:hover {
-    background-color: #C38E7D; 
+    background-color: #C38E7D;
 }
 
- .save-button:hover, .add-class-button:hover {
+.save-button:hover, .add-class-button:hover {
     background-color: #2e4a7a;
 }
-
 
 .modal-overlay {
     position: fixed;
@@ -216,7 +192,7 @@
     align-items: center;
     z-index: 1000;
 }
-/* Modal Content Styling */
+
 .modal-content {
     padding: 20px;
     border-radius: 10px;
@@ -225,7 +201,6 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal Header Styling */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -248,19 +223,16 @@
     color: #3361AE;
 }
 
-
-
-/* Input Group Styling */
 .input-group {
     display: flex;
     flex-direction: column;
     width: 475px;
-    margin-bottom: 10px; /* Shorten the gap between the fields */
+    margin-bottom: 10px;
 }
 
 .input-group-row {
     display: flex;
-    gap: 10px; /* Small gap between fields with two inputs */
+    gap: 10px;
 }
 
 .input-group label {
@@ -281,17 +253,13 @@
 }
 
 input[readonly] {
-    cursor: not-allowed; /* Not allowed cursor */
+    cursor: not-allowed;
 }
-
-
-
 
 .input-group-row .modal-input {
-    width: calc(50% + 97px); /* Ensure no excessive gap between the two input fields */
+    width: calc(50% + 97px);
 }
 
-/* Modal Footer */
 .modal-footer {
     display: flex;
     justify-content: flex-end;
@@ -317,6 +285,7 @@ input[readonly] {
     color: #3361AE;
     border: 1px solid #3361AE;
 }
+
 .saveModal-button:hover {
     background-color: lightgrey;
 }
