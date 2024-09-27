@@ -37,7 +37,25 @@ const Equipment = () => {
 
     return (
         <div>
-            <EquipmentTable></EquipmentTable>
+            <EquipmentTable
+                ref={equipmentTableRef}
+                isEditMode={isEditMode}
+                toggleEditMode={toggleEditMode}
+            />
+
+            <div className="student-btn">
+                {isEditMode ? (
+                    <div className="bottom-btn-container">
+                        <CancelButton onClick={toggleEditMode} />
+                        <SaveButton onClick={handleSave} />
+                    </div>
+                ) : (
+                    <div className="bottom-btn-container">
+                        <BackButton to="/" />
+                    </div>
+                )}
+            </div>
+
             <button className="add-new-button" onClick={handleOpenPopup}>
                 Add New +
             </button>
