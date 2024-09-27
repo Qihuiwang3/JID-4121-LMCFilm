@@ -101,12 +101,13 @@ const createGlobalItem = async (data) => {
 
 const updateItem = async (id, role) => {
     try {
-        const res = await axios.put(`${BACKEND_URL}/api/items/${id}/role`, { role }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return res.data;
+        // this thing needs to be implemented soon
+        // const res = await axios.put(`${BACKEND_URL}/api/items/${id}`, {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // });
+        // return res.data;
     } catch (error) {
         console.log(error);
         throw error;
