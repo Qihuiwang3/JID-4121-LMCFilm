@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './ClassCodesAdmin.css';
 import { useNavigate } from 'react-router-dom';
-import { getClassCodes, getBundleItemsByClassCode} from '../../../connector.js';
-import BackButton from '../../Button/BackButton/BackButton'; 
+import { getClassCodes, getBundleItemsByClassCode } from '../../../connector.js';
+import BackButton from '../../Button/BackButton/BackButton';
 
 function ClassCodesAdmin() {
     const navigate = useNavigate();
@@ -10,109 +10,78 @@ function ClassCodesAdmin() {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
-
-    // New state for placeholder management
     const [placeholderText, setPlaceholderText] = useState("Search by Class");
 
-    
-    // Function to get the package name (bundleName) for each class code
-// Function to get the package name (bundleName) for each class code
-// Function to get the bundle item for each class code (returning all data)
-// Function to fetch bundle item details by class code
-const getBundleItemDetails = async (classCode) => {
-    try {
-        // Fetch bundle items by class code
-        const bundleItems = await getBundleItemsByClassCode(classCode);
-
-        // Check if bundleItems exist and access the first bundle item (since bundleItems is an array)
-        if (bundleItems && bundleItems.length > 0) {
-            const bundleItem = bundleItems[0]; // First bundle item
-            return {
-                bundleId: bundleItem.bundleId,  // Add bundleId
-                classCode: bundleItem.classCode, // Add classCode
-                bundleName: bundleItem.bundleName,
-                price: bundleItem.price,
-                items: bundleItem.items,
-                // Add any other fields here that are relevant to the bundle
-            };
-        } else {
-            
+    const getBundleItemDetails = async (classCode) => {
+        try {
+            const bundleItems = await getBundleItemsByClassCode(classCode);
+            if (bundleItems && bundleItems.length > 0) {
+                const bundleItem = bundleItems[0];
+                return {
+                    bundleId: bundleItem.bundleId,
+                    classCode: bundleItem.classCode,
+                    bundleName: bundleItem.bundleName,
+                    price: bundleItem.price,
+                    items: bundleItem.items,
+                };
+            } else {
+                return {
+                    bundleId: "N/A",
+                    classCode: classCode,
+                    bundleName: "N/A",
+                    price: "N/A",
+                    items: [],
+                };
+            }
+        } catch (error) {
             return {
                 bundleId: "N/A",
-                classCode: classCode, // If no bundle, still show the original classCode
+                classCode: classCode,
                 bundleName: "N/A",
                 price: "N/A",
                 items: [],
-                // Default values for missing data
             };
-        }
-    } catch (error) {
-        
-        return {
-            bundleId: "N/A",
-            classCode: classCode, // Show the original classCode on error
-            bundleName: "N/A",
-            price: "N/A",
-            items: [],
-            // Default error handling for missing data
-        };
-    }
-};
-
-// Function to fetch and set the full bundle item details for each class code
-const fetchAndSetPackageNames = async (classData) => {
-    const updatedClassData = await Promise.all(
-        classData.map(async (classItem) => {
-            const bundleDetails = await getBundleItemDetails(classItem.code);
-            
-            // Map additional details from the bundle item to the class item
-            return { 
-                ...classItem, 
-                bundleId: bundleDetails.bundleId,    // Add bundleId field
-                classCode: bundleDetails.classCode,  // Add classCode field
-                packageName: bundleDetails.bundleName, // Add bundle name
-                price: bundleDetails.price,           // Add price field
-                items: bundleDetails.items            // Add items array
-                // You can add additional fields from bundleItem here
-            };
-        })
-    );
-    
-    // Update classData with new bundle details
-    setClassData(updatedClassData);
-};
-
-
-// In the useEffect or wherever the data is being fetched
-useEffect(() => {
-    const fetchClassData = async () => {
-        try {
-            const data = await getClassCodes(); 
-            setClassData(data); // Set the class data
-
-            // Fetch and set package names for each class code
-            await fetchAndSetPackageNames(data);
-        } catch (error) {
-            
         }
     };
 
-    fetchClassData(); 
-}, []);
+    const fetchAndSetPackageNames = async (classData) => {
+        const updatedClassData = await Promise.all(
+            classData.map(async (classItem) => {
+                const bundleDetails = await getBundleItemDetails(classItem.code);
+                return {
+                    ...classItem,
+                    bundleId: bundleDetails.bundleId,
+                    classCode: bundleDetails.classCode,
+                    packageName: bundleDetails.bundleName,
+                    price: bundleDetails.price,
+                    items: bundleDetails.items,
+                };
+            })
+        );
+        setClassData(updatedClassData);
+    };
 
-   
+    useEffect(() => {
+        const fetchClassData = async () => {
+            try {
+                const data = await getClassCodes();
+                setClassData(data);
+                await fetchAndSetPackageNames(data);
+            } catch (error) {}
+        };
+        fetchClassData();
+    }, []);
 
     const [filteredClassData, setFilteredClassData] = useState(classData || []);
 
     useEffect(() => {
         const filteredData = classData.filter((item) => {
-            const className = item.className || ''; 
+            const className = item.className || '';
             return className.toLowerCase().includes(searchQuery.toLowerCase());
         });
         setFilteredClassData(filteredData);
-        setCurrentPage(1); 
+        setCurrentPage(1);
     }, [searchQuery, classData]);
-
 
     const validClassData = filteredClassData.filter(item => item.className && item.code && item.professor);
     const totalPages = Math.max(1, Math.ceil(validClassData.length / rowsPerPage));
@@ -128,13 +97,12 @@ useEffect(() => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
-    
     const handleFocus = () => {
         setPlaceholderText("");
     };
 
     const handleBlur = () => {
-        setSearchQuery(''); 
+        setSearchQuery('');
         setPlaceholderText("Search by Class");
     };
 
@@ -149,27 +117,24 @@ useEffect(() => {
     return (
         <div className="content-container">
             <h2 className="section-title">Class Code</h2>
-
             <div className="top-buttons">
                 <div className="search-class-container">
                     <input
                         type="text"
                         className="search-class-input"
-                        placeholder={placeholderText} 
+                        placeholder={placeholderText}
                         value={searchQuery}
-                        onFocus={handleFocus} 
-                        onBlur={handleBlur}  
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                         onChange={handleSearchChange}
                     />
                     <img src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="Search Icon" />
                 </div>
-
                 <button className="edit-button" onClick={handleEditClass}>
                     Edit
                     <img src="https://cdn-icons-png.flaticon.com/512/84/84380.png" alt="Pencil Icon" />
                 </button>
             </div>
-
             <div className="table-container">
                 <table className="class-table">
                     <thead>
@@ -199,7 +164,6 @@ useEffect(() => {
                         )}
                     </tbody>
                 </table>
-
                 <div className="pagination-controls">
                     <button
                         className="pagination-button"
@@ -218,12 +182,10 @@ useEffect(() => {
                     </button>
                 </div>
             </div>
-           
             <div className="bottom-btn-container">
-                        <BackButton to="/ViewEquipment" />
-                    </div>
-
+                <BackButton to="/ViewEquipment" />
             </div>
+        </div>
     );
 }
 
