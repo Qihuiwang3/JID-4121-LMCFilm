@@ -11,7 +11,7 @@ html {
 }
 
 .page-container {
-    width: 70vw;
+    width: 80vw;
     height: auto;
     overflow-y: visible;
 }
@@ -54,4 +54,10 @@ html {
 
 .ag-paging-panel {
     background-color: #FFFDF8;
+    color: #3361AE;
+    border-top: transparent;
+}
+
+.ag-icon {
+    color: #3361AE;
 }

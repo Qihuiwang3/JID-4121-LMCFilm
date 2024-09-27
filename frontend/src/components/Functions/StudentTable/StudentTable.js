@@ -100,8 +100,7 @@ class StudentTable extends Component {
 
     render() {
         const { isEditMode, toggleEditMode } = this.props;
-        const containerStyles = { gap: isEditMode ? '20%' : '13.5%' };
-        // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
+        const containerStyles = { gap: isEditMode ? '40%' : '33.5%' };
 
         const columnDefs = [
             { headerName: "Class", field: "classCode", flex: 1 },
