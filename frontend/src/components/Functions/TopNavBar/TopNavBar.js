@@ -54,7 +54,6 @@ class TopNavBar extends Component {
                             <div className="dropdown-container">
                                 <div className="dropdown-content">Profile</div>
                                 <div className="dropdown-content" onClick={this.logoutNav}>Logout</div>
-                                <div className="dropdown-content">Notification</div>
                             </div>                        
                         )}
 

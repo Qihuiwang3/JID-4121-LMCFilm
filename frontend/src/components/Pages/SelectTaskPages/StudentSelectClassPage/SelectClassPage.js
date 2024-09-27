@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setClassCode } from "../../../redux/actions/classActions";
 import film from '../../../../Image/filmIcon.svg';
 import { getClassInfoByCode } from '../../../../connector';
+import Button from '../../../Button/Button';
 
 const SelectClassPage = () => {
   const [classInfo, setClassInfo] = useState(null);
@@ -56,9 +57,10 @@ const SelectClassPage = () => {
   }
 
   return (
-    <>
-      <h1 className="select-class-header">Choose Class</h1>
+    <div className='main-content'>
+      <h1 className="select-class-header">Select Class</h1>
       <div className="grid-container">
+       
         <div
           className="class-container"
           onClick={() => handleClick(classInfo._id)}
@@ -72,13 +74,14 @@ const SelectClassPage = () => {
           </div>
         </div>
       </div>
-      {selectedClassId && (
-        <div className="btnContainer">
-          <button className="backBtn" onClick={handleBack}>Back</button>
-          <button className="confirmBtn" onClick={handleConfirms}>Confirm</button>
-        </div>
-      )}
-    </>
+
+      <div className="btnContainer">
+        <Button type="back" onClick={handleBack}>Back</Button>
+        {selectedClassId && (
+          <Button type="next" onClick={handleConfirms}>Next</Button>
+        )}
+      </div>
+    </div>
   );
 }
 

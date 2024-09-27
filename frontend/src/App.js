@@ -13,7 +13,6 @@ import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/S
 import Management from "./components/Pages/SelectTaskPages/AdminManagementPage/Management";
 import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
-// import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
