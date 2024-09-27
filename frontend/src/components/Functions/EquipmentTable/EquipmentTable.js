@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
-import { getItems, deleteGlobalItem, updateItem } from '../../../connector.js';
+// import { getItems, deleteGlobalItem, updateItem } from '../../../connector.js';
+import { getItems, deleteGlobalItem } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
 import EditButton from '../../Button/EditButton/EditButton';
-import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -30,9 +30,23 @@ class EquipmentTable extends Component {
     loadRecords = async () => {
         try {
             const records = await getItems();
+
+            // Flatten the data by mapping each record's itemIds into separate rows
+            const transformedRecords = records.flatMap(record =>
+                record.itemIds.map(itemId => ({
+                    _id: record._id,
+                    itemName: record.itemName,
+                    pricePerItem: record.pricePerItem,
+                    itemId: itemId.itemId,
+                    checkin: itemId.checkin,
+                    checkout: itemId.checkout,
+                    repair: itemId.repair,
+                }))
+            );
+
             this.setState({
-                records,
-                filteredRecords: records,
+                records: transformedRecords,
+                filteredRecords: transformedRecords,
                 tempDeletedRows: [],
                 updatedRoles: {}
             });
@@ -69,7 +83,7 @@ class EquipmentTable extends Component {
     handleSearch = (query) => {
         const { records } = this.state;
         const filteredRecords = records.filter(record =>
-            record.name.toLowerCase().includes(query.toLowerCase())
+            record.itemName.toLowerCase().includes(query.toLowerCase())
         );
         this.setState({ filteredRecords, searchQuery: query });
     };
@@ -85,12 +99,7 @@ class EquipmentTable extends Component {
 
     saveChanges = async () => {
         try {
-            const { updatedRoles } = this.state;
-            for (let [id, role] of Object.entries(updatedRoles)) {
-                await updateItem(id, role);
-            }
             await this.confirmDeleteRows();
-            this.setState({ updatedRoles: {} });
             this.loadRecords();
         } catch (error) {
             console.error("Error saving changes:", error);
@@ -105,11 +114,21 @@ class EquipmentTable extends Component {
 
 
         const columnDefs = [
-            { headerName: "ItemID", field: `_id`, flex: 1 },
+            { headerName: "ItemID", field: `itemId`, flex: 1 },
             { headerName: "Item Name", field: "itemName", flex: 1 },
             { headerName: "Price", field: "pricePerItem", flex: 1 },
-            { headerName: "Checked-in", field: "checkin", flex: 1 },
-            { headerName: "Checked-out", field: "checkout", flex: 1 },
+            {
+                headerName: "Checked-in",
+                field: "checkin",
+                flex: 1,
+                valueFormatter: (params) => params.value ? params.value : 'N/A'
+            },
+            {
+                headerName: "Checked-out",
+                field: "checkout",
+                flex: 1,
+                valueFormatter: (params) => params.value ? params.value : 'N/A'
+            },
             { headerName: "Repair", field: "repair", flex: 1 },
 
             isEditMode ? {
