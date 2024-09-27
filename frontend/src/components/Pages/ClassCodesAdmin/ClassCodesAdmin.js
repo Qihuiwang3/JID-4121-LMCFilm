@@ -183,7 +183,7 @@ function ClassCodesAdmin() {
                 </div>
             </div>
             <div className="bottom-btn-container">
-                <BackButton to="/SelectTask" />
+                <BackButton to="/Management" />
             </div>
         </div>
     );
