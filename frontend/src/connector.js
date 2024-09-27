@@ -7,7 +7,21 @@ const getStudents = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
+    }
+};
+
+const loginStudent = async (email, password) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/students/login`, { email, password }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error logging in:', error);
+        throw error;
     }
 };
 
@@ -21,17 +35,57 @@ const createStudent = async (data) => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
-const deleteStudent = async (id) => {
+const deleteStudent = async (email) => {
     try {
-        const res = await axios.delete(`${BACKEND_URL}/students/${id}`);
+        const res = await axios.delete(`${BACKEND_URL}/students/${email}`);
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
+    }
+};
+
+const updateStudent = async (email, role) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/role`, { role }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const updateStudentInfo = async (email, name) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}`, { name }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Add class code to student
+const addClassCode = async (email, classCode) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/add-classcode`, { classCode }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
     }
 };
 
@@ -68,24 +122,10 @@ const createGlobalItem = async (data) => {
         });
         return res.data;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 };
 
-const updateStudent = async (id, role) => {
-    try {
-        const res = await axios.put(`${BACKEND_URL}/students/${id}/role`, { role }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return res.data;
-    } catch (error) {
-        console.log(error);
-        throw error; 
-    }
-};
 
 const getClassInfoByCode = async (codeInput) => {
     try {
@@ -111,6 +151,19 @@ const createCartWithData = async (cartData) => {
     }
 };
 
+const removeClassCode = async (email, classCode) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/remove-classcode`, { classCode }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
@@ -120,5 +173,9 @@ export {
     createCart,
     getClassInfoByCode,
     createCartWithData,
-    createGlobalItem
+    createGlobalItem,
+    updateStudentInfo,
+    addClassCode,
+    loginStudent,
+    removeClassCode
 };
