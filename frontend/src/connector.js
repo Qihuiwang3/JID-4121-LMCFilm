@@ -75,7 +75,6 @@ const updateStudentInfo = async (email, name) => {
     }
 };
 
-// Add class code to student
 const addClassCode = async (email, classCode) => {
     try {
         const res = await axios.put(`${BACKEND_URL}/students/${email}/add-classcode`, { classCode }, {
@@ -95,7 +94,7 @@ const getCart = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -109,7 +108,7 @@ const createCart = async (data) => {
         return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -125,7 +124,6 @@ const createGlobalItem = async (data) => {
         throw error;
     }
 };
-
 
 const getClassInfoByCode = async (codeInput) => {
     try {
@@ -173,6 +171,7 @@ const getClassCodes = async () => {
         throw error;
     }
 };
+
 const createClassCode = async (newClassCode) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/class-code/`, {
@@ -180,35 +179,33 @@ const createClassCode = async (newClassCode) => {
             professor: newClassCode.professor,
             className: newClassCode.className
         });
-        return res.data; 
+        return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
-
 
 const deleteClassCode = async (classCode) => {
     try {
         const res = await axios.delete(`${BACKEND_URL}/api/class-code/${classCode}`);
-        return res.data; 
+        return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
 
-
 const updateClassCode = async (updatedClass) => {
     try {
-        const res = await axios.put(`${BACKEND_URL}/api/class-code`, {
-            code: updatedClass.code,
+        const res = await axios.put(`${BACKEND_URL}/api/class-code/${updatedClass.code}`, {
             className: updatedClass.className,
+            professor: updatedClass.professor
         });
-        return res.data; 
+        return res.data;
     } catch (error) {
-        console.log(error);
-        throw error; 
+        console.error(error);
+        throw error;
     }
 };
 
@@ -230,14 +227,12 @@ const createBundleItem = async (bundleItemData) => {
             bundleName: bundleItemData.bundleName,
             price: bundleItemData.className
         });
-        return res.data; 
+        return res.data;
     } catch (error) {
         console.log(error);
-        throw error; 
+        throw error;
     }
 };
-
-
 
 export {
     getStudents,
@@ -251,7 +246,7 @@ export {
     deleteClassCode,
     updateClassCode,
     getBundleItemsByClassCode,
-    createBundleItem
+    createBundleItem,
     getClassInfoByCode,
     createCartWithData,
     createGlobalItem,
@@ -259,5 +254,4 @@ export {
     addClassCode,
     loginStudent,
     removeClassCode
-
 };

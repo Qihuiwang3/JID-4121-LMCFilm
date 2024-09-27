@@ -130,6 +130,17 @@ function ClassCodesEdit() {
         }
 
         try {
+            const updatePromises = pendingUpdates.map((updatedClass) =>
+                updateClassCode(updatedClass) 
+            );
+            await Promise.all(updatePromises); 
+            setPendingUpdates([]); 
+        } catch (error) {
+           
+        }
+           
+
+        try {
             for (const code of deletedClassCodes) {
                 await deleteClassCode(code);
             }
@@ -138,15 +149,8 @@ function ClassCodesEdit() {
            
         }
 
-        try {
-            const updatePromises = pendingUpdates.map((updatedClass) =>
-                updateClassCode(updatedClass)
-            );
-            await Promise.all(updatePromises);
-            setPendingUpdates([]);
-        } catch (error) {
-           
-        }
+        
+        
 
         navigate("/ClassCodesAdmin", {
             state: { classData }
