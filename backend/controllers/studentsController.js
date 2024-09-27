@@ -13,11 +13,11 @@ const getStudents = asyncHandler(async (req, res) => {
 // @route POST /students
 // @access Private
 const createStudent = asyncHandler(async (req, res) => {
-    const { classCode, name, email, role } = req.body;
+    const { classCodes, name, email, password, role } = req.body;
 
-    if (!classCode || !name || !email || !role) {
+    if (!name || !email || !password) {
         res.status(400);
-        throw new Error('Please add all fields');
+        throw new Error('Please provide all required fields');
     }
 
     const studentExists = await Student.findOne({ email });
@@ -27,59 +27,152 @@ const createStudent = asyncHandler(async (req, res) => {
     }
 
     const newStudent = new Student({
-        classCode,
+        classCodes,
         name,
         email,
-        role
+        password, // Hash the password in production!
+        role: role || 'Student'
     });
 
     const savedStudent = await newStudent.save();
     res.status(201).json(savedStudent);
 });
 
-// @desc Delete a student
-// @route DELETE /students/:id
+// @desc Delete student by email
+// @route DELETE /students/:email
 // @access Private
-const deleteStudent = asyncHandler(async (req, res) => {
-    const studentId = req.params.id;
-
-    const student = await Student.findById(studentId);
+const deleteStudentByEmail = asyncHandler(async (req, res) => {
+    const student = await Student.findOneAndDelete({ email: req.params.email });
 
     if (!student) {
         res.status(404);
         throw new Error('Student not found');
     }
 
-    await Student.deleteOne({ _id: studentId });
-
-    res.status(200).json({ message: `Student ${studentId} deleted` });
+    res.status(200).json({ message: `Student ${req.params.email} deleted` });
 });
 
-// @desc Update student's role
-// @route PUT /students/:id/role
+// @desc Update student's role by email
+// @route PUT /students/:email/role
 // @access Private
-const updateStudent = asyncHandler(async (req, res) => {
-    const studentId = req.params.id;
+const updateStudentRole = asyncHandler(async (req, res) => {
     const { role } = req.body;
 
-    // Validate role
-    if (!role || (role !== 'Student' && role !== 'Admin')) {
+    if (!role || (role !== 'Student' && role !== 'TA')) {
         res.status(400);
         throw new Error('Invalid role');
     }
 
-    const student = await Student.findById(studentId);
+    const student = await Student.findOneAndUpdate(
+        { email: req.params.email },
+        { role },
+        { new: true }
+    );
 
     if (!student) {
         res.status(404);
         throw new Error('Student not found');
     }
 
-    student.role = role;
-
-    const updatedStudent = await student.save();
-
-    res.status(200).json(updatedStudent);
+    res.status(200).json(student);
 });
 
-module.exports = { getStudents, createStudent, deleteStudent, updateStudent };
+// @desc Update student's name by email
+// @route PUT /students/:email
+// @access Private
+const updateStudentInfo = asyncHandler(async (req, res) => {
+    const { name } = req.body;
+
+    const student = await Student.findOneAndUpdate(
+        { email: req.params.email },
+        { name },
+        { new: true }
+    );
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    res.status(200).json(student);
+});
+
+// @desc Login student
+// @route POST /students/login
+// @access Public
+const loginStudent = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        res.status(400);
+        throw new Error('Please provide both email and password');
+    }
+
+    const student = await Student.findOne({ email });
+
+    if (!student || student.password !== password) { 
+        res.status(401);
+        throw new Error('Invalid email or password');
+    }
+
+    res.status(200).json({
+        email: student.email,
+        name: student.name,
+        role: student.role,
+        classCodes: student.classCodes
+    });
+});
+
+// @desc Add a class code to a student by email
+// @route PUT /students/:email/add-classcode
+// @access Private
+const addClassCode = asyncHandler(async (req, res) => {
+    const { classCode } = req.body;
+
+    const student = await Student.findOne({ email: req.params.email });
+    if (!student) {
+        return res.status(404).json({ error: 'Student not found' });
+    }
+
+    if (student.classCodes.includes(classCode)) {
+        return res.status(400).json({ error: 'Class code already exists in the student\'s class codes' });
+    }
+
+    student.classCodes.push(classCode);
+    await student.save();
+
+    res.status(200).json(student); 
+});
+
+// @desc Remove a class code from a student's classCodes list by email
+// @route PUT /students/:email/remove-classcode
+// @access Private
+const removeClassCode = asyncHandler(async (req, res) => {
+    const { classCode } = req.body;
+
+    const student = await Student.findOne({ email: req.params.email });
+    if (!student) {
+        return res.status(404).json({ error: 'Student not found' });
+    }
+    const updatedClassCodes = student.classCodes.filter(code => code !== classCode);
+
+    if (updatedClassCodes.length === student.classCodes.length) {
+        return res.status(404).json({ error: 'Class code not found in student\'s class codes' });
+    }
+
+    student.classCodes = updatedClassCodes;
+    await student.save();
+
+    res.status(200).json(student); 
+});
+
+module.exports = {
+    getStudents,
+    createStudent,
+    deleteStudentByEmail,
+    updateStudentRole,
+    updateStudentInfo,
+    addClassCode,
+    loginStudent,
+    removeClassCode,
+};

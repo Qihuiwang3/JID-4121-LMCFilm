@@ -1,88 +1,79 @@
-import React, { Component } from "react";
-import { withFuncProps } from "../../withFuncProps";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setStudentInfo } from "../../redux/actions/studentActions";
 import './EnterCode.css';
+import { getClassInfoByCode, addClassCode } from "../../../connector";
 
+const EnterCode = () => {
+    const [codeInput, setCodeInput] = useState("");
+    const [errorMessage, setErrorMessage] = useState("Don't have code?");
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-class EnterCode extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            codeInput: "",
-            errorMessage: "Don't have code?",
-            classTable: []
-        };
-    }
+    const handleInputChange = (event) => {
+        setCodeInput(event.target.value);
+    };
 
-    componentDidMount() {
-        fetch(`/api/class-code/${this.state.codeInput}`)
-            .then(res => res.json())
-            .then(data => {
-                this.setState({ classTable: [data] });
-            })
-            .catch(error => console.error('Error fetching class codes:', error));
-    }
+    const studentInfo = useSelector((state) => state.studentData);
 
-
-    handleInputChange = (event) => {
-        this.setState({ codeInput: event.target.value });
-    }
-
-    handleSubmit = () => {
-        const { codeInput } = this.state;
-        // Check if codeInput meets length requirements
+    const handleSubmit = () => {
         if (codeInput.length < 2) {
-            this.setState({ errorMessage: "Code must be at least 2 characters long" });
-        } 
-        else if (!/^\d+$/.test(codeInput)) {
-            this.setState({ errorMessage: "Code must contain only numeric characters" });
+            setErrorMessage("Code must be at least 2 characters long");
+        } else if (!/^\d+$/.test(codeInput)) {
+            setErrorMessage("Code must contain only numeric characters");
+        } else {
+            checkCodeExist(codeInput);
         }
-        else {
-            this.checkCodeExist(codeInput)
+    };
+
+    const checkCodeExist = async (codeInput) => {
+        try {
+            const data = await getClassInfoByCode(codeInput);
+            if (data && data.code === codeInput) {
+                await addClassCode(studentInfo.email, codeInput);
+                const updatedClassCodes = [...studentInfo.classCodes, codeInput];
+                const updatedStudentInfo = { ...studentInfo, classCodes: updatedClassCodes };
+                dispatch(setStudentInfo(updatedStudentInfo)); 
+                navigate("/SelectClass", { state: { updatedStudentInfo } });
+            } else {
+                setErrorMessage("The code does not exist");
+            }
+        } catch (error) {
+            setErrorMessage("There was an error processing your request");
         }
-    }
+    };
 
-    checkCodeExist = (codeInput) => {
-        fetch(`http://localhost:3500/api/class-code/${codeInput}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.code === codeInput) {
-                    this.props.navigate("/ReservationPage", { state: { classCode: codeInput } });
-                } else {
-                    this.setState({ errorMessage: "The code does not exist" });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.setState({ errorMessage: "There was an error processing your request" });
-            });
-    }
+    const handleNext = () => {
+        if (studentInfo.classCodes && studentInfo.classCodes.length > 0) {
+            navigate("/SelectClass", { state: { studentInfo } }); 
+        } else {
+            setErrorMessage("No class codes found in your account. Please enter a new code.");
+        }
+    };
 
-    render() {
-        return (
-            <div className="body">
-                <div className="enterCodeContainer">
-                    <h1 className="enterCodeTitle">Enter Class Code</h1>
-
-                    <input
-                        className="input-field"
-                        type="text"
-                        value={this.state.codeInput}
-                        onChange={this.handleInputChange}
-                        placeholder="Code"
-                        />
-                    <div className="error">
-                        {this.state.errorMessage && 
-                            <i>
-                                {this.state.errorMessage}
-                            </i>
-                        }
-                    </div>
-
-                    <button className="submit-button" onClick={this.handleSubmit}>Submit</button>
+    return (
+        <div className="body">
+            <div className="enterCodeContainer">
+                <h1 className="enterCodeTitle">Enter Class Code</h1>
+                <input
+                    className="input-field"
+                    type="text"
+                    value={codeInput}
+                    onChange={handleInputChange}
+                    placeholder="Code"
+                />
+                <div className="error">
+                    {errorMessage && <i>{errorMessage}</i>}
                 </div>
+                <button className="submit-button" onClick={handleSubmit}>Submit</button>
             </div>
-        );
-    }
-}
 
-export default withFuncProps(EnterCode);
+            <div className="enter-btnContainer">
+                <button className="enter-confirmBtn" onClick={handleNext}>Confirm</button>
+            </div>
+        </div>
+    );
+};
+
+export default EnterCode;

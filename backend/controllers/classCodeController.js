@@ -16,7 +16,7 @@ const getClassCode = asyncHandler(async (req, res) => {
 // @route POST /class-code
 // @access Private
 const createClassCode = asyncHandler(async (req, res) => {
-    const { code, professor } = req.body;
+    const { code, professor, className } = req.body;
 
     const existingClassCode = await ClassCode.findOne({ code });
     if (existingClassCode) {
@@ -25,13 +25,13 @@ const createClassCode = asyncHandler(async (req, res) => {
 
     const newClassCode = new ClassCode({
         code,
-        professor
+        professor,
+        className
     });
 
     const savedClassCode = await newClassCode.save();
     res.status(201).json(savedClassCode);
 });
-
 
 // @desc Get all class codes
 // @route GET /class-codes
@@ -41,4 +41,41 @@ const getAllClassCodes = asyncHandler(async (req, res) => {
     res.status(200).json(classCodes);
 });
 
-module.exports = { getClassCode, createClassCode, getAllClassCodes };
+// @desc Update class code information (professor, className)
+// @route PUT /class-code/:code
+// @access Private
+const updateClassCode = asyncHandler(async (req, res) => {
+    const { code } = req.params;
+    const { professor, className } = req.body;
+    let classCode = await ClassCode.findOne({ code });
+
+    if (!classCode) {
+        return res.status(404).json({ error: "Class code not found" });
+    }
+    if (professor) {
+        classCode.professor = professor;
+    }
+
+    if (className) {
+        classCode.className = className;
+    }
+    const updatedClassCode = await classCode.save();
+
+    res.status(200).json(updatedClassCode);
+});
+
+// @desc Delete a class code by code
+// @route DELETE /class-code/:code
+// @access Private
+const deleteClassCode = asyncHandler(async (req, res) => {
+    const { code } = req.params;
+    const classCode = await ClassCode.findOneAndDelete({ code });
+
+    if (!classCode) {
+        return res.status(404).json({ error: "Class code not found" });
+    }
+
+    res.status(200).json({ message: `Class code ${code} deleted successfully` });
+});
+
+module.exports = { getClassCode, createClassCode, getAllClassCodes, updateClassCode, deleteClassCode };
