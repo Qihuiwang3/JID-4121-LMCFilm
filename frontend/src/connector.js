@@ -114,15 +114,49 @@ const updateItem = async (id, role) => {
     }
 };
 
-const deleteGlobalItem = async (id) => {
+const deleteGlobalItem = async (itemName, itemId) => {
+    console.log("SOHOS " + itemName + " " + itemId);
     try {
-        const res = await axios.delete(`${BACKEND_URL}/api/items/${id}`);
+        const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName },
+        });
         return res.data;
     } catch (error) {
         console.log(error);
         throw error;
     }
 }
+
+const toggleRepairStatus = async (itemName, itemId) => {
+    try {
+        const res = await axios.patch(`${BACKEND_URL}/api/item/itemId/${itemId}/repair`, { itemName }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const toggleHideStatus = async (itemName, itemId) => {
+    try {
+        const res = await axios.patch(`${BACKEND_URL}/api/item/itemId/${itemId}/hide`, { itemName }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
 
 export {
     getStudents,
@@ -135,4 +169,6 @@ export {
     createGlobalItem,
     deleteGlobalItem,
     updateItem,
+    toggleRepairStatus,
+    toggleHideStatus,
 };
