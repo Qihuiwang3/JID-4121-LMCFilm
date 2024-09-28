@@ -1,5 +1,5 @@
 .search-bar {
-    border: 2px solid #3b5998; 
+    border: 2px solid #3b5998;
     border-radius: 4px;
     background-color: #fff;
     width: 250px;
@@ -7,7 +7,7 @@
 
 .search-input {
     border: none;
-    padding: 4px 0 4px 8px;
+    padding: 8px 0 8px 8px;
     outline: none;
     font-size: 16px;
 }
@@ -16,7 +16,7 @@
     color: #3b5998;
     font-weight: bold;
 }
-  
+
 .search-button {
     background: none;
     border: none;
@@ -24,6 +24,6 @@
     font-size: 15px;
     color: #3b5998;
     padding: 4px;
-    margin-left: 10px;
+    float: right;
+    margin: 5px;
 }
-  
