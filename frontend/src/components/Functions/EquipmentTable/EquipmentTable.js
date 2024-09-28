@@ -188,16 +188,10 @@ class EquipmentTable extends Component {
                 headerName: "Repair",
                 field: "repair",
                 flex: 1,
-                valueFormatter: (params) => params.value ? 'Yes' : 'No', // Display "Yes" or "No"
-                cellRenderer: isEditMode ? (params) => {
-                    return (
-                        <input
-                            type="checkbox"
-                            checked={params.data.repair}
-                            onChange={() => this.tempToggleRepair(params.data)}
-                        />
-                    );
-                } : null
+                editable: false, // make the cell non-editable
+                cellRenderer: (params) => {
+                    return params.value ? 'Yes' : 'No'; // render 'Yes' or 'No' based on the value
+                }
             },
             {
                 headerName: "Hide",
@@ -206,11 +200,22 @@ class EquipmentTable extends Component {
                 valueFormatter: (params) => params.value ? 'Yes' : 'No', // Display "Yes" or "No"
                 cellRenderer: isEditMode ? (params) => {
                     return (
-                        <input
-                            type="checkbox"
-                            checked={params.data.hide}
-                            onChange={() => this.tempToggleHide(params.data)}
-                        />
+                        <select
+                            value={params.data.hide ? 'Yes' : 'No'}
+                            onChange={(event) => this.tempToggleHide(params.data, event.target.value)}
+                            style={{
+                                width: '50px',                 // Width of the dropdown
+                                padding: '4px',                // Padding inside the dropdown
+                                color: 'white',                // Text color
+                                backgroundColor: '#3361AE',    // Background color
+                                border: 'none',                // No border
+                                borderRadius: '5px',           // Rounded corners
+                                textAlign: 'center'            // Center-align the text
+                            }}
+                        >
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
                     );
                 } : null
             },
