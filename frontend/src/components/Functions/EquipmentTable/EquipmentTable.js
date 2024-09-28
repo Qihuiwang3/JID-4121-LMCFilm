@@ -240,10 +240,10 @@ class EquipmentTable extends Component {
         return (
 
             <>
-                <div className="student-title">
-                    <h2>Equipment</h2>
+                <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%", paddingBottom: "75px" }}>
+                    <h1 style={{ paddingLeft: "16.5%", color: "#3361AE" }}> Equipment </h1>
                 </div>
-                <div className="search-bar-edit-container">
+                <div className="equipment-search-bar-edit-container">
                     <div className="student-searchbar" >
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
