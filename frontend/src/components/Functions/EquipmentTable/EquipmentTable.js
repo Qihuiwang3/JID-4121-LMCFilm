@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
 // import { getItems, deleteGlobalItem, updateItem } from '../../../connector.js';
-import { getItems, deleteGlobalItem } from '../../../connector.js';
+import { getItems, deleteGlobalItem, toggleRepairStatus, toggleHideStatus } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
 import EditButton from '../../Button/EditButton/EditButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,13 +13,14 @@ class EquipmentTable extends Component {
         this.state = {
             records: [],
             filteredRecords: [],
-            tempDeletedRows: [],
-            updatedRoles: {},
+            deletedRecords: [],
+            tempToggledRepairs: [],
+            tempToggledHides: [],
             defaultColDef: {
                 sortable: true,
                 resizable: true
             },
-            searchQuery: ''
+            searchQuery: '',
         };
     }
 
@@ -41,43 +42,100 @@ class EquipmentTable extends Component {
                     checkin: itemId.checkin,
                     checkout: itemId.checkout,
                     repair: itemId.repair,
+                    hide: itemId.hide,
                 }))
             );
 
             this.setState({
                 records: transformedRecords,
                 filteredRecords: transformedRecords,
-                tempDeletedRows: [],
-                updatedRoles: {}
             });
         } catch (error) {
             console.error("Error loading records:", error);
         }
     };
 
-    tempDeleteRow = (data) => {
-        this.setState((prevState) => {
-            const updatedRecords = prevState.records.filter(record => record._id !== data._id);
-            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record._id !== data._id);
+    tempDelete = async (data) => {
+        console.log(data);
+        const { filteredRecords, deletedRecords } = this.state;
 
-            return {
-                records: updatedRecords,
-                filteredRecords: updatedFilteredRecords,
-                tempDeletedRows: [...prevState.tempDeletedRows, data._id]
-            };
+        const updatedRecords = filteredRecords.filter(record =>
+            !(record.itemName === data.itemName && record.itemId === data.itemId)
+        );
+
+        this.setState({
+            filteredRecords: updatedRecords,
+            deletedRecords: [...deletedRecords, data],
+        });
+    }
+
+    tempToggleRepair = (data) => {
+        const { filteredRecords, tempToggledRepairs } = this.state;
+
+        // Toggle the repair status for the given item
+        const updatedRecords = filteredRecords.map(record =>
+            record.itemName === data.itemName && record.itemId === data.itemId
+                ? { ...record, repair: !record.repair }
+                : record
+        );
+
+        this.setState({
+            filteredRecords: updatedRecords,
+            tempToggledRepairs: [...tempToggledRepairs, data], // Add to the tempToggledRepairs list
         });
     };
 
-    confirmDeleteRows = async () => {
+    tempToggleHide = (data) => {
+        const { filteredRecords, tempToggledHides } = this.state;
+
+        // Toggle the hide status for the given item
+        const updatedRecords = filteredRecords.map(record =>
+            record.itemName === data.itemName && record.itemId === data.itemId
+                ? { ...record, hide: !record.hide }
+                : record
+        );
+
+        this.setState({
+            filteredRecords: updatedRecords,
+            tempToggledHides: [...tempToggledHides, data], // Add to the tempToggledHides list
+        });
+    };
+
+
+
+    saveChanges = async () => {
+        const { deletedRecords, tempToggledRepairs, tempToggledHides } = this.state;
+
         try {
-            const { tempDeletedRows } = this.state;
-            for (let id of tempDeletedRows) {
-                await deleteGlobalItem(id);
+            // Loop through each deleted record and call deleteGlobalItem
+            for (let record of deletedRecords) {
+                await deleteGlobalItem(record.itemName, record.itemId);
             }
-            this.setState({ tempDeletedRows: [] });
+
+            // Clear the deleted records after successful deletion
+            this.setState({ deletedRecords: [] });
+            console.log("Deletion changes saved successfully!");
+
+            // Loop through the tempToggledRepairs list
+            for (let record of tempToggledRepairs) {
+                const { itemName, itemId } = record;
+                await toggleRepairStatus(itemName, itemId);
+            }
+
+            // Loop through the tempToggledHides list
+            for (let record of tempToggledHides) {
+                const { itemName, itemId } = record;
+                await toggleHideStatus(itemName, itemId);
+            }
+
+            // Clear the toggled lists after successful changes
+            this.setState({ tempToggledRepairs: [], tempToggledHides: [] });
+            console.log("Changes saved successfully!");
+
         } catch (error) {
-            console.error("Error saving deletions:", error);
+            console.error("Error saving changes:", error);
         }
+        this.loadRecords();
     };
 
     handleSearch = (query) => {
@@ -88,48 +146,86 @@ class EquipmentTable extends Component {
         this.setState({ filteredRecords, searchQuery: query });
     };
 
-    handleRoleChange = (id, newRole) => {
-        this.setState(prevState => ({
-            updatedRoles: {
-                ...prevState.updatedRoles,
-                [id]: newRole
-            }
-        }));
-    };
-
-    saveChanges = async () => {
-        try {
-            await this.confirmDeleteRows();
-            this.loadRecords();
-        } catch (error) {
-            console.error("Error saving changes:", error);
-        }
-    };
-
     render() {
         const { isEditMode, toggleEditMode } = this.props;
         const containerStyles = { gap: isEditMode ? '20%' : '13.5%' };
         // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
 
-
-
         const columnDefs = [
             { headerName: "ItemID", field: `itemId`, flex: 1 },
             { headerName: "Item Name", field: "itemName", flex: 1 },
-            { headerName: "Price", field: "pricePerItem", flex: 1 },
+            {
+                headerName: "Price",
+                field: "pricePerItem",
+                flex: 1,
+                valueFormatter: (params) => {
+                    return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'N/A';
+                }
+            },
             {
                 headerName: "Checked-in",
                 field: "checkin",
                 flex: 1,
-                valueFormatter: (params) => params.value ? params.value : 'N/A'
+                valueFormatter: (params) => {
+                    const dateValue = new Date(params.value);
+                    return params.value ? dateValue.toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short',
+                    }) : 'N/A';
+                }
             },
             {
                 headerName: "Checked-out",
                 field: "checkout",
                 flex: 1,
-                valueFormatter: (params) => params.value ? params.value : 'N/A'
+                valueFormatter: (params) => {
+                    const dateValue = new Date(params.value);
+                    return params.value ? dateValue.toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short',
+                    }) : 'N/A';
+                }
             },
-            { headerName: "Repair", field: "repair", flex: 1 },
+            {
+                headerName: "Repair",
+                field: "repair",
+                flex: 1,
+                valueFormatter: (params) => params.value ? 'Yes' : 'No', // Display "Yes" or "No"
+                cellRenderer: isEditMode ? (params) => {
+                    return (
+                        <input
+                            type="checkbox"
+                            checked={params.data.repair}
+                            onChange={() => this.tempToggleRepair(params.data)}
+                        />
+                    );
+                } : null
+            },
+            {
+                headerName: "Hide",
+                field: "hide",
+                flex: 1,
+                valueFormatter: (params) => params.value ? 'Yes' : 'No', // Display "Yes" or "No"
+                cellRenderer: isEditMode ? (params) => {
+                    return (
+                        <input
+                            type="checkbox"
+                            checked={params.data.hide}
+                            onChange={() => this.tempToggleHide(params.data)}
+                        />
+                    );
+                } : null
+            },
 
             isEditMode ? {
                 headerName: "Delete",
@@ -138,7 +234,7 @@ class EquipmentTable extends Component {
                 cellRenderer: params => {
                     return (
                         <button
-                            onClick={() => this.tempDeleteRow(params.data)}
+                            onClick={() => { this.tempDelete(params.data) }}
                             className="trash-icon"
                         >
                             <FontAwesomeIcon icon={faTrash} />
@@ -162,7 +258,8 @@ class EquipmentTable extends Component {
                     </div>
                 </div>
                 <AgGridTable
-                    rowData={this.state.filteredRecords}
+                    key={this.state.filteredRecords.length}
+                    rowData={this.state.filteredRecords} // Make sure this points to filteredRecords
                     columnDefs={columnDefs}
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
