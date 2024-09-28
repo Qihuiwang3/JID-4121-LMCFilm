@@ -52,13 +52,13 @@ const Equipment = () => {
                 ) : (
                     <div className="bottom-btn-container">
                         <BackButton to="/" />
+                        <button className="add-new-button" onClick={handleOpenPopup}>
+                            Add New +
+                        </button>
                     </div>
                 )}
             </div>
 
-            <button className="add-new-button" onClick={handleOpenPopup}>
-                Add New +
-            </button>
             <EquipmentPopup show={showPopup} handleClose={handleClosePopup} />
         </div>
     );
