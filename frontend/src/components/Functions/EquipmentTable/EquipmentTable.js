@@ -6,6 +6,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import EditButton from '../../Button/EditButton/EditButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import './EquipmentTable.css';
 
 class EquipmentTable extends Component {
     constructor(props) {
@@ -143,8 +144,7 @@ class EquipmentTable extends Component {
     };
 
     render() {
-        const { isEditMode, toggleEditMode } = this.props;
-        const containerStyles = { gap: isEditMode ? '20%' : '13.5%' };
+        const { isEditMode, toggleEditMode, handleOpenPopup } = this.props;
         // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
 
         const columnDefs = [
@@ -238,18 +238,31 @@ class EquipmentTable extends Component {
         ].filter(Boolean);
 
         return (
+
             <>
                 <div className="student-title">
                     <h2>Equipment</h2>
                 </div>
-                <div className="search-bar-edit-container" style={containerStyles}>
+                <div className="search-bar-edit-container">
                     <div className="student-searchbar" >
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
-                    <div className="student-edit">
+
+                    {!isEditMode && (
                         <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
-                    </div>
+                    )}
+
+                    {isEditMode && (
+                        <div className="">
+                            <button className="add-new-button" onClick={handleOpenPopup}>
+                                Add New +
+                            </button>
+                        </div>
+                    )}
                 </div>
+
+
+
                 <AgGridTable
                     key={this.state.filteredRecords.length}
                     rowData={this.state.filteredRecords} // Make sure this points to filteredRecords
