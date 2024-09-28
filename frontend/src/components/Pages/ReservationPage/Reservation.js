@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
 import { createCartWithData } from '../../../connector.js';
+import Button from '../../Button/Button.js';
 
 function ReservationPage() {
     const navigate = useNavigate();
@@ -93,14 +94,14 @@ function ReservationPage() {
     }, [classCode]);
 
     return (
-        <div className="main-reservation-equipment-cart">
-            <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%" }}>
-                <h1 style={{ paddingLeft: "50px", color: "#3361AE" }}> Reservation </h1>
+        <div className="main-content">
+            <div className='reservation-header'>
+                <h1 className="reservation-header-text">Reservation</h1>
                 <TimeSelectionButton
                     initialPickupDateTime={pickupDateTime}
-                    initialReturnDateTime={returnDateTime} 
-                    onPickupDateTimeChange={setPickupDateTime} 
-                    onReturnDateTimeChange={setReturnDateTime} 
+                    initialReturnDateTime={returnDateTime}
+                    onPickupDateTimeChange={setPickupDateTime}
+                    onReturnDateTimeChange={setReturnDateTime}
                 />
             </div>
 
@@ -156,11 +157,11 @@ function ReservationPage() {
                 </div>
             </div>
 
-            <div className='equipment-button-container'>
-                <div className="equipment-back" onClick={handleBack}>Back</div>
-                <div className="equipment-checkout" onClick={() => handleCheckout()}> Checkout </div>
-            </div>
-        </div>
+            <div className='btnContainer'>
+                <Button type="back" onClick={handleBack}>Back</Button>
+                <Button type="next" onClick={() => handleCheckout()}> Checkout </Button>
+            </div >
+        </div >
     );
 }
 

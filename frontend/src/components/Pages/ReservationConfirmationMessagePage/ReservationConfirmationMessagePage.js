@@ -3,6 +3,7 @@ import './ReservationConfirmationMessagePage.css';
 import { useNavigate } from 'react-router-dom';
 import Barcode from 'react-barcode';
 import emailjs from 'emailjs-com';
+import Button from '../../Button/Button';
 
 function ReservationConfirmationMessagePage() {
     const [orderNumber, setOrderNumber] = useState('');
@@ -49,14 +50,14 @@ function ReservationConfirmationMessagePage() {
 
     // Function to handle the back button click
     const goBack = () => {
-        navigate(-1);
+        navigate('/Enter');
     };
 
     return (
-        <div className="confirmation-container">
-            <div className='header_text'>
+        <div className="main-content">
+            <h1 className='select-class-header'>
                 Your Reservation has been confirmed!
-            </div>
+            </h1>
             <div className='confirm-text'>
                 Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
             </div>
@@ -65,7 +66,9 @@ function ReservationConfirmationMessagePage() {
                 {/* Render the barcode with the order number */}
                 <Barcode value={orderNumber} />
             </div>
-            <button className="back-button">Back</button>
+            <div className="btnContainer">
+                <Button type="back" onClick={goBack}>Back</Button>
+            </div>
         </div>
 
     );
