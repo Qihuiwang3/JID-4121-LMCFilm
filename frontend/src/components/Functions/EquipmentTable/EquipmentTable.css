@@ -1,0 +1,12 @@
+.add-new-button {
+    border-radius: 5px;
+    width: 150px;
+    background-color: #3361AE;
+    border: 2px solid #3361AE;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
