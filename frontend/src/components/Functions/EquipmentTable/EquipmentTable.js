@@ -148,12 +148,12 @@ class EquipmentTable extends Component {
         // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
 
         const columnDefs = [
-            { headerName: "ItemID", field: `itemId`, flex: 1 },
-            { headerName: "Item Name", field: "itemName", flex: 1 },
+            { headerName: "ItemID", field: "itemId", width: 150, headerClass: 'header-center' },
+            { headerName: "Item Name", field: "itemName", width: 220 },
             {
                 headerName: "Price",
                 field: "pricePerItem",
-                flex: 1,
+                width: 120,
                 valueFormatter: (params) => {
                     return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'N/A';
                 }
@@ -161,7 +161,7 @@ class EquipmentTable extends Component {
             {
                 headerName: "Checked-in",
                 field: "checkin",
-                flex: 1,
+                width: 250,
                 valueFormatter: (params) => {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
@@ -174,7 +174,7 @@ class EquipmentTable extends Component {
             {
                 headerName: "Checked-out",
                 field: "checkout",
-                flex: 1,
+                width: 250,
                 valueFormatter: (params) => {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
@@ -187,7 +187,7 @@ class EquipmentTable extends Component {
             {
                 headerName: "Repair",
                 field: "repair",
-                flex: 1,
+                width: 200,
                 editable: false, // make the cell non-editable
                 cellRenderer: (params) => {
                     return params.value ? 'Yes' : 'No'; // render 'Yes' or 'No' based on the value
