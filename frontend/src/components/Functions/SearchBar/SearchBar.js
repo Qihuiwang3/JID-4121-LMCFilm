@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SearchBar = ({ onSearch }) => {
     const [query, setQuery] = useState('');
+    const [placeholder, setPlaceholder] = useState('Search by Name');
 
     const handleChange = (e) => {
         const newQuery = e.target.value;
@@ -14,13 +15,25 @@ const SearchBar = ({ onSearch }) => {
         }
     };
 
+    const handleFocus = () => {
+        setPlaceholder('');
+    };
+
+    const handleBlur = () => {
+        if (query === '') {
+            setPlaceholder('Search by Name');
+        }
+    };
+
     return (
         <div className="search-bar">
             <input
                 type="text"
-                placeholder="Search by Name"
+                placeholder={placeholder}
                 value={query}
                 onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 className="search-input"
             />
             <button type="button" className="search-button">
