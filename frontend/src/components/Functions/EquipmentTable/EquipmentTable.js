@@ -166,13 +166,9 @@ class EquipmentTable extends Component {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
                         year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZoneName: 'short',
-                    }) : 'N/A';
+                        month: '2-digit',
+                        day: '2-digit',
+                    }).replace(',', '') : 'N/A';
                 }
             },
             {
@@ -183,13 +179,9 @@ class EquipmentTable extends Component {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
                         year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZoneName: 'short',
-                    }) : 'N/A';
+                        month: '2-digit',
+                        day: '2-digit',
+                    }).replace(',', '') : 'N/A';
                 }
             },
             {
