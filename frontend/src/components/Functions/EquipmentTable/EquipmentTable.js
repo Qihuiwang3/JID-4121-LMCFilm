@@ -51,12 +51,10 @@ class EquipmentTable extends Component {
                 filteredRecords: transformedRecords,
             });
         } catch (error) {
-            console.error("Error loading records:", error);
         }
     };
 
     tempDelete = async (data) => {
-        console.log(data);
         const { filteredRecords, deletedRecords } = this.state;
 
         const updatedRecords = filteredRecords.filter(record =>
@@ -114,7 +112,6 @@ class EquipmentTable extends Component {
 
             // Clear the deleted records after successful deletion
             this.setState({ deletedRecords: [] });
-            console.log("Deletion changes saved successfully!");
 
             // Loop through the tempToggledRepairs list
             for (let record of tempToggledRepairs) {
@@ -130,7 +127,6 @@ class EquipmentTable extends Component {
 
             // Clear the toggled lists after successful changes
             this.setState({ tempToggledRepairs: [], tempToggledHides: [] });
-            console.log("Changes saved successfully!");
 
         } catch (error) {
             console.error("Error saving changes:", error);
