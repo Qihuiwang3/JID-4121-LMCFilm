@@ -56,8 +56,11 @@ html {
     background-color: #FFFDF8;
     color: #3361AE;
     border-top: transparent;
+    font-size: 20px;
 }
 
 .ag-icon {
     color: #3361AE;
+    font-weight: bold;
+    font-size: 20px;
 }
