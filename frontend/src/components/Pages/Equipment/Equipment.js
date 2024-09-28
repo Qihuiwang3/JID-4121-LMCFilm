@@ -43,14 +43,14 @@ const Equipment = () => {
                 handleOpenPopup={handleOpenPopup}
             />
 
-            <div className="student-btn">
+            <div className="equipment-btn">
                 {isEditMode ? (
-                    <div className="bottom-btn-container">
+                    <div className="equipment-bottom-btn-container">
                         <CancelButton onClick={toggleEditMode} />
                         <SaveButton onClick={handleSave} />
                     </div>
                 ) : (
-                    <div className="bottom-btn-container">
+                    <div className="equipment-bottom-btn-container">
                         <BackButton to="/" />
                     </div>
                 )}
