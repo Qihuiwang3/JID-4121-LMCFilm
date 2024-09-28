@@ -3,9 +3,28 @@ const router = express.Router();
 const studentsController = require("../controllers/studentsController");
 const limiter = require('../middleware/rateLimiter');
 
+// Get all students
 router.get('/', limiter, studentsController.getStudents);
+
+// Create new student
 router.post('/', limiter, studentsController.createStudent);
-router.delete('/:id', limiter, studentsController.deleteStudent);
-router.put('/:id/role', limiter, studentsController.updateStudent);
+
+// Login student route
+router.post('/login', limiter, studentsController.loginStudent);
+
+// Delete student by email
+router.delete('/:email', limiter, studentsController.deleteStudentByEmail);
+
+// Update student's role by email
+router.put('/:email/role', limiter, studentsController.updateStudentRole);
+
+// Update student's name by email
+router.put('/:email', limiter, studentsController.updateStudentInfo);
+
+// Add class code to a student by email
+router.put('/:email/add-classcode', limiter, studentsController.addClassCode);
+
+// route for removing class code
+router.put('/students/:email/remove-classcode', studentsController.removeClassCode); 
 
 module.exports = router;

@@ -1,41 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import './SelectClassPage.css';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'; 
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { setClassCode } from "../../../redux/actions/classActions";
 import film from '../../../../Image/filmIcon.svg';
-import { getClassInfoByCode } from '../../../../connector';
 import Button from '../../../Button/Button';
+import { getClassInfoByCode, removeClassCode } from '../../../../connector';
+
 
 const SelectClassPage = () => {
-  const [classInfo, setClassInfo] = useState(null);
-  const navigate = useNavigate();
+  const [classes, setClasses] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedClassId, setSelectedClassId] = useState(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const classCodeFromRedux = useSelector((state) => state.classData.classCode);
-
-  const classCode = classCodeFromRedux;
+  const location = useLocation();
+  const reduxStudentInfo = useSelector(state => state.studentData);
+  const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
   useEffect(() => {
-    const fetchClassInfo = async () => {
-      try {
-        const data = await getClassInfoByCode(classCode);
-        setClassInfo(data);
-      } catch (error) {
-        setErrorMessage('Error fetching class information');
+    const fetchAndValidateClasses = async () => {
+      console.log(studentInfo);
+      if (studentInfo && studentInfo.classCodes) {
+        const uniqueClassCodes = [...new Set(studentInfo.classCodes)];
+        const validClasses = [];
+        const invalidClassCodes = [];
+
+        for (const code of uniqueClassCodes) {
+          try {
+            const classData = await getClassInfoByCode(code);
+            validClasses.push(classData);
+          } catch (error) {
+            if (error.response?.status === 404) {
+              invalidClassCodes.push(code);
+            }
+          }
+        }
+
+        if (invalidClassCodes.length > 0) {
+          for (const invalidCode of invalidClassCodes) {
+            try {
+              await removeClassCode(studentInfo.email, invalidCode);
+            } catch (err) {
+              console.error(`Error removing invalid class code ${invalidCode} for student:`, err);
+            }
+          }
+        }
+        setClasses(validClasses);
+      } else {
+        setErrorMessage('No class codes found for this student');
       }
     };
+    fetchAndValidateClasses();
+  }, [studentInfo]);
 
-    fetchClassInfo();
-  }, [classCode]);
-  
   const handleConfirms = () => {
-    dispatch(setClassCode(classCode));
+    dispatch(setClassCode(selectedClassId));
     navigate('/Reservation', {
-      state: { 
-        classCode, 
+      state: {
+        classCode: selectedClassId,
       }
     });
   };
@@ -45,14 +68,14 @@ const SelectClassPage = () => {
   };
 
   const handleBack = () => {
-    navigate('/'); 
+    navigate('/Enter');
   };
-  
+
   if (errorMessage) {
     return <div>{errorMessage}</div>;
   }
 
-  if (!classInfo) {
+  if (!classes.length) {
     return <div>Loading class information...</div>;
   }
 
@@ -60,19 +83,21 @@ const SelectClassPage = () => {
     <div className='main-content'>
       <h1 className="select-class-header">Select Class</h1>
       <div className="grid-container">
-       
-        <div
-          className="class-container"
-          onClick={() => handleClick(classInfo._id)}
-        >
-          <div className="class-icon">
-            <img className='image' src={film} alt="Class Icon" />
-          </div>
-          <div className={`class-info ${selectedClassId === classInfo._id ? 'selected' : ''}`}>
+        {classes.map(classInfo => (
+          <div
+            key={classInfo.code}
+            className="class-container"
+            onClick={() => handleClick(classInfo.code)}
+          >
+            <div className="class-icon">
+              <img className='image' src={film} alt="Class Icon" />
+            </div>
+            <div className={`class-info ${selectedClassId === classInfo.code ? 'selected' : ''}`}>
               <div className="class-name">{classInfo.className}</div>
               <div className="instructor-name">Instructor: {classInfo.professor}</div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
 
       <div className="btnContainer">

@@ -4,10 +4,10 @@
 .main-content {
   display: flex;
   flex-direction: column;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   height: 100%;
-  width: 100vw; 
+  width: 100vw;
 }
 
 .select-class-header {
@@ -15,7 +15,7 @@
   width: 90vw;
   font-size: 38px;
   font-size: calc(2vw + 1vh);
-  margin-top: 15vh;
+  margin-top: 120px;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
   line-height: normal;
@@ -24,16 +24,23 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns */
-  grid-template-rows: repeat(2, auto); /* 2 rows */
-  row-gap: 60%; /* Space between the tabs */
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 columns */
+  grid-template-rows: repeat(2, auto);
+  /* 2 rows */
+  row-gap: 60%;
+  /* Space between the tabs */
   column-gap: 50%;
   height: auto;
   margin-top: 13vh;
-  justify-content: center; /* Center the grid horizontally */
-  align-items: center; /* Center the grid vertically */
-  width: 80vw; /* Ensure it doesn't overflow */
-  max-width: 800px; /* Restrict the maximum width */
+  justify-content: center;
+  /* Center the grid horizontally */
+  align-items: center;
+  /* Center the grid vertically */
+  width: 80vw;
+  /* Ensure it doesn't overflow */
+  max-width: 800px;
+  /* Restrict the maximum width */
 }
 
 
@@ -42,7 +49,7 @@
   flex-direction: row;
   border-radius: 10px;
   overflow: hidden;
-  height: 10vh; 
+  height: 10vh;
   width: 20vw;
   max-width: 400px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -50,7 +57,7 @@
 }
 
 .class-info {
-  background-color: #FFFFFF; 
+  background-color: #FFFFFF;
   color: #000000;
   display: flex;
   flex-direction: column;
@@ -60,12 +67,13 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   overflow: hidden;
-  height: 10vh; /* Set a fixed height */
+  height: 10vh;
+  /* Set a fixed height */
   width: 20vw;
   max-width: 400px;
 }
 
-  
+
 .class-icon {
   display: flex;
   flex: 0 0 5vw;
@@ -79,13 +87,15 @@
 
 .class-icon img {
   transform: scale(0.65);
-  max-width: 20vw; /* Scale based on viewport width */
+  max-width: 20vw;
+  /* Scale based on viewport width */
   height: auto;
 }
-  
-.class-name, .instructor-name {
+
+.class-name,
+.instructor-name {
   line-height: normal;
-  font-family: 'Nunito Sans', sans-serif; 
+  font-family: 'Nunito Sans', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: calc(0.4vw + 1vh) !important;
@@ -93,13 +103,15 @@
 }
 
 .btnContainer {
-  display: flex; /* Use flexbox */
-  justify-content: space-between; /* Space the buttons to the left and right */
-  padding: 0 20px; /* Add some padding for spacing */
+  display: flex;
+  /* Use flexbox */
+  justify-content: space-between;
+  /* Space the buttons to the left and right */
   width: 90vw;
-  position:absolute;
+  position: absolute;
   bottom: 10vh;
   box-sizing: border-box;
+  margin-top: 10%;
 }
 
 .class-info.selected {

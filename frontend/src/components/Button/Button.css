@@ -1,24 +1,33 @@
 /* Base button style */
 .button {
-    padding: 16px 20px; /* Shared padding */
+    padding: 16px 20px;
+    /* Shared padding */
     font-size: calc(0.4vw + 1vh) !important;
-    border: none; /* No border */
-    border-radius: 50px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */ 
-    text-align: center; /* Center text */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    border: none;
+    /* No border */
+    border-radius: 50px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+    text-align: center;
+    /* Center text */
+    transition: background-color 0.3s ease;
+    /* Smooth transition */
     width: 15%;
     box-sizing: border-box;
     padding: 10px 20px;
     margin: 0 10px;
     max-width: 200px;
     flex: 1 1 auto;
+    margin-left: 0%;
+    margin-right: auto;
 }
 
 /* Back button style */
 .back {
     background-color: #3361AE;
     color: white;
+
     /* display: inline-flex;
     padding: 16px 100px;
     justify-content: center;
@@ -27,7 +36,8 @@
 }
 
 .back:hover {
-    background-color: #3361AE; /* Darker shade on hover */
+    background-color: #3361AE;
+    /* Darker shade on hover */
 }
 
 /* Cancel button style */
@@ -42,7 +52,8 @@
 }
 
 .cancel:hover {
-    background-color: #b07865; /* Slightly different color for hover to make it noticeable */
+    background-color: #b07865;
+    /* Slightly different color for hover to make it noticeable */
 }
 
 /* Save button style */
@@ -57,7 +68,8 @@
 }
 
 .save:hover {
-    background-color: #3361AE; /* Same hover color as back button */
+    background-color: #3361AE;
+    /* Same hover color as back button */
 }
 
 /* Next button style */
@@ -69,5 +81,6 @@
 }
 
 .next:hover {
-    background-color: #3361AE; /* Same hover color as back button */
+    background-color: #3361AE;
+    /* Same hover color as back button */
 }

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedDates } from '../../redux/actions/classActions'; 
+import { setSelectedDates } from '../../redux/actions/classActions';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ReservationTimePicker.css';
 import tdesign_film from '../../../Image/tdesign_film.svg';
+import Button from '../../Button/Button';
 
 function ReservationTimePicker() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function ReservationTimePicker() {
             pickupTime.getHours(),
             pickupTime.getMinutes()
         );
-    
+
         const combinedReturnDateTime = new Date(
             returnDate.getFullYear(),
             returnDate.getMonth(),
@@ -37,9 +38,9 @@ function ReservationTimePicker() {
             returnTime.getHours(),
             returnTime.getMinutes()
         );
-    
+
         dispatch(setSelectedDates(combinedPickupDateTime, combinedReturnDateTime));
-    
+
         navigate('/ReservationPage');
     };
 
@@ -67,9 +68,9 @@ function ReservationTimePicker() {
     const minReturnTime = returnDate.toDateString() === pickupDate.toDateString() ? pickupTime : new Date().setHours(0, 0, 0, 0);
 
     return (
-        <div className="rt-picker-container">
+        <div className="main-content">
+            <h1 className="select-class-header">Select Time Period</h1>
             <div className="rt-picker">
-                <h2>Select Time Period</h2>
                 <div className='rt-time'>
                     <div className="rt-time-picker">
                         <div className="rt-time-slot">
@@ -127,9 +128,9 @@ function ReservationTimePicker() {
                     </div>
                 </div>
             </div>
-            <div className="rt-button-container">
-                <button className="rt-backBtn" onClick={handleBack}>Back</button>
-                <button className="rt-confirm-button" onClick={handleConfirm}>Confirm</button>
+            <div className="btnContainer">
+                <Button type="back" onClick={handleBack}>Back</Button>
+                <Button type="next" onClick={handleConfirm}>Confirm</Button>
             </div>
         </div>
     );

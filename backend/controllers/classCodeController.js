@@ -16,7 +16,7 @@ const getClassCode = asyncHandler(async (req, res) => {
 // @route POST /class-code
 // @access Private
 const createClassCode = asyncHandler(async (req, res) => {
-    const { code, professor, className } = req.body;
+const { code, professor, className } = req.body;
 
     const existingClassCode = await ClassCode.findOne({ code });
     if (existingClassCode) {
@@ -27,6 +27,7 @@ const createClassCode = asyncHandler(async (req, res) => {
         code,
         professor,
         className
+
     });
 
     const savedClassCode = await newClassCode.save();
