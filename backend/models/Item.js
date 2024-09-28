@@ -26,11 +26,11 @@ const itemSchema = new mongoose.Schema({
         },
         checkin: {
             type: Date,
-            default: '3'
+            default: '' // Set default date to January 1, 2024
         },
         checkout: {
             type: Date,
-            default: '3'
+            default: '' // Set default date to January 1, 2024
         },
     }],
 });
