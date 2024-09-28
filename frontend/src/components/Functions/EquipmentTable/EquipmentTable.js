@@ -153,7 +153,8 @@ class EquipmentTable extends Component {
             {
                 headerName: "Price",
                 field: "pricePerItem",
-                width: 120,
+                maxWidth: 250,
+                flex: 2,
                 valueFormatter: (params) => {
                     return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'N/A';
                 }
@@ -161,7 +162,8 @@ class EquipmentTable extends Component {
             {
                 headerName: "Checked-in",
                 field: "checkin",
-                width: 250,
+                maxWidth: 300,
+                flex: 2,
                 valueFormatter: (params) => {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
@@ -174,7 +176,7 @@ class EquipmentTable extends Component {
             {
                 headerName: "Checked-out",
                 field: "checkout",
-                width: 250,
+                flex: 2,
                 valueFormatter: (params) => {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
@@ -187,7 +189,8 @@ class EquipmentTable extends Component {
             {
                 headerName: "Repair",
                 field: "repair",
-                width: 200,
+                maxWidth: 200,
+                flex: 2,
                 editable: false, // make the cell non-editable
                 cellRenderer: (params) => {
                     return params.value ? 'Yes' : 'No'; // render 'Yes' or 'No' based on the value
