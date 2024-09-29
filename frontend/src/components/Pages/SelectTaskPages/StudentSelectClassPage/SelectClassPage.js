@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './SelectClassPage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'; 
+import { useDispatch, useSelector } from 'react-redux';
 import { setClassCode } from "../../../redux/actions/classActions";
 import film from '../../../../Image/filmIcon.svg';
+import Button from '../../../Button/Button';
 import { getClassInfoByCode, removeClassCode } from '../../../../connector';
+
 
 const SelectClassPage = () => {
   const [classes, setClasses] = useState([]);
@@ -20,17 +22,17 @@ const SelectClassPage = () => {
     const fetchAndValidateClasses = async () => {
       console.log(studentInfo);
       if (studentInfo && studentInfo.classCodes) {
-        const uniqueClassCodes = [...new Set(studentInfo.classCodes)]; 
+        const uniqueClassCodes = [...new Set(studentInfo.classCodes)];
         const validClasses = [];
         const invalidClassCodes = [];
 
         for (const code of uniqueClassCodes) {
           try {
             const classData = await getClassInfoByCode(code);
-            validClasses.push(classData); 
+            validClasses.push(classData);
           } catch (error) {
             if (error.response?.status === 404) {
-              invalidClassCodes.push(code); 
+              invalidClassCodes.push(code);
             }
           }
         }
@@ -44,19 +46,19 @@ const SelectClassPage = () => {
             }
           }
         }
-        setClasses(validClasses); 
+        setClasses(validClasses);
       } else {
         setErrorMessage('No class codes found for this student');
       }
     };
     fetchAndValidateClasses();
   }, [studentInfo]);
-  
+
   const handleConfirms = () => {
-    dispatch(setClassCode(selectedClassId)); 
+    dispatch(setClassCode(selectedClassId));
     navigate('/Reservation', {
-      state: { 
-        classCode: selectedClassId, 
+      state: {
+        classCode: selectedClassId,
       }
     });
   };
@@ -66,9 +68,9 @@ const SelectClassPage = () => {
   };
 
   const handleBack = () => {
-    navigate('/Enter'); 
+    navigate('/Enter');
   };
-  
+
   if (errorMessage) {
     return <div>{errorMessage}</div>;
   }
@@ -78,12 +80,12 @@ const SelectClassPage = () => {
   }
 
   return (
-    <>
-      <h1 className="select-class-header">Choose Class</h1>
+    <div className='main-content'>
+      <h1 className="select-class-header">Select Class</h1>
       <div className="grid-container">
         {classes.map(classInfo => (
           <div
-            key={classInfo.code} 
+            key={classInfo.code}
             className="class-container"
             onClick={() => handleClick(classInfo.code)}
           >
@@ -97,13 +99,14 @@ const SelectClassPage = () => {
           </div>
         ))}
       </div>
-      {selectedClassId && (
-        <div className="btnContainer">
-          <button className="backBtn" onClick={handleBack}>Back</button>
-          <button className="confirmBtn" onClick={handleConfirms}>Confirm</button>
-        </div>
-      )}
-    </>
+
+      <div className="btnContainer">
+        <Button type="back" onClick={handleBack}>Back</Button>
+        {selectedClassId && (
+          <Button type="next" onClick={handleConfirms}>Next</Button>
+        )}
+      </div>
+    </div>
   );
 }
 

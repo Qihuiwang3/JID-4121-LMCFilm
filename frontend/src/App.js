@@ -21,14 +21,14 @@ import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
 class App extends Component {
-    state = {
-        selectedDates: {
-            pickupDate: new Date(),
-            pickupTime: new Date(),
-            returnDate: new Date(),
-            returnTime: new Date(),
-        }
-    };
+  state = {
+    selectedDates: {
+      pickupDate: new Date(),
+      pickupTime: new Date(),
+      returnDate: new Date(),
+      returnTime: new Date(),
+    }
+  };
 
   setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
     this.setState({
@@ -46,7 +46,7 @@ class App extends Component {
             <Route path="/" element={<Login />} />
             <Route path="/SelectClass" element={<SelectClassPage />} />
             <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
-            <Route path="/ReservationPage" element={<ReservationPage/>} />
+            <Route path="/ReservationPage" element={<ReservationPage />} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />
