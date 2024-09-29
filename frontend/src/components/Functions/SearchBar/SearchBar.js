@@ -19,6 +19,10 @@ const SearchBar = ({ onSearch }) => {
         setPlaceholder('');
     };
 
+    const handleFocus = () => {
+        setPlaceholder('');
+    };
+
     const handleBlur = () => {
         if (query === '') {
             setPlaceholder('Search by Name');

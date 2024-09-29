@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
-import './ViewEquipment.css';
+import './Management.css';
 import { useNavigate } from 'react-router-dom';
 import film from '../../../../Image/filmIcon.svg';
 
-const ViewEquipment = () => {
+const Management = () => {
   const navigate = useNavigate();
   const [selectedClassId, setSelectedClassId] = useState(null);
   
   const taskRoutes = {
     // Add routes after the corresponding page has been created
-      // A: ,
+       A: "/ClassCodesAdmin",
       // B: ,
   };
   
@@ -24,13 +24,13 @@ const ViewEquipment = () => {
   };
 
   const classes = [
-      { id: 'A', name: 'Equipment'},
-      { id: 'B', name: 'Damage Report'},
+      { id: 'A', name: 'Class Code'},
+      { id: 'B', name: 'Student'},
   ];
 
   return (
       <>
-        <h1 className="select-class-header">View Equipment</h1>
+        <h1 className="select-class-header">Management</h1>
         <div className="grid-container">
           {classes.map((classItem) => (
               <div key={classItem.id}
@@ -54,4 +54,4 @@ const ViewEquipment = () => {
     );
 }
 
-export default ViewEquipment;
+export default Management;

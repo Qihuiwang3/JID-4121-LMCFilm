@@ -11,6 +11,20 @@ const getStudents = async () => {
     }
 };
 
+const loginStudent = async (email, password) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/students/login`, { email, password }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error logging in:', error);
+        throw error;
+    }
+};
+
 const createStudent = async (data) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/students`, data, {
@@ -25,9 +39,9 @@ const createStudent = async (data) => {
     }
 };
 
-const deleteStudent = async (id) => {
+const deleteStudent = async (email) => {
     try {
-        const res = await axios.delete(`${BACKEND_URL}/students/${id}`);
+        const res = await axios.delete(`${BACKEND_URL}/students/${email}`);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -35,9 +49,9 @@ const deleteStudent = async (id) => {
     }
 };
 
-const updateStudent = async (id, role) => {
+const updateStudent = async (email, role) => {
     try {
-        const res = await axios.put(`${BACKEND_URL}/students/${id}/role`, { role }, {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/role`, { role }, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -49,6 +63,31 @@ const updateStudent = async (id, role) => {
     }
 };
 
+const updateStudentInfo = async (email, name) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}`, { name }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const addClassCode = async (email, classCode) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/add-classcode`, { classCode }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 const getCart = async () => {
     try {
@@ -94,7 +133,6 @@ const createGlobalItem = async (data) => {
         });
         return res.data;
     } catch (error) {
-        console.log(error);
         throw error;
     }
 };
@@ -113,7 +151,116 @@ const deleteGlobalItem = async (itemName, itemId) => {
         console.log(error);
         throw error;
     }
-}
+};
+
+const getClassCodes = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/class-codes/`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const getClassInfoByCode = async (codeInput) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/class-code/${codeInput}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching class info:', error);
+        throw error;
+    }
+};
+
+const createCartWithData = async (cartData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/carts`, cartData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error creating cart:', error);
+        throw error;
+    }
+};
+
+const removeClassCode = async (email, classCode) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/remove-classcode`, { classCode }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const createClassCode = async (newClassCode) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/class-code/`, {
+            code: newClassCode.code,
+            professor: newClassCode.professor,
+            className: newClassCode.className
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const deleteClassCode = async (classCode) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/class-code/${classCode}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const updateClassCode = async (updatedClass) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/class-code/${updatedClass.code}`, {
+            className: updatedClass.className,
+            professor: updatedClass.professor
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+const getBundleItemsByClassCode = async (classCode) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/bundle-items/${classCode}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const createBundleItem = async (bundleItemData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/bundle-item`, {
+            bundleId: bundleItemData.bundleId,
+            classCode: bundleItemData.code,
+            bundleName: bundleItemData.bundleName,
+            price: bundleItemData.className
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
 
 const toggleRepairStatus = async (itemName, itemId) => {
     try {
@@ -147,12 +294,24 @@ export {
     getStudents,
     createStudent,
     deleteStudent,
-    updateStudent,
     getCart,
+    updateStudent,
     createCart,
     getItems,
     createGlobalItem,
     deleteGlobalItem,
     toggleRepairStatus,
     toggleHideStatus,
+    getClassCodes,
+    createClassCode,
+    deleteClassCode,
+    updateClassCode,
+    getBundleItemsByClassCode,
+    createBundleItem,
+    getClassInfoByCode,
+    createCartWithData,
+    updateStudentInfo,
+    addClassCode,
+    loginStudent,
+    removeClassCode
 };

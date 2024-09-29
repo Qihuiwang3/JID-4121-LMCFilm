@@ -9,7 +9,13 @@ const classCodeSchema = new mongoose.Schema({
     professor: {
         type: String,
         require: true,
+    },
+    className: {
+        type: String,
+        required: true, 
+
     }
+    
 });
 
 module.exports = mongoose.model('ClassCode', classCodeSchema);
