@@ -9,7 +9,7 @@ const Management = () => {
   
   const taskRoutes = {
     // Add routes after the corresponding page has been created
-      // A: ,
+       A: "/ClassCodesAdmin",
       // B: ,
   };
   

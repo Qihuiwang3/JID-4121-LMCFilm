@@ -13,7 +13,9 @@ const classCodeSchema = new mongoose.Schema({
     className: {
         type: String,
         required: true, 
+
     }
+    
 });
 
 module.exports = mongoose.model('ClassCode', classCodeSchema);

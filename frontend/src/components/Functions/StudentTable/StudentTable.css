@@ -5,15 +5,17 @@
     position: relative;
     margin-top: 8%;
     margin-bottom: 4%;
-    left: 15%;
+    left: 10%;
 }
 
 .search-bar-edit-container {
     display: flex;
     position: relative;
-    margin: 0 0 2px 0;
-    justify-content: space-around;
-    width: 100vw;
+    margin: 0 0 10px 0;
+    width: 80vw;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .trash-icon {
@@ -35,6 +37,8 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    margin-right: 0%;
+    margin-left: auto;
 }
 
 @media (max-width: 800px) {
