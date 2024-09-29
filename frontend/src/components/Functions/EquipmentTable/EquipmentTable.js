@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
-// import { getItems, deleteGlobalItem, updateItem } from '../../../connector.js';
 import { getItems, deleteGlobalItem, toggleRepairStatus, toggleHideStatus } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
 import EditButton from '../../Button/EditButton/EditButton';
