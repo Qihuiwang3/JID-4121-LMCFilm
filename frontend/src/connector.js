@@ -99,21 +99,6 @@ const createGlobalItem = async (data) => {
     }
 };
 
-const updateItem = async (id, role) => {
-    try {
-        // this thing needs to be implemented soon
-        // const res = await axios.put(`${BACKEND_URL}/api/items/${id}`, {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        // });
-        // return res.data;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-};
-
 const deleteGlobalItem = async (itemName, itemId) => {
     console.log("SOHOS " + itemName + " " + itemId);
     try {
@@ -168,7 +153,6 @@ export {
     getItems,
     createGlobalItem,
     deleteGlobalItem,
-    updateItem,
     toggleRepairStatus,
     toggleHideStatus,
 };
