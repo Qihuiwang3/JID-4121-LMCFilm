@@ -51,7 +51,7 @@ const Equipment = () => {
                     </div>
                 ) : (
                     <div className="equipment-bottom-btn-container">
-                        <BackButton to="/" />
+                        <BackButton to="/SelectTask" />
                     </div>
                 )}
             </div>
