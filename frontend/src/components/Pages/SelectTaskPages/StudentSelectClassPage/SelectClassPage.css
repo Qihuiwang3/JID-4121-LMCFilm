@@ -1,97 +1,117 @@
-html, body {
-  height: auto;
-  overflow: hidden;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600&display=swap');
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100vw;
+}
+
+.select-class-header {
+  display: inline-flex;
+  width: 90vw;
+  font-size: 38px;
+  font-size: calc(2vw + 1vh);
+  margin-top: 120px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  line-height: normal;
+  color: #3361AE;
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 20px; 
-  padding: 170px; 
-  justify-content: center; 
-  align-items: start;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 columns */
+  grid-template-rows: repeat(2, auto);
+  /* 2 rows */
+  row-gap: 60%;
+  /* Space between the tabs */
+  column-gap: 50%;
+  height: auto;
+  margin-top: 13vh;
+  justify-content: center;
+  /* Center the grid horizontally */
+  align-items: center;
+  /* Center the grid vertically */
+  width: 80vw;
+  /* Ensure it doesn't overflow */
+  max-width: 800px;
+  /* Restrict the maximum width */
 }
 
-.select-class-header {
-  margin-left: 50px;
-  margin-top: 8%;
-  font-size: 24px;
-  text-align: left;
-  color: #3361AE;
-  margin-bottom: -7rem; 
-}
 
 .class-container {
   display: flex;
+  flex-direction: row;
   border-radius: 10px;
   overflow: hidden;
-  margin-top: 10%;
-  margin-left: -55px;
-  width: 315px;
-  height: 80px;
+  height: 10vh;
+  width: 20vw;
+  max-width: 400px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
-  
-.class-icon {
-  flex: 0 0 95px;
-  background-color: #E7EFF2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: auto;
-  
-}
-.class-icon img {
-  transform: scale(0.65);
-}
-  
+
 .class-info {
-  background-color: #FFFFFF; 
+  background-color: #FFFFFF;
   color: #000000;
-  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 220px;
-}
-  
-.class-name, .instructor-name {
-  margin: 0;
-  line-height: 1.4;
-  font-family: 'Lato'; 
-  font-size: 15px;
-  margin-left: 10%;
-}
-
-.confirmBtn, .backBtn {
-  background-color: #3361AE;
-  color: white;
-  padding: 12px 70px;
-  font-size: 18px;
-  border: none;
-  border-radius: 22px;
-  cursor: pointer;
-  margin-bottom: 5%;
+  align-items: center;
+  text-align: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: hidden;
+  height: 10vh;
+  /* Set a fixed height */
+  width: 20vw;
+  max-width: 400px;
 }
 
-.confirmBtn:hover, .backBtn:hover {
-  background-color: #003a99;
+
+.class-icon {
+  display: flex;
+  flex: 0 0 5vw;
+  background-color: #E7EFF2;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.class-icon img {
+  transform: scale(0.65);
+  max-width: 20vw;
+  /* Scale based on viewport width */
+  height: auto;
+}
+
+.class-name,
+.instructor-name {
+  line-height: normal;
+  font-family: 'Nunito Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: calc(0.4vw + 1vh) !important;
+  text-align: center;
 }
 
 .btnContainer {
   display: flex;
+  /* Use flexbox */
   justify-content: space-between;
-  width: 100%;
-  padding: 20px;
-}
-
-.backBtn {
-  margin-left: 2%; 
-}
-
-.confirmBtn {
-  margin-right: 5%;
+  /* Space the buttons to the left and right */
+  width: 90vw;
+  position: absolute;
+  bottom: 10vh;
+  box-sizing: border-box;
+  margin-top: 10%;
 }
 
 .class-info.selected {

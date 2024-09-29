@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setStudentInfo } from "../../redux/actions/studentActions";
 import './EnterCode.css';
 import { getClassInfoByCode, addClassCode } from "../../../connector";
+import Button from "../../Button/Button";
 
 const EnterCode = () => {
     const [codeInput, setCodeInput] = useState("");
@@ -34,7 +35,7 @@ const EnterCode = () => {
                 await addClassCode(studentInfo.email, codeInput);
                 const updatedClassCodes = [...studentInfo.classCodes, codeInput];
                 const updatedStudentInfo = { ...studentInfo, classCodes: updatedClassCodes };
-                dispatch(setStudentInfo(updatedStudentInfo)); 
+                dispatch(setStudentInfo(updatedStudentInfo));
                 navigate("/SelectClass", { state: { updatedStudentInfo } });
             } else {
                 setErrorMessage("The code does not exist");
@@ -46,7 +47,7 @@ const EnterCode = () => {
 
     const handleNext = () => {
         if (studentInfo.classCodes && studentInfo.classCodes.length > 0) {
-            navigate("/SelectClass", { state: { studentInfo } }); 
+            navigate("/SelectClass", { state: { studentInfo } });
         } else {
             setErrorMessage("No class codes found in your account. Please enter a new code.");
         }
@@ -69,8 +70,8 @@ const EnterCode = () => {
                 <button className="submit-button" onClick={handleSubmit}>Submit</button>
             </div>
 
-            <div className="enter-btnContainer">
-                <button className="enter-confirmBtn" onClick={handleNext}>Confirm</button>
+            <div className="btnContainer">
+                <Button type="next" onClick={handleNext}>Use Existed Code</Button>
             </div>
         </div>
     );

@@ -5,7 +5,7 @@ import './EquipmentDropdown.css'
 
 function EquipmentDropdown({ title, equipment, addItem, showReserve }) {
 
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen)
@@ -16,7 +16,6 @@ function EquipmentDropdown({ title, equipment, addItem, showReserve }) {
     })
 
     return (
-
         <div className="equipment-dropdown">
             <div className="equipment-dropdown-header" onClick={toggleDropdown}>
                 <div>

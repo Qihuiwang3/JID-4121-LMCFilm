@@ -4,6 +4,25 @@
     background-color: #FFFDF8;
 }
 
+.reservation-header {
+    display: flex;
+    width: 90vw;
+    height: 34px;
+    margin-top: 120px;
+    align-items: center;
+    justify-content: left;
+}
+
+.reservation-header-text {
+    font-size: 38px;
+    font-size: calc(2vw + 1vh);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    line-height: normal;
+    color: #3361AE;
+    margin-right: 10%;
+}
+
 .equipment-and-cart {
     width: 100%;
     display: flex;
@@ -75,7 +94,8 @@
     width: 100%;
 }
 
-.equipment-back, .equipment-checkout {
+.equipment-back,
+.equipment-checkout {
     background-color: #3361AE;
     color: white;
     padding: 12px 70px;
@@ -87,9 +107,11 @@
     margin-bottom: 5%;
 }
 
-.equipment-back:hover, .equipment-checkout:hover {
+.equipment-back:hover,
+.equipment-checkout:hover {
     background-color: #003a99;
 }
+
 .equipment-back {
     margin-right: auto;
     margin-left: 2%;
