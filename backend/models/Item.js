@@ -24,6 +24,14 @@ const itemSchema = new mongoose.Schema({
             type: Boolean,
             default: false,
         },
+        checkin: {
+            type: Date,
+            default: '3'
+        },
+        checkout: {
+            type: Date,
+            default: '3'
+        },
     }],
 });
 

@@ -58,6 +58,7 @@ const updateStudent = async (email, role) => {
         });
         return res.data;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };
@@ -111,6 +112,17 @@ const createCart = async (data) => {
         throw error;
     }
 };
+
+const getItems = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/items`);
+        console.log(res.data)
+        return res.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
 
 const createGlobalItem = async (data) => {
     try {
@@ -241,6 +253,10 @@ export {
     getCart,
     updateStudent,
     createCart,
+    getItems,
+    createGlobalItem,
+    deleteGlobalItem,
+    updateItem,
     getClassCodes,
     createClassCode,
     deleteClassCode,
@@ -249,7 +265,6 @@ export {
     createBundleItem,
     getClassInfoByCode,
     createCartWithData,
-    createGlobalItem,
     updateStudentInfo,
     addClassCode,
     loginStudent,

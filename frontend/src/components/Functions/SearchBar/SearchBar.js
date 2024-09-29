@@ -4,17 +4,18 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SearchBar = ({ onSearch }) => {
+
   const [query, setQuery] = useState('');
   const [placeholder, setPlaceholder] = useState('Search by Name');
 
-  const handleChange = (e) => {
-    const newQuery = e.target.value;
-    setQuery(newQuery);
-    if (onSearch) {
-      onSearch(newQuery); 
-    }
-  };
-
+    const handleChange = (e) => {
+        const newQuery = e.target.value;
+        setQuery(newQuery);
+        if (onSearch) {
+            onSearch(newQuery);
+        }
+    };
+  
   const handleFocus = () => {
     setPlaceholder('');
   };
