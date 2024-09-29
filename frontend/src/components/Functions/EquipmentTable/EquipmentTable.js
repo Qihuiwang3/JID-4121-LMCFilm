@@ -148,29 +148,42 @@ class EquipmentTable extends Component {
         // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
 
         const columnDefs = [
-            { headerName: "ItemID", field: "itemId", width: 150, headerClass: 'header-center' },
-            { headerName: "Item Name", field: "itemName", width: 220 },
+            {
+                headerName: "ItemID",
+                field: "itemId",
+                width: 150,
+                headerClass: 'header-center',
+                maxWidth: 225,
+                flex: 1,
+            },
+            {
+                headerName: "Item Name",
+                field: "itemName",
+                width: 250,
+                maxWidth: 250,
+                flex: 1,
+            },
             {
                 headerName: "Price",
                 field: "pricePerItem",
                 maxWidth: 250,
-                flex: 2,
+                flex: 1,
                 valueFormatter: (params) => {
-                    return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'N/A';
+                    return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'Available';
                 }
             },
             {
                 headerName: "Checked-in",
                 field: "checkin",
                 maxWidth: 300,
-                flex: 2,
+                flex: 1,
                 valueFormatter: (params) => {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
-                    }).replace(',', '') : 'N/A';
+                    }).replace(',', '') : 'Available';
                 }
             },
             {
@@ -183,7 +196,7 @@ class EquipmentTable extends Component {
                         year: 'numeric',
                         month: '2-digit',
                         day: '2-digit',
-                    }).replace(',', '') : 'N/A';
+                    }).replace(',', '') : 'Available';
                 }
             },
             {
@@ -243,7 +256,7 @@ class EquipmentTable extends Component {
         return (
 
             <>
-                <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%", paddingBottom: "75px" }}>
+                <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%", paddingBottom: "25px" }}>
                     <h1 style={{ paddingLeft: "16.5%", color: "#3361AE" }}> Equipment </h1>
                 </div>
                 <div className="equipment-search-bar-edit-container">
