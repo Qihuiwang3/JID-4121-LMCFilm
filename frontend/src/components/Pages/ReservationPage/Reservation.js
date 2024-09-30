@@ -6,6 +6,7 @@ import './Reservation.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
+import { setReservationCartItems } from '../../redux/actions/reservationCartActions.js';
 import { createCartWithData } from '../../../connector.js';
 import Button from '../../Button/Button.js';
 
@@ -15,6 +16,7 @@ function ReservationPage() {
 
     const classCode = useSelector(state => state.classData.classCode);
     const selectedDates = useSelector(state => state.classData.selectedDates);
+    const reservationCartItems = useSelector(state => state.reservationCart.reservationCartItems);
 
     const [pickupDateTime, setPickupDateTime] = useState(new Date(selectedDates?.pickupDateTime || new Date()));
     const [returnDateTime, setReturnDateTime] = useState(new Date(selectedDates?.returnDateTime || new Date()));
@@ -23,8 +25,10 @@ function ReservationPage() {
     const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
+
     useEffect(() => {
         dispatch(setSelectedDates(pickupDateTime, returnDateTime));
+        setCartItems(reservationCartItems);
     }, [pickupDateTime, returnDateTime, dispatch]);
 
     const addToCart = (item) => {
@@ -45,10 +49,12 @@ function ReservationPage() {
 
     const handleCheckout = async () => {
         const cartData = { cartItems };
+        dispatch(setReservationCartItems(cartItems));
         try {
             const response = await createCartWithData(cartData);
             console.log('Cart created:', response);
             navigate('/CartConfirmation', { state: { cartItems } });
+            console.log(cartItems);
         } catch (error) {
             console.error('Error creating cart:', error);
         }
