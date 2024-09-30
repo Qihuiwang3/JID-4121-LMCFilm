@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import './EquipmentPopup.css';
-import { createGlobalItem } from '../../../connector.js';
+import { getItems, createGlobalItem } from '../../../connector.js';
+
 
 const EquipmentPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
@@ -9,6 +10,30 @@ const EquipmentPopup = ({ show, handleClose }) => {
     const [price, setPrice] = useState(0);
 
     const predefinedItems = ['Camera', 'Light', 'Tripod', 'Microphone'];
+
+    const [databasePrices, setDatabasePrices] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const items = await getItems();
+
+                const prices = items.flatMap(record =>
+                    record.itemIds.map(itemId => ({
+                        itemName: record.itemName,
+                        pricePerItem: record.pricePerItem,
+                    }))
+                );
+
+                setDatabasePrices(prices);
+                console.log(prices);
+            } catch (error) {
+                console.error("Error fetching items:", error);
+            }
+        };
+
+        fetchItems(); // Call the async function
+    }, []); // Empty array to run only on mount
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,11 +54,25 @@ const EquipmentPopup = ({ show, handleClose }) => {
         }
     };
 
+    const handleItemNameChange = (newValue) => {
+        setItemName(newValue || '');
+
+        // Find the price associated with the selected item name
+        const selectedItem = databasePrices.find(item => item.itemName === newValue);
+        if (selectedItem) {
+            setPrice(selectedItem.pricePerItem);
+        } else {
+            setPrice(0); // Reset price if item not found
+        }
+    };
+
     if (!show) {
         return null;
     }
 
     const isSubmitDisabled = !itemID || !itemName;
+
+
 
     return (
         <div className="modal-overlay">
@@ -68,9 +107,9 @@ const EquipmentPopup = ({ show, handleClose }) => {
                         <Autocomplete
                             options={predefinedItems}
                             value={itemName}
-                            onChange={(event, newValue) => setItemName(newValue || '')}
+                            onChange={(event, newValue) => { setItemName(newValue || ''); handleItemNameChange(newValue); }}
                             inputValue={itemName}
-                            onInputChange={(event, newInputValue) => setItemName(newInputValue)}
+                            onInputChange={(event, newInputValue) => { setItemName(newInputValue); handleItemNameChange(newInputValue); }}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
