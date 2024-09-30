@@ -11,6 +11,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
 
     const predefinedItems = ['Camera', 'Light', 'Tripod', 'Microphone'];
 
+    const [uniqueItemNames, setUniqueItemNames] = useState([]); // State for unique item names
     const [databasePrices, setDatabasePrices] = useState([]);
 
     useEffect(() => {
@@ -26,6 +27,8 @@ const EquipmentPopup = ({ show, handleClose }) => {
                 );
 
                 setDatabasePrices(prices);
+                const uniqueNames = [...new Set(prices.map(item => item.itemName))];
+                setUniqueItemNames(uniqueNames);
                 console.log(prices);
             } catch (error) {
                 console.error("Error fetching items:", error);
@@ -105,7 +108,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                     <div className="dropdown-wrapper">
                         <div className='form-text'>Item Name</div>
                         <Autocomplete
-                            options={predefinedItems}
+                            options={uniqueItemNames}
                             value={itemName}
                             onChange={(event, newValue) => { setItemName(newValue || ''); handleItemNameChange(newValue); }}
                             inputValue={itemName}
