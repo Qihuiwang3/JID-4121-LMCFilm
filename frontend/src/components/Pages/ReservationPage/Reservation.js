@@ -165,7 +165,12 @@ function ReservationPage() {
 
             <div className='btnContainer'>
                 <Button type="back" onClick={handleBack}>Back</Button>
-                <Button type="next" onClick={() => handleCheckout()}> Checkout </Button>
+                {/* Conditionally render the checkout button */}
+                {cartItems.length === 0 ? null : (
+                    <Button type="next" onClick={handleCheckout}>
+                        Checkout
+                    </Button>
+                )}
             </div >
         </div >
     );

@@ -5,7 +5,7 @@ import PackageEquipmentDropdown from '../PackageEquipmentDropdown/PackageEquipme
 import './PackageDropdown.css';
 
 function PackageDropdown({ id, title, pk, addItem, showReserve }) {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
