@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './CartConfirmation.css';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown';
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown';
 import axios from 'axios';
 import Button from '../../Button/Button';
+import { setReservationCartItems } from '../../redux/actions/reservationCartActions';
 
 function CartConfirmation() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { cartItems, itemId } = location.state || {};
-    const [equipment, setEquipment] = useState({});
-    const [packages, setPackages] = useState({});
+
+    const dispatch = useDispatch();
+
+    const { itemId } = location.state || {};
+    const [equipment, setEquipment] = useState([]);
+    const [packages, setPackages] = useState([]);
+
+    const cartItems = useSelector(state => state.reservationCart.reservationCartItems);
+
+    const [loading, setLoading] = useState(true);
 
     const handleContinue = () => {
         const cartTotal = calculateTotal();
@@ -27,6 +36,7 @@ function CartConfirmation() {
         } finally {
             navigate('/ReservationPage');
         }
+        dispatch(setReservationCartItems(cartItems));
     }
 
     const calculateTotal = () => {
@@ -45,7 +55,10 @@ function CartConfirmation() {
     }
 
     useEffect(() => {
-        filterCartContent();
+        if (cartItems) {
+            filterCartContent();
+            setLoading(false); // Set loading to false after filtering
+        }
     }, [cartItems])
 
     return (
@@ -53,18 +66,22 @@ function CartConfirmation() {
             <div className="cart-confirm-container">
                 <h1 style={{ paddingLeft: "50px", color: "#3361AE" }}>Cart</h1>
                 <div className="cart-contents-container">
-                    <EquipmentDropdown
-                        id="equipment"
-                        title="Selected Equipment"
-                        equipment={equipment}
-                        showReserve={false}
-                    />
-                    <PackageDropdown
-                        id="packages"
-                        title="Selected Packages"
-                        pk={packages}
-                        showReserve={false}
-                    />
+                    {!loading && (
+                        <>
+                            <EquipmentDropdown
+                                id="equipment"
+                                title="Selected Equipment"
+                                equipment={equipment}
+                                showReserve={false}
+                            />
+                            <PackageDropdown
+                                id="packages"
+                                title="Selected Packages"
+                                pk={packages}
+                                showReserve={false}
+                            />
+                        </>
+                    )}
                     <div className="cart-total">Total: ${calculateTotal()} </div>
                 </div>
             </div>

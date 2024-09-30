@@ -9,7 +9,9 @@
 }
 
 .package-dropdown-item {
-    padding: 20px;
+    padding-block: 10px;
+    padding-inline: 20px;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
