@@ -1,0 +1,38 @@
+.add-new-button {
+    border-radius: 5px;
+    width: 150px;
+    background-color: #3361AE;
+    border: 2px solid #3361AE;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.equipment-search-bar-edit-container {
+    display: flex;
+    position: relative;
+    margin: 0 0 2px 0;
+    justify-content: space-around;
+    width: 79vw;
+    justify-content: space-between;
+    margin-inline: auto;
+}
+
+.equipment-btn {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+    margin-left: 10%;
+}
+
+.equipment-bottom-btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80vw;
+    position: relative;
+}

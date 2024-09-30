@@ -15,15 +15,15 @@ const createGlobalItem = asyncHandler(async (req, res) => {
         item.pricePerItem = pricePerItem;
         const newItemIds = itemIds.map(id => ({
             itemId: id,
-            repair: false, 
-            hide: false 
+            repair: false,
+            hide: false
         }));
         item.itemIds.push(...newItemIds);
     } else {
         const newItemIds = itemIds.map(id => ({
             itemId: id,
-            repair: false, 
-            hide: false 
+            repair: false,
+            hide: false
         }));
         item = new Item({
             itemName,
@@ -127,6 +127,34 @@ const removeItem = asyncHandler(async (req, res) => {
 
     res.status(200).json({ message: `Item ${itemName} and all associated records removed successfully.` });
 });
+
+// @desc Remove an itemId from the list of items by item name
+// @route DELETE /item/itemId/:itemId
+// @access Private
+const removeSingularItem = asyncHandler(async (req, res) => {
+    const { itemName } = req.body; // Extract itemName from body
+    const { itemId } = req.params; // itemId remains in the URL
+    const item = await Item.findOne({ itemName });
+
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+    }
+
+    // Check if the itemId exists
+    const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
+    if (itemIndex === -1) {
+        return res.status(404).json({ error: `Item ID ${itemId} not found for item ${itemName}.` });
+    }
+
+    // Remove the itemId from the list
+    item.itemIds.splice(itemIndex, 1);
+    item.quantity -= 1;  // Decrease the quantity of the item
+    await item.save();
+
+    res.status(200).json({ message: `Item ID ${itemId} removed successfully from ${itemName}.` });
+});
+
+
 
 
 // @desc Create new single item
@@ -302,14 +330,15 @@ const returnBundleItem = asyncHandler(async (req, res) => {
 });
 
 // @desc Toggle the repair status of an item by itemId
-// @route PATCH /item/:itemId/repair
+// @route PATCH /item/itemId/:itemId/repair
 // @access Private
 const toggleRepairStatus = asyncHandler(async (req, res) => {
-    const { itemId } = req.params;
+    const { itemName } = req.body;  // Extract itemName from body
+    const { itemId } = req.params;  // itemId remains in the URL
 
-    const item = await Item.findOne({ "itemIds.itemId": itemId });
+    const item = await Item.findOne({ itemName });
     if (!item) {
-        return res.status(404).json({ error: `Item with ID ${itemId} not found.` });
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
     }
 
     const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
@@ -328,20 +357,21 @@ const toggleRepairStatus = asyncHandler(async (req, res) => {
 
     await item.save();
 
-    res.status(200).json({ 
-        message: `Repair status of item ID ${itemId} toggled to ${!isUnderRepair}. Current quantity: ${item.quantity}` 
+    res.status(200).json({
+        message: `Repair status of item ID ${itemId} toggled to ${!isUnderRepair}. Current quantity: ${item.quantity}`
     });
 });
 
 // @desc Toggle the hide status of an item by itemId
-// @route PATCH /item/:itemId/hide
+// @route PATCH /item/itemId/:itemId/hide
 // @access Private
 const toggleHideStatus = asyncHandler(async (req, res) => {
-    const { itemId } = req.params;
+    const { itemName } = req.body;  // Extract itemName from body
+    const { itemId } = req.params;  // itemId remains in the URL
 
-    const item = await Item.findOne({ "itemIds.itemId": itemId });
+    const item = await Item.findOne({ itemName });
     if (!item) {
-        return res.status(404).json({ error: `Item with ID ${itemId} not found.` });
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
     }
 
     const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
@@ -360,26 +390,27 @@ const toggleHideStatus = asyncHandler(async (req, res) => {
 
     await item.save();
 
-    res.status(200).json({ 
-        message: `Hide status of item ID ${itemId} toggled to ${!isHidden}. Current quantity: ${item.quantity}` 
+    res.status(200).json({
+        message: `Hide status of item ID ${itemId} toggled to ${!isHidden}. Current quantity: ${item.quantity}`
     });
 });
 
 
-module.exports = { 
+module.exports = {
     createGlobalItem,
     getAllGlobalEquipment,
     getItemByName,
     returnItem,
     pickUpItem,
     removeItem,
-    createSingleItem, 
-    getSingleItemsByClassCode, 
-    purchaseSingleItem, 
-    returnSingleItem, 
-    createBundleItem, 
-    getBundleItemsByClassCode, 
-    purchaseBundleItem, 
+    removeSingularItem,
+    createSingleItem,
+    getSingleItemsByClassCode,
+    purchaseSingleItem,
+    returnSingleItem,
+    createBundleItem,
+    getBundleItemsByClassCode,
+    purchaseBundleItem,
     returnBundleItem,
     toggleHideStatus,
     toggleRepairStatus

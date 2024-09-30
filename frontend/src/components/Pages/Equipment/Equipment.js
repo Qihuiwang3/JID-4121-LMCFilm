@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import EquipmentPopup from '../../Modal/EquipmentPopup/EquipmentPopup';
-import './Equipment.css';
 
 import BackButton from '../../Button/BackButton/BackButton';
 import CancelButton from '../../Button/CancelButton/CancelButton';
@@ -41,24 +40,22 @@ const Equipment = () => {
                 ref={equipmentTableRef}
                 isEditMode={isEditMode}
                 toggleEditMode={toggleEditMode}
+                handleOpenPopup={handleOpenPopup}
             />
 
-            <div className="student-btn">
+            <div className="equipment-btn">
                 {isEditMode ? (
-                    <div className="bottom-btn-container">
+                    <div className="equipment-bottom-btn-container">
                         <CancelButton onClick={toggleEditMode} />
                         <SaveButton onClick={handleSave} />
                     </div>
                 ) : (
-                    <div className="bottom-btn-container">
-                        <BackButton to="/" />
+                    <div className="equipment-bottom-btn-container">
+                        <BackButton to="/ViewEquipment" />
                     </div>
                 )}
             </div>
 
-            <button className="add-new-button" onClick={handleOpenPopup}>
-                Add New +
-            </button>
             <EquipmentPopup show={showPopup} handleClose={handleClosePopup} />
         </div>
     );

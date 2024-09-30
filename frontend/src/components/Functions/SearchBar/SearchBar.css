@@ -1,5 +1,5 @@
 .search-bar {
-    border: 2px solid #3b5998; 
+    border: 2px solid #3b5998;
     border-radius: 4px;
     background-color: #fff;
     width: 250px;
@@ -16,7 +16,7 @@
     color: #3b5998;
     font-weight: bold;
 }
-  
+
 .search-button {
     background: none;
     border: none;
@@ -27,4 +27,3 @@
     float: right;
     margin: 5px;
 }
-  

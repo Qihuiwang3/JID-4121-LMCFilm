@@ -25,7 +25,8 @@ html {
     overflow-y: auto;
 }
 
-.ag-header, .ag-advanced-filter-header {
+.ag-header,
+.ag-advanced-filter-header {
     background-color: #FFFDF8;
     border-top: 2px solid #3361AE;
     border-bottom: 2px solid #3361AE;
@@ -40,7 +41,8 @@ html {
     background-color: transparent;
 }
 
-.ag-header-group-cell-label, .ag-cell-label-container {
+.ag-header-group-cell-label,
+.ag-cell-label-container {
     font-size: 24px;
 }
 
@@ -49,7 +51,7 @@ html {
 }
 
 .ag-paging-page-size {
-    display: none; 
+    display: none;
 }
 
 .ag-paging-panel {

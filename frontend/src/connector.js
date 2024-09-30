@@ -137,6 +137,32 @@ const createGlobalItem = async (data) => {
     }
 };
 
+const deleteGlobalItem = async (itemName, itemId) => {
+    console.log("SOHOS " + itemName + " " + itemId);
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const getClassCodes = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/class-codes/`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 const getClassInfoByCode = async (codeInput) => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/class-code/${codeInput}`);
@@ -170,16 +196,6 @@ const removeClassCode = async (email, classCode) => {
         });
         return res.data;
     } catch (error) {
-        throw error;
-    }
-};
-
-const getClassCodes = async () => {
-    try {
-        const res = await axios.get(`${BACKEND_URL}/api/class-codes/`);
-        return res.data;
-    } catch (error) {
-        console.log(error);
         throw error;
     }
 };
@@ -246,6 +262,34 @@ const createBundleItem = async (bundleItemData) => {
     }
 };
 
+const toggleRepairStatus = async (itemName, itemId) => {
+    try {
+        const res = await axios.patch(`${BACKEND_URL}/api/item/itemId/${itemId}/repair`, { itemName }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const toggleHideStatus = async (itemName, itemId) => {
+    try {
+        const res = await axios.patch(`${BACKEND_URL}/api/item/itemId/${itemId}/hide`, { itemName }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
@@ -256,7 +300,8 @@ export {
     getItems,
     createGlobalItem,
     deleteGlobalItem,
-    updateItem,
+    toggleRepairStatus,
+    toggleHideStatus,
     getClassCodes,
     createClassCode,
     deleteClassCode,
