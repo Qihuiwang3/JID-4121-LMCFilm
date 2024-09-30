@@ -37,6 +37,30 @@ In this initial release, we focused on developing key features for the **Student
 - The email sender system needs to verify successful payment before sending confirmation emails.
 
 
+## Version 0.2.0
+**Release Date:** [9/30/2024]
+
+### Overview
+
+In this initial release, we focused on developing key features for the **Admin Portal**. This portal allows Admins to interact with the system by edit film equipment, create classcode, and view students for class projects. Also, we fixed some issue in Student protal such as create login system, and local storage.
+
+#### New Features
+
+- For this release, Admins can now create a class code, select a class section, add or remove necessary equipment and view students class deatil.
+- For this release, We Update UI in Student site.
+
+#### Bug Fixes
+
+- Fixed students info cannot be created.
+- Fixed the some edge cases for cart api.
+- fixed some UI issue
+
+#### Known Issues
+- Barcodes need to be properly generated and stored in the database.
+- The email sender system needs to verify successful payment before sending confirmation emails.
+- I a students have multiple class, the Admin cannot view this student's class.
+
+
 # How to build
 <!-- Frontend Initial Setup -->
 
