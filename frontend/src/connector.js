@@ -290,6 +290,64 @@ const toggleHideStatus = async (itemName, itemId) => {
     }
 };
 
+// Create a new damage report
+const createDamageReport = async (data) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/damage-reports`, data, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error creating damage report:', error);
+        throw error;
+    }
+};
+
+// Get all damage reports
+const getAllDamageReports = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/damage-reports`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching damage reports:', error);
+        throw error;
+    }
+};
+
+// Get a single damage report by ID
+const getSingleDamageReport = async (id) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/damage-reports/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching damage report:', error);
+        throw error;
+    }
+};
+
+// Delete a damage report
+const deleteDamageReport = async (id) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/damage-reports/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting damage report:', error);
+        throw error;
+    }
+};
+
+const updateDamageReport = async (id, data) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/damage-reports/${id}`, data, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error updating damage report:', error);
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
@@ -313,5 +371,10 @@ export {
     updateStudentInfo,
     addClassCode,
     loginStudent,
-    removeClassCode
+    removeClassCode,
+    createDamageReport,
+    getAllDamageReports,
+    getSingleDamageReport,
+    deleteDamageReport,
+    updateDamageReport
 };

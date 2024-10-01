@@ -16,6 +16,7 @@ import Management from "./components/Pages/SelectTaskPages/AdminManagementPage/M
 import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import Login from "./components/Pages/Login/Login";
+import DamageReport from "./components/Pages/DamageReport/DamageReport";
 // import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
@@ -58,6 +59,7 @@ class App extends Component {
             <Route path="/ViewEquipment" element={<ViewEquipment />} />
             <Route path="/SelectTask" element={<SelectTask />} />
             <Route path="/Management" element={<Management />} />
+            <Route path="/DamageReport" element={<DamageReport />} />
           </Routes>
         </Router>
       </Provider>
