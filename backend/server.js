@@ -27,6 +27,7 @@ app.use('/api', require('./routes/classCodeRoutes'));
 app.use("/carts", require("./routes/cartsRoutes"));
 app.use('/api', require('./routes/itemRoutes'));
 app.use('/api', require('./routes/orderRoutes'));
+app.use('/api', require('./routes/damageReportRoutes'));
 app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
