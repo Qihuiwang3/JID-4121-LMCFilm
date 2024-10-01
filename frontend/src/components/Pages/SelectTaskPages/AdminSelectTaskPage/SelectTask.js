@@ -9,7 +9,7 @@ const SelectTask = () => {
     const [selectedClassId, setSelectedClassId] = useState(null);
     
     const taskRoutes = {
-        A: '/ReserveEquipment',
+        A: '/Enter',
         B: '/ViewReservations',
         C: '/ViewEquipment',
         D: '/Management',

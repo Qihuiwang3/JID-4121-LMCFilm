@@ -40,7 +40,7 @@ class StudentTable extends Component {
                         classCode: classCode,
                         role: student.role
                     }))
-                    : [{ 
+                    : [{ // If no class codes, add a record with class N/A
                         email: student.email,
                         name: student.name,
                         classCode: "N/A", 
