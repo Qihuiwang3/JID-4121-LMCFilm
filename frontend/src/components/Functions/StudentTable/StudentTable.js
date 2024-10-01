@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents, deleteStudent, updateStudent } from '../../../connector.js';  
+import { getStudents, deleteStudent, updateStudentRole, } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import EditButton from '../../Button/EditButton/EditButton'; 
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
@@ -30,10 +30,27 @@ class StudentTable extends Component {
 
     loadRecords = async () => {
         try {
-            const records = await getStudents();
+            const students = await getStudents();
+
+            const flattenedRecords = students.flatMap(student => 
+                student.classCodes.length > 0 
+                    ? student.classCodes.map(classCode => ({
+                        email: student.email,
+                        name: student.name,
+                        classCode: classCode,
+                        role: student.role
+                    }))
+                    : [{ // If no class codes, add a record with class N/A
+                        email: student.email,
+                        name: student.name,
+                        classCode: "N/A", 
+                        role: student.role
+                    }]
+            );
+            
             this.setState({ 
-                records,
-                filteredRecords: records, 
+                records: flattenedRecords,
+                filteredRecords: flattenedRecords, 
                 tempDeletedRows: [],
                 updatedRoles: {} 
             });
@@ -44,13 +61,13 @@ class StudentTable extends Component {
 
     tempDeleteRow = (data) => {
         this.setState((prevState) => {
-            const updatedRecords = prevState.records.filter(record => record._id !== data._id);
-            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record._id !== data._id);
-    
+            const updatedRecords = prevState.records.filter(record => record.email !== data.email); 
+            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record.email !== data.email); 
+
             return {
                 records: updatedRecords,
                 filteredRecords: updatedFilteredRecords, 
-                tempDeletedRows: [...prevState.tempDeletedRows, data._id]
+                tempDeletedRows: [...prevState.tempDeletedRows, data.email] 
             };
         });
     };
@@ -58,8 +75,8 @@ class StudentTable extends Component {
     confirmDeleteRows = async () => {
         try {
             const { tempDeletedRows } = this.state;
-            for (let id of tempDeletedRows) {
-                await deleteStudent(id); 
+            for (let email of tempDeletedRows) {
+                await deleteStudent(email); 
             }
             this.setState({ tempDeletedRows: [] });
         } catch (error) {
@@ -75,11 +92,11 @@ class StudentTable extends Component {
         this.setState({ filteredRecords, searchQuery: query });
     };
 
-    handleRoleChange = (id, newRole) => {
+    handleRoleChange = (email, newRole) => {
         this.setState(prevState => ({
             updatedRoles: {
                 ...prevState.updatedRoles,
-                [id]: newRole
+                [email]: newRole
             }
         }));
     };
@@ -87,8 +104,8 @@ class StudentTable extends Component {
     saveChanges = async () => {
         try {
             const { updatedRoles } = this.state;
-            for (let [id, role] of Object.entries(updatedRoles)) {
-                await updateStudent(id, role);
+            for (let [email, role] of Object.entries(updatedRoles)) {
+                await updateStudentRole(email, role);
             }
             await this.confirmDeleteRows();
             this.setState({ updatedRoles: {} });
@@ -119,7 +136,7 @@ class StudentTable extends Component {
                                 value={params.value}
                                 node={params.node}
                                 colDef={params.colDef}
-                                onChange={event => this.handleRoleChange(params.data._id, event.target.value)}
+                                onChange={event => this.handleRoleChange(params.data.email, event.target.value)}
                             />
                         );
                     }

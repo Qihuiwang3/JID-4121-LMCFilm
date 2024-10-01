@@ -11,7 +11,7 @@ const Management = () => {
   const taskRoutes = {
     // Add routes after the corresponding page has been created
        A: "/ClassCodesAdmin",
-      // B: ,
+       B: "/Students",
   };
   
   const handleConfirms = () => {

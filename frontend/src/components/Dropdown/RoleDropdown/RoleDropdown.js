@@ -5,7 +5,6 @@ const RoleDropdown = (props) => {
   const handleChange = (event) => {
     const newValue = event.target.value;
     props.node.setDataValue(props.colDef.field, newValue);
-    // Notify parent about the change
     props.onChange(event); 
   };
 
