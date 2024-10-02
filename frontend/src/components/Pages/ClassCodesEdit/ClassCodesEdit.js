@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ClassCodesEdit.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { createClassCode, deleteClassCode, updateClassCode, createBundleItem } from '../../../connector.js';
+import { createClassCode, deleteClassCode, updateClassCode, createBundleItem, getItems, createSingleItem } from '../../../connector.js';
 import SaveButton from '../../Button/SaveButton/SaveButton.js';
 
 function ClassCodesEdit() {
@@ -9,7 +9,7 @@ function ClassCodesEdit() {
     const navigate = useNavigate();
     const { classData: initialClassData } = location.state || {};
     const [generatedCode, setGeneratedCode] = useState('');
-
+    const [availableEquipment, setAvailableEquipment] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
 
@@ -21,14 +21,27 @@ function ClassCodesEdit() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newClassData, setNewClassData] = useState([]);
     const [deletedClassCodes, setDeletedClassCodes] = useState([]);
-
     const [newClass, setNewClass] = useState({
         className: '',
         professor: '',
         bundleId: '',
         packageName: '',
         price: '',
+        equipment: [],
+        bundleEquipment: [],
     });
+
+    useEffect(() => {
+        const fetchEquipment = async () => {
+            try {
+                const equipmentList = await getItems();
+                setAvailableEquipment(equipmentList);
+            } catch (error) {
+                console.error('Error fetching equipment:', error);
+            }
+        };
+        fetchEquipment();
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -58,6 +71,8 @@ function ClassCodesEdit() {
             packageName: '',
             price: '',
             bundleId: '',
+            equipment: [],
+            bundleEquipment: [],
         });
         setIsModalOpen(false);
     };
@@ -94,6 +109,8 @@ function ClassCodesEdit() {
             packageName: newClass.packageName,
             price: newClass.price,
             bundleId: newClass.bundleId,
+            equipment: newClass.equipment,
+            bundleEquipment: newClass.bundleEquipment,
         };
         setClassData([...classData, newEntry]);
         setNewClassData([...newClassData, newEntry]);
@@ -103,6 +120,8 @@ function ClassCodesEdit() {
             bundleId: '',
             packageName: '',
             price: '',
+            equipment: [],
+            bundleEquipment: [],
         });
         setIsModalOpen(false);
     };
@@ -115,14 +134,19 @@ function ClassCodesEdit() {
                     professor: newClass.professor,
                     className: newClass.className,
                 });
-                if (newClass.code && newClass.bundleId && newClass.bundleName && newClass.price) {
-                    await createBundleItem({
-                        bundleId: newClass.bundleId,
+                for (let equipmentItem of newClass.equipment) {
+                    await createSingleItem({
                         classCode: newClass.code,
-                        price: newClass.price,
-                        bundleName: newClass.packageName,
+                        itemName: equipmentItem,
                     });
                 }
+                await createBundleItem({
+                    bundleId: newClass.bundleId,
+                    classCode: newClass.code,
+                    items: newClass.bundleEquipment.map(itemName => ({ itemName, quantity: 1 })),
+                    price: newClass.price,
+                    bundleName: newClass.packageName,
+                });
             }
             setNewClassData([]);
         } catch (error) {
@@ -131,30 +155,20 @@ function ClassCodesEdit() {
 
         try {
             const updatePromises = pendingUpdates.map((updatedClass) =>
-                updateClassCode(updatedClass) 
+                updateClassCode(updatedClass)
             );
-            await Promise.all(updatePromises); 
-            setPendingUpdates([]); 
-        } catch (error) {
-           
-        }
-           
+            await Promise.all(updatePromises);
+            setPendingUpdates([]);
+        } catch (error) {}
 
         try {
             for (const code of deletedClassCodes) {
                 await deleteClassCode(code);
             }
             setDeletedClassCodes([]);
-        } catch (error) {
-           
-        }
+        } catch (error) {}
 
-        
-        
-
-        navigate("/ClassCodesAdmin", {
-            state: { classData }
-        });
+        navigate("/ClassCodesAdmin", { state: { classData } });
     };
 
     const handleCancel = () => {
@@ -300,7 +314,7 @@ function ClassCodesEdit() {
                             </div>
                             <div className="input-group">
                                 <label>Select Items Inside the Package</label>
-                                <input type="text" name="itemsInsidePackage" value={editClassData.items} onChange={handleEditClassChange} className="modal-input" />
+                                <input type="text" name="itemsInsidePackage" value={editClassData.bundleEquipment} onChange={handleEditClassChange} className="modal-input" />
                             </div>
                         </div>
                         <div className="modal-footer">
@@ -334,7 +348,35 @@ function ClassCodesEdit() {
                             </div>
                             <div className="input-group">
                                 <label>Select Equipment For This Class</label>
-                                <input type="text" name="equipment" value={newClass.equipment} onChange={handleInputChange} className="modal-input" />
+                                <select
+                                    name="equipment"
+                                    value=""
+                                    onChange={(e) => {
+                                        const selectedEquipment = e.target.value;
+                                        if (selectedEquipment && !newClass.equipment.includes(selectedEquipment)) {
+                                            setNewClass(prevState => ({
+                                                ...prevState,
+                                                equipment: [...prevState.equipment, selectedEquipment]
+                                            }));
+                                        }
+                                    }}
+                                    className="modal-input"
+                                >
+                                    <option value="">Select Equipment</option>
+                                    {availableEquipment.map((equipmentItem) => (
+                                        <option key={equipmentItem._id} value={equipmentItem.itemName}>
+                                            {equipmentItem.itemName}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    name="equipmentList"
+                                    value={newClass.equipment.join(', ')}
+                                    readOnly
+                                    className="modal-input"
+                                    placeholder="Selected equipment will appear here"
+                                />
                             </div>
                             <div className="input-group">
                                 <label>Package ID</label>
@@ -351,8 +393,36 @@ function ClassCodesEdit() {
                                 </div>
                             </div>
                             <div className="input-group">
-                                <label>Select Items Inside the Package</label>
-                                <input type="text" name="itemsInsidePackage" value={newClass.itemsInsidePackage} onChange={handleInputChange} className="modal-input" />
+                                <label>Select Bundle Items</label>
+                                <select
+                                    name="bundleEquipment"
+                                    value=""
+                                    onChange={(e) => {
+                                        const selectedBundleEquipment = e.target.value;
+                                        if (selectedBundleEquipment && !newClass.bundleEquipment.includes(selectedBundleEquipment)) {
+                                            setNewClass(prevState => ({
+                                                ...prevState,
+                                                bundleEquipment: [...prevState.bundleEquipment, selectedBundleEquipment]
+                                            }));
+                                        }
+                                    }}
+                                    className="modal-input"
+                                >
+                                    <option value="">Select Bundle Items</option>
+                                    {newClass.equipment.map((equipmentItem, index) => (
+                                        <option key={index} value={equipmentItem}>
+                                            {equipmentItem}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    name="bundleEquipmentList"
+                                    value={newClass.bundleEquipment.join(', ')}
+                                    readOnly
+                                    className="modal-input"
+                                    placeholder="Selected bundle items will appear here"
+                                />
                             </div>
                         </div>
                         <div className="modal-footer">
