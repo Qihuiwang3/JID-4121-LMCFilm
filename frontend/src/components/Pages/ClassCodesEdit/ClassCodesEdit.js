@@ -143,7 +143,7 @@ function ClassCodesEdit() {
                 await createBundleItem({
                     bundleId: newClass.bundleId,
                     classCode: newClass.code,
-                    items: newClass.bundleEquipment.map(itemName => ({ itemName, quantity: 1 })),
+                    items: [],
                     price: newClass.price,
                     bundleName: newClass.packageName,
                 });
