@@ -162,6 +162,11 @@ const removeSingularItem = asyncHandler(async (req, res) => {
 // @access Private
 const createSingleItem = asyncHandler(async (req, res) => {
     const { classCode, itemName } = req.body;
+
+    let item = await Item.findOne({ itemName });
+    if (!item) {
+        return res.status(404).json({ error: "Item not found in the equipment checkout center." });
+    }
    
     const newSingleItem = new SingleItem({
         classCode,

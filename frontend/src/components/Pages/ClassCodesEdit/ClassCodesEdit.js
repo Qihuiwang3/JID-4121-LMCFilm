@@ -134,16 +134,24 @@ function ClassCodesEdit() {
                     professor: newClass.professor,
                     className: newClass.className,
                 });
+                const tempBundle = [];
                 for (let equipmentItem of newClass.equipment) {
-                    await createSingleItem({
+                    const tempItem = await createSingleItem({
                         classCode: newClass.code,
                         itemName: equipmentItem,
+
+                        
+                    });
+
+                    if (newClass.bundleEquipment.includes(equipmentItem)) tempBundle.push({
+                        itemName: tempItem.itemName,
+                        quantity: 1 
                     });
                 }
                 await createBundleItem({
                     bundleId: newClass.bundleId,
                     classCode: newClass.code,
-                    items: [],
+                    items: tempBundle,
                     price: newClass.price,
                     bundleName: newClass.packageName,
                 });
