@@ -92,12 +92,23 @@ class StudentTable extends Component {
     };
 
     handleRoleChange = (email, newRole) => {
-        this.setState(prevState => ({
-            updatedRoles: {
-                ...prevState.updatedRoles,
-                [email]: newRole
-            }
-        }), this.saveChanges); 
+        this.setState(prevState => {
+            const updatedFilteredRecords = prevState.filteredRecords.map(record => 
+                record.email === email ? { ...record, role: newRole } : record
+            );
+            const updatedRecords = prevState.records.map(record => 
+                record.email === email ? { ...record, role: newRole } : record
+            );
+    
+            return {
+                updatedRoles: {
+                    ...prevState.updatedRoles,
+                    [email]: newRole
+                },
+                filteredRecords: updatedFilteredRecords,
+                records: updatedRecords
+            };
+        }, this.saveChanges);
     };
     
 
@@ -112,12 +123,10 @@ class StudentTable extends Component {
             await this.confirmDeleteRows();
     
             this.setState({ updatedRoles: {} });
-            await this.loadRecords();
         } catch (error) {
             console.error("Error saving changes:", error);
         }
     };
-    
 
     render() {
         const columnDefs = [
