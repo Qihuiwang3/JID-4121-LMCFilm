@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents, deleteStudent, updateStudentRole, } from '../../../connector.js';  
+import { getStudents, deleteStudent, updateStudentRole } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import EditButton from '../../Button/EditButton/EditButton'; 
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
@@ -40,7 +40,7 @@ class StudentTable extends Component {
                         classCode: classCode,
                         role: student.role
                     }))
-                    : [{ // If no class codes, add a record with class N/A
+                    : [{ 
                         email: student.email,
                         name: student.name,
                         classCode: "N/A", 
@@ -98,27 +98,29 @@ class StudentTable extends Component {
                 ...prevState.updatedRoles,
                 [email]: newRole
             }
-        }));
+        }), this.saveChanges); 
     };
+    
 
     saveChanges = async () => {
         try {
             const { updatedRoles } = this.state;
+    
             for (let [email, role] of Object.entries(updatedRoles)) {
                 await updateStudentRole(email, role);
             }
+    
             await this.confirmDeleteRows();
+    
             this.setState({ updatedRoles: {} });
-            this.loadRecords();
+            await this.loadRecords();
         } catch (error) {
             console.error("Error saving changes:", error);
         }
     };
+    
 
     render() {
-        const { isEditMode, toggleEditMode } = this.props;
-        const containerStyles = { gap: isEditMode ? '40%' : '33.5%' };
-
         const columnDefs = [
             { headerName: "Class", field: "classCode", flex: 1 },
             { headerName: "Name", field: "name", flex: 1 },
@@ -127,50 +129,41 @@ class StudentTable extends Component {
                 headerName: "Role",
                 field: "role",
                 flex: 1,
-                cellEditor: isEditMode ? RoleDropdown : null,
-                editable: isEditMode,
-                cellRenderer: params => {
-                    if (isEditMode) {
-                        return (
-                            <RoleDropdown
-                                value={params.value}
-                                node={params.node}
-                                colDef={params.colDef}
-                                onChange={event => this.handleRoleChange(params.data.email, event.target.value)}
-                            />
-                        );
-                    }
-                    return params.value;
-                }
+                cellRenderer: params => (
+                    <RoleDropdown
+                        value={params.value}
+                        node={params.node}
+                        colDef={params.colDef}
+                        onChange={event => this.handleRoleChange(params.data.email, event.target.value)}
+                    />
+                )
             },
-            isEditMode ? {
+            {
                 headerName: "Delete",
                 field: "delete",
                 flex: 1,
-                cellRenderer: params => {
-                    return (
-                        <button 
-                            onClick={() => this.tempDeleteRow(params.data)} 
-                            className="trash-icon"
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    );
-                }
-            } : null
-        ].filter(Boolean);
+                cellRenderer: params => (
+                    <button 
+                        onClick={() => this.tempDeleteRow(params.data)} 
+                        className="trash-icon"
+                    >
+                        <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                )
+            }
+        ];
 
         return (
             <>
                 <div className="student-title">
                     <h2>Students</h2>
                 </div>
-                <div className="search-bar-edit-container" style={containerStyles}>
-                    <div className="student-searchbar" >
+                <div className="search-bar-edit-container">
+                    <div className="student-searchbar">
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
                     <div className="student-edit">
-                        <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
+                        <EditButton />
                     </div>
                 </div>
                 <AgGridTable
