@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
 import { getStudents, deleteStudent, updateStudentRole } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
-import EditButton from '../../Button/EditButton/EditButton'; 
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -69,7 +68,7 @@ class StudentTable extends Component {
                 filteredRecords: updatedFilteredRecords, 
                 tempDeletedRows: [...prevState.tempDeletedRows, data.email] 
             };
-        });
+        }, this.confirmDeleteRows);
     };
 
     confirmDeleteRows = async () => {
@@ -161,9 +160,6 @@ class StudentTable extends Component {
                 <div className="search-bar-edit-container">
                     <div className="student-searchbar">
                         <SearchBar onSearch={this.handleSearch} />
-                    </div>
-                    <div className="student-edit">
-                        <EditButton />
                     </div>
                 </div>
                 <AgGridTable
