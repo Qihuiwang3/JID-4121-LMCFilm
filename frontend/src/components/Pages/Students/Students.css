@@ -5,11 +5,10 @@
 
 .student-btn {
     display: inline-flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     position: relative;
     margin-top: 20px;
-    margin-left: 10%;
 }
 
 .bottom-btn-container {

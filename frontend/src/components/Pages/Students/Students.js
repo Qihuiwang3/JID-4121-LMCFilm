@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import StudentTable from '../../Functions/StudentTable/StudentTable'; 
-import BackButton from '../../Button/BackButton/BackButton'; 
+import Button from '../../Button/Button';
 import './Students.css';
+import { useNavigate } from 'react-router-dom';
 
 const Students = () => {
+    const navigate = useNavigate();
     const [isEditMode, setIsEditMode] = useState(false);
     const studentTableRef = useRef(null); 
 
@@ -12,6 +14,10 @@ const Students = () => {
             studentTableRef.current.loadRecords(); 
         }
         setIsEditMode(!isEditMode); 
+    };
+
+    const handleBack = () => {
+        navigate('/Management');
     };
 
     return (
@@ -24,7 +30,7 @@ const Students = () => {
 
             <div className="student-btn">
                 <div className="bottom-btn-container">
-                    <BackButton to="/Management" />
+                    <Button type="back" onClick={() => handleBack()}>Back</Button>
                 </div>
             </div>
         </div>
