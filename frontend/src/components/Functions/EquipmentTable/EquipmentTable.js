@@ -242,8 +242,8 @@ class EquipmentTable extends Component {
 
         return (
             <>
-                <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%", paddingBottom: "25px" }}>
-                    <h1 style={{ paddingLeft: "16.5%", color: "#3361AE" }}> Equipment </h1>
+                <div className="flex-container">
+                    <h1 className="equipment-heading"> Equipment </h1>
                 </div>
                 <div className="equipment-search-bar-edit-container">
                     <div className="student-searchbar">
