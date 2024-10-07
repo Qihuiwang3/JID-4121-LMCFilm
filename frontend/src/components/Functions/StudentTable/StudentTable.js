@@ -130,13 +130,12 @@ class StudentTable extends Component {
 
     render() {
         const columnDefs = [
-            { headerName: "Class", field: "classCode", flex: 1, maxWidth: 170 },
-            { headerName: "Name", field: "name", flex: 1, maxWidth: 270 },
-            { headerName: "Student Email", field: "email", maxWidth: 330, flex: 1 },
+            { headerName: "Class", field: "classCode", flex: 1 },
+            { headerName: "Name", field: "name", flex: 1},
+            { headerName: "Student Email", field: "email", flex: 2 },
             {
                 headerName: "Role",
                 field: "role",
-                maxWidth: 120,
                 flex: 1,
                 cellRenderer: params => (
                     <RoleDropdown
@@ -151,7 +150,6 @@ class StudentTable extends Component {
                 headerName: "Delete",
                 field: "delete",
                 flex: 1,
-                maxWidth: 120,
                 cellRenderer: params => (
                     <button 
                         onClick={() => this.tempDeleteRow(params.data)} 
