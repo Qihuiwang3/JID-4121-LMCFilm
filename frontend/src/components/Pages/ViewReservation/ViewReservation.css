@@ -1,0 +1,20 @@
+.reservation-container {
+    width: 100%;
+    background-color: #FFFDF8;
+}
+
+.reservation-btn {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+    margin-left: 10%;
+}
+
+.bottom-btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    position: relative;
+}
