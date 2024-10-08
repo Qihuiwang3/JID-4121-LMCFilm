@@ -260,7 +260,10 @@ class EquipmentTable extends Component {
                 </div>
                 <div className="equipment-search-bar-edit-container">
                     <div className="student-searchbar" >
-                        <SearchBar onSearch={this.handleSearch} />
+                        <SearchBar 
+                            onSearch={this.handleSearch} 
+                            placeholder={"Search by Item Name"}
+                        />
                     </div>
 
                     {!isEditMode && (

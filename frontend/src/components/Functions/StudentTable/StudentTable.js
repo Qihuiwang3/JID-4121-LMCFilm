@@ -167,7 +167,10 @@ class StudentTable extends Component {
                 </div>
                 <div className="search-bar-edit-container" style={containerStyles}>
                     <div className="student-searchbar" >
-                        <SearchBar onSearch={this.handleSearch} />
+                        <SearchBar 
+                            onSearch={this.handleSearch} 
+                            placeholder={"Search by Name"}
+                        />
                     </div>
                     <div className="student-edit">
                         <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
