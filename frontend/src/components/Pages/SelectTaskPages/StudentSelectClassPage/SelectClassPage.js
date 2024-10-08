@@ -54,17 +54,14 @@ const SelectClassPage = () => {
     fetchAndValidateClasses();
   }, [studentInfo]);
 
-  const handleConfirms = () => {
+
+  const handleClassClick = (selectedClassId) => {
     dispatch(setClassCode(selectedClassId));
     navigate('/Reservation', {
       state: {
         classCode: selectedClassId,
       }
     });
-  };
-
-  const handleClick = (id) => {
-    setSelectedClassId(id);
   };
 
   const handleBack = () => {
@@ -87,7 +84,7 @@ const SelectClassPage = () => {
           <div
             key={classInfo.code}
             className="class-container"
-            onClick={() => handleClick(classInfo.code)}
+            onClick={() => handleClassClick(classInfo.code)}
           >
             <div className="class-icon">
               <img className='image' src={film} alt="Class Icon" />
@@ -102,9 +99,6 @@ const SelectClassPage = () => {
 
       <div className="btnContainer">
         <Button type="back" onClick={handleBack}>Back</Button>
-        {selectedClassId && (
-          <Button type="next" onClick={handleConfirms}>Next</Button>
-        )}
       </div>
     </div>
   );

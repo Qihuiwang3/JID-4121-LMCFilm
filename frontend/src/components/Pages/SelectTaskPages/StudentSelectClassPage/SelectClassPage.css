@@ -56,6 +56,11 @@
   cursor: pointer;
 }
 
+.class-container {
+  background-color: #3361AE;
+  color: #FFFFFF;
+}
+
 .class-info {
   background-color: #FFFFFF;
   color: #000000;
@@ -88,7 +93,6 @@
 .class-icon img {
   transform: scale(0.65);
   max-width: 20vw;
-  /* Scale based on viewport width */
   height: auto;
 }
 
@@ -114,7 +118,7 @@
   margin-top: 10%;
 }
 
-.class-info.selected {
+.class-info:hover {
   background-color: #3361AE;
   color: #FFFFFF;
 }
