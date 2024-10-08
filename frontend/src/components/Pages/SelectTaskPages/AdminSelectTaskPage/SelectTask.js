@@ -9,7 +9,7 @@ const SelectTask = () => {
 
   const taskRoutes = {
     A: '/Enter',
-    B: '/ViewReservations',
+    B: '/ViewReservation',
     C: '/ViewEquipment',
     D: '/Management',
   };
