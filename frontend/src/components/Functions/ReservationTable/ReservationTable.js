@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
 import { getStudents, deleteStudent, updateStudentRole, } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
-import EditButton from '../../Button/EditButton/EditButton'; 
+import ScanButton from '../../Button/ScanButton/ScanButton'; 
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './ReservationTable.css';
 
 class ReservationTable extends Component {
@@ -120,11 +118,11 @@ class ReservationTable extends Component {
         const containerStyles = { gap: isEditMode ? '40%' : '33.5%' };
 
         const columnDefs = [
-            { headerName: "Class", field: "classCode", flex: 1 },
-            { headerName: "Name", field: "name", flex: 1 },
-            { headerName: "Email", field: "email", flex: 1 },
+            { headerName: "Bar Code", field: "classCode", flex: 1 },
+            { headerName: "Student Name", field: "name", flex: 1 },
+            { headerName: "Student Email", field: "email", flex: 1 },
             {
-                headerName: "Role",
+                headerName: "Checked-in",
                 field: "role",
                 flex: 1,
                 cellEditor: isEditMode ? RoleDropdown : null,
@@ -143,21 +141,9 @@ class ReservationTable extends Component {
                     return params.value;
                 }
             },
-            isEditMode ? {
-                headerName: "Delete",
-                field: "delete",
-                flex: 1,
-                cellRenderer: params => {
-                    return (
-                        <button 
-                            onClick={() => this.tempDeleteRow(params.data)} 
-                            className="trash-icon"
-                        >
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    );
-                }
-            } : null
+            { headerName: "Checked-out", field: "email", flex: 1 },
+            { headerName: "View", field: "email", flex: 1 }
+
         ].filter(Boolean);
 
         return (
@@ -170,7 +156,7 @@ class ReservationTable extends Component {
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
                     <div className="reservation-edit">
-                        <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
+                        <ScanButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
                     </div>
                 </div>
                 <AgGridTable
