@@ -1,5 +1,7 @@
 .package-dropdown-content {
     background-color: #DDE8EA5C;
+    overflow-y: auto;
+    max-height: 20vh;
 }
 
 .package-dropdown-header {
