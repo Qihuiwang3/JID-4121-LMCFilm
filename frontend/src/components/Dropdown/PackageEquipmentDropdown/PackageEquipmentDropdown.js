@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function PackageEquipmentDropdown({ id, title, equipment }) {
+function PackageEquipmentDropdown({ id, title, equipment, showQuantity }) {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -23,7 +23,7 @@ function PackageEquipmentDropdown({ id, title, equipment }) {
                 <div className="equipment-dropdown-content">
                     {equipment.map((option, index) => (
                         <div className="package-equipment-dropdown-item" key={index}>
-                            {index + 1}. {option.itemID} | {option.name} | Quantity: {option.quantity}
+                            {index + 1}. {option.itemID} | {option.name} {showQuantity && ` | Quantity: ${option.quantity}`}
                         </div>
                     ))}
                 </div>
