@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import StudentTable from '../../Functions/StudentTable/StudentTable'; 
-import BackButton from '../../Button/BackButton/BackButton'; 
-import CancelButton from '../../Button/CancelButton/CancelButton'; 
-import SaveButton from '../../Button/SaveButton/SaveButton'; 
+import Button from '../../Button/Button';
 import './Students.css';
+import { useNavigate } from 'react-router-dom';
 
 const Students = () => {
+    const navigate = useNavigate();
     const [isEditMode, setIsEditMode] = useState(false);
     const studentTableRef = useRef(null); 
 
@@ -16,11 +16,8 @@ const Students = () => {
         setIsEditMode(!isEditMode); 
     };
 
-    const handleSave = async () => {
-        if (studentTableRef.current) {
-            await studentTableRef.current.saveChanges(); 
-        }
-        toggleEditMode();
+    const handleBack = () => {
+        navigate('/Management');
     };
 
     return (
@@ -32,16 +29,9 @@ const Students = () => {
             /> 
 
             <div className="student-btn">
-                {isEditMode ? (
-                    <div className="bottom-btn-container">
-                        <CancelButton onClick={toggleEditMode} />  
-                        <SaveButton onClick={handleSave} />
-                    </div>
-                ) : (
-                    <div className="bottom-btn-container">
-                        <BackButton to="/Management" />
-                    </div>
-                )}
+                <div className="bottom-btn-container">
+                    <Button type="back" onClick={() => handleBack()}>Back</Button>
+                </div>
             </div>
         </div>
     );

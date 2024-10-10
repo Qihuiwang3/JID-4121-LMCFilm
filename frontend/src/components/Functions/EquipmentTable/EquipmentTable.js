@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
 import { getItems, deleteGlobalItem, toggleRepairStatus, toggleHideStatus } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
-import EditButton from '../../Button/EditButton/EditButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentTable.css';
@@ -51,6 +50,7 @@ class EquipmentTable extends Component {
                 filteredRecords: transformedRecords,
             });
         } catch (error) {
+            console.error("Error loading records:", error);
         }
     };
 
@@ -64,13 +64,12 @@ class EquipmentTable extends Component {
         this.setState({
             filteredRecords: updatedRecords,
             deletedRecords: [...deletedRecords, data],
-        });
+        }, this.saveChanges); 
     }
 
     tempToggleRepair = (data) => {
         const { filteredRecords, tempToggledRepairs } = this.state;
 
-        // Toggle the repair status for the given item
         const updatedRecords = filteredRecords.map(record =>
             record.itemName === data.itemName && record.itemId === data.itemId
                 ? { ...record, repair: !record.repair }
@@ -79,14 +78,13 @@ class EquipmentTable extends Component {
 
         this.setState({
             filteredRecords: updatedRecords,
-            tempToggledRepairs: [...tempToggledRepairs, data], // Add to the tempToggledRepairs list
-        });
+            tempToggledRepairs: [...tempToggledRepairs, data],
+        }, this.saveChanges); 
     };
 
     tempToggleHide = (data) => {
         const { filteredRecords, tempToggledHides } = this.state;
 
-        // Toggle the hide status for the given item
         const updatedRecords = filteredRecords.map(record =>
             record.itemName === data.itemName && record.itemId === data.itemId
                 ? { ...record, hide: !record.hide }
@@ -95,37 +93,30 @@ class EquipmentTable extends Component {
 
         this.setState({
             filteredRecords: updatedRecords,
-            tempToggledHides: [...tempToggledHides, data], // Add to the tempToggledHides list
-        });
+            tempToggledHides: [...tempToggledHides, data], 
+        }, this.saveChanges); 
     };
-
-
 
     saveChanges = async () => {
         const { deletedRecords, tempToggledRepairs, tempToggledHides } = this.state;
 
         try {
-            // Loop through each deleted record and call deleteGlobalItem
             for (let record of deletedRecords) {
                 await deleteGlobalItem(record.itemName, record.itemId);
             }
 
-            // Clear the deleted records after successful deletion
             this.setState({ deletedRecords: [] });
 
-            // Loop through the tempToggledRepairs list
             for (let record of tempToggledRepairs) {
                 const { itemName, itemId } = record;
                 await toggleRepairStatus(itemName, itemId);
             }
 
-            // Loop through the tempToggledHides list
             for (let record of tempToggledHides) {
                 const { itemName, itemId } = record;
                 await toggleHideStatus(itemName, itemId);
             }
 
-            // Clear the toggled lists after successful changes
             this.setState({ tempToggledRepairs: [], tempToggledHides: [] });
 
         } catch (error) {
@@ -143,29 +134,26 @@ class EquipmentTable extends Component {
     };
 
     render() {
-        const { isEditMode, toggleEditMode, handleOpenPopup } = this.props;
-        // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
+        const { handleOpenPopup } = this.props;
 
         const columnDefs = [
             {
                 headerName: "ItemID",
                 field: "itemId",
-                width: 150,
                 headerClass: 'header-center',
-                maxWidth: 225,
+                maxWidth: 120,
                 flex: 1,
             },
             {
                 headerName: "Item Name",
                 field: "itemName",
-                width: 250,
-                maxWidth: 250,
+                maxWidth: 150,
                 flex: 1,
             },
             {
                 headerName: "Price",
                 field: "pricePerItem",
-                maxWidth: 250,
+                maxWidth: 100,
                 flex: 1,
                 valueFormatter: (params) => {
                     return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'Available';
@@ -188,7 +176,7 @@ class EquipmentTable extends Component {
             {
                 headerName: "Checked-out",
                 field: "checkout",
-                flex: 2,
+                flex: 1,
                 valueFormatter: (params) => {
                     const dateValue = new Date(params.value);
                     return params.value ? dateValue.toLocaleString('en-US', {
@@ -201,9 +189,9 @@ class EquipmentTable extends Component {
             {
                 headerName: "Repair",
                 field: "repair",
-                maxWidth: 200,
-                flex: 2,
-                editable: false, // make the cell non-editable
+                maxWidth: 110,
+                flex: 1,
+                editable: false, 
                 cellRenderer: (params) => {
                     return params.value ? 'Yes' : 'No'; // render 'Yes' or 'No' based on the value
                 }
@@ -211,34 +199,34 @@ class EquipmentTable extends Component {
             {
                 headerName: "Hide",
                 field: "hide",
+                maxWidth: 110,
                 flex: 1,
-                valueFormatter: (params) => params.value ? 'Yes' : 'No', // Display "Yes" or "No"
-                cellRenderer: isEditMode ? (params) => {
+                cellRenderer: params => {
                     return (
                         <select
                             value={params.data.hide ? 'Yes' : 'No'}
                             onChange={(event) => this.tempToggleHide(params.data, event.target.value)}
                             style={{
-                                width: '50px',                 // Width of the dropdown
-                                padding: '4px',                // Padding inside the dropdown
-                                color: 'white',                // Text color
-                                backgroundColor: '#3361AE',    // Background color
-                                border: 'none',                // No border
-                                borderRadius: '5px',           // Rounded corners
-                                textAlign: 'center'            // Center-align the text
+                                width: '50px',
+                                padding: '4px',
+                                color: 'white',
+                                backgroundColor: '#3361AE',
+                                border: 'none',
+                                borderRadius: '5px',
+                                textAlign: 'center'
                             }}
                         >
                             <option value="Yes">Yes</option>
                             <option value="No">No</option>
                         </select>
                     );
-                } : null
+                }
             },
-
-            isEditMode ? {
+            {
                 headerName: "Delete",
                 field: "delete",
                 flex: 1,
+                maxWidth: 110,
                 cellRenderer: params => {
                     return (
                         <button
@@ -249,38 +237,29 @@ class EquipmentTable extends Component {
                         </button>
                     );
                 }
-            } : null
-        ].filter(Boolean);
+            }
+        ];
 
         return (
-
             <>
-                <div style={{ display: "flex", paddingTop: "100px", justifyContent: "space-between", width: "60%", paddingBottom: "25px" }}>
-                    <h1 style={{ paddingLeft: "16.5%", color: "#3361AE" }}> Equipment </h1>
+                <div className="flex-container">
+                    <h1 className="equipment-heading"> Equipment </h1>
                 </div>
                 <div className="equipment-search-bar-edit-container">
-                    <div className="student-searchbar" >
+                    <div className="student-searchbar">
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
 
-                    {!isEditMode && (
-                        <EditButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
-                    )}
-
-                    {isEditMode && (
-                        <div className="">
-                            <button className="add-new-button" onClick={handleOpenPopup}>
-                                Add New +
-                            </button>
-                        </div>
-                    )}
+                    <div className="">
+                        <button className="add-new-button" onClick={handleOpenPopup}>
+                            Add New +
+                        </button>
+                    </div>
                 </div>
-
-
 
                 <AgGridTable
                     key={this.state.filteredRecords.length}
-                    rowData={this.state.filteredRecords} // Make sure this points to filteredRecords
+                    rowData={this.state.filteredRecords} 
                     columnDefs={columnDefs}
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
@@ -291,4 +270,4 @@ class EquipmentTable extends Component {
     }
 }
 
-export default EquipmentTable
+export default EquipmentTable;
