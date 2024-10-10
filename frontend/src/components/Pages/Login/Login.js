@@ -43,17 +43,23 @@ const Login = () => {
             setErrorMessage(validationError);
             return;
         }
-
+    
         try {
             if (isLogin) {
                 const response = await loginStudent(formData.email, formData.password);
                 console.log(response);
+    
                 dispatch(setStudentInfo({
                     email: response.email,
                     name: response.name,
                     classCodes: response.classCodes
                 }));
-                navigate('/Enter'); 
+    
+                if (response.role === 'Admin') {
+                    navigate('/SelectTask'); 
+                } else {
+                    navigate('/Enter'); 
+                }
             } else {
                 const response = await createStudent({
                     name: formData.name,
@@ -67,6 +73,7 @@ const Login = () => {
             setErrorMessage(error.response?.data?.message || 'An error occurred');
         }
     };
+    
     
     return (
         <div className="login-container">

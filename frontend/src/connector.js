@@ -39,6 +39,20 @@ const createStudent = async (data) => {
     }
 };
 
+const updateStudentRole = async (email, role) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/students/${email}/role`, { role }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error updating student role:', error);
+        throw error;
+    }
+};
+
 const deleteStudent = async (email) => {
     try {
         const res = await axios.delete(`${BACKEND_URL}/students/${email}`);
@@ -49,19 +63,6 @@ const deleteStudent = async (email) => {
     }
 };
 
-const updateStudent = async (email, role) => {
-    try {
-        const res = await axios.put(`${BACKEND_URL}/students/${email}/role`, { role }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return res.data;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-};
 
 const updateStudentInfo = async (email, name) => {
     try {
@@ -237,6 +238,7 @@ const updateClassCode = async (updatedClass) => {
     }
 };
 
+
 const getBundleItemsByClassCode = async (classCode) => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/bundle-items/${classCode}`);
@@ -247,17 +249,16 @@ const getBundleItemsByClassCode = async (classCode) => {
     }
 };
 
-const createBundleItem = async (bundleItemData) => {
+const createBundleItem = async (itemData) => {
     try {
-        const res = await axios.post(`${BACKEND_URL}/api/bundle-item`, {
-            bundleId: bundleItemData.bundleId,
-            classCode: bundleItemData.code,
-            bundleName: bundleItemData.bundleName,
-            price: bundleItemData.className
+        const res = await axios.post(`${BACKEND_URL}/api/bundle-item`, itemData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
         return res.data;
     } catch (error) {
-        console.log(error);
+        console.error('Error adding single item:', error);
         throw error;
     }
 };
@@ -286,6 +287,20 @@ const toggleHideStatus = async (itemName, itemId) => {
         return res.data;
     } catch (error) {
         console.log(error);
+        throw error;
+    }
+};
+
+const createSingleItem = async (itemData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/single-item`, itemData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error adding single item:', error);
         throw error;
     }
 };
@@ -349,7 +364,6 @@ export {
     createStudent,
     deleteStudent,
     getCart,
-    updateStudent,
     createCart,
     getItems,
     createGlobalItem,
@@ -368,6 +382,8 @@ export {
     addClassCode,
     loginStudent,
     removeClassCode,
+    updateStudentRole, 
+    createSingleItem,
     createDamageReport,
     getAllDamageReports,
     getSingleDamageReport,
