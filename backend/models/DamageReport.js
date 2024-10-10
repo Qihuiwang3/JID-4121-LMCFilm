@@ -9,10 +9,6 @@ const damageReportSchema = new mongoose.Schema({
         type: Date,
         default: Date.now, 
     },
-    orderNumber: {
-        type: String,
-        required: true,
-    },
     studentEmail: {
         type: String, 
         required: true,

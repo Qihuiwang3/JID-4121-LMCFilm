@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './DamageReportModal.css';
-
+import { createDamageReport, toggleRepairStatus } from '../../../connector'; 
 const DamageReportModal = ({ show, handleClose }) => {
     const [reporter, setReporter] = useState('Admin A');
     const [dateReported] = useState(new Date().toISOString().split('T')[0]); 
@@ -12,24 +12,51 @@ const DamageReportModal = ({ show, handleClose }) => {
     const [error, setError] = useState('');
 
     const handleImageUpload = (e) => {
-        setUploadedImage(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file) {
+            if (!file.type.match('image/jpeg|image/png')) {
+                setError('Only JPG or PNG files are allowed');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                setUploadedImage(event.target.result); 
+            };
+            reader.readAsDataURL(file);
+            setError('');
+        }
     };
 
     const handleImageRemove = () => {
         setUploadedImage(null);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!studentEmail || !itemId || !itemName || !description) {
-            setError('Please fill all required fields.');
+            setError('Please fill out all required fields.');
             return;
         }
-        
 
-        // Close modal
-        handleClose();
+        const data = {
+            reporter: reporter,
+            dateCreated: dateReported,
+            studentEmail: studentEmail,
+            itemId: itemId,
+            itemName: itemName,
+            description: description,
+            images: uploadedImage ? [uploadedImage] : [], 
+        };
+
+        try {
+            await createDamageReport(data);
+            await toggleRepairStatus(itemName, itemId);
+            handleClose(); 
+        } catch (error) {
+            console.error('Error submitting damage report:', error);
+            setError('Failed to submit the damage report.');
+        }
     };
 
     if (!show) {
@@ -44,16 +71,19 @@ const DamageReportModal = ({ show, handleClose }) => {
                     <button className="close-button" onClick={handleClose}>&times;</button>
                 </div>
                 <form onSubmit={handleSubmit} className="modal-form">
-                    <div>
-                        <label>Reporter</label>
-                        <input type="text" value={reporter} readOnly />
+                    <div className='damage-report'>
+                        <div className='damage-reportor'>
+                            <div className='damage-lable'>Reporter</div>
+                            <input type="text" value={reporter} readOnly />
+                        </div>
+                        <div className='damage-date'> 
+                            <div className='damage-lable'>Date Reported</div>
+                            <input type="date" value={dateReported} readOnly />
+                        </div>
                     </div>
-                    <div>
-                        <label>Date Reported</label>
-                        <input type="date" value={dateReported} readOnly />
-                    </div>
-                    <div>
-                        <label>Student Email</label>
+                    
+                    <div className='damage-info'>
+                        <div className='damage-lable'>Student Email</div>
                         <input
                             type="email"
                             value={studentEmail}
@@ -61,8 +91,8 @@ const DamageReportModal = ({ show, handleClose }) => {
                             required
                         />
                     </div>
-                    <div>
-                        <label>Scan the bar code</label>
+                    <div className='damage-info'>
+                        <div className='damage-lable'>Item ID</div>
                         <input
                             type="text"
                             value={itemId}
@@ -70,8 +100,8 @@ const DamageReportModal = ({ show, handleClose }) => {
                             required
                         />
                     </div>
-                    <div>
-                        <label>Item Name</label>
+                    <div className='damage-info'>
+                        <div className='damage-lable'>Item Name</div>
                         <input
                             type="text"
                             value={itemName}
@@ -79,16 +109,17 @@ const DamageReportModal = ({ show, handleClose }) => {
                             required
                         />
                     </div>
-                    <div>
-                        <label>Description</label>
-                        <textarea
+
+                    <div className='damage-info'>
+                        <div className='damage-lable'>Description</div>
+                        <input
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             required
-                        ></textarea>
+                        ></input>
                     </div>
-                    <div>
-                        <label>Upload Image (optional)</label>
+                    <div className='damage-info'>
+                        <div className='damage-lable'>Upload Image (optional)</div>
                         <input type="file" onChange={handleImageUpload} />
                         {uploadedImage && (
                             <div className="uploaded-image-preview">

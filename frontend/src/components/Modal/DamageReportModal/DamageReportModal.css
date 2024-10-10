@@ -34,23 +34,51 @@
     cursor: pointer;
 }
 
-.modal-form div {
-    margin-bottom: 15px;
-}
-
-.modal-form label {
-    display: block;
-    margin-bottom: 5px;
+.damage-lable {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
     color: #3361AE;
 }
 
-.modal-form input,
-.modal-form textarea {
+.damage-info {
+    margin-left: 2%;
     width: 90%;
-    padding: 8px;
+    margin-bottom: 3%;
+}
+
+.damage-report {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.damage-reportor {
+    margin-left: 2%;
+    margin-right: 40%;
+    width: 50%;
+}
+
+
+.damage-info input {
+    width: 100%;
     border-radius: 5px;
     background-color: #E7EFF2;
     border: 1px solid #3361AE;
+}
+
+.damage-reportor input, .damage-date input {
+    width: 100%;
+    border-radius: 5px;
+    background-color: #E7EFF2;
+    border: 1px solid #3361AE;
+}
+
+.damage-date {
+    margin-left: auto;
+    width: 45%;
 }
 
 .modal-footer {
@@ -72,9 +100,10 @@
 }
 
 .submit-button {
-    background-color: #3361AE;
-    color: white;
-    border: none;
+    border-color: #3361AE;
+    background-color: transparent;
+    color: #3361AE;
+    border: 1px solid #3361AE;
 }
 
 .uploaded-image-preview {

@@ -5,21 +5,20 @@ const DamageReport = require('../models/damageReport');
 // @route POST /damage-reports
 // @access Private (Admin)
 const createDamageReport = asyncHandler(async (req, res) => {
-    const { reporter, orderNumber, studentEmail, itemName, itemId, description, images } = req.body;
+    const { reporter, studentEmail, itemName, itemId, description, images } = req.body;
 
-    if (!reporter || !orderNumber || !studentEmail || !itemName || !itemId || !description) {
+    if (!reporter || !studentEmail || !itemName || !itemId || !description) {
         res.status(400);
         throw new Error('Please provide all required fields');
     }
 
     const damageReport = new DamageReport({
         reporter,
-        orderNumber,
         studentEmail,
         itemName,
         itemId,
         description,
-        images,
+        images: req.files?.map(file => file.path) || [],
     });
 
     const savedReport = await damageReport.save();

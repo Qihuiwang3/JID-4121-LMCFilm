@@ -7,13 +7,12 @@ const {
     deleteDamageReport,
     updateDamageReport,
 } = require('../controllers/damageReportController');
-const limiter = require('../middleware/rateLimiter');
 
 // Routes
-router.post('/', limiter, createDamageReport);
-router.get('/', limiter, getAllDamageReports);
-router.get('/:id', limiter, getSingleDamageReport);
-router.delete('/:id', limiter, deleteDamageReport);
-router.put('/:id', limiter, updateDamageReport);
+router.post('/damage-reports', createDamageReport);
+router.get('/damage-reports', getAllDamageReports);
+router.get('/damage-reports/:id', getSingleDamageReport);
+router.delete('/damage-reports/:id', deleteDamageReport);
+router.put('/damage-reports/:id', updateDamageReport);
 
 module.exports = router;

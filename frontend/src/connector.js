@@ -290,10 +290,9 @@ const toggleHideStatus = async (itemName, itemId) => {
     }
 };
 
-// Create a new damage report
 const createDamageReport = async (data) => {
     try {
-        const res = await axios.post(`${BACKEND_URL}/damage-reports`, data, {
+        const res = await axios.post(`${BACKEND_URL}/api/damage-reports`, data, {
             headers: { 'Content-Type': 'application/json' },
         });
         return res.data;
@@ -303,10 +302,9 @@ const createDamageReport = async (data) => {
     }
 };
 
-// Get all damage reports
 const getAllDamageReports = async () => {
     try {
-        const res = await axios.get(`${BACKEND_URL}/damage-reports`);
+        const res = await axios.get(`${BACKEND_URL}/api/damage-reports`);
         return res.data;
     } catch (error) {
         console.error('Error fetching damage reports:', error);
@@ -314,10 +312,9 @@ const getAllDamageReports = async () => {
     }
 };
 
-// Get a single damage report by ID
 const getSingleDamageReport = async (id) => {
     try {
-        const res = await axios.get(`${BACKEND_URL}/damage-reports/${id}`);
+        const res = await axios.get(`${BACKEND_URL}/api/damage-reports/${id}`);
         return res.data;
     } catch (error) {
         console.error('Error fetching damage report:', error);
@@ -325,10 +322,9 @@ const getSingleDamageReport = async (id) => {
     }
 };
 
-// Delete a damage report
 const deleteDamageReport = async (id) => {
     try {
-        const res = await axios.delete(`${BACKEND_URL}/damage-reports/${id}`);
+        const res = await axios.delete(`${BACKEND_URL}/api/damage-reports/${id}`);
         return res.data;
     } catch (error) {
         console.error('Error deleting damage report:', error);
@@ -338,7 +334,7 @@ const deleteDamageReport = async (id) => {
 
 const updateDamageReport = async (id, data) => {
     try {
-        const res = await axios.put(`${BACKEND_URL}/damage-reports/${id}`, data, {
+        const res = await axios.put(`${BACKEND_URL}/api/damage-reports/${id}`, data, {
             headers: { 'Content-Type': 'application/json' },
         });
         return res.data;
