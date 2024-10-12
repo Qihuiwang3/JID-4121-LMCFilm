@@ -2,9 +2,7 @@ import React, { useState, useRef } from 'react';
 import EquipmentPopup from '../../Modal/EquipmentPopup/EquipmentPopup';
 
 import BackButton from '../../Button/BackButton/BackButton';
-import CancelButton from '../../Button/CancelButton/CancelButton';
-import SaveButton from '../../Button/SaveButton/SaveButton';
-import EquipmentTable from '../../Functions/EquipmentTable/EquipmentTable'
+import EquipmentTable from '../../Functions/EquipmentTable/EquipmentTable';
 
 const Equipment = () => {
     const [showPopup, setShowPopup] = useState(false);
@@ -18,14 +16,7 @@ const Equipment = () => {
         }
         setIsEditMode(!isEditMode);
     };
-
-    const handleSave = async () => {
-        if (equipmentTableRef.current) {
-            await equipmentTableRef.current.saveChanges();
-        }
-        toggleEditMode();
-    };
-
+    
     const handleOpenPopup = () => {
         setShowPopup(true);
     };
@@ -44,16 +35,9 @@ const Equipment = () => {
             />
 
             <div className="equipment-btn">
-                {isEditMode ? (
-                    <div className="equipment-bottom-btn-container">
-                        <CancelButton onClick={toggleEditMode} />
-                        <SaveButton onClick={handleSave} />
-                    </div>
-                ) : (
-                    <div className="equipment-bottom-btn-container">
+                <div className="equipment-bottom-btn-container">
                         <BackButton to="/ViewEquipment" />
-                    </div>
-                )}
+                </div>
             </div>
 
             <EquipmentPopup show={showPopup} handleClose={handleClosePopup} />
