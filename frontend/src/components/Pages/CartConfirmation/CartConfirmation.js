@@ -24,9 +24,7 @@ function CartConfirmation() {
 
     const handleContinue = () => {
         const cartTotal = calculateTotal();
-        // navigate('/Payment', { state: { cartTotal } });
-        navigate('/message');
-
+        navigate('/Payment', { state: { cartTotal } });
     };
 
     const handleBack = async () => {
