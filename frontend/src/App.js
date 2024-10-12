@@ -16,55 +16,53 @@ import Management from "./components/Pages/SelectTaskPages/AdminManagementPage/M
 import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import Login from "./components/Pages/Login/Login";
-import ReservationHistory from "./components/Pages/ReservationHistory/ReservationHistory";
 // import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
 class App extends Component {
-    state = {
-        selectedDates: {
-            pickupDate: new Date(),
-            pickupTime: new Date(),
-            returnDate: new Date(),
-            returnTime: new Date(),
-        }
-    };
-
-    setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
-        this.setState({
-            selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
-        });
-    };
-
-    render() {
-        return (
-            <Provider store={store}>
-                <Router>
-                    <TopNavBar />
-                    <Routes>
-                        <Route path="/Enter" element={<EnterCode />} />
-                        <Route path="/" element={<Login />} />
-                        <Route path="/SelectClass" element={<SelectClassPage />} />
-                        <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
-                        <Route path="/ReservationPage" element={<ReservationPage />} />
-                        <Route path="/Payment" element={<Payment />} />
-                        <Route path="/CartConfirmation" element={<CartConfirmation />} />
-                        <Route path="/Payment" element={<Payment />} />
-                        <Route path="/ClassCodesAdmin" element={<ClassCodesAdmin />} />
-                        <Route path="/ClassCodesEdit" element={<ClassCodesEdit />} />
-                        <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
-                        <Route path="/Equipment" element={<Equipment />} />
-                        <Route path="/Students" element={<Students />} />
-                        <Route path="/ViewEquipment" element={<ViewEquipment />} />
-                        <Route path="/SelectTask" element={<SelectTask />} />
-                        <Route path="/Management" element={<Management />} />
-                        <Route path="/ViewReservations" element={<ReservationHistory />} />
-                    </Routes>
-                </Router>
-            </Provider>
-        );
+  state = {
+    selectedDates: {
+      pickupDate: new Date(),
+      pickupTime: new Date(),
+      returnDate: new Date(),
+      returnTime: new Date(),
     }
+  };
+
+  setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
+    this.setState({
+      selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
+    });
+  };
+
+  render() {
+    return (
+      <Provider store={store}>
+        <Router>
+          <TopNavBar />
+          <Routes>
+            <Route path="/Enter" element={<EnterCode />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/SelectClass" element={<SelectClassPage />} />
+            <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
+            <Route path="/ReservationPage" element={<ReservationPage />} />
+            <Route path="/Payment" element={<Payment />} />
+            <Route path="/CartConfirmation" element={<CartConfirmation />} />
+            <Route path="/Payment" element={<Payment />} />
+            <Route path="/ClassCodesAdmin" element={<ClassCodesAdmin />} />
+            <Route path="/ClassCodesEdit" element={<ClassCodesEdit />} />
+            <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
+            <Route path="/Equipment" element={<Equipment />} />
+            <Route path="/Students" element={<Students />} />
+            <Route path="/ViewEquipment" element={<ViewEquipment />} />
+            <Route path="/SelectTask" element={<SelectTask />} />
+            <Route path="/Management" element={<Management />} />
+          </Routes>
+        </Router>
+      </Provider>
+    );
+  }
 }
 
 export default App;
