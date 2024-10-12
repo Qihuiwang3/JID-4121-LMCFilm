@@ -3,7 +3,6 @@ import AgGridTable from '../AgGridTable/AgGridTable';
 import { getStudents, deleteStudent, updateStudentRole, } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import ScanButton from '../../Button/ScanButton/ScanButton'; 
-import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
 import './ReservationTable.css';
 
 class ReservationTable extends Component {
@@ -114,34 +113,12 @@ class ReservationTable extends Component {
     };
 
     render() {
-        const { isEditMode, toggleEditMode } = this.props;
-        const containerStyles = { gap: isEditMode ? '40%' : '33.5%' };
-
         const columnDefs = [
-            { headerName: "Bar Code", field: "classCode", flex: 1 },
-            { headerName: "Student Name", field: "name", flex: 1 },
-            { headerName: "Student Email", field: "email", flex: 1 },
-            {
-                headerName: "Checked-in",
-                field: "role",
-                flex: 1,
-                cellEditor: isEditMode ? RoleDropdown : null,
-                editable: isEditMode,
-                cellRenderer: params => {
-                    if (isEditMode) {
-                        return (
-                            <RoleDropdown
-                                value={params.value}
-                                node={params.node}
-                                colDef={params.colDef}
-                                onChange={event => this.handleRoleChange(params.data.email, event.target.value)}
-                            />
-                        );
-                    }
-                    return params.value;
-                }
-            },
-            { headerName: "Checked-out", field: "email", flex: 1 },
+            { headerName: "Bar Code", field: "classCode", flex: 1.5 },
+            { headerName: "Name", field: "name", flex: 1.5 },
+            { headerName: "Email", field: "email", flex: 2 },
+            { headerName: "Checked-in", field: "email", flex: 2 },
+            { headerName: "Checked-out", field: "email", flex: 2 },
             { headerName: "View", field: "email", flex: 1 }
 
         ].filter(Boolean);
@@ -151,7 +128,7 @@ class ReservationTable extends Component {
                 <div className="reservation-title">
                     <h2>View Reservations</h2>
                 </div>
-                <div className="search-bar-edit-container" style={containerStyles}>
+                <div className="search-bar-edit-container">
                     <div className="reservation-searchbar" >
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
