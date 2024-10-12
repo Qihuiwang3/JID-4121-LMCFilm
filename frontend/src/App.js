@@ -59,7 +59,7 @@ class App extends Component {
                         <Route path="/ViewEquipment" element={<ViewEquipment />} />
                         <Route path="/SelectTask" element={<SelectTask />} />
                         <Route path="/Management" element={<Management />} />
-                        <Route path="/ViewReservations" element={<ReservationHistory />} />
+                        <Route path="/ReservationHistory" element={<ReservationHistory />} />
                     </Routes>
                 </Router>
             </Provider>
