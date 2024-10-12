@@ -156,7 +156,7 @@ class ReservationTable extends Component {
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
                     <div className="reservation-edit">
-                        <ScanButton isEditMode={isEditMode} toggleEditMode={toggleEditMode} />
+                        <ScanButton/>
                     </div>
                 </div>
                 <AgGridTable
