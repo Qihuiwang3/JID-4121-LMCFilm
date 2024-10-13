@@ -17,7 +17,8 @@ class ReservationTable extends Component {
                 sortable: true,
                 resizable: true
             },
-            searchQuery: ''
+            searchQuery: '',
+            showModal: false,
         };
     }
 
@@ -112,7 +113,14 @@ class ReservationTable extends Component {
         }
     };
 
+    toggleScanModal = () => {
+        this.setState(prevState => ({
+            showModal: !prevState.showModal
+        }));
+    };
+
     render() {
+        const { showModal } = this.state;
         const columnDefs = [
             { headerName: "Bar Code", field: "classCode", flex: 1.5 },
             { headerName: "Name", field: "name", flex: 1.5 },
@@ -133,7 +141,7 @@ class ReservationTable extends Component {
                         <SearchBar onSearch={this.handleSearch} />
                     </div>
                     <div className="reservation-edit">
-                        <ScanButton/>
+                        <ScanButton onClick={this.toggleScanModal} />
                     </div>
                 </div>
                 <AgGridTable
@@ -143,6 +151,14 @@ class ReservationTable extends Component {
                     domLayout="autoHeight"
                     suppressHorizontalScroll={true}
                 />
+                {showModal && (
+                    <div className="modal-overlay" onClick={this.toggleScanModal}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                            <button className="modal-button">Equipment Check Out</button>
+                            <button className="modal-button">Equipment Check In</button>
+                        </div>
+                    </div>
+                )}
             </>
         );
     }

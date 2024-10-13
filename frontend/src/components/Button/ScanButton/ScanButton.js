@@ -3,13 +3,13 @@ import './ScanButton.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 
-const ScanButton = ({ isScanMode, toggleScanMode }) => {
+const ScanButton = ({ isScanMode, onClick }) => {
     if (isScanMode) {
         return null; // Do not render the Scan button in scan mode
     }
 
     return (
-        <div onClick={toggleScanMode}>
+        <div onClick={onClick}>
             <button className="scan-btn">
                 Scan
                 <FontAwesomeIcon icon={faExpand} className="scan-btn-icon" />
@@ -17,5 +17,6 @@ const ScanButton = ({ isScanMode, toggleScanMode }) => {
         </div>
     );
 };
+
 
 export default ScanButton;
