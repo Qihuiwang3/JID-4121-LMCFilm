@@ -3,6 +3,7 @@ import AgGridTable from '../AgGridTable/AgGridTable';
 import { getStudents, deleteStudent, updateStudentRole, } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import ScanButton from '../../Button/ScanButton/ScanButton'; 
+import EquipmentCheckoutPopup from '../../Modal/EquipmentCheckoutPopup/EquipmentCheckoutPopup';
 import './ReservationTable.css';
 
 class ReservationTable extends Component {
@@ -19,6 +20,7 @@ class ReservationTable extends Component {
             },
             searchQuery: '',
             showModal: false,
+            showScanPopup: false
         };
     }
 
@@ -119,8 +121,15 @@ class ReservationTable extends Component {
         }));
     };
 
+    toggleCheckoutPopup = () => {
+        this.setState(prevState => ({
+            showScanPopup: !prevState.showScanPopup,
+            showModal: !prevState.showModal
+        }));
+    };
+
     render() {
-        const { showModal } = this.state;
+        const { showModal, showScanPopup } = this.state;
         const columnDefs = [
             { headerName: "Bar Code", field: "classCode", flex: 1.5 },
             { headerName: "Name", field: "name", flex: 1.5 },
@@ -152,12 +161,16 @@ class ReservationTable extends Component {
                     suppressHorizontalScroll={true}
                 />
                 {showModal && (
-                    <div className="modal-overlay" onClick={this.toggleScanModal}>
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <button className="modal-button">Equipment Check Out</button>
-                            <button className="modal-button">Equipment Check In</button>
+                    <div className="view-reservation-modal-overlay" onClick={this.toggleScanModal}>
+                        <div className="view-reservation-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <button className="view-reservation-modal-button" onClick={this.toggleCheckoutPopup}>Equipment Check Out</button>
+                            <button className="view-reservation-modal-button">Equipment Check In</button>
                         </div>
                     </div>
+                )}
+
+                {showScanPopup && (
+                    <EquipmentCheckoutPopup onClose={this.toggleCheckoutPopup} />
                 )}
             </>
         );

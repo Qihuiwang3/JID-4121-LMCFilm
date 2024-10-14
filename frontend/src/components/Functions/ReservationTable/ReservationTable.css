@@ -52,7 +52,7 @@
     }
 }
 
-.modal-overlay {
+.view-reservation-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -65,23 +65,26 @@
     z-index: 1000;
 }
 
-.modal-content {
-    background-color: rgba(0, 0, 0, 0.3);
+.view-reservation-modal-content {
     text-align: center;
     display: flex;
-    gap: 20%;
+    gap: 7%;
+    width: 100%;
+    height: 40px;
+    justify-content: center;
 }
 
-.modal-button {
+.view-reservation-modal-button {
     background-color: #3361AE;
     color: #fff;
     border: none;
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 5px;
+    font-weight: bold;
     cursor: pointer;
 }
 
-.modal-button:hover {
+.view-reservation-modal-button:hover {
     background-color: #3361AE;
 }

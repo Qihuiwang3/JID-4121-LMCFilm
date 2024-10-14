@@ -1,0 +1,71 @@
+.equipment-checkout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.equipment-checkout-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.equipment-checkout-content h2 {
+    margin-top: 0;
+    color: #1976d2;
+}
+
+.equipment-checkout-input {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.equipment-checkout-input label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.equipment-checkout-input input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.equipment-checkout-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancel-button, .scan-search-button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #ccc;
+    color: #333;
+}
+
+.scan-search-button {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.scan-search-button:hover {
+    background-color: #155a9d;
+}
