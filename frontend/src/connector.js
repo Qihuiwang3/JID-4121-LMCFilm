@@ -305,6 +305,16 @@ const createSingleItem = async (itemData) => {
     }
 };
 
+const getOrderByOrderNumber = async (orderNumber) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/${orderNumber}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error adding single item:', error);
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
@@ -329,5 +339,6 @@ export {
     loginStudent,
     removeClassCode,
     updateStudentRole, 
-    createSingleItem
+    createSingleItem,
+    getOrderByOrderNumber
 };
