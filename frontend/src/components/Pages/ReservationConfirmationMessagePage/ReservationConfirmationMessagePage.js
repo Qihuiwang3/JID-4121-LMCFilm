@@ -13,37 +13,13 @@ function ReservationConfirmationMessagePage() {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
     };
 
-    // const createOrder = async () => {
-    //     const generatedOrderNumber = generateOrderNumber();
-    //     setOrderNumber(generatedOrderNumber);
-
-    //     const orderData = {
-    //         orderNumber: generatedOrderNumber,
-    //         email,
-    //         checkin,
-    //         checkout,
-    //         studentName
-    //     };
-
-    //     try {
-    //         const response = await fetch('http://localhost:3500/api/order', {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(orderData)
-    //         });
-    //         const data = await response.json();
-    //         if (response.ok) {
-    //             console.log('Order created successfully:', data);
-    //         } else {
-    //             console.error('Error creating order:', data.error);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error submitting order:', error);
-    //     }
-    // };
+    const send = async (generatedOrderNumber) => {
+        await sendEmail('test', generatedOrderNumber, 'test');
+    };
 
     useEffect(() => {
         const generatedOrderNumber = generateOrderNumber();
+        send(generatedOrderNumber);
         setOrderNumber(generatedOrderNumber);
         // createOrder();
     }, []);
