@@ -2,10 +2,10 @@
 
     import React, { useState, useEffect } from 'react';
     import { Autocomplete, TextField } from '@mui/material';
-    import './AdminDamagePopup.css';
+    import './ViewDamageReportModal.css';
    
     
-    const AdminDamagePopup = ({ show, handleClose, damageReport, img = [] }) => {
+    const ViewDamageReportModal = ({ show, handleClose, damageReport, img = [] }) => {
         const imageUrl = "https://s3-alpha-sig.figma.com/img/dda2/83b6/dd4a7c16f4534ac6baeba0ee78d8d32e?Expires=1730073600&Key-Pair-Id=APKAQ4GOSFWCAVNEHN3O4&Signature=lStzB3TGHFxqtgaDKzSa3Lja4Cp9h4il2Vl6AUBvbuP-L5aj-WHiLjbvP3g9VlFRJFJW7C1Zmm5uscK6S2kmOmNB~zW6w8hW9U0vjBOQVvOa6WQ4pW1DRvTg0bUaHPQDRzvyVLU0l23aNPYenDSUB6vycZeRZw7mI-pKC9C-sitFcoS~cI4R91gyK~tMtIEBAQMg17FB~RESMO9L0VBkrxY7VOZYmE7XBmT9obwjPXYd3IuHCOUUJXtJbnwkvZkT2n4cyvnBbgS~eFSlyuPRMXdykwBBjG99sXgBOoLmaTkFMyCGC0UXVhTtxn~cKEEhHL~p7UcoArMnqUUlAsliFw__";
         const [images, setImages] = useState([]);
         const [loading, setLoading] = useState(true);
@@ -75,4 +75,4 @@ return (
 
 }
 
-export default AdminDamagePopup;
+export default ViewDamageReportModal;
