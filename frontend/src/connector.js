@@ -315,6 +315,27 @@ const getOrderByOrderNumber = async (orderNumber) => {
     }
 };
 
+const sendEmail = async (to, subject, text) => {
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/send-email`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                to,      // Who the email is sent to
+                subject,  // Subject of the email
+                text,  // Email body content
+            }),
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+
+};
+
 export {
     getStudents,
     createStudent,
@@ -340,5 +361,6 @@ export {
     removeClassCode,
     updateStudentRole, 
     createSingleItem,
-    getOrderByOrderNumber
+    getOrderByOrderNumber,
+    sendEmail
 };
