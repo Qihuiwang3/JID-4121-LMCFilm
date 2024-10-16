@@ -19,7 +19,8 @@ class ReservationTable extends Component {
             },
             searchQuery: '',
             showModal: false,
-            showScanPopup: false
+            showScanPopup: false,
+            viewReportId: null,
         };
     }
 
@@ -62,6 +63,18 @@ class ReservationTable extends Component {
         }));
     };
 
+    handleViewReport = (id) => {
+        this.setState({ 
+            viewReportId: id
+        })
+    };
+
+    handleCloseModal = () => {
+        this.setState({ 
+            viewReportId: null
+        })
+    };
+
     render() {
         const { showModal, showScanPopup } = this.state;
         const columnDefs = [
@@ -94,7 +107,15 @@ class ReservationTable extends Component {
                     }).replace(',', '') : 'Available';
                 }
             },
-            { headerName: "View", field: "email", flex: 1 }
+            { headerName: "View",
+                field: "view",
+                flex: 1,
+                cellRenderer: params => (
+                    <button onClick={() => this.handleViewReport(params.data._id)} className="reservation-view-details">
+                        View Details
+                    </button>
+                )
+            }
 
         ].filter(Boolean);
 

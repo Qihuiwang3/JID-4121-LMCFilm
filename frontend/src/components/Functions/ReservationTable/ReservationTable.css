@@ -88,3 +88,14 @@
 .view-reservation-modal-button:hover {
     background-color: #3361AE;
 }
+
+.reservation-view-details:hover {
+    color: #3361AE;
+    cursor: pointer;
+}
+
+.reservation-view-details {
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+}
