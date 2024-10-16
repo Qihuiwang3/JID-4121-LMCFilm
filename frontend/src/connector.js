@@ -7,7 +7,7 @@ const getStudents = async () => {
         return res.data;
     } catch (error) {
         console.log(error);
-         throw error;
+        throw error;
     }
 };
 
@@ -305,6 +305,17 @@ const createSingleItem = async (itemData) => {
     }
 };
 
+const getAllOrders = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/orders`);
+        console.log(res.data)
+        return res.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
 export {
     getStudents,
     createStudent,
@@ -328,6 +339,7 @@ export {
     addClassCode,
     loginStudent,
     removeClassCode,
-    updateStudentRole, 
-    createSingleItem
+    updateStudentRole,
+    createSingleItem,
+    getAllOrders,
 };
