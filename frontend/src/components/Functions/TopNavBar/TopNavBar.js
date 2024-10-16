@@ -17,12 +17,12 @@ class TopNavBar extends Component {
 
     toggleDropdown = () => {
         const { isDroppedDown } = this.state;
-        this.setState({isDroppedDown: !isDroppedDown})
+        this.setState({ isDroppedDown: !isDroppedDown })
     }
-    
-    // profileNav = () => {
-    //     this.props.navigate("/Profile");
-    // }
+
+    profileNav = () => {
+        this.props.navigate("/ReservationHistory");
+    }
 
     // notificationeNav = () => {
     //     this.props.navigate("/Notification");
@@ -32,7 +32,7 @@ class TopNavBar extends Component {
         // goes to EnterCode page for now
         this.props.navigate("/");
         const { isDroppedDown } = this.state;
-        this.setState({isDroppedDown: !isDroppedDown})
+        this.setState({ isDroppedDown: !isDroppedDown })
     }
 
 
@@ -49,12 +49,12 @@ class TopNavBar extends Component {
                         <FontAwesomeIcon icon={faCircleUser} />
                     </div>
                     <div className="dropdownIcon">
-                        <FontAwesomeIcon icon={isDroppedDown? faAngleUp: faAngleDown} onClick={this.toggleDropdown}/>
+                        <FontAwesomeIcon icon={isDroppedDown ? faAngleUp : faAngleDown} onClick={this.toggleDropdown} />
                         {isDroppedDown && (
                             <div className="dropdown-container">
-                                <div className="dropdown-content">Profile</div>
+                                <div className="dropdown-content" onClick={this.profileNav}>Profile</div>
                                 <div className="dropdown-content" onClick={this.logoutNav}>Logout</div>
-                            </div>                        
+                            </div>
                         )}
 
                     </div>
