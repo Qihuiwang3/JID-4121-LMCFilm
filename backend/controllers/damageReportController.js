@@ -18,7 +18,7 @@ const createDamageReport = asyncHandler(async (req, res) => {
         itemName,
         itemId,
         description,
-        images: req.files?.map(file => file.path) || [],
+        images: images || [],
     });
 
     const savedReport = await damageReport.save();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import SearchBar from '../SearchBar/SearchBar'; 
+import DamageSearch from "../DamageSearch/DamageSearch"; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { getAllDamageReports, deleteDamageReport, toggleRepairStatus, getRepairStatus } from "../../../connector"; 
@@ -58,6 +58,21 @@ const DamageTable = () => {
         setSearchQuery(query);
         const filtered = records.filter(record => record.itemId.toLowerCase().includes(query.toLowerCase()));
         setFilteredRecords(filtered);
+    };
+
+    const handleNewReportAdded = async (newReport) => {
+        try {
+            const repairStatus = await getRepairStatus(newReport.itemName, newReport.itemId);
+            const newReportWithRepairStatus = {
+                ...newReport,
+                isRepaired: repairStatus.repair, 
+            };
+
+            setRecords(prevRecords => [...prevRecords, newReportWithRepairStatus]);
+            setFilteredRecords(prevFilteredRecords => [...prevFilteredRecords, newReportWithRepairStatus]);
+        } catch (error) {
+            console.error("Error fetching repair status for the new report:", error);
+        }
     };
 
 
@@ -146,7 +161,7 @@ const DamageTable = () => {
             </div>
             <div className="search-bar-edit-container">
                 <div className="damage-searchbar">
-                    <SearchBar onSearch={handleSearch} placehoder={"Search by Item ID"} />
+                    <DamageSearch onSearch={handleSearch} placehoder={"Search by Item ID"} />
                 </div>
 
                 <div className="add-new-container">
@@ -173,7 +188,11 @@ const DamageTable = () => {
                 />
             )}
             {showAddNewPopup && (
-                <DamageReportModal show={showAddNewPopup} handleClose={handleClosePopup} />
+                <DamageReportModal 
+                    show={showAddNewPopup} 
+                    handleClose={handleClosePopup} 
+                    onReportAdded={handleNewReportAdded} 
+                />
             )}
         </>
     );

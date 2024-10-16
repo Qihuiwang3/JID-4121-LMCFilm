@@ -117,7 +117,6 @@ const createCart = async (data) => {
 const getItems = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/items`);
-        console.log(res.data)
         return res.data;
     } catch (error) {
         console.log(error)
@@ -139,7 +138,6 @@ const createGlobalItem = async (data) => {
 };
 
 const deleteGlobalItem = async (itemName, itemId) => {
-    console.log("SOHOS " + itemName + " " + itemId);
     try {
         const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}/`, {
             headers: {

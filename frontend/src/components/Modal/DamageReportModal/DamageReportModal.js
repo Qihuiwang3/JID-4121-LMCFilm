@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './DamageReportModal.css';
-import { createDamageReport, toggleRepairStatus } from '../../../connector'; 
-const DamageReportModal = ({ show, handleClose }) => {
+import { createDamageReport } from '../../../connector'; 
+const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
     const [reporter, setReporter] = useState('Admin A');
     const [dateReported] = useState(new Date().toISOString().split('T')[0]); 
     const [studentEmail, setStudentEmail] = useState('');
@@ -9,12 +9,13 @@ const DamageReportModal = ({ show, handleClose }) => {
     const [itemName, setItemName] = useState('');
     const [description, setDescription] = useState('');
     const [uploadedImage, setUploadedImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     const [error, setError] = useState('');
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            if (!file.type.match('image/jpeg|image/png')) {
+            if (!file.type.match('image/jpeg|image/png|image/jpg|image/jpeg')) {
                 setError('Only JPG or PNG files are allowed');
                 return;
             }
@@ -23,12 +24,14 @@ const DamageReportModal = ({ show, handleClose }) => {
                 setUploadedImage(event.target.result); 
             };
             reader.readAsDataURL(file);
+            setImagePreview(URL.createObjectURL(file));
             setError('');
         }
     };
 
     const handleImageRemove = () => {
         setUploadedImage(null);
+        setImagePreview(null);
     };
 
     const handleSubmit = async (e) => {
@@ -50,7 +53,8 @@ const DamageReportModal = ({ show, handleClose }) => {
         };
 
         try {
-            await createDamageReport(data);
+            const newReport = await createDamageReport(data);
+            onReportAdded(newReport);
             handleClose(); 
         } catch (error) {
             console.error('Error submitting damage report:', error);
@@ -118,11 +122,11 @@ const DamageReportModal = ({ show, handleClose }) => {
                         ></input>
                     </div>
                     <div className='damage-info'>
-                        <div className='damage-lable'>Upload Image (optional)</div>
-                        <input type="file" onChange={handleImageUpload} />
-                        {uploadedImage && (
+                        <div className='damage-label'>Upload Image (optional)</div>
+                        <input type="file" accept="image/jpeg, image/png, image/jpg" onChange={handleImageUpload} />
+                        {imagePreview && (
                             <div className="uploaded-image-preview">
-                                <img src={URL.createObjectURL(uploadedImage)} alt="uploaded" />
+                                <img src={imagePreview} alt="Uploaded Preview" />
                                 <button type="button" onClick={handleImageRemove}>Remove</button>
                             </div>
                         )}
