@@ -10,8 +10,8 @@ const ViewEquipment = () => {
 
     const taskRoutes = {
         // Add routes after the corresponding page has been created
-        A: '/equipment'
-        // B: ,
+        A: '/equipment',
+        B: '/DamageReport',
 
     };
 

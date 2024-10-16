@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600&display=swap');
+.damage-title{
+    font-size: 24px;
+    font-weight: bold;
+    color: #3361AE;
+    position: relative;
+    margin-top: 8%;
+    margin-bottom: 4%;
+    left: 10%;
+}
+
+.search-bar-edit-container {
+    display: flex;
+    position: relative;
+    margin: 0 0 10px 0;
+    width: 80vw;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.trash-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 30px;
+    cursor: pointer;
+    color: #3361AE;
+}
+
+.damage-searchbar {
+    display: inline-flex;
+    align-items: center;
+}
+
+.damage-edit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-right: 0%;
+    margin-left: auto;
+}
+
+.view-details {
+    border: none;
+    background-color: transparent;
+}
+
+.view-details:hover {
+    color: #3361AE;
+    cursor: pointer;
+}
+
+.repair-dropdown {
+    width: 50px;
+    padding: 4px;
+    color: white;
+    background-color: rgb(51, 97, 174);
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+@media (max-width: 800px) {
+
+    .damage-title {
+        margin-top: 10%;
+    }
+
+    .damage-searchbar {
+        margin-right: 0%;
+    }
+}

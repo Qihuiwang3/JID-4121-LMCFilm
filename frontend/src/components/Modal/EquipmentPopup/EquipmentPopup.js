@@ -9,8 +9,6 @@ const EquipmentPopup = ({ show, handleClose }) => {
     const [itemName, setItemName] = useState('');
     const [price, setPrice] = useState(0);
 
-    const predefinedItems = ['Camera', 'Light', 'Tripod', 'Microphone'];
-
     const [uniqueItemNames, setUniqueItemNames] = useState([]); // State for unique item names
     const [databasePrices, setDatabasePrices] = useState([]);
 
