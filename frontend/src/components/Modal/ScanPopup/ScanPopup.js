@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
 
-const ScanPopup = ({ onClose }) => {
+const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
 
     const handleSearchClick = () => {
@@ -26,6 +26,28 @@ const ScanPopup = ({ onClose }) => {
                 <button className="close-button" onClick={onClose}>
                     <div className='close-button-inner'>&times;</div>
                 </button>
+                
+                <div className="radio-input">
+                    <label>
+                        <input
+                            type="radio"
+                            value="checkout"
+                            checked={selectedOption === 'checkout'}
+                            onChange={onOptionChange}
+                        />
+                        Equipment Check Out
+                    </label>
+                    <label>
+                        <input
+                            type="radio"
+                            value="checkin"
+                            checked={selectedOption === 'checkin'}
+                            onChange={onOptionChange}
+                        />
+                        Equipment Check In
+                    </label>
+                </div>
+
                 <div className="equipment-checkout-input">
                     <label htmlFor="barcode">Bar Code</label>
                     <input type="text" id="barcode" className="checkout-modal-input"/>
@@ -38,7 +60,14 @@ const ScanPopup = ({ onClose }) => {
                 
                 <div className="modal-footer">
                     <button className="cancelModal-button" onClick={onClose}>Cancel</button>
-                    <button className="scan-search-button" onClick={handleSearchClick}>Search</button>
+                    <button 
+                        className="scan-search-button" 
+                        onClick={handleSearchClick}
+                        // Disable until a radio button is selected
+                        disabled={!selectedOption} 
+                    >
+                        Search
+                    </button>
                 </div>
             </div>
         </div>

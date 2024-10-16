@@ -95,3 +95,16 @@
 .checkout-modal-input {
     padding: 10px;
 }
+
+.radio-input {
+    margin: 15px 0 5px 0px;
+    text-align: left;
+}
+
+.radio-input label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 500;
+    color: black;
+    font-size: 14px;
+}

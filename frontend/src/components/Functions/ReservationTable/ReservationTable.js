@@ -19,6 +19,7 @@ class ReservationTable extends Component {
             },
             searchQuery: '',
             showScanPopup: false,
+            selectedOption: '',
             viewReportId: null,
         };
     }
@@ -52,7 +53,12 @@ class ReservationTable extends Component {
     toggleScanModal = () => {
         this.setState(prevState => ({
             showScanPopup: !prevState.showScanPopup,
+            selectedOption: '', 
         }));
+    };
+
+    handleOptionChange = (event) => {
+        this.setState({ selectedOption: event.target.value });
     };
 
     handleViewReport = (id) => {
@@ -68,7 +74,7 @@ class ReservationTable extends Component {
     };
 
     render() {
-        const { showScanPopup } = this.state;
+        const { showScanPopup, selectedOption } = this.state;
         const columnDefs = [
             { headerName: "Order Number", field: "orderNumber", flex: 1.5 },
             { headerName: "Name", field: "studentName", flex: 1.5 },
@@ -133,7 +139,11 @@ class ReservationTable extends Component {
                 />
 
                 {showScanPopup && (
-                    <ScanPopup onClose={this.toggleScanModal} />
+                    <ScanPopup 
+                        onClose={this.toggleScanModal} 
+                        selectedOption={selectedOption}
+                        onOptionChange={this.handleOptionChange}
+                    />
                 )}
             </>
         );
