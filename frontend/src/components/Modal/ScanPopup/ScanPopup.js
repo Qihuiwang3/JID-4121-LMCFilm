@@ -20,8 +20,8 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     }
 
     return (
-        <div className="equipment-checkout-overlay" onClick={onClose}>
-            <div className="equipment-checkout-content" onClick={(e) => e.stopPropagation()}>
+        <div className="scan-overlay" onClick={onClose}>
+            <div className="scan-content" onClick={(e) => e.stopPropagation()}>
                 <h2>Scan</h2>
                 <button className="close-button" onClick={onClose}>
                     <div className='close-button-inner'>&times;</div>
@@ -48,12 +48,12 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     </label>
                 </div>
 
-                <div className="equipment-checkout-input">
+                <div className="scan-input">
                     <label htmlFor="barcode">Bar Code</label>
                     <input type="text" id="barcode" className="checkout-modal-input"/>
                 </div>
                 
-                <div className="equipment-checkout-input">
+                <div className="scan-input">
                     <label htmlFor="email">Student Email</label>
                     <input type="email" id="email" className="checkout-modal-input"/>
                 </div>

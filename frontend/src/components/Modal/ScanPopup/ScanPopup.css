@@ -1,4 +1,4 @@
-.equipment-checkout-overlay {
+.scan-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 1000;
 }
 
-.equipment-checkout-content {
+.scan-content {
     background-color: white;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -21,7 +21,7 @@
     position: relative;
 }
 
-.equipment-checkout-content h2 {
+.scan-content h2 {
     color: #3361AE;
     font-size: 24px;
     display: flex;
@@ -30,12 +30,12 @@
     border-bottom: 1px solid #3361AE;
 }
 
-.equipment-checkout-input {
+.scan-input {
     margin: 15px 0;
     text-align: left;
 }
 
-.equipment-checkout-input label {
+.scan-input label {
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
@@ -43,7 +43,7 @@
     font-size: 14px;
 }
 
-.equipment-checkout-input input {
+.scan-input input {
     width: 100%;
     padding: 10px 0 10px 0;
     border: 1px solid #3361AE;
@@ -54,7 +54,7 @@
     outline: none;
 }
 
-.equipment-checkout-buttons {
+.scan-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
