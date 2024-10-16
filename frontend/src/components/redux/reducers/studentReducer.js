@@ -1,7 +1,7 @@
 const initialState = {
     email: '',
     name: '',
-    classCodes: [], 
+    classCodes: [],
 };
 
 const studentReducer = (state = initialState, action) => {
@@ -11,7 +11,8 @@ const studentReducer = (state = initialState, action) => {
                 ...state,
                 email: action.payload.email,
                 name: action.payload.name,
-                classCodes: action.payload.classCodes || [] 
+                classCodes: action.payload.classCodes || [],
+                role: action.payload.role,
             };
         default:
             return state;
