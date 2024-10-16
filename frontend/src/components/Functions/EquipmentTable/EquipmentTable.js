@@ -144,7 +144,6 @@ class EquipmentTable extends Component {
 
     render() {
         const { isEditMode, toggleEditMode, handleOpenPopup } = this.props;
-        // const searchBarStyle = isEditMode ? { marginRight: '20%' } : {};
 
         const columnDefs = [
             {

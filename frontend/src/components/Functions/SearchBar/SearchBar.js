@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const SearchBar = ({ onSearch, placeholder }) => {
     const [query, setQuery] = useState('');
+    const [placeholderText, setPlaceholderText] = useState(placeholder);
 
     const handleChange = (e) => {
         const newQuery = e.target.value;
@@ -15,12 +16,13 @@ const SearchBar = ({ onSearch, placeholder }) => {
     };
 
     const handleFocus = () => {
-        setQuery('');
+        setPlaceholderText('');  
     };
 
     const handleBlur = () => {
         if (query === '') {
-            setQuery('');
+            // Resets the placeholder if input is empty
+            setPlaceholderText(placeholder);  
         }
     };
 
@@ -28,7 +30,7 @@ const SearchBar = ({ onSearch, placeholder }) => {
         <div className="search-bar">
             <input
                 type="text"
-                placeholder={placeholder}
+                placeholder={placeholderText}
                 value={query}
                 onChange={handleChange}
                 onFocus={handleFocus}
