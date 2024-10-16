@@ -3,7 +3,7 @@ import AgGridTable from '../AgGridTable/AgGridTable';
 import { getAllOrders } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import ScanButton from '../../Button/ScanButton/ScanButton'; 
-import EquipmentCheckoutPopup from '../../Modal/EquipmentCheckoutPopup/EquipmentCheckoutPopup';
+import ScanPopup from '../../Modal/ScanPopup/ScanPopup.js';
 import './ReservationTable.css';
 
 class ReservationTable extends Component {
@@ -149,7 +149,7 @@ class ReservationTable extends Component {
                 )}
 
                 {showScanPopup && (
-                    <EquipmentCheckoutPopup onClose={this.toggleCheckoutPopup} />
+                    <ScanPopup onClose={this.toggleCheckoutPopup} />
                 )}
             </>
         );

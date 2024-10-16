@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './EquipmentCheckoutPopup.css';
+import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
 
-const EquipmentCheckoutPopup = ({ onClose }) => {
+const ScanPopup = ({ onClose }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
 
     const handleSearchClick = () => {
@@ -11,7 +11,7 @@ const EquipmentCheckoutPopup = ({ onClose }) => {
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
-        // Close the EquipmentCheckoutPopup as well 
+        // Close the ScanPopup as well 
         onClose(); 
     };
 
@@ -45,4 +45,4 @@ const EquipmentCheckoutPopup = ({ onClose }) => {
     );
 };
 
-export default EquipmentCheckoutPopup;
+export default ScanPopup;
