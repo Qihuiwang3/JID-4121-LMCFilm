@@ -4,15 +4,14 @@
 }
 
 .student-btn {
-    display: inline-flex;
-    justify-content: space-between;
+    display: flex;
+    justify-content: center;
     width: 100%;
     position: relative;
     margin-top: 20px;
-    margin-left: 10%;
 }
 
-.bottom-btn-container {
+.student-bottom-btn-container {
     display: flex;
     justify-content: space-between;
     width: 80%;

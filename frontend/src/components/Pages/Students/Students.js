@@ -38,7 +38,7 @@ const Students = () => {
                         <SaveButton onClick={handleSave} />
                     </div>
                 ) : (
-                    <div className="bottom-btn-container">
+                    <div className="student-bottom-btn-container">
                         <BackButton to="/Management" />
                     </div>
                 )}
