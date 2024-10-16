@@ -117,7 +117,6 @@ const createCart = async (data) => {
 const getItems = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/items`);
-        console.log(res.data)
         return res.data;
     } catch (error) {
         console.log(error)
@@ -139,7 +138,6 @@ const createGlobalItem = async (data) => {
 };
 
 const deleteGlobalItem = async (itemName, itemId) => {
-    console.log("SOHOS " + itemName + " " + itemId);
     try {
         const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}/`, {
             headers: {
@@ -311,6 +309,81 @@ const getAllOrders = async () => {
         return res.data;
     } catch (error) {
         console.error('Error fetching all orders:', error);
+
+    }
+};
+
+const createDamageReport = async (data) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/damage-reports`, data, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error creating damage report:', error);
+        throw error;
+    }
+};
+
+const getAllDamageReports = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/damage-reports`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching damage reports:', error);
+        throw error;
+    }
+};
+
+const getSingleDamageReport = async (id) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/damage-reports/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching damage report:', error);
+        throw error;
+    }
+};
+
+const deleteDamageReport = async (id) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/damage-reports/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting damage report:', error);
+        throw error;
+    }
+};
+
+const updateDamageReport = async (id, data) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/damage-reports/${id}`, data, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error updating damage report:', error);
+        throw error;
+    }
+};
+
+const getRepairStatus = async (itemName, itemId) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/item/repair-status`, {
+            itemName,
+            itemId,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data; 
+    } catch (error) {
+        console.error('Error getting repair status:', error);
         throw error;
     }
 };
@@ -340,5 +413,11 @@ export {
     removeClassCode,
     updateStudentRole, 
     createSingleItem,
-    getAllOrders
+    getAllOrders,
+    createDamageReport,
+    getAllDamageReports,
+    getSingleDamageReport,
+    deleteDamageReport,
+    updateDamageReport,
+    getRepairStatus,
 };
