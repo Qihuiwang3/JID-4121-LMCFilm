@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600&display=swap');
-.student-title {
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600&display=swap');
+.damage-title{
     font-size: 24px;
     font-weight: bold;
     color: #3361AE;
@@ -29,12 +29,12 @@
     color: #3361AE;
 }
 
-.student-searchbar {
+.damage-searchbar {
     display: inline-flex;
     align-items: center;
 }
 
-.student-edit {
+.damage-edit {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -43,13 +43,34 @@
     margin-left: auto;
 }
 
+.view-details {
+    border: none;
+    background-color: transparent;
+}
+
+.view-details:hover {
+    color: #3361AE;
+    cursor: pointer;
+}
+
+.repair-dropdown {
+    width: 50px;
+    padding: 4px;
+    color: white;
+    background-color: rgb(51, 97, 174);
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
 @media (max-width: 800px) {
 
-    .student-title {
+    .damage-title {
         margin-top: 10%;
     }
 
-    .student-searchbar {
+    .damage-searchbar {
         margin-right: 0%;
     }
 }

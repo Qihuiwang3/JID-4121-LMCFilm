@@ -36,3 +36,16 @@
     width: 80vw;
     position: relative;
 }
+
+.flex-container {
+    display: flex;
+    padding-top: 100px;
+    justify-content: space-between;
+    width: 60%;
+    padding-bottom: 25px;
+}
+
+.equipment-heading {
+    padding-left: 16.5%;
+    color: #3361AE;
+}
