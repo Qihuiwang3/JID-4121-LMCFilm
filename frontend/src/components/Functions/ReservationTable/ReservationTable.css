@@ -52,43 +52,6 @@
     }
 }
 
-.view-reservation-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.view-reservation-modal-content {
-    text-align: center;
-    display: flex;
-    gap: 7%;
-    width: 100%;
-    height: 40px;
-    justify-content: center;
-}
-
-.view-reservation-modal-button {
-    background-color: #3361AE;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.view-reservation-modal-button:hover {
-    background-color: #3361AE;
-}
-
 .reservation-view-details:hover {
     color: #3361AE;
     cursor: pointer;

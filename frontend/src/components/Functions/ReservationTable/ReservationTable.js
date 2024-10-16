@@ -18,7 +18,6 @@ class ReservationTable extends Component {
                 resizable: true
             },
             searchQuery: '',
-            showModal: false,
             showScanPopup: false,
             viewReportId: null,
         };
@@ -52,14 +51,7 @@ class ReservationTable extends Component {
 
     toggleScanModal = () => {
         this.setState(prevState => ({
-            showModal: !prevState.showModal
-        }));
-    };
-
-    toggleCheckoutPopup = () => {
-        this.setState(prevState => ({
             showScanPopup: !prevState.showScanPopup,
-            showModal: !prevState.showModal
         }));
     };
 
@@ -76,7 +68,7 @@ class ReservationTable extends Component {
     };
 
     render() {
-        const { showModal, showScanPopup } = this.state;
+        const { showScanPopup } = this.state;
         const columnDefs = [
             { headerName: "Order Number", field: "orderNumber", flex: 1.5 },
             { headerName: "Name", field: "studentName", flex: 1.5 },
@@ -139,17 +131,9 @@ class ReservationTable extends Component {
                     domLayout="autoHeight"
                     suppressHorizontalScroll={true}
                 />
-                {showModal && (
-                    <div className="view-reservation-modal-overlay" onClick={this.toggleScanModal}>
-                        <div className="view-reservation-modal-content" onClick={(e) => e.stopPropagation()}>
-                            <button className="view-reservation-modal-button" onClick={this.toggleCheckoutPopup}>Equipment Check Out</button>
-                            <button className="view-reservation-modal-button">Equipment Check In</button>
-                        </div>
-                    </div>
-                )}
 
                 {showScanPopup && (
-                    <ScanPopup onClose={this.toggleCheckoutPopup} />
+                    <ScanPopup onClose={this.toggleScanModal} />
                 )}
             </>
         );
