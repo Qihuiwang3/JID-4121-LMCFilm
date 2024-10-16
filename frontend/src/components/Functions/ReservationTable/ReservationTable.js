@@ -68,8 +68,32 @@ class ReservationTable extends Component {
             { headerName: "Order Number", field: "orderNumber", flex: 1.5 },
             { headerName: "Name", field: "studentName", flex: 1.5 },
             { headerName: "Email", field: "email", flex: 2 },
-            { headerName: "Checked-in", field: "checkin", flex: 2 },
-            { headerName: "Checked-out", field: "checkout", flex: 2 },
+            { 
+                headerName: "Checked-in", 
+                field: "checkin", 
+                flex: 2,
+                valueFormatter: (params) => {
+                    const dateValue = new Date(params.value);
+                    return params.value ? dateValue.toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                    }).replace(',', '') : 'Available';
+                }
+            },
+            { 
+                headerName: "Checked-out", 
+                field: "checkout", 
+                flex: 2,
+                valueFormatter: (params) => {
+                    const dateValue = new Date(params.value);
+                    return params.value ? dateValue.toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                    }).replace(',', '') : 'Available';
+                }
+            },
             { headerName: "View", field: "email", flex: 1 }
 
         ].filter(Boolean);
