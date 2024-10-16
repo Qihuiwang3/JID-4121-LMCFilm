@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents, deleteStudent, updateStudentRole, } from '../../../connector.js';  
+import { getAllOrders } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import ScanButton from '../../Button/ScanButton/ScanButton'; 
 import EquipmentCheckoutPopup from '../../Modal/EquipmentCheckoutPopup/EquipmentCheckoutPopup';
@@ -12,7 +12,6 @@ class ReservationTable extends Component {
         this.state = {
             records: [],
             filteredRecords: [],
-            tempDeletedRows: [],
             updatedRoles: {},
             defaultColDef: {
                 sortable: true,
@@ -30,57 +29,15 @@ class ReservationTable extends Component {
 
     loadRecords = async () => {
         try {
-            const students = await getStudents();
-
-            const flattenedRecords = students.flatMap(reservation => 
-                reservation.classCodes.length > 0 
-                    ? reservation.classCodes.map(classCode => ({
-                        email: reservation.email,
-                        name: reservation.name,
-                        classCode: classCode,
-                        role: reservation.role
-                    }))
-                    : [{ // If no class codes, add a record with class N/A
-                        email: reservation.email,
-                        name: reservation.name,
-                        classCode: "N/A", 
-                        role: reservation.role
-                    }]
-            );
-            
+            const orders = await getAllOrders();
+            console.log("orders: ", orders)
             this.setState({ 
-                records: flattenedRecords,
-                filteredRecords: flattenedRecords, 
-                tempDeletedRows: [],
+                records: orders,
+                filteredRecords: orders, 
                 updatedRoles: {} 
             });
         } catch (error) {
             console.error("Error loading records:", error);
-        }
-    };
-
-    tempDeleteRow = (data) => {
-        this.setState((prevState) => {
-            const updatedRecords = prevState.records.filter(record => record.email !== data.email); 
-            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record.email !== data.email); 
-
-            return {
-                records: updatedRecords,
-                filteredRecords: updatedFilteredRecords, 
-                tempDeletedRows: [...prevState.tempDeletedRows, data.email] 
-            };
-        });
-    };
-
-    confirmDeleteRows = async () => {
-        try {
-            const { tempDeletedRows } = this.state;
-            for (let email of tempDeletedRows) {
-                await deleteStudent(email); 
-            }
-            this.setState({ tempDeletedRows: [] });
-        } catch (error) {
-            console.error("Error saving deletions:", error);
         }
     };
 
@@ -90,29 +47,6 @@ class ReservationTable extends Component {
             record.name.toLowerCase().includes(query.toLowerCase())
         );
         this.setState({ filteredRecords, searchQuery: query });
-    };
-
-    handleRoleChange = (email, newRole) => {
-        this.setState(prevState => ({
-            updatedRoles: {
-                ...prevState.updatedRoles,
-                [email]: newRole
-            }
-        }));
-    };
-
-    saveChanges = async () => {
-        try {
-            const { updatedRoles } = this.state;
-            for (let [email, role] of Object.entries(updatedRoles)) {
-                await updateStudentRole(email, role);
-            }
-            await this.confirmDeleteRows();
-            this.setState({ updatedRoles: {} });
-            this.loadRecords();
-        } catch (error) {
-            console.error("Error saving changes:", error);
-        }
     };
 
     toggleScanModal = () => {
@@ -131,11 +65,11 @@ class ReservationTable extends Component {
     render() {
         const { showModal, showScanPopup } = this.state;
         const columnDefs = [
-            { headerName: "Bar Code", field: "classCode", flex: 1.5 },
-            { headerName: "Name", field: "name", flex: 1.5 },
+            { headerName: "Order Number", field: "orderNumber", flex: 1.5 },
+            { headerName: "Name", field: "studentName", flex: 1.5 },
             { headerName: "Email", field: "email", flex: 2 },
-            { headerName: "Checked-in", field: "email", flex: 2 },
-            { headerName: "Checked-out", field: "email", flex: 2 },
+            { headerName: "Checked-in", field: "checkin", flex: 2 },
+            { headerName: "Checked-out", field: "checkout", flex: 2 },
             { headerName: "View", field: "email", flex: 1 }
 
         ].filter(Boolean);

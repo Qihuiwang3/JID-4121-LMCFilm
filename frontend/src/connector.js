@@ -305,6 +305,16 @@ const createSingleItem = async (itemData) => {
     }
 };
 
+const getAllOrders = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/orders`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching all orders:', error);
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
@@ -329,5 +339,6 @@ export {
     loginStudent,
     removeClassCode,
     updateStudentRole, 
-    createSingleItem
+    createSingleItem,
+    getAllOrders
 };
