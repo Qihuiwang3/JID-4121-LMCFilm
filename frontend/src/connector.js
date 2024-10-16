@@ -339,7 +339,11 @@ const getSingleDamageReport = async (id) => {
 
 const deleteDamageReport = async (id) => {
     try {
-        const res = await axios.delete(`${BACKEND_URL}/api/damage-reports/${id}`);
+        const res = await axios.delete(`${BACKEND_URL}/api/damage-reports/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
         return res.data;
     } catch (error) {
         console.error('Error deleting damage report:', error);
@@ -355,6 +359,23 @@ const updateDamageReport = async (id, data) => {
         return res.data;
     } catch (error) {
         console.error('Error updating damage report:', error);
+        throw error;
+    }
+};
+
+const getRepairStatus = async (itemName, itemId) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/item/repair-status`, {
+            itemName,
+            itemId,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data; 
+    } catch (error) {
+        console.error('Error getting repair status:', error);
         throw error;
     }
 };
@@ -388,5 +409,6 @@ export {
     getAllDamageReports,
     getSingleDamageReport,
     deleteDamageReport,
-    updateDamageReport
+    updateDamageReport,
+    getRepairStatus
 };

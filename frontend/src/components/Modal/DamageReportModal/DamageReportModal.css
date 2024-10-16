@@ -88,7 +88,8 @@
 }
 
 .cancel-button,
-.submit-button {
+.damage-submit-button {
+    font-size: 21px;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -99,11 +100,22 @@
     color: #3361AE;
 }
 
-.submit-button {
+.damage-submit-button {
+    font-size: 21px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+    font-family: sans-serif;
     border-color: #3361AE;
     background-color: transparent;
     color: #3361AE;
     border: 1px solid #3361AE;
+}
+
+.damage-submit-button:hover {
+    background-color: #3361AE;
+    color: white;
 }
 
 .uploaded-image-preview {

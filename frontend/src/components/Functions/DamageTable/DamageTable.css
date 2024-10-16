@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600&display=swap');
 .damage-title{
     font-size: 24px;
     font-weight: bold;
@@ -39,6 +41,27 @@
     cursor: pointer;
     margin-right: 0%;
     margin-left: auto;
+}
+
+.view-details {
+    border: none;
+    background-color: transparent;
+}
+
+.view-details:hover {
+    color: #3361AE;
+    cursor: pointer;
+}
+
+.repair-dropdown {
+    width: 50px;
+    padding: 4px;
+    color: white;
+    background-color: rgb(51, 97, 174);
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
 }
 
 @media (max-width: 800px) {

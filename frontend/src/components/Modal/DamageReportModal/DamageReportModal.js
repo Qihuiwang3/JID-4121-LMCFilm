@@ -51,7 +51,6 @@ const DamageReportModal = ({ show, handleClose }) => {
 
         try {
             await createDamageReport(data);
-            await toggleRepairStatus(itemName, itemId);
             handleClose(); 
         } catch (error) {
             console.error('Error submitting damage report:', error);
@@ -131,7 +130,7 @@ const DamageReportModal = ({ show, handleClose }) => {
                     {error && <div className="error-message">{error}</div>}
                     <div className="modal-footer">
                         <button type="button" className="cancel-button" onClick={handleClose}>Cancel</button>
-                        <button type="submit" className="submit-button">Save</button>
+                        <button type="submit" className="damage-submit-button">Save</button>
                     </div>
                 </form>
             </div>

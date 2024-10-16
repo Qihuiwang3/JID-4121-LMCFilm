@@ -1,0 +1,19 @@
+.report-info {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.label {
+    color: #3361AE;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.info {
+    color: #000;
+}

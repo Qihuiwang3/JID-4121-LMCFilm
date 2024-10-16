@@ -47,19 +47,22 @@ const getSingleDamageReport = asyncHandler(async (req, res) => {
     res.status(200).json(report);
 });
 
-// @desc Delete a damage report by ID
+
+// @desc Delete a damage report by _id
 // @route DELETE /damage-reports/:id
 // @access Private (Admin)
 const deleteDamageReport = asyncHandler(async (req, res) => {
-    const report = await DamageReport.findById(req.params.id);
+    const { id } = req.params;
+
+    const report = await DamageReport.findById(id);
 
     if (!report) {
         res.status(404);
-        throw new Error('Damage report not found');
+        throw new Error('Damage report not found.');
     }
 
-    await report.remove();
-    res.status(200).json({ message: 'Damage report deleted' });
+    await DamageReport.deleteOne({ _id: id });
+    res.status(200).json({ message: 'Damage report deleted successfully.' });
 });
 
 // @desc Update a damage report's description and images

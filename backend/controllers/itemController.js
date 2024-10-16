@@ -155,8 +155,6 @@ const removeSingularItem = asyncHandler(async (req, res) => {
 });
 
 
-
-
 // @desc Create new single item
 // @route POST /single-item
 // @access Private
@@ -397,6 +395,31 @@ const toggleHideStatus = asyncHandler(async (req, res) => {
 });
 
 
+// @desc Get the repair status of a specific item by itemName and itemId
+// @route POST /item/repair-status
+// @access Private
+const getRepairStatus = asyncHandler(async (req, res) => {
+    const { itemName, itemId } = req.body;
+
+    const item = await Item.findOne({ itemName });
+
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
+    }
+
+    const itemDetails = item.itemIds.find(i => i.itemId === itemId);
+
+    if (!itemDetails) {
+        return res.status(404).json({ error: `Item ID ${itemId} not found for item ${itemName}.` });
+    }
+
+    res.status(200).json({
+        repair: itemDetails.repair
+    });
+});
+
+
+
 module.exports = {
     createGlobalItem,
     getAllGlobalEquipment,
@@ -414,5 +437,6 @@ module.exports = {
     purchaseBundleItem,
     returnBundleItem,
     toggleHideStatus,
-    toggleRepairStatus
+    toggleRepairStatus,
+    getRepairStatus
 };
