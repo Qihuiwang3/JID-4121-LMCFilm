@@ -29,7 +29,7 @@ const Students = () => {
             /> 
 
             <div className="student-btn">
-                <div className="bottom-btn-container">
+                <div className="student-bottom-btn-container">
                     <Button type="back" onClick={() => handleBack()}>Back</Button>
                 </div>
             </div>

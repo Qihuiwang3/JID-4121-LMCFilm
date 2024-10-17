@@ -3,9 +3,9 @@ import './SearchBar.css';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, placeholder }) => {
     const [query, setQuery] = useState('');
-    const [placeholder, setPlaceholder] = useState('Search by Name');
+    const [placeholderText, setPlaceholderText] = useState(placeholder);
 
     const handleChange = (e) => {
         const newQuery = e.target.value;
@@ -16,12 +16,13 @@ const SearchBar = ({ onSearch }) => {
     };
 
     const handleFocus = () => {
-        setPlaceholder('');
+        setPlaceholderText('');  
     };
 
     const handleBlur = () => {
         if (query === '') {
-            setPlaceholder('Search by Name');
+            // Resets the placeholder if input is empty
+            setPlaceholderText(placeholder);  
         }
     };
 
@@ -29,7 +30,7 @@ const SearchBar = ({ onSearch }) => {
         <div className="search-bar">
             <input
                 type="text"
-                placeholder={placeholder}
+                placeholder={placeholderText}
                 value={query}
                 onChange={handleChange}
                 onFocus={handleFocus}
