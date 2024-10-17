@@ -9,7 +9,7 @@ const ViewReservation = () => {
     const studentTableRef = useRef(null); 
 
     const handleBack = () => {
-        navigate('/Management');
+        navigate('/SelectTask');
     };
 
     return (
