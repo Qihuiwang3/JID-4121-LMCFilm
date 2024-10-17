@@ -31,7 +31,6 @@ class ReservationTable extends Component {
     loadRecords = async () => {
         try {
             const orders = await getAllOrders();
-            console.log("orders: ", orders)
             this.setState({ 
                 records: orders,
                 filteredRecords: orders, 
@@ -76,7 +75,7 @@ class ReservationTable extends Component {
     render() {
         const { showScanPopup, selectedOption } = this.state;
         const columnDefs = [
-            { headerName: "Order Number", field: "orderNumber", flex: 1.5 },
+            { headerName: "Order #", field: "orderNumber", flex: 1.5 },
             { headerName: "Name", field: "studentName", flex: 1.5 },
             { headerName: "Email", field: "email", flex: 2 },
             { 

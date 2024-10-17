@@ -23,8 +23,8 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
         <div className="scan-overlay" onClick={onClose}>
             <div className="scan-content" onClick={(e) => e.stopPropagation()}>
                 <h2>Scan</h2>
-                <button className="close-button" onClick={onClose}>
-                    <div className='close-button-inner'>&times;</div>
+                <button className="scan-close-button" onClick={onClose}>
+                    <div className='scan-close-button-inner'>&times;</div>
                 </button>
                 
                 <div className="radio-input">
@@ -49,8 +49,12 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 </div>
 
                 <div className="scan-input">
-                    <label htmlFor="barcode">Bar Code</label>
+                    <label htmlFor="barcode">Order Number</label>
                     <input type="text" id="barcode" className="checkout-modal-input"/>
+                </div>
+
+                <div className="or-text">
+                    OR
                 </div>
                 
                 <div className="scan-input">
@@ -59,7 +63,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 </div>
                 
                 <div className="modal-footer">
-                    <button className="cancelModal-button" onClick={onClose}>Cancel</button>
+                    <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
                     <button 
                         className="scan-search-button" 
                         onClick={handleSearchClick}
