@@ -167,8 +167,11 @@ class StudentTable extends Component {
                     <h2>Students</h2>
                 </div>
                 <div className="search-bar-edit-container">
-                    <div className="student-searchbar">
-                        <SearchBar onSearch={this.handleSearch} />
+                    <div className="student-searchbar" >
+                        <SearchBar 
+                            onSearch={this.handleSearch} 
+                            placeholder={"Search by Name"}
+                        />
                     </div>
                 </div>
                 <AgGridTable
