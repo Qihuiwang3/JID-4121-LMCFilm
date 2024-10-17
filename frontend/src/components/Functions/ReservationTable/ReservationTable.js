@@ -44,8 +44,9 @@ class ReservationTable extends Component {
     handleSearch = (query) => {
         const { records } = this.state;
         const filteredRecords = records.filter(record =>
-            record.name.toLowerCase().includes(query.toLowerCase())
+            record.email.toLowerCase().includes(query.toLowerCase())
         );
+        
         this.setState({ filteredRecords, searchQuery: query });
     };
 
@@ -123,7 +124,10 @@ class ReservationTable extends Component {
                 </div>
                 <div className="search-bar-edit-container">
                     <div className="reservation-searchbar" >
-                        <SearchBar onSearch={this.handleSearch} />
+                        <SearchBar 
+                            onSearch={this.handleSearch} 
+                            placeholder={"Search by Email"}
+                        />
                     </div>
                     <div className="reservation-edit">
                         <ScanButton onClick={this.toggleScanModal} />
