@@ -27,7 +27,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-    border-bottom: 1px solid #3361AE;
+    border-bottom: 1.5px solid #3361AE;
     padding-bottom: 5px;
 }
 
@@ -46,11 +46,17 @@
 .search-section {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.search-popup-input-group {
-    width: 48%;
+.info-order-number {
+    text-align: left;
+}
+
+.info-group {
+    text-align: left;
+    width: 45%;
 }
 
 .search-label {

@@ -6,6 +6,8 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
 
     const handleSearchClick = () => {
+        console.log("showSearchPopup?", showSearchPopup)
+
         setShowSearchPopup(true);
     };
 
@@ -14,10 +16,6 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
         // Close the ScanPopup as well 
         onClose(); 
     };
-
-    if (showSearchPopup) {
-        return <SearchPopup onClose={closeSearchPopup} />;
-    }
 
     return (
         <div className="scan-overlay" onClick={onClose}>
@@ -67,12 +65,14 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     <button 
                         className="scan-search-button" 
                         onClick={handleSearchClick}
-                        // Disable until a radio button is selected
-                        disabled={!selectedOption} 
                     >
                         Search
                     </button>
                 </div>
+                
+                {showSearchPopup && 
+                    <SearchPopup onClose={closeSearchPopup} />
+                }
             </div>
         </div>
     );
