@@ -15,6 +15,7 @@ import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/S
 import Management from "./components/Pages/SelectTaskPages/AdminManagementPage/Management";
 import EnterCode from "./components/Pages/EnterCode/EnterCode";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
+import ViewReservation from "./components/Pages/ViewReservation/ViewReservation";
 import Login from "./components/Pages/Login/Login";
 import DamageReport from "./components/Pages/DamageReport/DamageReport";
 // import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
@@ -48,6 +49,7 @@ class App extends Component {
             <Route path="/SelectClass" element={<SelectClassPage />} />
             <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
             <Route path="/ReservationPage" element={<ReservationPage />} />
+            <Route path="/ViewReservation" element={<ViewReservation />} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />

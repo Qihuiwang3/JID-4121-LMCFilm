@@ -1,0 +1,17 @@
+.scan-btn {
+    border-radius: 5px;
+    width: 100px;
+    background-color: #3361AE;
+    border: 2px solid #3361AE;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.scan-btn-icon {
+    font-size: 16px;
+    margin-left: 4px;
+}

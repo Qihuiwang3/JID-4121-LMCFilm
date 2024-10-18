@@ -303,6 +303,16 @@ const createSingleItem = async (itemData) => {
     }
 };
 
+const getAllOrders = async () => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/orders`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching all orders:', error);
+
+    }
+};
+
 const createDamageReport = async (data) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/damage-reports`, data, {
@@ -403,10 +413,11 @@ export {
     removeClassCode,
     updateStudentRole, 
     createSingleItem,
+    getAllOrders,
     createDamageReport,
     getAllDamageReports,
     getSingleDamageReport,
     deleteDamageReport,
     updateDamageReport,
-    getRepairStatus
+    getRepairStatus,
 };
