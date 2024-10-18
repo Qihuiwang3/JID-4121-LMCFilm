@@ -17,6 +17,7 @@ const {
     returnBundleItem,
     toggleRepairStatus,
     toggleHideStatus,
+    updateBundleItem,
     getRepairStatus
 } = require('../controllers/itemController');
 
@@ -48,6 +49,7 @@ router.post('/return-single/:itemName', returnSingleItem);
 // Routes for bundle items
 router.post('/bundle-item', createBundleItem);
 router.get('/bundle-items/:classCode', getBundleItemsByClassCode);
+router.put('/bundle-items/:bundleId', updateBundleItem)
 router.post('/purchase-bundle/:bundleId', purchaseBundleItem);
 router.post('/return-bundle/:bundleId', returnBundleItem);
 

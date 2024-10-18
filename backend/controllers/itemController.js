@@ -261,6 +261,37 @@ const createBundleItem = asyncHandler(async (req, res) => {
     res.status(201).json(savedBundleItem);
 });
 
+const updateBundleItem = asyncHandler(async (req, res) => {
+    const { bundleId } = req.params;
+    const { price, bundleName, items} = req.body;
+
+    // Corrected model name: BundleItem instead of BundleItemModel
+    let bundleItem = await BundleItem.findOne({ bundleId });
+
+    if (!bundleItem) {
+        return res.status(404).json({ error: "Bundle Item not found" });
+    }
+
+    if (price) {
+        bundleItem.price = price;
+    }
+
+    if (bundleName) {
+        bundleItem.bundleName = bundleName;
+    }
+
+    if (items) {
+        bundleItem.items = items;
+    }
+
+    // Save the updated bundle item
+    const updatedBundleItem = await bundleItem.save();
+
+    // Respond with the updated item
+    res.status(200).json(updatedBundleItem);
+});
+
+
 
 // @desc Get all bundle items for a specific class code
 // @route GET /bundle-items/:classCode
@@ -438,5 +469,6 @@ module.exports = {
     returnBundleItem,
     toggleHideStatus,
     toggleRepairStatus,
+    updateBundleItem,
     getRepairStatus
 };

@@ -10,7 +10,7 @@ const Management = () => {
 
   const taskRoutes = {
     // Add routes after the corresponding page has been created
-    A: "/ClassCodesAdmin",
+    A: "/ClassCodes",
     B: "/Students",
   };
 

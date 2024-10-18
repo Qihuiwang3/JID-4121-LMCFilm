@@ -172,6 +172,17 @@ const getClassInfoByCode = async (codeInput) => {
     }
 };
 
+const getSingleItemsByClassCode = async (codeInput) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/single-items/${codeInput}`);
+        console.log(res.data)
+        return res.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
 const createCartWithData = async (cartData) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/carts`, cartData, {
@@ -303,6 +314,21 @@ const createSingleItem = async (itemData) => {
     }
 };
 
+const updateBundleItem = async (updatedBundleItem) => {
+    try {
+        console.log(updateBundleItem.bundleId)
+        const res = await axios.put(`${BACKEND_URL}/api/bundle-items/${updatedBundleItem.bundleId}`, {
+            bundleName: updatedBundleItem.bundleName,
+            price: updatedBundleItem.price,
+            items: updatedBundleItem.bundleEquipment,
+        });
+        return res.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 const getAllOrders = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/orders`);
@@ -413,6 +439,8 @@ export {
     removeClassCode,
     updateStudentRole, 
     createSingleItem,
+    updateBundleItem,
+    getSingleItemsByClassCode,
     getAllOrders,
     createDamageReport,
     getAllDamageReports,
