@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
-import { getClassCodes, createClassCode, createBundleItem, getItems, createSingleItem, deleteClassCode, updateClassCode, getBundleItemsByClassCode, getClassInfoByCode } from '../../../connector.js';
+import { getClassCodes, createClassCode, createBundleItem, getItems, createSingleItem, deleteClassCode, getBundleItemsByClassCode, updateClassCode, updateBundleItem, getSingleItemsByClassCode } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
 
 function CodesTable() {
@@ -13,6 +13,8 @@ function CodesTable() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [generatedCode, setGeneratedCode] = useState('');
     const [availableEquipment, setAvailableEquipment] = useState([]);
+    const [initialEquipment, setInitialEquipment] = useState([]);
+
     const [newClass, setNewClass] = useState({
         className: '',
         professor: '',
@@ -24,8 +26,17 @@ function CodesTable() {
         bundleEquipment: [],
     });
 
+    const [editClassData, setEditClassData] = useState({
+        className: '',
+        professor: '',
+        code: '',
+        bundleId: '',
+        bundleName: '',
+        price: '',
+        equipment: [],
+        bundleEquipment: [],
+    });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [editClassData, setEditClassData] = useState({});
 
     useEffect(() => {
         loadRecords();
@@ -46,7 +57,6 @@ function CodesTable() {
                         bundleName: bundleName,
                     };
                 } catch (error) {
-                    console.error(`Error fetching bundle for classCode ${classCode.code}:`, error);
                     return {
                         code: classCode.code,
                         className: classCode.className,
@@ -58,18 +68,14 @@ function CodesTable() {
             const reverseRecords = flattenedRecords.reverse();
             setRecords(reverseRecords);
             setFilteredRecords(reverseRecords);
-        } catch (error) {
-            console.error("Error loading class codes:", error);
-        }
+        } catch (error) {}
     };
 
     const fetchEquipment = async () => {
         try {
             const equipmentList = await getItems();
             setAvailableEquipment(equipmentList);
-        } catch (error) {
-            console.error("Error fetching equipment:", error);
-        }
+        } catch (error) {}
     };
 
     const handleSearch = (query) => {
@@ -120,21 +126,18 @@ function CodesTable() {
             equipment: newClass.equipment || [],
             bundleEquipment: newClass.bundleEquipment || [],
         };
-
         try {
             await createClassCode({
                 code: newEntry.code,
                 professor: newEntry.professor,
                 className: newEntry.className,
             });
-
             const tempBundle = [];
             for (let equipmentItem of newClass.equipment) {
                 const tempItem = await createSingleItem({
                     classCode: newEntry.code,
                     itemName: equipmentItem,
                 });
-
                 if (newClass.bundleEquipment.includes(equipmentItem)) {
                     tempBundle.push({
                         itemName: tempItem.itemName,
@@ -142,7 +145,6 @@ function CodesTable() {
                     });
                 }
             }
-
             if (newClass.bundleId && newClass.bundleName) {
                 await createBundleItem({
                     bundleId: newClass.bundleId,
@@ -152,13 +154,8 @@ function CodesTable() {
                     bundleName: newClass.bundleName,
                 });
             }
-
             await loadRecords();
-
-        } catch (error) {
-            console.error("Error adding new class:", error);
-        }
-
+        } catch (error) {}
         closeAddModal();
     };
 
@@ -167,46 +164,44 @@ function CodesTable() {
             await deleteClassCode(code);
             setRecords(records.filter((record) => record.code !== code));
             setFilteredRecords(filteredRecords.filter((record) => record.code !== code));
-        } catch (error) {
-            console.error("Error deleting class code:", error);
-        }
+        } catch (error) {}
     };
 
     const openEditModal = async (code) => {
+        const classToEdit = records.find((item) => item.code === code);
+        let bundleInfo = { bundleName: 'N/A', bundleId: '', price: '', bundleEquipment: [] };
+        let singleItems = [];
         try {
-            // Fetch the class details from the backend
-            const classDetails = await getClassInfoByCode(code);
-    
-            // Fetch the bundle details from the backend using the class code
-            const bundleDetails = await getBundleItemsByClassCode(code);
-    
-            // Get the necessary bundle fields from the bundle details
-            const bundleData = bundleDetails.length > 0 ? bundleDetails[0] : {};
-    
-            // Set the state with class and bundle details, including price and bundleId from the backend
-            setEditClassData({
-                code: classDetails.code,
-                className: classDetails.className,
-                professor: classDetails.professor,
-                bundleId: bundleData.bundleId || '', // Set bundleId if available
-                bundleName: bundleData.bundleName || 'N/A', // Set bundleName or N/A
-                price: bundleData.price || '', // Set price if available
-            });
-    
-            setIsEditModalOpen(true);
-        } catch (error) {
-            console.error('Error fetching class or bundle details:', error);
-        }
+            const bundleItems = await getBundleItemsByClassCode(classToEdit.code);
+            if (bundleItems.length > 0) {
+                bundleInfo = {
+                    bundleName: bundleItems[0].bundleName,
+                    bundleId: bundleItems[0].bundleId,
+                    price: bundleItems[0].price,
+                    bundleEquipment: bundleItems[0].items || [],
+                };
+            }
+        } catch (error) {}
+        try {
+            singleItems = await getSingleItemsByClassCode(classToEdit.code);
+        } catch (error) {}
+        setInitialEquipment(singleItems || []);
+        setEditClassData({
+            ...classToEdit,
+            ...bundleInfo,
+            equipment: singleItems || [],
+        });
+        setIsEditModalOpen(true);
     };
-    
+
     const closeEditModal = () => {
         setIsEditModalOpen(false);
     };
 
     const handleEditClassChange = (e) => {
         const { name, value } = e.target;
-        setEditClassData(prevData => ({
-            ...prevData,
+        setEditClassData(prevState => ({
+            ...prevState,
             [name]: value
         }));
     };
@@ -214,36 +209,54 @@ function CodesTable() {
     const handleSaveEditedClass = async () => {
         try {
             await updateClassCode(editClassData);
-
+            const newEquipment = editClassData.equipment.filter(equipmentItem => {
+                return !initialEquipment.find(initialItem => initialItem.itemName === equipmentItem.itemName);
+            });
+            for (const equipmentItem of newEquipment) {
+                await createSingleItem({
+                    classCode: editClassData.code,
+                    itemName: equipmentItem.itemName,
+                });
+            }
+            if (editClassData.bundleId || editClassData.price) {
+                const updatedBundleItems = editClassData.bundleEquipment.map(be => ({
+                    itemName: be.itemName,
+                    quantity: 1,
+                }));
+                await updateBundleItem({
+                    bundleName: editClassData.bundleName,
+                    code: editClassData.code,
+                    bundleId: editClassData.bundleId,
+                    price: editClassData.price,
+                    items: updatedBundleItems,
+                });
+            }
             const updatedRecords = records.map(item => {
                 return item.code === editClassData.code ? editClassData : item;
             });
-
             setRecords(updatedRecords);
             setFilteredRecords(updatedRecords);
             closeEditModal();
-        } catch (error) {
-            console.error("Error saving edited class:", error);
-        }
+        } catch (error) {}
     };
 
     const columnDefs = [
-        {
-            headerName: "Class",
-            field: "className",
-            flex: 1,
-            cellRenderer: params => (
-                <div className="class-edit-container">
-                    <FontAwesomeIcon
-                        icon={faEdit}
-                        className="edit-icon"
-                        onClick={() => openEditModal(params.data.code)}
-                        style={{ marginLeft: '10px', cursor: 'pointer' }}
-                    />
-                    <span> {params.value}</span>
-                </div>
-            )
-        },
+        { headerName: "Class", field: "className", flex: 1, cellRenderer: params => (
+            <>
+                <img
+                    src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
+                    alt="Edit"
+                    className="edit-icon"
+                    onClick={() => openEditModal(params.data.code)}
+                    style={{
+                        cursor: 'pointer', 
+                        width: '16px', 
+                        filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
+                    }}
+                />
+                {params.value}
+            </>
+        )},
         { headerName: "Code", field: "code", flex: 1 },
         { headerName: "Professor", field: "professor", flex: 1 },
         { headerName: "Package Name", field: "bundleName", flex: 1 },
@@ -252,10 +265,7 @@ function CodesTable() {
             field: "delete",
             flex: 1,
             cellRenderer: params => (
-                <button
-                    onClick={() => handleDeleteRow(params.data.code)}
-                    className="trash-icon"
-                >
+                <button onClick={() => handleDeleteRow(params.data.code)} className="trash-icon">
                     <FontAwesomeIcon icon={faTrash} />
                 </button>
             )
@@ -281,7 +291,6 @@ function CodesTable() {
                 defaultColDef={{ sortable: true, resizable: true }}
                 domLayout="autoHeight"
             />
-
             {isModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -306,20 +315,15 @@ function CodesTable() {
                             </div>
                             <div className="input-group">
                                 <label>Select Equipment For This Class</label>
-                                <select
-                                    name="equipment"
-                                    value=""
-                                    onChange={(e) => {
-                                        const selectedEquipment = e.target.value;
-                                        if (selectedEquipment && !newClass.equipment.includes(selectedEquipment)) {
-                                            setNewClass(prevState => ({
-                                                ...prevState,
-                                                equipment: [...prevState.equipment, selectedEquipment],
-                                            }));
-                                        }
-                                    }}
-                                    className="modal-input"
-                                >
+                                <select name="equipment" value="" onChange={(e) => {
+                                    const selectedEquipment = e.target.value;
+                                    if (selectedEquipment && !newClass.equipment.includes(selectedEquipment)) {
+                                        setNewClass(prevState => ({
+                                            ...prevState,
+                                            equipment: [...prevState.equipment, selectedEquipment],
+                                        }));
+                                    }
+                                }} className="modal-input">
                                     <option value="">Select Equipment</option>
                                     {availableEquipment.map((equipmentItem) => (
                                         <option key={equipmentItem._id} value={equipmentItem.itemName}>
@@ -327,14 +331,7 @@ function CodesTable() {
                                         </option>
                                     ))}
                                 </select>
-                                <input
-                                    type="text"
-                                    name="equipmentList"
-                                    value={newClass.equipment.join(', ')}
-                                    readOnly
-                                    className="modal-input"
-                                    placeholder="Selected equipment will appear here"
-                                />
+                                <input type="text" name="equipmentList" value={newClass.equipment ? newClass.equipment.join(', ') : ''} readOnly className="modal-input" placeholder="Selected equipment will appear here" />
                             </div>
                             <div className="input-group">
                                 <label>Package ID</label>
@@ -352,20 +349,15 @@ function CodesTable() {
                             </div>
                             <div className="input-group">
                                 <label>Select Bundle Items</label>
-                                <select
-                                    name="bundleEquipment"
-                                    value=""
-                                    onChange={(e) => {
-                                        const selectedBundleEquipment = e.target.value;
-                                        if (selectedBundleEquipment && !newClass.bundleEquipment.includes(selectedBundleEquipment)) {
-                                            setNewClass(prevState => ({
-                                                ...prevState,
-                                                bundleEquipment: [...prevState.bundleEquipment, selectedBundleEquipment],
-                                            }));
-                                        }
-                                    }}
-                                    className="modal-input"
-                                >
+                                <select name="bundleEquipment" value="" onChange={(e) => {
+                                    const selectedBundleEquipment = e.target.value;
+                                    if (selectedBundleEquipment && !newClass.bundleEquipment.includes(selectedBundleEquipment)) {
+                                        setNewClass(prevState => ({
+                                            ...prevState,
+                                            bundleEquipment: [...prevState.bundleEquipment, selectedBundleEquipment],
+                                        }));
+                                    }
+                                }} className="modal-input">
                                     <option value="">Select Bundle Items</option>
                                     {newClass.equipment.map((equipmentItem, index) => (
                                         <option key={index} value={equipmentItem}>
@@ -373,32 +365,21 @@ function CodesTable() {
                                         </option>
                                     ))}
                                 </select>
-                                <input
-                                    type="text"
-                                    name="bundleEquipmentList"
-                                    value={newClass.bundleEquipment.join(', ')}
-                                    readOnly
-                                    className="modal-input"
-                                    placeholder="Selected bundle items will appear here"
-                                />
+                                <input type="text" name="bundleEquipmentList" value={newClass.bundleEquipment ? newClass.bundleEquipment.join(', ') : ''} readOnly className="modal-input" placeholder="Selected bundle items will appear here" />
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button className="cancelModal-button" onClick={closeAddModal}>Cancel</button>
-                            <button className={`saveModal-button ${isAddButtonDisabled ? 'disabled-button' : ''}`}
-                                onClick={handleAddNewClassToScreen}
-                                disabled={isAddButtonDisabled}>Add</button>
+                            <button className={`saveModal-button ${isAddButtonDisabled ? 'disabled-button' : ''}`} onClick={handleAddNewClassToScreen} disabled={isAddButtonDisabled}>Add</button>
                         </div>
                     </div>
                 </div>
             )}
-
-            {/* Edit Modal */}
             {isEditModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h2>Edit Class</h2>
+                            <h2>Edit Class Code</h2>
                             <button className="close-button" onClick={closeEditModal}>×</button>
                         </div>
                         <div className="modal-body">
@@ -409,26 +390,66 @@ function CodesTable() {
                             <div className="input-group-row">
                                 <div className="input-group">
                                     <label>Class</label>
-                                    <input type="text" name="className" value={editClassData.className} onChange={handleEditClassChange} className="modal-input" />
+                                    <input type="text" name="className" value={editClassData.className || ''} onChange={handleEditClassChange} className="modal-input" />
                                 </div>
                                 <div className="input-group">
                                     <label>Professor</label>
-                                    <input type="text" name="professor" value={editClassData.professor} onChange={handleEditClassChange} className="modal-input" />
+                                    <input type="text" name="professor" value={editClassData.professor || ''} onChange={handleEditClassChange} className="modal-input" />
                                 </div>
                             </div>
                             <div className="input-group">
-                                <label>Package Name</label>
-                                <input type="text" name="bundleName" value={editClassData.bundleName} onChange={handleEditClassChange} className="modal-input" />
+                                <label>Select Equipment For This Class</label>
+                                <select name="equipment" value="" onChange={(e) => {
+                                    const selectedEquipment = e.target.value;
+                                    if (selectedEquipment && !editClassData.equipment.find(eq => eq.itemName === selectedEquipment)) {
+                                        setEditClassData(prevState => ({
+                                            ...prevState,
+                                            equipment: [...prevState.equipment, { itemName: selectedEquipment, quantity: 1 }],
+                                        }));
+                                    }
+                                }} className="modal-input">
+                                    <option value="">Select Equipment</option>
+                                    {availableEquipment.map((equipmentItem) => (
+                                        <option key={equipmentItem._id} value={equipmentItem.itemName}>
+                                            {equipmentItem.itemName}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input type="text" name="equipmentList" value={editClassData.equipment ? editClassData.equipment.map(eq => eq.itemName).join(', ') : ''} readOnly className="modal-input" placeholder="Selected equipment will appear here" />
+                            </div>
+                            <div className="input-group">
+                                <label>Package ID</label>
+                                <input type="text" name="bundleId" value={editClassData.bundleId || ''} readOnly disabled className="modal-input" />
                             </div>
                             <div className="input-group-row">
                                 <div className="input-group">
-                                    <label>Package ID</label>
-                                    <input type="text" name="bundleId" value={editClassData.bundleId} onChange={handleEditClassChange} className="modal-input" />
+                                    <label>Package Name</label>
+                                    <input type="text" name="bundleName" value={editClassData.bundleName || ''} onChange={handleEditClassChange} className="modal-input" />
                                 </div>
                                 <div className="input-group">
                                     <label>Price</label>
-                                    <input type="text" name="price" value={editClassData.price} onChange={handleEditClassChange} className="modal-input" />
+                                    <input type="text" name="price" value={editClassData.price || ''} onChange={handleEditClassChange} className="modal-input" />
                                 </div>
+                            </div>
+                            <div className="input-group">
+                                <label>Select Bundle Items</label>
+                                <select name="bundleEquipment" value="" onChange={(e) => {
+                                    const selectedBundleEquipment = e.target.value;
+                                    if (selectedBundleEquipment && !editClassData.bundleEquipment.find(be => be.itemName === selectedBundleEquipment)) {
+                                        setEditClassData(prevState => ({
+                                            ...prevState,
+                                            bundleEquipment: [...prevState.bundleEquipment, { itemName: selectedBundleEquipment, quantity: 1 }],
+                                        }));
+                                    }
+                                }} className="modal-input">
+                                    <option value="">Select Bundle Items</option>
+                                    {editClassData.equipment.map((equipmentItem, index) => (
+                                        <option key={index} value={equipmentItem.itemName}>
+                                            {equipmentItem.itemName}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input type="text" name="bundleEquipmentList" value={editClassData.bundleEquipment ? editClassData.bundleEquipment.map(be => be.itemName).join(', ') : ''} readOnly className="modal-input" placeholder="Selected bundle items will appear here" />
                             </div>
                         </div>
                         <div className="modal-footer">
@@ -443,3 +464,4 @@ function CodesTable() {
 }
 
 export default CodesTable;
+
