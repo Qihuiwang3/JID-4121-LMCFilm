@@ -1,7 +1,6 @@
 import React from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
-
+import { useNavigate } from "react-router-dom";
 
 const clientId = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 
@@ -11,6 +10,8 @@ const initialOptions = {
 };
 
 function Paypal({ cartTotalCost }) {
+    const navigate = useNavigate(); 
+
     return (
         <PayPalScriptProvider options={initialOptions}>
             <PayPalButtons
@@ -30,6 +31,7 @@ function Paypal({ cartTotalCost }) {
                 onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
                         console.log("Transaction completed by " + details.payer.name.given_name);
+                        navigate("/Message");
                     });
                 }}
             />

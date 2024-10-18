@@ -313,6 +313,21 @@ const getAllOrders = async () => {
     }
 };
 
+const createOrder = async (orderData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/order`, orderData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error creating order:', error);
+        throw error;
+    }
+};
+
+
 const createDamageReport = async (data) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/damage-reports`, data, {
@@ -414,6 +429,7 @@ export {
     updateStudentRole, 
     createSingleItem,
     getAllOrders,
+    createOrder,
     createDamageReport,
     getAllDamageReports,
     getSingleDamageReport,

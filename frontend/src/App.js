@@ -18,7 +18,6 @@ import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import ViewReservation from "./components/Pages/ViewReservation/ViewReservation";
 import Login from "./components/Pages/Login/Login";
 import DamageReport from "./components/Pages/DamageReport/DamageReport";
-// import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 

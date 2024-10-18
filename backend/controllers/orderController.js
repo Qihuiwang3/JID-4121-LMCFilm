@@ -27,9 +27,9 @@ const getOrderByOrderNumber = asyncHandler(async (req, res) => {
 // @route POST /order
 // @access Private
 const createOrder = asyncHandler(async (req, res) => {
-    const { orderNumber, email, checkin, checkout, studentName } = req.body;
+    const { orderNumber, email, checkin, checkout, studentName, equipment } = req.body;
 
-    if (!orderNumber || !email || !checkin || !checkout || !studentName) {
+    if (!orderNumber || !email || !checkin || !checkout || !studentName || !equipment) {
         return res.status(400).json({ error: "All fields are required." });
     }
 
@@ -44,11 +44,13 @@ const createOrder = asyncHandler(async (req, res) => {
         checkin: new Date(checkin), 
         checkout: new Date(checkout),
         studentName,
+        equipment,
     });
 
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
 });
+
 
 // @desc Delete an order by order number
 // @route DELETE /order/:orderNumber

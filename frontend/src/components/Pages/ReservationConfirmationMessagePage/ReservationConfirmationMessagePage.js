@@ -1,77 +1,79 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import './ReservationConfirmationMessagePage.css';
-import { useNavigate } from 'react-router-dom';
 import Barcode from 'react-barcode';
-import emailjs from 'emailjs-com';
 import Button from '../../Button/Button';
+import { createOrder } from '../../../connector.js';
 
-function ReservationConfirmationMessagePage() {
-    const [orderNumber, setOrderNumber] = useState('');
-    const navigate = useNavigate();
+class ReservationConfirmationMessagePage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            orderNumber: ''
+        };
+    }
 
-    const generateOrderNumber = () => {
+    // Method to generate the order number
+    generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
     };
 
-    // const createOrder = async () => {
-    //     const generatedOrderNumber = generateOrderNumber();
-    //     setOrderNumber(generatedOrderNumber);
+    // Lifecycle method - called once when component mounts
+    componentDidMount() {
+        const generatedOrderNumber = this.generateOrderNumber();
+        this.setState({ orderNumber: generatedOrderNumber });
 
-    //     const orderData = {
-    //         orderNumber: generatedOrderNumber,
-    //         email,
-    //         checkin,
-    //         checkout,
-    //         studentName
-    //     };
+        // Call createOrder only once when the component mounts
+        const orderData = {
+            orderNumber: generatedOrderNumber,
+            email: "student@example.com", // Replace with actual email or dynamic value
+            checkin: "2024-09-12T10:00:00Z", // Replace with actual checkin date
+            checkout: "2024-09-18T10:00:00Z", // Replace with actual checkout date
+            checkedin: "2024-10-12T10:00:00Z", // Replace with actual checked-in date
+            checkedout: "2024-10-18T10:00:00Z", // Replace with actual checked-out date
+            checkedinStatus: true, // Set the check-in status to true
+            checkedoutStatus: true, // Set the check-out status to true
+            studentName: "John Doe", // Replace with actual student name
+            createdAt: "2024-09-10T09:00:00Z", // Replace with the correct creation date
+            equipment: ["laptop", "projector"] // Replace with actual equipment
+        };
 
-    //     try {
-    //         const response = await fetch('http://localhost:3500/api/order', {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(orderData)
-    //         });
-    //         const data = await response.json();
-    //         if (response.ok) {
-    //             console.log('Order created successfully:', data);
-    //         } else {
-    //             console.error('Error creating order:', data.error);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error submitting order:', error);
-    //     }
-    // };
-
-    useEffect(() => {
-        const generatedOrderNumber = generateOrderNumber();
-        setOrderNumber(generatedOrderNumber);
-        // createOrder();
-    }, []);
+        createOrder(orderData)
+            .then(response => {
+                console.log('Order created successfully:', response);
+            })
+            .catch(error => {
+                console.error('Error creating order:', error);
+            });
+    }
 
     // Function to handle the back button click
-    const goBack = () => {
-        navigate('/Enter');
+    goBack = () => {
+        this.props.history.push('/Enter');
     };
 
-    return (
-        <div className="main-content">
-            <h1 className='select-class-header'>
-                Your Reservation has been confirmed!
-            </h1>
-            <div className='confirm-text'>
-                Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
-            </div>
+    render() {
+        const { orderNumber } = this.state;
+        console.log("orderNumber", orderNumber)
 
-            <div className="barcode-container">
-                {/* Render the barcode with the order number */}
-                <Barcode value={orderNumber} />
-            </div>
-            <div className="btnContainer">
-                <Button type="back" onClick={goBack}>Back</Button>
-            </div>
-        </div>
 
-    );
+        return (
+            <div className="main-content">
+                <h1 className='select-class-header'>
+                    Your Reservation has been confirmed!
+                </h1>
+                <div className='confirm-text'>
+                    Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
+                </div>
+
+                <div className="barcode-container">
+                    <Barcode value={orderNumber} />
+                </div>
+                <div className="btnContainer">
+                    <Button type="back" onClick={this.goBack}>Back</Button>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default ReservationConfirmationMessagePage;
