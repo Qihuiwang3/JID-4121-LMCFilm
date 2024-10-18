@@ -15,7 +15,7 @@
     background: white;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+    max-width: 1000px;
     overflow: auto;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; 
@@ -57,4 +57,59 @@
     background-color: #E7EFF2;
     color: #333;
     outline: none;
+}
+
+.view-equipment-sections {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.view-equipment-checkout {
+    width: 50%;
+}
+
+.view-equipment-checkin {
+    width: 48%; 
+    margin-right: 10px;
+
+}
+
+.view-section-header {
+    color: #3361AE;
+    margin: 15px 0;
+    padding-bottom: 5px;
+    text-align: left;
+    font-size: 28px;
+}
+
+.view-equipment-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.view-equipment-group {
+    display: flex;
+    flex-direction: column;
+    width: 32%; 
+    margin-right: 30px;
+}
+
+.view-equipment-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #3361AE;
+}
+
+.view-input-field {
+    padding: 10px;
+    border: 1.5px solid #3361AE;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #E7EFF2;
+    color: #333;
+    outline: none;
+    width: 100%;
 }
