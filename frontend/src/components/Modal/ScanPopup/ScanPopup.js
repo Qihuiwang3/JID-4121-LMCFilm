@@ -18,12 +18,12 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     };
 
     return (
-        <div className="scan-overlay" onClick={onClose}>
-            <div className="scan-content" onClick={(e) => e.stopPropagation()}>
-                <h2>Scan</h2>
-                <button className="scan-close-button" onClick={onClose}>
-                    <div className='scan-close-button-inner'>&times;</div>
-                </button>
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Scan</h2>
+                    <button className="close-button" onClick={onClose}>&times;</button>
+                </div>
                 
                 <div className="radio-input">
                     <label>

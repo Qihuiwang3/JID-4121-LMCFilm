@@ -5,10 +5,10 @@ const SearchPopup = ({ onClose }) => {
     return (
         <div className="search-overlay" onClick={onClose}>
             <div className="search-content" onClick={(e) => e.stopPropagation()}>
-                <h2 className="search-header">
-                    Reservation Information
+                <div className="modal-header">
+                    <h2 className='header-text'>Reservation Information</h2>
                     <button className="close-button" onClick={onClose}>&times;</button>
-                </h2>
+                </div>
 
                 <div className="info-order-number">
                     <label htmlFor="orderNumber" className="search-label">Order Number</label>
