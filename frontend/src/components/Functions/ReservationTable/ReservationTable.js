@@ -66,13 +66,13 @@ class ReservationTable extends Component {
 
     handleViewReport = (id) => {
         console.log("id", id)
-        this.toggleViewDetail();
         this.setState({ 
-            viewReportId: id
+            viewReportId: id,
+            showViewDetailPopup: true,
         })
     };
 
-    toggleViewDetail = () => {
+    handleCloseViewDetailModal = () => {
         this.setState(prevState => ({
             showViewDetailPopup: !prevState.showViewDetailPopup,
         }));
@@ -162,7 +162,7 @@ class ReservationTable extends Component {
 
                 {showViewDetailPopup && (
                     <ReservationDetailPopup 
-                        onClose={this.toggleScanModal} 
+                        onClose={this.handleCloseViewDetailModal} 
                         selectedOption={selectedOption}
                         onOptionChange={this.handleOptionChange}
                     />

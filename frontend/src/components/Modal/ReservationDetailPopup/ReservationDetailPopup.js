@@ -3,24 +3,24 @@ import './ReservationDetailPopup.css';
 
 const ReservationDetailPopup = ({ onClose }) => {
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="view-modal-overlay" onClick={onClose}>
+            <div className="view-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2 className='header-text'>Reservation Details</h2>
                     <button className="close-button" onClick={onClose}>&times;</button>
                 </div>
 
-                <div className="info-row">
-                    <div className="info-group">
-                        <label htmlFor="barcode" className="info-label">Bar Code</label>
+                <div className="details-section">
+                    <div className="details-info-group">
+                        <label htmlFor="order-number" className="details-info-label">Order Number</label>
                         <input type="text" id="barcode" className="input-field" defaultValue="00001" readOnly />
                     </div>
                     <div className="info-group">
-                        <label htmlFor="student-name" className="info-label">Student Name</label>
+                        <label htmlFor="student-name" className="details-info-label">Student Name</label>
                         <input type="text" id="student-name" className="input-field" defaultValue="Qihui Wang" readOnly />
                     </div>
                     <div className="info-group">
-                        <label htmlFor="student-email" className="info-label">Student Email</label>
+                        <label htmlFor="student-email" className="details-info-label">Student Email</label>
                         <input type="email" id="student-email" className="input-field" defaultValue="qwang491@gatech.edu" readOnly />
                     </div>
                 </div>
