@@ -4,6 +4,8 @@ import { getAllOrders } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar'; 
 import ScanButton from '../../Button/ScanButton/ScanButton'; 
 import ScanPopup from '../../Modal/ScanPopup/ScanPopup.js';
+import ReservationDetailPopup from '../../Modal/ReservationDetailPopup/ReservationDetailPopup.js';
+
 import './ReservationTable.css';
 
 class ReservationTable extends Component {
@@ -19,6 +21,7 @@ class ReservationTable extends Component {
             },
             searchQuery: '',
             showScanPopup: false,
+            showViewDetailPopup: false,
             selectedOption: '',
             viewReportId: null,
         };
@@ -62,9 +65,17 @@ class ReservationTable extends Component {
     };
 
     handleViewReport = (id) => {
+        console.log("id", id)
+        this.toggleViewDetail();
         this.setState({ 
             viewReportId: id
         })
+    };
+
+    toggleViewDetail = () => {
+        this.setState(prevState => ({
+            showViewDetailPopup: !prevState.showViewDetailPopup,
+        }));
     };
 
     handleCloseModal = () => {
@@ -74,7 +85,7 @@ class ReservationTable extends Component {
     };
 
     render() {
-        const { showScanPopup, selectedOption } = this.state;
+        const { showScanPopup, selectedOption, showViewDetailPopup } = this.state;
         const columnDefs = [
             { headerName: "Order #", field: "orderNumber", flex: 1.5 },
             { headerName: "Name", field: "studentName", flex: 1.5 },
@@ -148,6 +159,16 @@ class ReservationTable extends Component {
                         onOptionChange={this.handleOptionChange}
                     />
                 )}
+
+                {showViewDetailPopup && (
+                    <ReservationDetailPopup 
+                        onClose={this.toggleScanModal} 
+                        selectedOption={selectedOption}
+                        onOptionChange={this.handleOptionChange}
+                    />
+                )}
+
+
             </>
         );
     }
