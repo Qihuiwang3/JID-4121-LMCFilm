@@ -87,6 +87,7 @@ function CodesTable() {
     };
 
     const openAddModal = () => {
+
         const randomCode = Math.floor(1000 + Math.random() * 9000);
         setGeneratedCode(randomCode);
         setNewClass({
@@ -158,6 +159,12 @@ function CodesTable() {
         } catch (error) {}
         closeAddModal();
     };
+
+    function adjustModalHeight() {
+        const modal = document.querySelector('.modal-content');
+        modal.style.height = 'auto';
+        modal.style.maxHeight = `${window.innerHeight * 0.9}px`; // 90% of the window height
+      }
 
     const handleDeleteRow = async (code) => {
         try {
@@ -279,7 +286,9 @@ function CodesTable() {
             </div>
             <div className="search-bar-edit-container">
                 <div className="classCode-searchbar">
-                    <SearchBar onSearch={handleSearch} />
+                    <SearchBar onSearch={handleSearch}
+                     placeholder={"Search by Class"} 
+                     />
                 </div>
                 <button className="add-class-button" onClick={openAddModal}>
                     Add New <span className="plus-icon">+</span>
@@ -293,7 +302,7 @@ function CodesTable() {
             />
             {isModalOpen && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
+                    <div className="modal-content2">
                         <div className="modal-header">
                             <h2>Add New</h2>
                             <button className="close-button" onClick={closeAddModal}>×</button>
@@ -377,7 +386,7 @@ function CodesTable() {
             )}
             {isEditModalOpen && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
+                    <div className="modal-content2">
                         <div className="modal-header">
                             <h2>Edit Class Code</h2>
                             <button className="close-button" onClick={closeEditModal}>×</button>

@@ -83,11 +83,11 @@
     z-index: 1000;
 }
 
-.modal-content {
+.modal-content2 {
     padding: 20px;
     border-radius: 10px;
     background-color: #fff;
-    width: 300px;
+    width: 500px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .edit-icon {
-    color:  #3361AE; /* Change the icon color to blue */
+    color:  #3361AE; 
     cursor: pointer;
 }
 
