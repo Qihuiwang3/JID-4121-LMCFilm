@@ -66,13 +66,11 @@
 }
 
 .view-equipment-checkout {
-    width: 50%;
+    width: 49%;
 }
 
 .view-equipment-checkin {
-    width: 48%; 
-    margin-right: 10px;
-
+    width: 49%; 
 }
 
 .view-section-header {
@@ -97,9 +95,9 @@
 }
 
 .view-equipment-label {
-    font-weight: bold;
+    font-weight: 400;
     margin-bottom: 5px;
-    font-size: 0.9rem;
+    font-size: 14px;
     color: #3361AE;
 }
 
@@ -112,4 +110,16 @@
     color: #333;
     outline: none;
     width: 100%;
+}
+
+.view-equipment-group:nth-child(1) {
+    width: 20%;
+}
+
+.view-equipment-group:nth-child(2) {
+    width: 45%;
+}
+
+.view-equipment-group:nth-child(3) {
+    width: 35%;
 }
