@@ -13,8 +13,6 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
-        // Close the ScanPopup as well 
-        onClose(); 
     };
 
     return (

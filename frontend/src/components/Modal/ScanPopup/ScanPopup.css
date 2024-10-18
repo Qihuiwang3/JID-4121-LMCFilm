@@ -1,35 +1,3 @@
-.scan-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.scan-content {
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    min-width: 400px;
-    text-align: center;
-    position: relative;
-}
-
-.scan-content h2 {
-    color: #3361AE;
-    font-size: 24px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #3361AE;
-}
-
 .scan-input {
     margin: 15px 0;
     text-align: left;
@@ -50,8 +18,8 @@
 }
 
 .scan-input input {
-    width: 95%;
-    padding: 10px 0px 10px 5px;
+    width: 100%;
+    padding: 10px 0px 10px 0px;
     border: 1.5px solid #3361AE;
     border-radius: 5px;
     font-size: 14px;

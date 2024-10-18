@@ -35,14 +35,14 @@ const SearchPopup = ({ onClose }) => {
                         </div>
                         <div className="search-item-group">
                             <label className="search-label">Scan the Item ID</label>
-                            <input type="text" className="search-popup-input" placeholder="Enter Item ID" />
+                            <input type="text" className="search-popup-input"/>
                         </div>
                     </div>
                 ))}
 
-                <div className="search-footer">
-                    <button className="cancel-button" onClick={onClose}>Cancel</button>
-                    <button className="submit-button">Student Checked In</button>
+                <div className="modal-footer">
+                    <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
+                    <button className="checkin-button">Student Checked In</button>
                 </div>
             </div>
         </div>
