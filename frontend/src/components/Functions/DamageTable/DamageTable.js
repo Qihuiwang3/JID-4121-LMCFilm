@@ -14,6 +14,7 @@ const DamageTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showAddNewPopup, setShowAddNewPopup] = useState(false);
     const [viewReportId, setViewReportId] = useState(null);
+    const [editReportData, setEditReportData] = useState(null);
 
     useEffect(() => {
         const fetchRecords = async () => {

@@ -64,6 +64,10 @@ const ViewDamageModal = ({ show, reportId, handleClose }) => {
                             <img src={report.images[0]} alt="Damage" style={{ width: '100%' }} />
                         </div>
                     )}
+
+                    <div className="modal-footer">
+                        <button type="submit" className="damage-submit-button">Edit</button>
+                    </div>
                 </div>
             </div>
         </div>

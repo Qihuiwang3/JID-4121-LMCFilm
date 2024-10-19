@@ -94,18 +94,14 @@
     gap: 10px;
 }
 
-.cancel-button,
 .damage-submit-button {
     font-size: 21px;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 4%;
 }
 
-.cancel-button {
-    background-color: transparent;
-    color: #3361AE;
-}
 
 .damage-submit-button {
     font-size: 21px;

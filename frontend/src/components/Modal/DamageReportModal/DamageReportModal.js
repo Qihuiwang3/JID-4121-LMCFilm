@@ -148,7 +148,6 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
                     </div>
                     {error && <div className="error-message">{error}</div>}
                     <div className="modal-footer">
-                        <button type="button" className="cancel-button" onClick={handleClose}>Cancel</button>
                         <button type="submit" className="damage-submit-button">Save</button>
                     </div>
                 </form>
