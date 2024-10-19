@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './DamageReportModal.css';
 import { createDamageReport, getItems } from '../../../connector'; 
 import { useSelector } from 'react-redux';
-const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
+const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) => {
     const reporter = useSelector((state) => state.studentData.name);
     const [dateReported] = useState(new Date().toISOString().split('T')[0]); 
-    const [studentEmail, setStudentEmail] = useState('');
-    const [itemId, setItemId] = useState('');
-    const [itemName, setItemName] = useState('');
-    const [description, setDescription] = useState('');
+    const [studentEmail, setStudentEmail] = useState(reportToEdit?.studentEmail || '');
+    const [itemId, setItemId] = useState(reportToEdit?.itemId || '');
+    const [itemName, setItemName] = useState(reportToEdit?.itemName || '');
+    const [description, setDescription] = useState(reportToEdit?.description || '');
     const [uploadedImage, setUploadedImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [error, setError] = useState('');

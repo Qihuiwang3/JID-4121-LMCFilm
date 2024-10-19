@@ -17,33 +17,33 @@ const DamageTable = () => {
     const [editReportData, setEditReportData] = useState(null);
 
     useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const fetchedRecords = await getAllDamageReports();
-                const updatedRecords = await Promise.all(
-                    fetchedRecords.map(async (record) => {
-                        try {
-                            const repairStatus = await getRepairStatus(record.itemName, record.itemId);
-                            return {
-                                ...record,
-                                isRepaired: repairStatus.repair,  
-                            };
-                        } catch (error) {
-                            console.error('Error fetching repair status:', error);
-                            return { ...record, isRepaired: false }; 
-                        }
-                    })
-                );
-
-                setRecords(updatedRecords);
-                setFilteredRecords(updatedRecords);
-            } catch (error) {
-                console.error("Error loading records:", error);
-            }
-        };
-
         fetchRecords();
     }, []);
+
+    const fetchRecords = async () => {
+        try {
+            const fetchedRecords = await getAllDamageReports();
+            const updatedRecords = await Promise.all(
+                fetchedRecords.map(async (record) => {
+                    try {
+                        const repairStatus = await getRepairStatus(record.itemName, record.itemId);
+                        return {
+                            ...record,
+                            isRepaired: repairStatus.repair,  
+                        };
+                    } catch (error) {
+                        console.error('Error fetching repair status:', error);
+                        return { ...record, isRepaired: false }; 
+                    }
+                })
+            );
+
+            setRecords(updatedRecords);
+            setFilteredRecords(updatedRecords);
+        } catch (error) {
+            console.error("Error loading records:", error);
+        }
+    };
 
     const handleDeleteRow = async (data) => {
         try {
@@ -71,6 +71,7 @@ const DamageTable = () => {
 
             setRecords(prevRecords => [...prevRecords, newReportWithRepairStatus]);
             setFilteredRecords(prevFilteredRecords => [...prevFilteredRecords, newReportWithRepairStatus]);
+            fetchRecords();
         } catch (error) {
             console.error("Error fetching repair status for the new report:", error);
         }
@@ -78,7 +79,10 @@ const DamageTable = () => {
 
 
     const handleOpenPopup = () => setShowAddNewPopup(true);
-    const handleClosePopup = () => setShowAddNewPopup(false);
+    const handleClosePopup = () => {
+        setShowAddNewPopup(false);
+        setEditReportData(null); 
+    }
 
     const handleViewReport = (id) => {
         setViewReportId(id); 
@@ -100,6 +104,12 @@ const DamageTable = () => {
         } catch (error) {
             console.error("Error updating repair status:", error);
         }
+    };
+
+    const handleEditReport = (report) => {
+        setEditReportData(report); 
+        setViewReportId(null); 
+        setShowAddNewPopup(true);
     };
 
 
@@ -186,6 +196,7 @@ const DamageTable = () => {
                     show={!!viewReportId} 
                     reportId={viewReportId} 
                     handleClose={handleCloseModal} 
+                    handleEdit={handleEditReport}
                 />
             )}
             {showAddNewPopup && (
@@ -193,6 +204,7 @@ const DamageTable = () => {
                     show={showAddNewPopup} 
                     handleClose={handleClosePopup} 
                     onReportAdded={handleNewReportAdded} 
+                    reportToEdit={editReportData}
                 />
             )}
         </>

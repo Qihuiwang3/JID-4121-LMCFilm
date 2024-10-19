@@ -12,7 +12,12 @@ const createDamageReport = asyncHandler(async (req, res) => {
         throw new Error('Please provide all required fields');
     }
 
-    const damageReport = new DamageReport({
+    const existingReport = await DamageReport.findOne({ itemName, itemId });
+
+    if (existingReport) {
+        await DamageReport.deleteOne({ _id: existingReport._id });
+    } 
+    const newReport = new DamageReport({
         reporter,
         studentEmail,
         itemName,
@@ -20,9 +25,9 @@ const createDamageReport = asyncHandler(async (req, res) => {
         description,
         images: images || [],
     });
-
-    const savedReport = await damageReport.save();
+    const savedReport = await newReport.save();
     res.status(201).json(savedReport);
+    
 });
 
 // @desc Get all damage reports
