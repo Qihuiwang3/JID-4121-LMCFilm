@@ -3,42 +3,30 @@ import './SearchPopup.css';
 import { updateOrderByOrderNumber } from '../../../connector'; 
 
 const SearchPopup = ({ goBack, onClose, orderInfo }) => {
-    // Hooks must be at the top level of the component
-    const [itemIds, setItemIds] = useState([]); // Initial empty array for itemIds
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Initially disable the button
-
-    // Initialize the itemIds state with an array of empty strings when orderInfo changes
-    // useEffect(() => {
-    //     if (orderInfo && orderInfo.equipment) {
-    //         setItemIds(orderInfo.equipment.map(() => ''));
-    //     }
-    // }, [orderInfo]);
+    const [itemIds, setItemIds] = useState([]);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
     useEffect(() => {
         if (orderInfo && Array.isArray(orderInfo.equipment)) {
-            console.log("Equipment Info in here: ", orderInfo.equipment); // Check the structure here
             setItemIds(orderInfo.equipment.map(() => ''));
         }
     }, [orderInfo]);
     
-    // Handle changes in the itemId inputs
     const handleItemIdChange = (index, value) => {
         const newItemIds = [...itemIds];
         newItemIds[index] = value;
         setItemIds(newItemIds);
     };
 
-    // Effect to check if all itemId fields are filled
     useEffect(() => {
         const allFilled = itemIds.every(id => id.trim() !== '');
-        setIsButtonDisabled(!allFilled); // Enable the button only if all fields are filled
+        setIsButtonDisabled(!allFilled);
     }, [itemIds]);
 
-    // Handle the "Student Checked In" button click
     const handleEquipmentCheckout = async () => {
         const updatedEquipment = orderInfo.equipment.map((item, index) => ({
-            itemName: item.itemName, // Use itemName from orderInfo
-            itemId: itemIds[index] // Use the corresponding itemId from user input
+            itemName: item.itemName,
+            itemId: itemIds[index]
         }));
         try {
             await updateOrderByOrderNumber(orderInfo.orderNumber, {
@@ -46,13 +34,12 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                 checkedoutStatus: true, 
             });
             console.log('Order updated successfully');
-            onClose(); // Close the popup after updating the order
+            onClose();
         } catch (error) {
             console.error('Error updating order:', error);
         }
     };
 
-    // If no orderInfo is available, return null (after hooks have been initialized)
     if (!orderInfo) {
         return null;
     }
@@ -116,8 +103,8 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                             <input
                                 type="text"
                                 className="search-popup-input"
-                                value={itemIds[index]} // Bind to state
-                                onChange={(e) => handleItemIdChange(index, e.target.value)} // Update state on input change
+                                value={itemIds[index]}
+                                onChange={(e) => handleItemIdChange(index, e.target.value)}
                             />
                         </div>
                     </div>
@@ -127,7 +114,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                     <button className="scan-cancel-button" onClick={goBack}>Go Back</button>
                     <button
                         className="checkin-button"
-                        disabled={isButtonDisabled} // Disable the button if any field is empty
+                        disabled={isButtonDisabled}
                         onClick={handleEquipmentCheckout}
                     >
                         Student Checked In

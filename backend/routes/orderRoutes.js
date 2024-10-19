@@ -2,6 +2,7 @@ const express = require('express');
 const { 
     getAllOrders, 
     getOrderByOrderNumber, 
+    getOrderById,
     createOrder, 
     deleteOrder, 
     getOrderByEmail,
@@ -19,6 +20,11 @@ router.get('/orders', getAllOrders);
 // @route GET /api/order/:orderNumber
 // @access Private
 router.get('/order/:orderNumber', getOrderByOrderNumber);
+
+// Route to get a specific order by id
+// @route GET /api/order/:id
+// @access Private
+router.get('/order/id/:id', getOrderById); 
 
 // Route to get a specific order by email
 // @route GET /order/email/:email

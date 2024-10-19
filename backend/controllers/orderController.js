@@ -36,6 +36,17 @@ const getOrderByEmail = asyncHandler(async (req, res) => {
     res.status(200).json(orders);
 });
 
+// @desc Get order by ID
+// @route GET /order/id/:id
+// @access Private
+const getOrderById = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+        return res.status(404).json({ error: `Order with ID ${req.params.id} not found.` });
+    }
+    res.status(200).json(order);
+});
+
 // @desc Create new order
 // @route POST /order
 // @access Private
@@ -119,6 +130,7 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
 module.exports = { 
     getAllOrders,
     getOrderByOrderNumber,
+    getOrderById,
     getOrderByEmail,
     createOrder,
     deleteOrder,

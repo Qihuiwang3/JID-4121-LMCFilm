@@ -439,6 +439,15 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
         throw error;
     }
 };
+const getOrderById = async (id) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/id/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order by ID:', error);
+        throw error;
+    }
+};
 
 
 
@@ -477,5 +486,6 @@ export {
     deleteDamageReport,
     updateDamageReport,
     getRepairStatus,
-    updateOrderByOrderNumber
+    updateOrderByOrderNumber,
+    getOrderById
 };
