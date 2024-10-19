@@ -1,7 +1,13 @@
 import React from 'react';
 import './SearchPopup.css';
 
-const SearchPopup = ({ onClose }) => {
+const SearchPopup = ({ onClose, orderInfo }) => {
+    if (!orderInfo) {
+        return null; // If no orderInfo is available, don't render the popup
+    }
+
+    const { orderNumber, studentName, email, equipment } = orderInfo; 
+
     return (
         <div className="search-overlay" onClick={onClose}>
             <div className="search-content" onClick={(e) => e.stopPropagation()}>
@@ -12,30 +18,53 @@ const SearchPopup = ({ onClose }) => {
 
                 <div className="info-order-number">
                     <label htmlFor="orderNumber" className="search-label">Order Number</label>
-                    <input type="text" id="orderNumber" className="search-popup-input" defaultValue="00001" readOnly />
+                    <input
+                        type="text"
+                        id="orderNumber"
+                        className="search-popup-input"
+                        defaultValue={orderNumber} 
+                        readOnly
+                    />
                 </div>
                 <div className="search-section">
-                    <div className="info-group">
+                    <div className="search-info-group">
                         <label htmlFor="student-name" className="search-label">Student Name</label>
-                        <input type="text" id="student-name" className="search-popup-input" defaultValue="Qihui Wang" readOnly />
+                        <input
+                            type="text"
+                            id="student-name"
+                            className="search-popup-input"
+                            defaultValue={studentName}
+                            readOnly
+                        />
                     </div>
-                    <div className="info-group">
+                    <div className="search-info-group">
                         <label htmlFor="student-email" className="search-label">Student Email</label>
-                        <input type="email" id="student-email" className="search-popup-input" defaultValue="qwang491@gatech.edu" readOnly />
+                        <input
+                            type="email"
+                            id="student-email"
+                            className="search-popup-input"
+                            defaultValue={email} // Dynamically set value from orderInfo
+                            readOnly
+                        />
                     </div>
                 </div>
 
                 <h3 className="equipment-header">Equipment Check Out</h3>
 
-                {[1, 2, 3].map((item, index) => (
+                {equipment.map((item, index) => (
                     <div key={index} className="search-row">
                         <div className="search-item-group">
                             <label className="search-label">Item Name</label>
-                            <input type="text" className="search-popup-input" defaultValue={`Camera ${String.fromCharCode(64 + item)}`} readOnly />
+                            <input
+                                type="text"
+                                className="search-popup-input"
+                                defaultValue={item} 
+                                readOnly
+                            />
                         </div>
                         <div className="search-item-group">
                             <label className="search-label">Scan the Item ID</label>
-                            <input type="text" className="search-popup-input"/>
+                            <input type="text" className="search-popup-input" /> {/* Left empty for scanning */}
                         </div>
                     </div>
                 ))}

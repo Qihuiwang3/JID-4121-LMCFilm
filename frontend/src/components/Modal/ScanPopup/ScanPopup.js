@@ -6,9 +6,9 @@ import { getOrderByOrderNumber } from '../../../connector';
 const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
     const [orderNumber, setOrderNumber] = useState('');
+    const [orderInfo, setOrderInfo] = useState(null); 
 
     const handleSearchClick = () => {
-        console.log("showSearchPopup?", showSearchPopup);
         setShowSearchPopup(true);
     };
 
@@ -23,8 +23,9 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const handleOrderNumberBlur = async () => {
         try {
             if (orderNumber) {
-                const order = await getOrderByOrderNumber(orderNumber);
-                console.log('Order found:', order);
+                const fetchedOrderInfo = await getOrderByOrderNumber(orderNumber);
+                console.log(fetchedOrderInfo)
+                setOrderInfo(fetchedOrderInfo);
             }
         } catch (error) {
             console.error('Error fetching order:', error);
@@ -47,8 +48,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                         className="checkout-modal-input"
                         value={orderNumber}
                         onChange={handleOrderNumberChange}
-                        // Trigger API call when user clicks away
-                        onBlur={handleOrderNumberBlur} 
+                        onBlur={handleOrderNumberBlur} // Trigger API call when user clicks away
                     />
                 </div>
                 <div className="radio-input">
@@ -79,7 +79,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     </button>
                 </div>
 
-                {showSearchPopup && <SearchPopup onClose={closeSearchPopup} />}
+                {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeSearchPopup} />}
             </div>
         </div>
     );
