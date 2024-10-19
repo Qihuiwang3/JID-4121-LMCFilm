@@ -91,7 +91,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
 // @route PUT /order/:orderNumber
 // @access Private
 const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
-    const { equipment } = req.body; // Expect an array of tuples: [{ itemName, itemId }]
+    const { equipment, checkedoutStatus } = req.body; // Expect equipment and checkout status
 
     if (!equipment || equipment.length === 0) {
         return res.status(400).json({ error: "Equipment and item IDs are required." });
@@ -103,8 +103,13 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: `Order with number ${req.params.orderNumber} not found.` });
     }
 
-    // Update the equipment array to contain itemName and itemId tuples
+    // Update the equipment array
     order.equipment = equipment;
+
+    // Optionally update the checkout status
+    if (typeof checkedoutStatus !== 'undefined') {
+        order.checkedoutStatus = checkedoutStatus;
+    }
 
     const updatedOrder = await order.save();
     res.status(200).json(updatedOrder);

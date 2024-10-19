@@ -47,7 +47,7 @@ const orderSchema = new mongoose.Schema({
     },
     equipment: [{ 
         itemName: { type: String, required: true }, 
-        itemId: { type: String }, 
+        itemId: { type: String, required: true }, 
     }],
 });
 

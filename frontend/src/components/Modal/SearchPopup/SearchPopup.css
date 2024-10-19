@@ -18,6 +18,15 @@
     border-radius: 8px;
     min-width: 500px;
     position: relative;
+    overflow: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    max-height: 500px;
+}
+
+
+.search-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
 }
 
 .search-section {

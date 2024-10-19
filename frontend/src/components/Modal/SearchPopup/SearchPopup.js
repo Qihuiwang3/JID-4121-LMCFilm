@@ -8,12 +8,19 @@ const SearchPopup = ({ onClose, orderInfo }) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Initially disable the button
 
     // Initialize the itemIds state with an array of empty strings when orderInfo changes
+    // useEffect(() => {
+    //     if (orderInfo && orderInfo.equipment) {
+    //         setItemIds(orderInfo.equipment.map(() => ''));
+    //     }
+    // }, [orderInfo]);
+
     useEffect(() => {
-        if (orderInfo && orderInfo.equipment) {
+        if (orderInfo && Array.isArray(orderInfo.equipment)) {
+            console.log("Equipment Info in here: ", orderInfo.equipment); // Check the structure here
             setItemIds(orderInfo.equipment.map(() => ''));
         }
     }, [orderInfo]);
-
+    
     // Handle changes in the itemId inputs
     const handleItemIdChange = (index, value) => {
         const newItemIds = [...itemIds];
@@ -28,16 +35,16 @@ const SearchPopup = ({ onClose, orderInfo }) => {
     }, [itemIds]);
 
     // Handle the "Student Checked In" button click
-    const handleCheckIn = async () => {
+    const handleEquipmentCheckout = async () => {
         const updatedEquipment = orderInfo.equipment.map((item, index) => ({
-            itemName: item, // Assuming equipment contains item names
+            itemName: item.itemName, // Use itemName from orderInfo
             itemId: itemIds[index] // Use the corresponding itemId from user input
         }));
-
-        
-
         try {
-            await updateOrderByOrderNumber(orderInfo.orderNumber, updatedEquipment);
+            await updateOrderByOrderNumber(orderInfo.orderNumber, {
+                equipment: updatedEquipment,
+                checkedoutStatus: true, 
+            });
             console.log('Order updated successfully');
             onClose(); // Close the popup after updating the order
         } catch (error) {
@@ -121,7 +128,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                     <button
                         className="checkin-button"
                         disabled={isButtonDisabled} // Disable the button if any field is empty
-                        onClick={handleCheckIn}
+                        onClick={handleEquipmentCheckout}
                     >
                         Student Checked In
                     </button>
