@@ -12,8 +12,8 @@
 }
 
 .scan-input input {
-    width: 100%;
-    padding: 10px 0px 10px 0px;
+    width: 95%;
+    padding: 10px 10px;
     border: 1.5px solid #3361AE;
     border-radius: 5px;
     font-size: 14px;
@@ -90,4 +90,19 @@
     font-weight: 500;
     color: black;
     font-size: 14px;
+}
+
+.disabled-button {
+    background-color: #d3d3d3;
+    color: #808080;
+    cursor: not-allowed;
+}
+
+.disabled-button:hover {
+    background-color: #d3d3d3;
+    color: #808080;
+}
+
+.scan-search-button {
+    transition: background-color 0.3s ease, color 0.3s ease;
 }

@@ -64,7 +64,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                         </div>
                         <div className="search-item-group">
                             <label className="search-label">Scan the Item ID</label>
-                            <input type="text" className="search-popup-input" /> {/* Left empty for scanning */}
+                            <input type="text" className="search-popup-input" /> 
                         </div>
                     </div>
                 ))}
