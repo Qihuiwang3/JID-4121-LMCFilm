@@ -23,21 +23,21 @@ class ReservationConfirmationMessagePage extends Component {
         const generatedOrderNumber = this.generateOrderNumber();
         this.setState({ orderNumber: generatedOrderNumber });
 
-        // Get cartItems from Redux
-        const { cartItems } = this.props;
+        // Get cartItems and selectedDates from Redux
+        const { cartItems, selectedDates } = this.props;
 
         // Call createOrder only once when the component mounts
         const orderData = {
             orderNumber: generatedOrderNumber,
             email: "student@example.com", // Replace with actual email or dynamic value
-            checkin: "2024-09-12T10:00:00Z", // Replace with actual checkin date
-            checkout: "2024-09-18T10:00:00Z", // Replace with actual checkout date
-            checkedin: "2024-10-12T10:00:00Z", // Replace with actual checked-in date
-            checkedout: "2024-10-18T10:00:00Z", // Replace with actual checked-out date
-            checkedinStatus: true, // Set the check-in status to true
-            checkedoutStatus: true, // Set the check-out status to true
+            checkin: selectedDates.pickupDateTime, // Use selected pickupDateTime or default to current date
+            checkout: selectedDates.returnDateTime, // Use selected returnDateTime or default to current date
+            checkedin: null, // Default to null, as the user hasn't checked in yet
+            checkedout: null, // Default to null, as the user hasn't checked out yet
+            checkedinStatus: false, // Set the check-in status to false
+            checkedoutStatus: false, // Set the check-out status to false
             studentName: "John Doe", // Replace with actual student name
-            createdAt: "2024-09-10T09:00:00Z", // Replace with the correct creation date
+            createdAt: new Date(), // Current date
             equipment: cartItems.map(item => item.name), // Use cartItems from Redux
         };
 
@@ -81,6 +81,7 @@ class ReservationConfirmationMessagePage extends Component {
 // Map Redux state to component props
 const mapStateToProps = (state) => ({
     cartItems: state.reservationCart.reservationCartItems,
+    selectedDates: state.classData.selectedDates // Assuming selectedDates is in classData
 });
 
 export default connect(mapStateToProps)(ReservationConfirmationMessagePage);
