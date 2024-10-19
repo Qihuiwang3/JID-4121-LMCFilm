@@ -24,19 +24,21 @@ class ReservationConfirmationMessagePage extends Component {
         this.setState({ orderNumber: generatedOrderNumber });
 
         // Get cartItems and selectedDates from Redux
-        const { cartItems, selectedDates } = this.props;
+        const { cartItems, selectedDates, name, email } = this.props;
+        console.log("name: ", name)
+        console.log("email : ", email)
 
         // Call createOrder only once when the component mounts
         const orderData = {
             orderNumber: generatedOrderNumber,
-            email: "student@example.com", // Replace with actual email or dynamic value
+            email: email, // Replace with actual email or dynamic value
             checkin: selectedDates.pickupDateTime, // Use selected pickupDateTime or default to current date
             checkout: selectedDates.returnDateTime, // Use selected returnDateTime or default to current date
             checkedin: null, // Default to null, as the user hasn't checked in yet
             checkedout: null, // Default to null, as the user hasn't checked out yet
             checkedinStatus: false, // Set the check-in status to false
             checkedoutStatus: false, // Set the check-out status to false
-            studentName: "John Doe", // Replace with actual student name
+            studentName: name, // Replace with actual student name
             createdAt: new Date(), // Current date
             equipment: cartItems.map(item => item.name), // Use cartItems from Redux
         };
@@ -81,7 +83,9 @@ class ReservationConfirmationMessagePage extends Component {
 // Map Redux state to component props
 const mapStateToProps = (state) => ({
     cartItems: state.reservationCart.reservationCartItems,
-    selectedDates: state.classData.selectedDates // Assuming selectedDates is in classData
+    selectedDates: state.classData.selectedDates, // Assuming selectedDates is in classData
+    email: state.studentData.email, 
+    name: state.studentData.name, 
 });
 
 export default connect(mapStateToProps)(ReservationConfirmationMessagePage);
