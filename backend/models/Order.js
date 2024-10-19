@@ -45,9 +45,10 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now, 
     },
-    // equipment: [{ 
-    //     type: String,  
-    // }],
+    equipment: [{ 
+        type: String,  
+        required: true,
+    }],
 });
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -29,7 +29,7 @@ const getOrderByOrderNumber = asyncHandler(async (req, res) => {
 const createOrder = asyncHandler(async (req, res) => {
     const { orderNumber, email, checkin, checkout, studentName, equipment } = req.body;
 
-    if (!orderNumber || !email || !checkin || !checkout || !studentName || !equipment) {
+    if (!orderNumber || !email || !checkin || !checkout || !studentName || equipment.length === 0) {
         return res.status(400).json({ error: "All fields are required." });
     }
 

@@ -3,6 +3,7 @@ import './ReservationConfirmationMessagePage.css';
 import Barcode from 'react-barcode';
 import Button from '../../Button/Button';
 import { createOrder } from '../../../connector.js';
+import { connect } from 'react-redux'; // To connect to Redux
 
 class ReservationConfirmationMessagePage extends Component {
     constructor(props) {
@@ -22,6 +23,9 @@ class ReservationConfirmationMessagePage extends Component {
         const generatedOrderNumber = this.generateOrderNumber();
         this.setState({ orderNumber: generatedOrderNumber });
 
+        // Get cartItems from Redux
+        const { cartItems } = this.props;
+
         // Call createOrder only once when the component mounts
         const orderData = {
             orderNumber: generatedOrderNumber,
@@ -34,7 +38,7 @@ class ReservationConfirmationMessagePage extends Component {
             checkedoutStatus: true, // Set the check-out status to true
             studentName: "John Doe", // Replace with actual student name
             createdAt: "2024-09-10T09:00:00Z", // Replace with the correct creation date
-            equipment: ["laptop", "projector"] // Replace with actual equipment
+            equipment: cartItems.map(item => item.name), // Use cartItems from Redux
         };
 
         createOrder(orderData)
@@ -53,8 +57,6 @@ class ReservationConfirmationMessagePage extends Component {
 
     render() {
         const { orderNumber } = this.state;
-        console.log("orderNumber", orderNumber)
-
 
         return (
             <div className="main-content">
@@ -76,4 +78,9 @@ class ReservationConfirmationMessagePage extends Component {
     }
 }
 
-export default ReservationConfirmationMessagePage;
+// Map Redux state to component props
+const mapStateToProps = (state) => ({
+    cartItems: state.reservationCart.reservationCartItems,
+});
+
+export default connect(mapStateToProps)(ReservationConfirmationMessagePage);

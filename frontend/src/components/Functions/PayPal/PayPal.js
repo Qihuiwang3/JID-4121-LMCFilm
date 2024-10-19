@@ -31,7 +31,7 @@ function Paypal({ cartTotalCost }) {
                 onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
                         console.log("Transaction completed by " + details.payer.name.given_name);
-                        navigate("/Message");
+                        navigate("/ReservationConfirmationMessagePage");
                     });
                 }}
             />

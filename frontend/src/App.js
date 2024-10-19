@@ -54,7 +54,7 @@ class App extends Component {
             <Route path="/Payment" element={<Payment />} />
             <Route path="/ClassCodesAdmin" element={<ClassCodesAdmin />} />
             <Route path="/ClassCodesEdit" element={<ClassCodesEdit />} />
-            <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
+            <Route path="/ReservationConfirmationMessagePage" element={<ReservationConfirmationMessagePage />} />
             <Route path="/Equipment" element={<Equipment />} />
             <Route path="/Students" element={<Students />} />
             <Route path="/ViewEquipment" element={<ViewEquipment />} />
