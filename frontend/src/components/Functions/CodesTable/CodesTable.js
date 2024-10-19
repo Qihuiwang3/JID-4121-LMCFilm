@@ -160,11 +160,7 @@ function CodesTable() {
         closeAddModal();
     };
 
-    function adjustModalHeight() {
-        const modal = document.querySelector('.modal-content');
-        modal.style.height = 'auto';
-        modal.style.maxHeight = `${window.innerHeight * 0.9}px`; // 90% of the window height
-      }
+    
 
     const handleDeleteRow = async (code) => {
         try {
@@ -257,7 +253,8 @@ function CodesTable() {
                     onClick={() => openEditModal(params.data.code)}
                     style={{
                         cursor: 'pointer', 
-                        width: '16px', 
+                        width: '12px', 
+                        marginRight: '8px', 
                         filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
                     }}
                 />
