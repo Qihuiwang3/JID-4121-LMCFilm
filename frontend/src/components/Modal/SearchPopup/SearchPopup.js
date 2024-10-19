@@ -34,6 +34,8 @@ const SearchPopup = ({ onClose, orderInfo }) => {
             itemId: itemIds[index] // Use the corresponding itemId from user input
         }));
 
+        
+
         try {
             await updateOrderByOrderNumber(orderInfo.orderNumber, updatedEquipment);
             console.log('Order updated successfully');
@@ -98,7 +100,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                             <input
                                 type="text"
                                 className="search-popup-input"
-                                defaultValue={item}
+                                defaultValue={item.itemName}
                                 readOnly
                             />
                         </div>

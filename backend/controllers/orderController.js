@@ -43,7 +43,7 @@ const createOrder = asyncHandler(async (req, res) => {
     const { orderNumber, email, checkin, checkout, studentName, equipment } = req.body;
 
     if (!orderNumber || !email || !checkin || !checkout || !studentName || equipment.length === 0) {
-        return res.status(400).json({ error: "All fields are required." });
+        return res.status(400).json({ error: "All fields are required, including equipment." });
     }
 
     const existingOrder = await Order.findOne({ orderNumber });
@@ -51,18 +51,27 @@ const createOrder = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: `Order with number ${orderNumber} already exists.` });
     }
 
+    const formattedEquipment = equipment.map(e => ({
+        itemName: e.itemName,
+        itemId: '' // itemId is optional and will be set to an empty string initially
+    }));
+
     const newOrder = new Order({
         orderNumber,
         email,
         checkin: new Date(checkin), 
         checkout: new Date(checkout),
+        checkedinStatus: false, // Explicitly set these to false initially
+        checkedoutStatus: false, // Explicitly set these to false initially
         studentName,
-        equipment,
+        equipment: formattedEquipment
     });
 
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
 });
+
+
 
 
 // @desc Delete an order by order number

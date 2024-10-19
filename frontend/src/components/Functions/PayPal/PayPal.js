@@ -32,7 +32,10 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
             checkedoutStatus: false,
             studentName: name,
             createdAt: new Date(),
-            equipment: cartItems.map(item => item.name),
+            equipment: cartItems.map(item => ({
+                itemName: item.name, 
+                itemId: '' 
+            })),
         };
 
         // Call createOrder API

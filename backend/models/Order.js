@@ -31,11 +31,11 @@ const orderSchema = new mongoose.Schema({
     // if user checked in already, this will be true
     checkedinStatus: {
         type: Boolean,
-        default: false,
+        required: true,
     },
     checkedoutStatus: {
         type: Boolean,
-        default: false,
+        required: true,
     },
     studentName: {
         type: String,
@@ -45,10 +45,6 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now, 
     },
-    // equipment: [{ 
-    //     itemName: { type: String, required: true }, 
-    //     itemId: { type: String }, 
-    // }],
     equipment: [{ 
         itemName: { type: String, required: true }, 
         itemId: { type: String }, 
