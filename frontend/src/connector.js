@@ -388,6 +388,16 @@ const getRepairStatus = async (itemName, itemId) => {
     }
 };
 
+const getOrderByOrderNumber = async (ordNum) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/${ordNum}`)
+        return res.data
+    } catch (error) {
+        console.error('Error fetching damage report:', error);
+        throw error;
+    }
+};
+
 export {
     getStudents,
     createStudent,
@@ -420,4 +430,5 @@ export {
     deleteDamageReport,
     updateDamageReport,
     getRepairStatus,
+    getOrderByOrderNumber,
 };
