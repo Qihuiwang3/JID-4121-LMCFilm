@@ -9,7 +9,8 @@ class ReservationConfirmationMessagePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            orderNumber: ''
+            orderNumber: '',
+            orderError: false,
         };
     }
 
@@ -23,12 +24,8 @@ class ReservationConfirmationMessagePage extends Component {
         const generatedOrderNumber = this.generateOrderNumber();
         this.setState({ orderNumber: generatedOrderNumber });
 
-        // Get cartItems and selectedDates from Redux
         const { cartItems, selectedDates, name, email } = this.props;
-        console.log("name: ", name)
-        console.log("email : ", email)
 
-        // Call createOrder only once when the component mounts
         const orderData = {
             orderNumber: generatedOrderNumber,
             email: email, // Replace with actual email or dynamic value
@@ -45,9 +42,12 @@ class ReservationConfirmationMessagePage extends Component {
 
         createOrder(orderData)
             .then(response => {
+                const generatedOrderNumber = this.generateOrderNumber();
+                this.setState({ orderNumber: generatedOrderNumber, orderError: false });
                 console.log('Order created successfully:', response);
             })
             .catch(error => {
+                this.setState({ orderError: true }); 
                 console.error('Error creating order:', error);
             });
     }
@@ -58,20 +58,26 @@ class ReservationConfirmationMessagePage extends Component {
     };
 
     render() {
-        const { orderNumber } = this.state;
+        const { orderNumber, orderError } = this.state;
 
         return (
             <div className="main-content">
                 <h1 className='select-class-header'>
-                    Your Reservation has been confirmed!
+                    {orderError ? 'Error, there\'s something wrong when making the order.' : 'Your Reservation has been confirmed!'}
                 </h1>
-                <div className='confirm-text'>
-                    Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
-                </div>
 
-                <div className="barcode-container">
-                    <Barcode value={orderNumber} />
-                </div>
+                {!orderError && (
+                    <>
+                        <div className='confirm-text'>
+                            Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
+                        </div>
+
+                        <div className="barcode-container">
+                            <Barcode value={orderNumber} />
+                        </div>
+                    </>
+                )}
+
                 <div className="btnContainer">
                     <Button type="back" onClick={this.goBack}>Back</Button>
                 </div>
