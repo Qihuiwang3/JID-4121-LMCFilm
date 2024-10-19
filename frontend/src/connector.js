@@ -427,7 +427,8 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
     try {
         const res = await axios.put(`${BACKEND_URL}/api/order/${orderNumber}`, {
             equipment: updateData.equipment,
-            checkedoutStatus: updateData.checkedoutStatus
+            checkedoutStatus: updateData.checkedoutStatus,
+            checkedout: updateData.checkedout
         }, {
             headers: {
                 'Content-Type': 'application/json',

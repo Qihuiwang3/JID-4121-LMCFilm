@@ -31,7 +31,8 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
         try {
             await updateOrderByOrderNumber(orderInfo.orderNumber, {
                 equipment: updatedEquipment,
-                checkedoutStatus: true, 
+                checkedoutStatus: true,
+                checkedout: new Date() 
             });
             console.log('Order updated successfully');
             onClose();
