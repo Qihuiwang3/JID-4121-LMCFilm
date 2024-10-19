@@ -17,6 +17,11 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
         setShowSearchPopup(false);
     };
 
+    const closeAllModals = () => {
+        setShowSearchPopup(false);
+        onClose();
+    };
+
     const handleOrderNumberChange = (e) => {
         setOrderNumber(e.target.value);
         setIsOrderNumberValid(false);
@@ -103,10 +108,10 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 </div>
 
                 <div className="scan-input">
-                    <label htmlFor="barcode">Order Number</label>
+                    <label htmlFor="orderNumber">Order Number</label>
                     <input
                         type="text"
-                        id="barcode"
+                        id="orderNumber"
                         className="checkout-modal-input"
                         value={orderNumber}
                         onChange={handleOrderNumberChange}
@@ -127,7 +132,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     </button>
                 </div>
 
-                {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeSearchPopup} />}
+                {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup}/>}
             </div>
         </div>
     );

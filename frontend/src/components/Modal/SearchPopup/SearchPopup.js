@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SearchPopup.css';
 import { updateOrderByOrderNumber } from '../../../connector'; 
 
-const SearchPopup = ({ onClose, orderInfo }) => {
+const SearchPopup = ({ goBack, onClose, orderInfo }) => {
     // Hooks must be at the top level of the component
     const [itemIds, setItemIds] = useState([]); // Initial empty array for itemIds
     const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Initially disable the button
@@ -124,7 +124,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                 ))}
 
                 <div className="modal-footer">
-                    <button className="scan-cancel-button" onClick={onClose}>Go Back</button>
+                    <button className="scan-cancel-button" onClick={goBack}>Go Back</button>
                     <button
                         className="checkin-button"
                         disabled={isButtonDisabled} // Disable the button if any field is empty
