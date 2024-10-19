@@ -423,6 +423,22 @@ const getOrderByOrderNumber = async (orderNumber) => {
     }
 };
 
+const updateOrderByOrderNumber = async (orderNumber, updatedEquipment) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/order/${orderNumber}`, {
+            equipment: updatedEquipment
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error updating order by order number:', error);
+        throw error;
+    }
+};
+
 
 export {
     getStudents,
@@ -459,4 +475,5 @@ export {
     deleteDamageReport,
     updateDamageReport,
     getRepairStatus,
+    updateOrderByOrderNumber
 };

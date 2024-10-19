@@ -4,7 +4,8 @@ const {
     getOrderByOrderNumber, 
     createOrder, 
     deleteOrder, 
-    getOrderByEmail
+    getOrderByEmail,
+    updateOrderByOrderNumber
 } = require('../controllers/orderController');
 
 const router = express.Router();
@@ -28,6 +29,10 @@ router.get('/order/email/:email', getOrderByEmail);
 // @route POST /api/order
 // @access Private
 router.post('/order', createOrder);
+
+// Route to update an order by order number
+// @route PUT /api/order/:orderNumber
+router.put('/order/:orderNumber', updateOrderByOrderNumber); 
 
 // Route to delete an order by order number
 // @route DELETE /api/order/:orderNumber

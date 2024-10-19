@@ -78,10 +78,35 @@ const deleteOrder = asyncHandler(async (req, res) => {
     res.status(200).json({ message: `Order with number ${req.params.orderNumber} deleted successfully.` });
 });
 
+// @desc Update an order by order number
+// @route PUT /order/:orderNumber
+// @access Private
+const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
+    const { equipment } = req.body; // Expect an array of tuples: [{ itemName, itemId }]
+
+    if (!equipment || equipment.length === 0) {
+        return res.status(400).json({ error: "Equipment and item IDs are required." });
+    }
+
+    const order = await Order.findOne({ orderNumber: req.params.orderNumber });
+    
+    if (!order) {
+        return res.status(404).json({ error: `Order with number ${req.params.orderNumber} not found.` });
+    }
+
+    // Update the equipment array to contain itemName and itemId tuples
+    order.equipment = equipment;
+
+    const updatedOrder = await order.save();
+    res.status(200).json(updatedOrder);
+});
+
+
 module.exports = { 
     getAllOrders,
     getOrderByOrderNumber,
     getOrderByEmail,
     createOrder,
     deleteOrder,
+    updateOrderByOrderNumber
 };

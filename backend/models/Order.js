@@ -45,9 +45,13 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now, 
     },
+    // equipment: [{ 
+    //     itemName: { type: String, required: true }, 
+    //     itemId: { type: String }, 
+    // }],
     equipment: [{ 
-        type: String,  
-        required: true,
+        itemName: { type: String, required: true }, 
+        itemId: { type: String }, 
     }],
 });
 

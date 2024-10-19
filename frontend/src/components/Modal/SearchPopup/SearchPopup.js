@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './SearchPopup.css';
+import { updateOrderByOrderNumber } from '../../../connector'; 
 
 const SearchPopup = ({ onClose, orderInfo }) => {
-    if (!orderInfo) {
-        return null; // If no orderInfo is available, don't render the popup
-    }
+    // Hooks must be at the top level of the component
+    const [itemIds, setItemIds] = useState([]); // Initial empty array for itemIds
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true); // Initially disable the button
 
-    const { orderNumber, studentName, email, equipment } = orderInfo; 
+    // Initialize the itemIds state with an array of empty strings when orderInfo changes
+    useEffect(() => {
+        if (orderInfo && orderInfo.equipment) {
+            setItemIds(orderInfo.equipment.map(() => ''));
+        }
+    }, [orderInfo]);
+
+    // Handle changes in the itemId inputs
+    const handleItemIdChange = (index, value) => {
+        const newItemIds = [...itemIds];
+        newItemIds[index] = value;
+        setItemIds(newItemIds);
+    };
+
+    // Effect to check if all itemId fields are filled
+    useEffect(() => {
+        const allFilled = itemIds.every(id => id.trim() !== '');
+        setIsButtonDisabled(!allFilled); // Enable the button only if all fields are filled
+    }, [itemIds]);
+
+    // Handle the "Student Checked In" button click
+    const handleCheckIn = async () => {
+        const updatedEquipment = orderInfo.equipment.map((item, index) => ({
+            itemName: item, // Assuming equipment contains item names
+            itemId: itemIds[index] // Use the corresponding itemId from user input
+        }));
+
+        try {
+            await updateOrderByOrderNumber(orderInfo.orderNumber, updatedEquipment);
+            console.log('Order updated successfully');
+            onClose(); // Close the popup after updating the order
+        } catch (error) {
+            console.error('Error updating order:', error);
+        }
+    };
+
+    // If no orderInfo is available, return null (after hooks have been initialized)
+    if (!orderInfo) {
+        return null;
+    }
 
     return (
         <div className="search-overlay" onClick={onClose}>
@@ -22,7 +62,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                         type="text"
                         id="orderNumber"
                         className="search-popup-input"
-                        defaultValue={orderNumber} 
+                        defaultValue={orderInfo.orderNumber}
                         readOnly
                     />
                 </div>
@@ -33,7 +73,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                             type="text"
                             id="student-name"
                             className="search-popup-input"
-                            defaultValue={studentName}
+                            defaultValue={orderInfo.studentName}
                             readOnly
                         />
                     </div>
@@ -43,7 +83,7 @@ const SearchPopup = ({ onClose, orderInfo }) => {
                             type="email"
                             id="student-email"
                             className="search-popup-input"
-                            defaultValue={email} // Dynamically set value from orderInfo
+                            defaultValue={orderInfo.email}
                             readOnly
                         />
                     </div>
@@ -51,27 +91,38 @@ const SearchPopup = ({ onClose, orderInfo }) => {
 
                 <h3 className="equipment-header">Equipment Check Out</h3>
 
-                {equipment.map((item, index) => (
+                {orderInfo.equipment.map((item, index) => (
                     <div key={index} className="search-row">
                         <div className="search-item-group">
                             <label className="search-label">Item Name</label>
                             <input
                                 type="text"
                                 className="search-popup-input"
-                                defaultValue={item} 
+                                defaultValue={item}
                                 readOnly
                             />
                         </div>
                         <div className="search-item-group">
                             <label className="search-label">Scan the Item ID</label>
-                            <input type="text" className="search-popup-input" /> 
+                            <input
+                                type="text"
+                                className="search-popup-input"
+                                value={itemIds[index]} // Bind to state
+                                onChange={(e) => handleItemIdChange(index, e.target.value)} // Update state on input change
+                            />
                         </div>
                     </div>
                 ))}
 
                 <div className="modal-footer">
-                    <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
-                    <button className="checkin-button">Student Checked In</button>
+                    <button className="scan-cancel-button" onClick={onClose}>Go Back</button>
+                    <button
+                        className="checkin-button"
+                        disabled={isButtonDisabled} // Disable the button if any field is empty
+                        onClick={handleCheckIn}
+                    >
+                        Student Checked In
+                    </button>
                 </div>
             </div>
         </div>
