@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './DamageReportModal.css';
-import { createDamageReport, getItems } from '../../../connector'; 
+import { createDamageReport, getItems, getStudents } from '../../../connector'; 
 import { useSelector } from 'react-redux';
 const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) => {
     const reporter = useSelector((state) => state.studentData.name);
@@ -9,15 +9,18 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
     const [itemId, setItemId] = useState(reportToEdit?.itemId || '');
     const [itemName, setItemName] = useState(reportToEdit?.itemName || '');
     const [description, setDescription] = useState(reportToEdit?.description || '');
-    const [uploadedImage, setUploadedImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const [uploadedImage, setUploadedImage] = useState(reportToEdit?.images || null);
+    const [imagePreview, setImagePreview] = useState(reportToEdit?.images || null);
     const [error, setError] = useState('');
     const [items, setItems] = useState([]);
+    const [students, setStudents] = useState([]);
 
     useEffect(() => {
         const fetchItems = async () => {
             try {
                 const fetchedItems = await getItems(); 
+                const fetchedStudents = await getStudents();
+                setStudents(fetchedStudents);
                 setItems(fetchedItems);
             } catch (error) {
                 console.error('Error fetching items:', error);
@@ -49,6 +52,24 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
 
         if (!studentEmail || !itemId || !itemName || !description) {
             setError('Please fill out all required fields.');
+            return;
+        }
+
+        const studentExists = students.some(student => student.email === studentEmail);
+        if (!studentExists) {
+            setError('Student email not found.');
+            return;
+        }
+
+        const item = items.find(item => item.itemName === itemName);
+        if (!item) {
+            setError('Item name not found.');
+            return;
+        }
+
+        const itemIdExists = item.itemIds.some(idObj => idObj.itemId === itemId);
+        if (!itemIdExists) {
+            setError('Item ID not found.');
             return;
         }
 
