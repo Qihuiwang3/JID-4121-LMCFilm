@@ -64,7 +64,7 @@ const createOrder = asyncHandler(async (req, res) => {
 
     const formattedEquipment = equipment.map(e => ({
         itemName: e.itemName,
-        itemId: '' // itemId is optional and will be set to an empty string initially
+        itemId: ''
     }));
 
     const newOrder = new Order({

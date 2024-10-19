@@ -22,11 +22,11 @@ const orderSchema = new mongoose.Schema({
     // the real user check in date
     checkedin: {
         type: Date, 
-        default: Date.now, 
+        default: null, 
     },
     checkedout: {
         type: Date,
-        default: Date.now, 
+        default: null, 
     },
     // if user checked in already, this will be true
     checkedinStatus: {
@@ -47,7 +47,7 @@ const orderSchema = new mongoose.Schema({
     },
     equipment: [{ 
         itemName: { type: String, required: true }, 
-        itemId: { type: String, required: true }, 
+        itemId: { type: String }, 
     }],
 });
 
