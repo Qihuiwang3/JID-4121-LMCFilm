@@ -88,8 +88,8 @@ class ReservationTable extends Component {
         const { showScanPopup, selectedOption, showViewDetailPopup, reservationDetails } = this.state;
         const columnDefs = [
             { headerName: "Order #", field: "orderNumber", flex: 1.5 },
-            { headerName: "Name", field: "studentName", flex: 1.5 },
-            { headerName: "Email", field: "email", flex: 2 },
+            { headerName: "Name", field: "studentName", flex: 1.3 },
+            { headerName: "Email", field: "email", flex: 2.3 },
             { 
                 headerName: "Checked-in", 
                 field: "checkin", 

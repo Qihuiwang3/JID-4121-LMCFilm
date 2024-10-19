@@ -1,6 +1,15 @@
 import React from 'react';
 import './ReservationDetailPopup.css'; 
 
+const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const ReservationDetailPopup = ({ onClose, reservationDetails }) => {
     return (
         <div className="view-modal-overlay" onClick={onClose}>
@@ -55,7 +64,12 @@ const ReservationDetailPopup = ({ onClose, reservationDetails }) => {
                                 </div>
                                 <div className="view-equipment-group">
                                     <label className="view-equipment-label">Date Checked Out</label>
-                                    <input type="text" className="view-input-field" defaultValue={reservationDetails.checkedout} readOnly/>
+                                    <input 
+                                        type="text" 
+                                        className="view-input-field" 
+                                        defaultValue={formatDate(reservationDetails.checkedout)} 
+                                        readOnly
+                                    />
                                 </div>
                             </div>
                         ))}
@@ -75,7 +89,12 @@ const ReservationDetailPopup = ({ onClose, reservationDetails }) => {
                                 </div>
                                 <div className="view-equipment-group">
                                     <label className="view-equipment-label">Date Checked In</label>
-                                    <input type="text" className="view-input-field" defaultValue={reservationDetails.checkedin} readOnly/>
+                                    <input 
+                                        type="text" 
+                                        className="view-input-field" 
+                                        defaultValue={formatDate(reservationDetails.checkedin)} 
+                                        readOnly
+                                    />
                                 </div>
                             </div>
                         ))}
