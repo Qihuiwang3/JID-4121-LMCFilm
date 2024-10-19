@@ -115,16 +115,16 @@ const DamageTable = () => {
 
     const columnDefs = [
         { headerName: "Item ID", field: "itemId", flex: 1 },
-        { headerName: "Item Name", field: "itemName", flex: 1 },
+        { headerName: "Item Name", field: "itemName", flex: 1.2 },
         { 
             headerName: "Reported Date", 
             field: "dateCreated", 
-            flex: 1,
+            flex: 1.5,
             valueFormatter: (params) => {
                 return new Date(params.value).toLocaleDateString(); 
             }
         },
-        { headerName: "Reporter", field: "reporter", flex: 1 },
+        { headerName: "Reporter", field: "reporter", flex: 1.2 },
         {
             headerName: "Repair",
             field: "isRepaired",
