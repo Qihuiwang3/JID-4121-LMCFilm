@@ -69,6 +69,13 @@
     border: 1px solid #3361AE;
 }
 
+.damage-info select {
+    width: 104%;
+    border-radius: 5px;
+    background-color: #E7EFF2;
+    border: 1px solid #3361AE;
+}
+
 .damage-reportor input, .damage-date input {
     width: 100%;
     border-radius: 5px;
@@ -127,4 +134,9 @@
 .error-message {
     color: red;
     font-weight: bold;
+}
+
+.image-preview-size {
+    width: 100%; 
+    height: auto; 
 }

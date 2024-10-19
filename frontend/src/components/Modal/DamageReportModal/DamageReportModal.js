@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './DamageReportModal.css';
-import { createDamageReport } from '../../../connector'; 
+import { createDamageReport, getItems } from '../../../connector'; 
+import { useSelector } from 'react-redux';
 const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
-    const [reporter, setReporter] = useState('Admin A');
+    const reporter = useSelector((state) => state.studentData.name);
     const [dateReported] = useState(new Date().toISOString().split('T')[0]); 
     const [studentEmail, setStudentEmail] = useState('');
     const [itemId, setItemId] = useState('');
@@ -11,6 +12,19 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
     const [uploadedImage, setUploadedImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [error, setError] = useState('');
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const fetchedItems = await getItems(); 
+                setItems(fetchedItems);
+            } catch (error) {
+                console.error('Error fetching items:', error);
+            }
+        };
+        fetchItems();
+    }, []);
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -29,10 +43,6 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
         }
     };
 
-    const handleImageRemove = () => {
-        setUploadedImage(null);
-        setImagePreview(null);
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -105,12 +115,18 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
                     </div>
                     <div className='damage-info'>
                         <div className='damage-lable'>Item Name</div>
-                        <input
-                            type="text"
+                        <select
                             value={itemName}
                             onChange={(e) => setItemName(e.target.value)}
                             required
-                        />
+                        >
+                            <option value="">Select Item</option>
+                            {items.map(item => (
+                                <option key={item.itemName} value={item.itemName}>
+                                    {item.itemName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className='damage-info'>
@@ -122,12 +138,11 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
                         ></input>
                     </div>
                     <div className='damage-info'>
-                        <div className='damage-label'>Upload Image (optional)</div>
+                        <div className='damage-lable'>Upload Image (optional)</div>
                         <input type="file" accept="image/jpeg, image/png, image/jpg" onChange={handleImageUpload} />
                         {imagePreview && (
                             <div className="uploaded-image-preview">
-                                <img src={imagePreview} alt="Uploaded Preview" />
-                                <button type="button" onClick={handleImageRemove}>Remove</button>
+                                <img src={imagePreview} alt="Uploaded Preview" className="image-preview-size"/>
                             </div>
                         )}
                     </div>
