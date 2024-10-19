@@ -3,7 +3,8 @@ const {
     getAllOrders, 
     getOrderByOrderNumber, 
     createOrder, 
-    deleteOrder 
+    deleteOrder, 
+    getOrderByEmail
 } = require('../controllers/orderController');
 
 const router = express.Router();
@@ -17,6 +18,11 @@ router.get('/orders', getAllOrders);
 // @route GET /api/order/:orderNumber
 // @access Private
 router.get('/order/:orderNumber', getOrderByOrderNumber);
+
+// Route to get a specific order by email
+// @route GET /order/email/:email
+// @access Private
+router.get('/order/email/:email', getOrderByEmail);
 
 // Route to create a new order
 // @route POST /api/order

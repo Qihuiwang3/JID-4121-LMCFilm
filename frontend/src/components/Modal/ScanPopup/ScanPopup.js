@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
 import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
+import { getOrderByOrderNumber } from '../../../connector'; 
 
 const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
+    const [orderNumber, setOrderNumber] = useState('');
 
     const handleSearchClick = () => {
-        console.log("showSearchPopup?", showSearchPopup)
-
+        console.log("showSearchPopup?", showSearchPopup);
         setShowSearchPopup(true);
     };
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
+    };
+
+    const handleOrderNumberChange = (e) => {
+        setOrderNumber(e.target.value);
+    };
+
+    const handleOrderNumberBlur = async () => {
+        try {
+            if (orderNumber) {
+                const order = await getOrderByOrderNumber(orderNumber);
+                console.log('Order found:', order);
+            }
+        } catch (error) {
+            console.error('Error fetching order:', error);
+        }
     };
 
     return (
@@ -22,7 +38,19 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     <h2>Scan</h2>
                     <button className="close-button" onClick={onClose}>&times;</button>
                 </div>
-                
+
+                <div className="scan-input">
+                    <label htmlFor="barcode">Order Number</label>
+                    <input
+                        type="text"
+                        id="barcode"
+                        className="checkout-modal-input"
+                        value={orderNumber}
+                        onChange={handleOrderNumberChange}
+                        // Trigger API call when user clicks away
+                        onBlur={handleOrderNumberBlur} 
+                    />
+                </div>
                 <div className="radio-input">
                     <label>
                         <input
@@ -44,33 +72,14 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     </label>
                 </div>
 
-                <div className="scan-input">
-                    <label htmlFor="barcode">Order Number</label>
-                    <input type="text" id="barcode" className="checkout-modal-input"/>
-                </div>
-
-                <div className="or-text">
-                    OR
-                </div>
-                
-                <div className="scan-input">
-                    <label htmlFor="email">Student Email</label>
-                    <input type="email" id="email" className="checkout-modal-input"/>
-                </div>
-                
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
-                    <button 
-                        className="scan-search-button" 
-                        onClick={handleSearchClick}
-                    >
+                    <button className="scan-search-button" onClick={handleSearchClick}>
                         Search
                     </button>
                 </div>
-                
-                {showSearchPopup && 
-                    <SearchPopup onClose={closeSearchPopup} />
-                }
+
+                {showSearchPopup && <SearchPopup onClose={closeSearchPopup} />}
             </div>
         </div>
     );

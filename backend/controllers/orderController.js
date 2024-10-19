@@ -23,6 +23,19 @@ const getOrderByOrderNumber = asyncHandler(async (req, res) => {
     res.status(200).json(order);
 });
 
+// @desc Get orders by email
+// @route GET /order/email/:email
+// @access Private
+const getOrderByEmail = asyncHandler(async (req, res) => {
+    const orders = await Order.find({ email: req.params.email });
+
+    if (!orders || orders.length === 0) {
+        return res.status(404).json({ error: `No orders found for email ${req.params.email}.` });
+    }
+
+    res.status(200).json(orders);
+});
+
 // @desc Create new order
 // @route POST /order
 // @access Private
@@ -68,6 +81,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
 module.exports = { 
     getAllOrders,
     getOrderByOrderNumber,
+    getOrderByEmail,
     createOrder,
     deleteOrder,
 };

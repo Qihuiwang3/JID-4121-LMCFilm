@@ -403,6 +403,27 @@ const getRepairStatus = async (itemName, itemId) => {
     }
 };
 
+const getOrderByEmail = async (email) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/email/${email}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order by email:', error);
+        throw error;
+    }
+};
+
+const getOrderByOrderNumber = async (orderNumber) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/${orderNumber}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order by order number:', error);
+        throw error;
+    }
+};
+
+
 export {
     getStudents,
     createStudent,
@@ -430,6 +451,8 @@ export {
     createSingleItem,
     getAllOrders,
     createOrder,
+    getOrderByEmail,
+    getOrderByOrderNumber,
     createDamageReport,
     getAllDamageReports,
     getSingleDamageReport,
