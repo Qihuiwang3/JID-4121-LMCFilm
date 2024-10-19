@@ -316,15 +316,14 @@ const createSingleItem = async (itemData) => {
 
 const updateBundleItem = async (updatedBundleItem) => {
     try {
-        console.log(updateBundleItem.bundleId)
-        const res = await axios.put(`${BACKEND_URL}/api/bundle-items/${updatedBundleItem.bundleId}`, {
-            bundleName: updatedBundleItem.bundleName,
-            price: updatedBundleItem.price,
-            items: updatedBundleItem.bundleEquipment,
+        const res = await axios.put(`${BACKEND_URL}/api/bundle-items/${updatedBundleItem.bundleId}`, updatedBundleItem, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
         return res.data;
     } catch (error) {
-        console.error(error);
+        console.error('Error adding single item:', error);
         throw error;
     }
 };
@@ -414,6 +413,38 @@ const getRepairStatus = async (itemName, itemId) => {
     }
 };
 
+const removeSingularItem = async (itemName, itemId) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/item/itemId/${itemId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName }, // Send itemName in the request body
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting single item:', error);
+        throw error;
+    }
+};
+
+
+const deleteBundleItem = async (bundleId, itemName) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/bundle-items/${bundleId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting bundle item:', error);
+        throw error;
+    }
+};
+
+
 export {
     getStudents,
     createStudent,
@@ -448,4 +479,6 @@ export {
     deleteDamageReport,
     updateDamageReport,
     getRepairStatus,
+    removeSingularItem,
+    deleteBundleItem,
 };
