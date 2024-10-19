@@ -31,11 +31,11 @@ const orderSchema = new mongoose.Schema({
     // if user checked in already, this will be true
     checkedinStatus: {
         type: Boolean,
-        required: true,
+        default: false, 
     },
     checkedoutStatus: {
         type: Boolean,
-        required: true,
+        default: false, 
     },
     studentName: {
         type: String,

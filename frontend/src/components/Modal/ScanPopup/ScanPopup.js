@@ -1,25 +1,33 @@
 import React, { useState } from 'react';
 import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
+import SearchPopupCheckin from '../SearchPopup/SearchPopupCheckin';
 import { getOrderByOrderNumber } from '../../../connector'; 
 
 const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
+    const [showCheckinPopup, setShowCheckinPopup] = useState(false);
     const [orderNumber, setOrderNumber] = useState('');
     const [orderInfo, setOrderInfo] = useState(null); 
     const [isOrderNumberValid, setIsOrderNumberValid] = useState(false); 
 
     const handleSearchClick = () => {
-        setShowSearchPopup(true);
+        if (selectedOption === 'checkout') {
+            setShowSearchPopup(true);
+        } else if (selectedOption === 'checkin') {
+            setShowCheckinPopup(true);
+        }
     };
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
+        setShowCheckinPopup(false);  // Close both popups when navigating back
     };
 
     const closeAllModals = () => {
         setShowSearchPopup(false);
-        onClose();
+        setShowCheckinPopup(false);
+        onClose(); // Close parent modal
     };
 
     const handleOrderNumberChange = (e) => {
@@ -32,13 +40,9 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
             if (orderNumber) {
                 const fetchedOrderInfo = await getOrderByOrderNumber(orderNumber);
                 if (fetchedOrderInfo) {
-                    console.log("fetchedOrderInfo.checkedinStatus: ", fetchedOrderInfo.checkedinStatus);
-                    console.log("fetchedOrderInfo.checkedoutStatus: ", fetchedOrderInfo.checkedoutStatus);
-                    console.log("fetchedOrderInfo, ", fetchedOrderInfo);
                     setOrderInfo(fetchedOrderInfo);
                     setIsOrderNumberValid(true); 
 
-                    
                     // Automatically select the appropriate radio button based on order status
                     if (!fetchedOrderInfo.checkedinStatus && !fetchedOrderInfo.checkedoutStatus) {
                         onOptionChange({ target: { value: 'checkout' } });
@@ -55,7 +59,6 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
         }
     };
 
-    // Determine which UI elements to show based on checkedinStatus and checkedoutStatus
     const renderRadioButtonsOrMessage = () => {
         if (orderInfo && isOrderNumberValid) {
             const { checkedinStatus, checkedoutStatus } = orderInfo;
@@ -132,7 +135,8 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     </button>
                 </div>
 
-                {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup}/>}
+                {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup} />}
+                {showCheckinPopup && <SearchPopupCheckin orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup} />}
             </div>
         </div>
     );
