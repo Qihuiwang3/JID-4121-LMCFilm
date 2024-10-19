@@ -9,7 +9,8 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showCheckinPopup, setShowCheckinPopup] = useState(false);
     const [orderNumber, setOrderNumber] = useState('');
     const [orderInfo, setOrderInfo] = useState(null); 
-    const [isOrderNumberValid, setIsOrderNumberValid] = useState(false); 
+    const [isOrderNumberValid, setIsOrderNumberValid] = useState(false);
+    const [orderNotFound, setOrderNotFound] = useState(false);
 
     const handleSearchClick = () => {
         if (selectedOption === 'checkout') {
@@ -21,18 +22,19 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
-        setShowCheckinPopup(false);  // Close both popups when navigating back
+        setShowCheckinPopup(false);
     };
 
     const closeAllModals = () => {
         setShowSearchPopup(false);
         setShowCheckinPopup(false);
-        onClose(); // Close parent modal
+        onClose();
     };
 
     const handleOrderNumberChange = (e) => {
         setOrderNumber(e.target.value);
         setIsOrderNumberValid(false);
+        setOrderNotFound(false);
     };
 
     const handleOrderNumberBlur = async () => {
@@ -41,9 +43,9 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 const fetchedOrderInfo = await getOrderByOrderNumber(orderNumber);
                 if (fetchedOrderInfo) {
                     setOrderInfo(fetchedOrderInfo);
-                    setIsOrderNumberValid(true); 
+                    setIsOrderNumberValid(true);
+                    setOrderNotFound(false);
 
-                    // Automatically select the appropriate radio button based on order status
                     if (!fetchedOrderInfo.checkedinStatus && !fetchedOrderInfo.checkedoutStatus) {
                         onOptionChange({ target: { value: 'checkout' } });
                     } else if (fetchedOrderInfo.checkedoutStatus && !fetchedOrderInfo.checkedinStatus) {
@@ -51,11 +53,13 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     }
                 } else {
                     setIsOrderNumberValid(false); 
+                    setOrderNotFound(true);
                 }
             }
         } catch (error) {
             console.error('Error fetching order:', error);
             setIsOrderNumberValid(false); 
+            setOrderNotFound(true);
         }
     };
 
@@ -96,7 +100,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
             }
 
             if (checkedoutStatus && checkedinStatus) {
-                return <p>This order is complete.</p>;
+                return <p className="error-message">This order is complete.</p>;
             }
         }
         return null;
@@ -120,6 +124,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                         onChange={handleOrderNumberChange}
                         onBlur={handleOrderNumberBlur} 
                     />
+                    {orderNotFound && <p className="error-message">Order Number is invalid.</p>}
                 </div>
 
                 {isOrderNumberValid && renderRadioButtonsOrMessage()}
