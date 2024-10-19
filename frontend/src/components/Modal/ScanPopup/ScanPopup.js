@@ -27,14 +27,17 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
             if (orderNumber) {
                 const fetchedOrderInfo = await getOrderByOrderNumber(orderNumber);
                 if (fetchedOrderInfo) {
-                    console.log(fetchedOrderInfo);
+                    console.log("fetchedOrderInfo.checkedinStatus: ", fetchedOrderInfo.checkedinStatus);
+                    console.log("fetchedOrderInfo.checkedoutStatus: ", fetchedOrderInfo.checkedoutStatus);
+                    console.log("fetchedOrderInfo, ", fetchedOrderInfo);
                     setOrderInfo(fetchedOrderInfo);
                     setIsOrderNumberValid(true); 
 
+                    
                     // Automatically select the appropriate radio button based on order status
-                    if (!fetchedOrderInfo.checkedInStatus && !fetchedOrderInfo.checkedOutStatus) {
+                    if (!fetchedOrderInfo.checkedinStatus && !fetchedOrderInfo.checkedoutStatus) {
                         onOptionChange({ target: { value: 'checkout' } });
-                    } else if (fetchedOrderInfo.checkedOutStatus && !fetchedOrderInfo.checkedInStatus) {
+                    } else if (fetchedOrderInfo.checkedoutStatus && !fetchedOrderInfo.checkedinStatus) {
                         onOptionChange({ target: { value: 'checkin' } });
                     }
                 } else {
@@ -47,12 +50,12 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
         }
     };
 
-    // Determine which UI elements to show based on checkedInStatus and checkedOutStatus
+    // Determine which UI elements to show based on checkedinStatus and checkedoutStatus
     const renderRadioButtonsOrMessage = () => {
         if (orderInfo && isOrderNumberValid) {
-            const { checkedInStatus, checkedOutStatus } = orderInfo;
+            const { checkedinStatus, checkedoutStatus } = orderInfo;
 
-            if (!checkedInStatus && !checkedOutStatus) {
+            if (!checkedinStatus && !checkedoutStatus) {
                 return (
                     <div className="radio-input">
                         <label>
@@ -68,7 +71,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 );
             }
 
-            if (checkedOutStatus && !checkedInStatus) {
+            if (checkedoutStatus && !checkedinStatus) {
                 return (
                     <div className="radio-input">
                         <label>
@@ -84,7 +87,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 );
             }
 
-            if (checkedOutStatus && checkedInStatus) {
+            if (checkedoutStatus && checkedinStatus) {
                 return <p>This order is complete.</p>;
             }
         }
