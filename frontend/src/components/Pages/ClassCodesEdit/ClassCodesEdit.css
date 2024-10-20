@@ -205,7 +205,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-    border-bottom: 1px solid #3361AE;
+    border-bottom: 1.5px solid #3361AE;
 }
 
 .modal-header h2 {

@@ -246,8 +246,11 @@ class EquipmentTable extends Component {
                     <h1 className="equipment-heading"> Equipment </h1>
                 </div>
                 <div className="equipment-search-bar-edit-container">
-                    <div className="student-searchbar">
-                        <SearchBar onSearch={this.handleSearch} />
+                    <div className="student-searchbar" >
+                        <SearchBar 
+                            onSearch={this.handleSearch} 
+                            placeholder={"Search by Item Name"}
+                        />
                     </div>
 
                     <div className="">

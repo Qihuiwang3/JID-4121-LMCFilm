@@ -1,5 +1,7 @@
 .package-dropdown-content {
     background-color: #DDE8EA5C;
+    overflow-y: auto;
+    max-height: 20vh;
 }
 
 .package-dropdown-header {
@@ -31,6 +33,7 @@
     background-color: #1FA190;
     color: white;
     border: none;
+    margin-left: 10px;
     padding: 7px 30px;
     cursor: pointer;
     border-radius: 0;
@@ -41,7 +44,7 @@
     padding-inline: 10px;
     height: 30px;
     line-height: 30px;
-    width: 100%;
+    width: 90%;
 }
 
 .general-reserve-button {

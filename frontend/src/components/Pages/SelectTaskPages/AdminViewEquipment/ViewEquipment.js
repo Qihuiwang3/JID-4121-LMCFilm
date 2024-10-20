@@ -10,22 +10,18 @@ const ViewEquipment = () => {
 
     const taskRoutes = {
         // Add routes after the corresponding page has been created
-        A: '/equipment'
-        // B: ,
+        A: '/equipment',
+        B: '/DamageReport',
 
     };
 
-    const handleConfirms = () => {
-        if (selectedClassId) {
-            navigate(taskRoutes[selectedClassId]);
-        }
-    }
     const handleBack = () => {
         navigate('/SelectTask');
     };
 
     const handleClick = (id) => {
         setSelectedClassId(id);
+        navigate(taskRoutes[id]);
     };
 
     const classes = [
@@ -52,9 +48,6 @@ const ViewEquipment = () => {
             </div>
             <div className="btnContainer">
                 <Button type="back" onClick={handleBack}>Back</Button>
-                {selectedClassId && (
-                    <Button type="next" onClick={handleConfirms}>Next</Button>
-                )}
             </div>
         </div>
     );

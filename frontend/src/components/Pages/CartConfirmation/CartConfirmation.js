@@ -75,12 +75,14 @@ function CartConfirmation() {
                                 title="Selected Equipment"
                                 equipment={equipment}
                                 showReserve={false}
+                                showQuantity={false}
                             />
                             <PackageDropdown
                                 id="packages"
                                 title="Selected Packages"
                                 pk={packages}
                                 showReserve={false}
+                                showQuantity={false}
                             />
                         </>
                     )}
