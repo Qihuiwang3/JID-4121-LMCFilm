@@ -413,10 +413,16 @@ function CodesTable() {
             // Check if the equipment is already selected
             if (newClass.equipment.includes(selectedEquipment)) {
                 // If it is already selected, remove it
-                setNewClass(prevState => ({
-                    ...prevState,
-                    equipment: prevState.equipment.filter(eq => eq !== selectedEquipment),
-                }));
+                setNewClass(prevState => {
+                    const updatedEquipment = prevState.equipment.filter(eq => eq !== selectedEquipment);
+                    const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be !== selectedEquipment);
+
+                    return {
+                        ...prevState,
+                        equipment: updatedEquipment,
+                        bundleEquipment: updatedBundleEquipment,  // Also remove from bundle equipment
+                    };
+                });
             } else {
                 // Otherwise, add the selected equipment
                 setNewClass(prevState => ({
