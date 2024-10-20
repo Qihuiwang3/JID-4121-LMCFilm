@@ -75,13 +75,13 @@ const ReservationHistoryTable = () => {
         {
             headerName: "View Damage Report",
             flex: 1,
-            cellStyle: { cursor: 'pointer' },
+            cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
         },
         {
             headerName: "View Details",
             flex: 1,
-            cellStyle: { cursor: 'pointer' },
+            cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
         }
     ];
