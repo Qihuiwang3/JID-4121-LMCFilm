@@ -169,6 +169,8 @@
     width: 497px;
 }
 
+
+
 input[readonly] {
     cursor: not-allowed;
 }

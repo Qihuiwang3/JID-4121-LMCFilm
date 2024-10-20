@@ -468,7 +468,7 @@ function CodesTable() {
     <input
         type="text"
         name="price"
-        value={newClass.price === '' ? '' : newClass.price} // Show '' when empty, or the actual value
+        value={newClass.price === '' ? '' : `$${newClass.price}`} // Show '' when empty, or the actual value
         onFocus={(e) => {
             if (newClass.price === '0') {
                 setNewClass(prevState => ({
@@ -497,6 +497,7 @@ function CodesTable() {
         inputMode="numeric" // Mobile-friendly numeric keyboard
         pattern="[0-9]*"    // Only numeric values allowed
     />
+
 </div>
 
                             </div>
@@ -653,7 +654,7 @@ function CodesTable() {
     <input
         type="text"
         name="price"
-        value={editClassData.price === '' || editClassData.price === '0' ? '' : editClassData.price} // Show '' when empty or '0'
+        value={editClassData.price === '' || editClassData.price === '0' ? '' : `$${editClassData.price}`} // Show '' when empty or '0'
         onFocus={(e) => {
             if (editClassData.price === '0') {
                 setEditClassData(prevState => ({
