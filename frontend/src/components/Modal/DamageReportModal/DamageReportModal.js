@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './DamageReportModal.css';
-import { createDamageReport, getItems, getStudents } from '../../../connector'; 
+import { createDamageReport, getItems, getStudents, updateDamageReport } from '../../../connector'; 
 import { useSelector } from 'react-redux';
 const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) => {
     const reporter = useSelector((state) => state.studentData.name);
@@ -84,8 +84,12 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
         };
 
         try {
-            const newReport = await createDamageReport(data);
-            onReportAdded(newReport);
+            if (reportToEdit) {
+                await updateDamageReport(reportToEdit._id, data);
+            } else {
+                const newReport = await createDamageReport(data);
+                onReportAdded(newReport);
+            }
             handleClose(); 
         } catch (error) {
             console.error('Error submitting damage report:', error);
