@@ -24,7 +24,6 @@
     color: black;
     border: none;
     padding: 7px 30px;
-    margin-right: 10px;
     cursor: pointer;
     border-radius: 0;
     max-height: 30px;
@@ -34,6 +33,7 @@
     background-color: #1FA190;
     color: white;
     border: none;
+    margin-left: 10px;
     padding: 7px 30px;
     cursor: pointer;
     border-radius: 0;
