@@ -5,6 +5,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentTable.css';
+import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
 class EquipmentTable extends Component {
     constructor(props) {
@@ -20,6 +21,8 @@ class EquipmentTable extends Component {
                 resizable: true
             },
             searchQuery: '',
+            showDeletePopup: false, // New state for showing the delete popup
+            itemToDelete: null,      // New state to track the item to delete
         };
     }
 
@@ -54,18 +57,35 @@ class EquipmentTable extends Component {
         }
     };
 
-    tempDelete = async (data) => {
-        const { filteredRecords, deletedRecords } = this.state;
+    tempDelete = (data) => {
+        this.setState({
+            showDeletePopup: true,
+            itemToDelete: data,
+        });
+    };
+
+    confirmDelete = async () => {
+        const { itemToDelete, filteredRecords, deletedRecords } = this.state;
 
         const updatedRecords = filteredRecords.filter(record =>
-            !(record.itemName === data.itemName && record.itemId === data.itemId)
+            !(record.itemName === itemToDelete.itemName && record.itemId === itemToDelete.itemId)
         );
 
         this.setState({
             filteredRecords: updatedRecords,
-            deletedRecords: [...deletedRecords, data],
-        }, this.saveChanges); 
-    }
+            deletedRecords: [...deletedRecords, itemToDelete],
+            showDeletePopup: false,
+            itemToDelete: null,
+        }, this.saveChanges);
+    };
+
+    closeDeletePopup = () => {
+        this.setState({
+            showDeletePopup: false,
+            itemToDelete: null,
+        });
+    };
+
 
     tempToggleRepair = (data) => {
         const { filteredRecords, tempToggledRepairs } = this.state;
@@ -79,7 +99,7 @@ class EquipmentTable extends Component {
         this.setState({
             filteredRecords: updatedRecords,
             tempToggledRepairs: [...tempToggledRepairs, data],
-        }, this.saveChanges); 
+        }, this.saveChanges);
     };
 
     tempToggleHide = (data) => {
@@ -93,8 +113,8 @@ class EquipmentTable extends Component {
 
         this.setState({
             filteredRecords: updatedRecords,
-            tempToggledHides: [...tempToggledHides, data], 
-        }, this.saveChanges); 
+            tempToggledHides: [...tempToggledHides, data],
+        }, this.saveChanges);
     };
 
     saveChanges = async () => {
@@ -191,7 +211,7 @@ class EquipmentTable extends Component {
                 field: "repair",
                 maxWidth: 110,
                 flex: 1,
-                editable: false, 
+                editable: false,
                 cellRenderer: (params) => {
                     return params.value ? 'Yes' : 'No'; // render 'Yes' or 'No' based on the value
                 }
@@ -247,8 +267,8 @@ class EquipmentTable extends Component {
                 </div>
                 <div className="equipment-search-bar-edit-container">
                     <div className="student-searchbar" >
-                        <SearchBar 
-                            onSearch={this.handleSearch} 
+                        <SearchBar
+                            onSearch={this.handleSearch}
                             placeholder={"Search by Item Name"}
                         />
                     </div>
@@ -262,12 +282,20 @@ class EquipmentTable extends Component {
 
                 <AgGridTable
                     key={this.state.filteredRecords.length}
-                    rowData={this.state.filteredRecords} 
+                    rowData={this.state.filteredRecords}
                     columnDefs={columnDefs}
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
                     suppressHorizontalScroll={true}
                 />
+
+                {/* Delete Confirmation Popup */}
+                <DeletePopup
+                    show={this.state.showDeletePopup}
+                    handleClose={this.closeDeletePopup}
+                    handleDelete={this.confirmDelete}
+                />
+
             </>
         );
     }
