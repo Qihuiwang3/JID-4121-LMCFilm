@@ -415,11 +415,11 @@ const getRepairStatus = async (itemName, itemId) => {
 
 const removeSingularItem = async (itemName, itemId) => {
     try {
-        const res = await axios.delete(`${BACKEND_URL}/api/item/itemId/${itemId}`, {
+        const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: { itemName }, // Send itemName in the request body
+            data: { itemName }, 
         });
         return res.data;
     } catch (error) {

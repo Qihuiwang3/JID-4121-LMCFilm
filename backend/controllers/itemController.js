@@ -132,27 +132,34 @@ const removeItem = asyncHandler(async (req, res) => {
 // @route DELETE /item/itemId/:itemId
 // @access Private
 const removeSingularItem = asyncHandler(async (req, res) => {
-    const { itemName } = req.body; // Extract itemName from body
-    const { itemId } = req.params; // itemId remains in the URL
-    const item = await Item.findOne({ itemName });
+    const { itemName } = req.body;  // Extract itemName from body
+    const { itemId } = req.params;  // itemId remains in the URL (this should be the MongoDB _id)
 
-    if (!item) {
-        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+    const item = await Item.findOne({ "itemIds._id": itemId });
+    const singularItem = await SingleItem.findOneAndDelete({ _id : itemId})
+    if (!singularItem && !item) {
+        return res.status(404).json({ error: `Item ${itemId} not found in the equipment checkout center.` });
     }
+    res.status(200).json({ message: `Item ${itemName} and all associated records removed successfully.` });
 
-    // Check if the itemId exists
-    const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
+
+    // Find the index of the itemId
+    const itemIndex = item.itemIds.findIndex(i => i._id.toString() === itemId);
+    const singularItemIndex = singularItem.itemIds.findIndex(i => i._id.toString() === itemId)
     if (itemIndex === -1) {
-        return res.status(404).json({ error: `Item ID ${itemId} not found for item ${itemName}.` });
+        return res.status(404).json({ error: `Item ID ${itemId} not found in the list of items for ${itemName}.` });
     }
 
     // Remove the itemId from the list
     item.itemIds.splice(itemIndex, 1);
     item.quantity -= 1;  // Decrease the quantity of the item
+    singularItem.itemIds.splice(singularItemIndex, 1)
+    await singularItem.save()
     await item.save();
 
     res.status(200).json({ message: `Item ID ${itemId} removed successfully from ${itemName}.` });
 });
+
 
 
 // @desc Create new single item
