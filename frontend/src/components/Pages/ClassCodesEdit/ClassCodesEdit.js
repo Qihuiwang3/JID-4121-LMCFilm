@@ -3,6 +3,7 @@ import './ClassCodesEdit.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createClassCode, deleteClassCode, updateClassCode, createBundleItem, getItems, createSingleItem } from '../../../connector.js';
 import SaveButton from '../../Button/SaveButton/SaveButton.js';
+import DeletePopup from '../../Modal/DeletePopupModal/DeletePopup';
 
 function ClassCodesEdit() {
     const location = useLocation();
@@ -12,6 +13,9 @@ function ClassCodesEdit() {
     const [availableEquipment, setAvailableEquipment] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 5;
+
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [classCodeToDelete, setClassCodeToDelete] = useState(null);
 
     const generateRandomCode = () => {
         return Math.floor(1000 + Math.random() * 9000);
@@ -88,13 +92,25 @@ function ClassCodesEdit() {
     };
 
     const handleDeleteRow = (code) => {
-        setDeletedClassCodes([...deletedClassCodes, code]);
-        const updatedClassData = classData.filter(item => item.code !== code);
-        setClassData(updatedClassData);
-        const remainingRowsOnPage = updatedClassData.slice(indexOfFirstRow, indexOfLastRow);
-        if (remainingRowsOnPage.length === 0 && currentPage > 1) {
-            setCurrentPage((prevPage) => prevPage - 1);
+        setClassCodeToDelete(code);  // Set the class code that needs to be deleted
+        setShowDeletePopup(true);    // Show the delete confirmation popup
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await deleteClassCode(classCodeToDelete);  // Perform the deletion
+            setClassData(prevData => prevData.filter(item => item.code !== classCodeToDelete));
+            setDeletedClassCodes(prevDeleted => [...prevDeleted, classCodeToDelete]);
+            setShowDeletePopup(false);  // Hide the popup
+            setClassCodeToDelete(null);  // Clear the selected class code
+        } catch (error) {
+            console.error("Error deleting class code:", error);
         }
+    };
+
+    const closeDeletePopup = () => {
+        setShowDeletePopup(false);
+        setClassCodeToDelete(null);
     };
 
     const goToPreviousPage = () => {
@@ -140,12 +156,12 @@ function ClassCodesEdit() {
                         classCode: newClass.code,
                         itemName: equipmentItem,
 
-                        
+
                     });
 
                     if (newClass.bundleEquipment.includes(equipmentItem)) tempBundle.push({
                         itemName: tempItem.itemName,
-                        quantity: 1 
+                        quantity: 1
                     });
                 }
                 await createBundleItem({
@@ -167,14 +183,14 @@ function ClassCodesEdit() {
             );
             await Promise.all(updatePromises);
             setPendingUpdates([]);
-        } catch (error) {}
+        } catch (error) { }
 
         try {
             for (const code of deletedClassCodes) {
                 await deleteClassCode(code);
             }
             setDeletedClassCodes([]);
-        } catch (error) {}
+        } catch (error) { }
 
         navigate("/ClassCodesAdmin", { state: { classData } });
     };
@@ -440,6 +456,11 @@ function ClassCodesEdit() {
                     </div>
                 </div>
             )}
+            <DeletePopup
+                show={showDeletePopup}
+                handleClose={closeDeletePopup}
+                handleDelete={confirmDelete}
+            />
         </div>
     );
 }

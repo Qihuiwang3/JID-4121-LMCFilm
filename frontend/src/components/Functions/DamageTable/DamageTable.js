@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import AgGridTable from '../AgGridTable/AgGridTable'; 
-import DamageSearch from "../DamageSearch/DamageSearch"; 
+import AgGridTable from '../AgGridTable/AgGridTable';
+import DamageSearch from "../DamageSearch/DamageSearch";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { getAllDamageReports, deleteDamageReport, toggleRepairStatus, getRepairStatus } from "../../../connector"; 
+import { getAllDamageReports, deleteDamageReport, toggleRepairStatus, getRepairStatus } from "../../../connector";
 import DamageReportModal from "../../Modal/DamageReportModal/DamageReportModal";
 import ViewDamageModal from "../../Modal/ViewDamageModal/ViewDamageModal";
 import './DamageTable.css';
+import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
 const DamageTable = () => {
     const [records, setRecords] = useState([]);
@@ -14,6 +15,9 @@ const DamageTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showAddNewPopup, setShowAddNewPopup] = useState(false);
     const [viewReportId, setViewReportId] = useState(null);
+
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
 
     useEffect(() => {
         const fetchRecords = async () => {
@@ -25,11 +29,11 @@ const DamageTable = () => {
                             const repairStatus = await getRepairStatus(record.itemName, record.itemId);
                             return {
                                 ...record,
-                                isRepaired: repairStatus.repair,  
+                                isRepaired: repairStatus.repair,
                             };
                         } catch (error) {
                             console.error('Error fetching repair status:', error);
-                            return { ...record, isRepaired: false }; 
+                            return { ...record, isRepaired: false };
                         }
                     })
                 );
@@ -44,14 +48,26 @@ const DamageTable = () => {
         fetchRecords();
     }, []);
 
-    const handleDeleteRow = async (data) => {
+    const handleDeleteRow = (data) => {
+        setItemToDelete(data);
+        setShowDeletePopup(true);
+    };
+
+    const confirmDelete = async () => {
         try {
-            await deleteDamageReport(data._id);
-            setRecords(prevRecords => prevRecords.filter(record => record._id !== data._id));
-            setFilteredRecords(prevFiltered => prevFiltered.filter(record => record._id !== data._id));
+            await deleteDamageReport(itemToDelete._id);
+            setRecords(prevRecords => prevRecords.filter(record => record._id !== itemToDelete._id));
+            setFilteredRecords(prevFiltered => prevFiltered.filter(record => record._id !== itemToDelete._id));
+            setShowDeletePopup(false);
+            setItemToDelete(null);
         } catch (error) {
             console.error("Error deleting record:", error);
         }
+    };
+
+    const closeDeletePopup = () => {
+        setShowDeletePopup(false);
+        setItemToDelete(null);
     };
 
     const handleSearch = (query) => {
@@ -65,7 +81,7 @@ const DamageTable = () => {
             const repairStatus = await getRepairStatus(newReport.itemName, newReport.itemId);
             const newReportWithRepairStatus = {
                 ...newReport,
-                isRepaired: repairStatus.repair, 
+                isRepaired: repairStatus.repair,
             };
 
             setRecords(prevRecords => [...prevRecords, newReportWithRepairStatus]);
@@ -80,20 +96,20 @@ const DamageTable = () => {
     const handleClosePopup = () => setShowAddNewPopup(false);
 
     const handleViewReport = (id) => {
-        setViewReportId(id); 
+        setViewReportId(id);
     };
 
     const handleCloseModal = () => {
-        setViewReportId(null); 
+        setViewReportId(null);
     };
 
     const handleRepairStatusChange = async (data, newStatus) => {
         try {
             await toggleRepairStatus(data.itemName, data.itemId);
-            setRecords(prevRecords => prevRecords.map(record => 
+            setRecords(prevRecords => prevRecords.map(record =>
                 record._id === data._id ? { ...record, isRepaired: newStatus === "Yes" } : record
             ));
-            setFilteredRecords(prevFiltered => prevFiltered.map(record => 
+            setFilteredRecords(prevFiltered => prevFiltered.map(record =>
                 record._id === data._id ? { ...record, isRepaired: newStatus === "Yes" } : record
             ));
         } catch (error) {
@@ -105,12 +121,12 @@ const DamageTable = () => {
     const columnDefs = [
         { headerName: "Item ID", field: "itemId", flex: 1 },
         { headerName: "Item Name", field: "itemName", flex: 1 },
-        { 
-            headerName: "Reported Date", 
-            field: "dateCreated", 
+        {
+            headerName: "Reported Date",
+            field: "dateCreated",
             flex: 1,
             valueFormatter: (params) => {
-                return new Date(params.value).toLocaleDateString(); 
+                return new Date(params.value).toLocaleDateString();
             }
         },
         { headerName: "Reporter", field: "reporter", flex: 1 },
@@ -144,8 +160,8 @@ const DamageTable = () => {
             field: "delete",
             flex: 1,
             cellRenderer: params => (
-                <button 
-                    onClick={() => handleDeleteRow(params.data)} 
+                <button
+                    onClick={() => handleDeleteRow(params.data)}
                     className="trash-icon"
                 >
                     <FontAwesomeIcon icon={faTrash} />
@@ -171,7 +187,7 @@ const DamageTable = () => {
                 </div>
             </div>
             <AgGridTable
-                rowData={filteredRecords} 
+                rowData={filteredRecords}
                 columnDefs={columnDefs}
                 defaultColDef={{
                     sortable: true,
@@ -181,19 +197,24 @@ const DamageTable = () => {
                 suppressHorizontalScroll={true}
             />
             {viewReportId && (
-                <ViewDamageModal 
-                    show={!!viewReportId} 
-                    reportId={viewReportId} 
-                    handleClose={handleCloseModal} 
+                <ViewDamageModal
+                    show={!!viewReportId}
+                    reportId={viewReportId}
+                    handleClose={handleCloseModal}
                 />
             )}
             {showAddNewPopup && (
-                <DamageReportModal 
-                    show={showAddNewPopup} 
-                    handleClose={handleClosePopup} 
-                    onReportAdded={handleNewReportAdded} 
+                <DamageReportModal
+                    show={showAddNewPopup}
+                    handleClose={handleClosePopup}
+                    onReportAdded={handleNewReportAdded}
                 />
             )}
+            <DeletePopup
+                show={showDeletePopup}
+                handleClose={closeDeletePopup}
+                handleDelete={confirmDelete}
+            />
         </>
     );
 };
