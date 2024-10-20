@@ -35,13 +35,10 @@ function PackageDropdown({ id, title, pk, addItem, showReserve, showQuantity }) 
                                     quantity: equipment.quantity
                                 }))}
                                 showQuantity={showQuantity}
+                                addItem={addItem}
+                                showReserve={showReserve}
+                                fullpk={option}
                             />
-
-                            {showReserve && (
-                                <div className="general-reserve-button">
-                                    <button className="package-reserve-button" onClick={() => addItem(option)}> Reserve </button>
-                                </div>
-                            )}
 
                         </div>
                     ))}

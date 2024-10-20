@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function PackageEquipmentDropdown({ id, title, equipment, showQuantity }) {
+function PackageEquipmentDropdown({ id, title, equipment, showQuantity, showReserve, addItem, fullpk }) {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -14,8 +14,18 @@ function PackageEquipmentDropdown({ id, title, equipment, showQuantity }) {
             <div className="package-dropdown-header">
                 <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <div>{title}</div>
-                    <button className="package-expand-button" onClick={toggleDropdown}> View Contents </button>
+                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                        <button className="package-expand-button" onClick={toggleDropdown}> View Contents </button>
+                        {showReserve && (
+                            <div className="general-reserve-button">
+                                <button className="package-reserve-button" onClick={() => addItem(fullpk)}> Reserve </button>
+                            </div>
+                        )}
+                    </div>
+
                 </div>
+
+
 
             </div>
 
