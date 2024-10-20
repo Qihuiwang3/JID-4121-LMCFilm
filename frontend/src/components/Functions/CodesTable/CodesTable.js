@@ -431,7 +431,7 @@ function CodesTable() {
                 }));
             }
         }}
-        className="modal-input"
+        className="modal-input2"
     >
         <option value="">
             {newClass.equipment && newClass.equipment.length > 0
@@ -464,9 +464,41 @@ function CodesTable() {
                                     <input type="text" name="bundleName" value={newClass.bundleName} onChange={handleInputChange} className="modal-input" />
                                 </div>
                                 <div className="input-group">
-                                    <label>Price</label>
-                                    <input type="text" name="price" value={newClass.price} onChange={handleInputChange} className="modal-input" />
-                                </div>
+    <label>Price</label>
+    <input
+        type="text"
+        name="price"
+        value={newClass.price === '' ? '' : newClass.price} // Show '' when empty, or the actual value
+        onFocus={(e) => {
+            if (newClass.price === '0') {
+                setNewClass(prevState => ({
+                    ...prevState,
+                    price: '' // Clear the input when focused
+                }));
+            }
+        }}
+        onBlur={(e) => {
+            if (newClass.price === '') {
+                setNewClass(prevState => ({
+                    ...prevState,
+                    price: '0' // Set back to '0' if empty when focus is lost
+                }));
+            }
+        }}
+        onChange={(e) => {
+            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+            setNewClass(prevState => ({
+                ...prevState,
+                price: numericValue
+            }));
+        }}
+        className="modal-input"
+        placeholder="0" // Placeholder shows '0' if the field is empty
+        inputMode="numeric" // Mobile-friendly numeric keyboard
+        pattern="[0-9]*"    // Only numeric values allowed
+    />
+</div>
+
                             </div>
                             <div className="input-group">
     <label>Select Bundle Items</label>
@@ -491,7 +523,7 @@ function CodesTable() {
                 }));
             }
         }}
-        className="modal-input"
+        className="modal-input2"
     >
         <option value="">
             {newClass.bundleEquipment && newClass.bundleEquipment.length > 0
@@ -574,7 +606,7 @@ function CodesTable() {
                 }));
             }
         }}
-        className="modal-input"
+        className="modal-input2"
     >
         <option value="">
             {editClassData.equipment && editClassData.equipment.length > 0
@@ -617,9 +649,41 @@ function CodesTable() {
                         <input type="text" name="bundleName" value={editClassData.bundleName || ''} onChange={handleEditClassChange} className="modal-input" />
                     </div>
                     <div className="input-group">
-                        <label>Price</label>
-                        <input type="text" name="price" value={editClassData.price || ''} onChange={handleEditClassChange} className="modal-input" />
-                    </div>
+    <label>Price</label>
+    <input
+        type="text"
+        name="price"
+        value={editClassData.price === '' || editClassData.price === '0' ? '' : editClassData.price} // Show '' when empty or '0'
+        onFocus={(e) => {
+            if (editClassData.price === '0') {
+                setEditClassData(prevState => ({
+                    ...prevState,
+                    price: '' // Clear the input when focused if price is '0'
+                }));
+            }
+        }}
+        onBlur={(e) => {
+            if (editClassData.price === '') {
+                setEditClassData(prevState => ({
+                    ...prevState,
+                    price: '0' // Set back to '0' if empty when focus is lost
+                }));
+            }
+        }}
+        onChange={(e) => {
+            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+            setEditClassData(prevState => ({
+                ...prevState,
+                price: numericValue
+            }));
+        }}
+        className="modal-input"
+        placeholder="0" // Placeholder shows '0' if the field is empty
+        inputMode="numeric" // Mobile-friendly numeric keyboard
+        pattern="[0-9]*"    // Only numeric values allowed
+    />
+</div>
+
                 </div>
 
                 {/* Bundle Items Dropdown */}
@@ -645,7 +709,7 @@ function CodesTable() {
                                 }));
                             }
                         }}
-                        className="modal-input"
+                        className="modal-input2"
                     >
                         <option value="">
                             {editClassData.bundleEquipment.length > 0 

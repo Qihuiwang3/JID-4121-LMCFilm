@@ -160,6 +160,15 @@
     width: 100%;
 }
 
+.modal-input2 {
+    padding: 10px;
+    border: 1px solid #3361AE;
+    border-radius: 5px;
+    background-color: #e7eff2;
+    font-size: 14px;
+    width: 497px;
+}
+
 input[readonly] {
     cursor: not-allowed;
 }
