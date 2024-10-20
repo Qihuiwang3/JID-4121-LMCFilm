@@ -52,7 +52,8 @@ const Login = () => {
                 dispatch(setStudentInfo({
                     email: response.email,
                     name: response.name,
-                    classCodes: response.classCodes
+                    classCodes: response.classCodes,
+                    role: response.role
                 }));
     
                 if (response.role === 'Admin') {
