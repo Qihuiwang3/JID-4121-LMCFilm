@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ReservationConfirmationMessagePage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Barcode from 'react-barcode';
 import Button from '../../Button/Button';
-import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+
 
 function ReservationConfirmationMessagePage() {
     const [orderNumber, setOrderNumber] = useState('');
+    const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const location = useLocation();
+   
 
     const reduxStudentInfo = useSelector(state => state.studentData);
     const studentInfo = location.state?.studentInfo || reduxStudentInfo;
@@ -69,9 +69,6 @@ function ReservationConfirmationMessagePage() {
     }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, setOrderNumber]);
 
     // Function to handle the back button click
-    const location = useLocation();
-    const orderNumber = location.state?.orderNumber || '';
-    const navigate = useNavigate(); 
 
     const goBack = () => {
         navigate('/Enter');
