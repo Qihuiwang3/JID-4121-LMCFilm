@@ -3,12 +3,19 @@ import AgGridTable from '../AgGridTable/AgGridTable';
 import { getAllOrders } from '../../../connector';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
 import './ReservationHistoryTable.css';
+import StudentViewDamageModal from '../../Modal/StudentViewDamageModal/StudentViewDamageModal';
+
+
 
 const ReservationHistoryTable = () => {
     const [records, setRecords] = useState([]);
     const location = useLocation();
     const reduxStudentInfo = useSelector(state => state.studentData);
+    const [viewReportId, setViewReportId] = useState(null);
+    const [viewDamageId, setViewDamageId] = useState(null);
+
 
     useEffect(() => {
         const loadRecords = async () => {
@@ -38,6 +45,22 @@ const ReservationHistoryTable = () => {
 
         loadRecords();
     }, [location.state, reduxStudentInfo]);
+
+    const handleViewReport = (orderNumber) => {
+        setViewReportId(orderNumber);
+    };
+
+
+    const handleViewDamage = (id) => {
+        setViewDamageId(id);
+    };
+
+
+    const handleCloseModal = () => {
+        setViewReportId(null);
+        setViewDamageId(null)
+    };
+
 
     const columnDefs = [
         {
@@ -77,13 +100,35 @@ const ReservationHistoryTable = () => {
             flex: 1,
             cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
+            cellRenderer: params => (
+                <span
+                    onClick={() => handleViewDamage(params.data.code)}
+                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
+                    className="clickable-text"
+                >
+                    View Damage Report
+                </span>
+            )
+
         },
         {
             headerName: "View Details",
             flex: 1,
             cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
+            cellRenderer: params => (
+                <span
+                    onClick={() => handleViewReport(params.data.code)}
+                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
+                    className="clickable-text"
+                >
+                    View Details
+                </span>
+            )
+
+            
         }
+            
     ];
 
     return (
@@ -100,6 +145,21 @@ const ReservationHistoryTable = () => {
                 domLayout="autoHeight"
                 suppressHorizontalScroll={true}
             />
+    {viewReportId && (
+                <BarCodePopup
+                    show={!!viewReportId}
+                    orderNumber = {viewReportId}
+                    handleClose={handleCloseModal}
+                />
+            )}
+    {viewDamageId && (
+                <StudentViewDamageModal
+                    show={!!viewDamageId}
+                    orderNumber = {viewDamageId}
+                    handleClose={handleCloseModal}
+                />
+            )}
+
         </>
     );
 };
