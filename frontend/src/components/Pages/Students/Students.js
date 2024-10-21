@@ -29,9 +29,7 @@ const Students = () => {
             /> 
 
             <div className="student-btn">
-                <div className="student-bottom-btn-container">
-                    <Button type="back" onClick={() => handleBack()}>Back</Button>
-                </div>
+                <Button type="back" onClick={() => handleBack()}>Back</Button>
             </div>
         </div>
     );
