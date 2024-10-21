@@ -16,26 +16,27 @@ import ClassCodes from "./components/Pages/ClassCodes/ClassCodes";
 import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import ViewReservation from "./components/Pages/ViewReservation/ViewReservation";
 import Login from "./components/Pages/Login/Login";
+import ReservationHistory from "./components/Pages/ReservationHistory/ReservationHistory";
 import DamageReport from "./components/Pages/DamageReport/DamageReport";
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
 class App extends Component {
-  state = {
-    selectedDates: {
-      pickupDate: new Date(),
-      pickupTime: new Date(),
-      returnDate: new Date(),
-      returnTime: new Date(),
-    }
-  };
+    state = {
+        selectedDates: {
+            pickupDate: new Date(),
+            pickupTime: new Date(),
+            returnDate: new Date(),
+            returnTime: new Date(),
+        }
+    };
 
-  setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
-    this.setState({
-      selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
-    });
-  };
-
+    setSelectedDates = (pickupDate, pickupTime, returnDate, returnTime) => {
+        this.setState({
+            selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
+        });
+    };
+  
   render() {
     return (
       <Provider store={store}>
@@ -58,6 +59,7 @@ class App extends Component {
             <Route path="/ViewEquipment" element={<ViewEquipment />} />
             <Route path="/SelectTask" element={<SelectTask />} />
             <Route path="/Management" element={<Management />} />
+            <Route path="/ReservationHistory" element={<ReservationHistory />} />
             <Route path="/DamageReport" element={<DamageReport />} />
           </Routes>
         </Router>

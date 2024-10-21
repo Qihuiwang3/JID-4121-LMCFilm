@@ -7,7 +7,7 @@ import { setStudentInfo } from '../../redux/actions/studentActions';
 
 
 const Login = () => {
-    const [isLogin, setIsLogin] = useState(true); 
+    const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({ email: '', password: '', name: '' });
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -15,13 +15,13 @@ const Login = () => {
 
     const handleFormSwitch = () => {
         setIsLogin(!isLogin);
-        setFormData({ email: '', password: '', name: '' }); 
+        setFormData({ email: '', password: '', name: '' });
         setErrorMessage('');
     };
 
     const validateInput = () => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/; 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
         if (!emailRegex.test(formData.email)) {
             return "Please enter a valid email address.";
@@ -43,39 +43,39 @@ const Login = () => {
             setErrorMessage(validationError);
             return;
         }
-    
+
         try {
             if (isLogin) {
                 const response = await loginStudent(formData.email, formData.password);
                 console.log(response);
-    
+
                 dispatch(setStudentInfo({
                     email: response.email,
                     name: response.name,
                     classCodes: response.classCodes,
-                    role: response.role
+                    role: response.role,
                 }));
-    
+
                 if (response.role === 'Admin') {
-                    navigate('/SelectTask'); 
+                    navigate('/SelectTask');
                 } else {
-                    navigate('/Enter'); 
+                    navigate('/Enter');
                 }
             } else {
                 const response = await createStudent({
                     name: formData.name,
                     email: formData.email,
                     password: formData.password,
-                    classCodes: [], 
+                    classCodes: [],
                 });
-                setIsLogin(true); 
+                setIsLogin(true);
             }
         } catch (error) {
             setErrorMessage(error.response?.data?.message || 'An error occurred');
         }
     };
-    
-    
+
+
     return (
         <div className="login-container">
             <div className="form-container">
