@@ -172,6 +172,17 @@ const getClassInfoByCode = async (codeInput) => {
     }
 };
 
+const getSingleItemsByClassCode = async (codeInput) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/single-items/${codeInput}`);
+        console.log(res.data)
+        return res.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
 const createCartWithData = async (cartData) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/carts`, cartData, {
@@ -303,6 +314,20 @@ const createSingleItem = async (itemData) => {
     }
 };
 
+const updateBundleItem = async (updatedBundleItem) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/bundle-items/${updatedBundleItem.bundleId}`, updatedBundleItem, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error adding single item:', error);
+        throw error;
+    }
+};
+
 const getAllOrders = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/orders`);
@@ -312,6 +337,21 @@ const getAllOrders = async () => {
 
     }
 };
+
+const createOrder = async (orderData) => {
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/order`, orderData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error creating order:', error);
+        throw error;
+    }
+};
+
 
 const createDamageReport = async (data) => {
     try {
@@ -388,6 +428,87 @@ const getRepairStatus = async (itemName, itemId) => {
     }
 };
 
+const getOrderByEmail = async (email) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/email/${email}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order by email:', error);
+        throw error;
+    }
+};
+
+const getOrderByOrderNumber = async (orderNumber) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/${orderNumber}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order by order number:', error);
+        throw error;
+    }
+};
+
+const updateOrderByOrderNumber = async (orderNumber, updateData) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/order/${orderNumber}`, {
+            equipment: updateData.equipment,
+            checkedoutStatus: updateData.checkedoutStatus,
+            checkedout: updateData.checkedout,
+            checkedinStatus: updateData.checkedinStatus,
+            checkedin: updateData.checkedin
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error updating order by order number:', error);
+        throw error;
+    }
+};
+const getOrderById = async (id) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/order/id/${id}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching order by ID:', error);
+        throw error;
+    }
+};
+
+const removeSingularItem = async (itemName, itemId) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName }, 
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting single item:', error);
+        throw error;
+    }
+};
+
+
+const deleteBundleItem = async (bundleId, itemName) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/bundle-items/${bundleId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting bundle item:', error);
+        throw error;
+    }
+};
+
+
 export {
     getStudents,
     createStudent,
@@ -413,11 +534,20 @@ export {
     removeClassCode,
     updateStudentRole, 
     createSingleItem,
+    updateBundleItem,
+    getSingleItemsByClassCode,
     getAllOrders,
+    createOrder,
+    getOrderByEmail,
+    getOrderByOrderNumber,
     createDamageReport,
     getAllDamageReports,
     getSingleDamageReport,
     deleteDamageReport,
     updateDamageReport,
     getRepairStatus,
+    updateOrderByOrderNumber,
+    getOrderById,
+    removeSingularItem,
+    deleteBundleItem,
 };

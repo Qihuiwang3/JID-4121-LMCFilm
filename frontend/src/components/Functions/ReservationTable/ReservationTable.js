@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getAllOrders } from '../../../connector.js';  
+import { getAllOrders, getOrderById } from '../../../connector.js';  
 import SearchBar from '../SearchBar/SearchBar'; 
 import ScanButton from '../../Button/ScanButton/ScanButton'; 
 import ScanPopup from '../../Modal/ScanPopup/ScanPopup.js';
@@ -14,7 +14,7 @@ class ReservationTable extends Component {
         this.state = {
             records: [],
             filteredRecords: [],
-            updatedRoles: {},
+            reservationDetails: null, 
             defaultColDef: {
                 sortable: true,
                 resizable: true
@@ -36,8 +36,7 @@ class ReservationTable extends Component {
             const orders = await getAllOrders();
             this.setState({ 
                 records: orders,
-                filteredRecords: orders, 
-                updatedRoles: {} 
+                filteredRecords: orders
             });
         } catch (error) {
             console.error("Error loading records:", error);
@@ -64,32 +63,33 @@ class ReservationTable extends Component {
         this.setState({ selectedOption: event.target.value });
     };
 
-    handleViewReport = (id) => {
-        console.log("id", id)
-        this.setState({ 
-            viewReportId: id,
-            showViewDetailPopup: true,
-        })
+    handleViewReport = async (id) => {
+        try {
+            const reservationDetails = await getOrderById(id);
+            console.log("reservationDetails: ", reservationDetails)
+            this.setState({
+                viewReportId: id,
+                reservationDetails, 
+                showViewDetailPopup: true,
+            });
+        } catch (error) {
+            console.error("Error fetching reservation details:", error);
+        }
     };
 
     handleCloseViewDetailModal = () => {
         this.setState(prevState => ({
             showViewDetailPopup: !prevState.showViewDetailPopup,
+            reservationDetails: null 
         }));
     };
 
-    handleCloseModal = () => {
-        this.setState({ 
-            viewReportId: null
-        })
-    };
-
     render() {
-        const { showScanPopup, selectedOption, showViewDetailPopup } = this.state;
+        const { showScanPopup, selectedOption, showViewDetailPopup, reservationDetails } = this.state;
         const columnDefs = [
             { headerName: "Order #", field: "orderNumber", flex: 1.5 },
-            { headerName: "Name", field: "studentName", flex: 1.5 },
-            { headerName: "Email", field: "email", flex: 2 },
+            { headerName: "Name", field: "studentName", flex: 1.3 },
+            { headerName: "Email", field: "email", flex: 2.3 },
             { 
                 headerName: "Checked-in", 
                 field: "checkin", 
@@ -116,7 +116,8 @@ class ReservationTable extends Component {
                     }).replace(',', '') : 'Available';
                 }
             },
-            { headerName: "View",
+            { 
+                headerName: "View",
                 field: "view",
                 flex: 1,
                 cellRenderer: params => (
@@ -125,8 +126,7 @@ class ReservationTable extends Component {
                     </button>
                 )
             }
-
-        ].filter(Boolean);
+        ];
 
         return (
             <>
@@ -134,7 +134,7 @@ class ReservationTable extends Component {
                     <h2>View Reservations</h2>
                 </div>
                 <div className="search-bar-edit-container">
-                    <div className="reservation-searchbar" >
+                    <div className="reservation-searchbar">
                         <SearchBar 
                             onSearch={this.handleSearch} 
                             placeholder={"Search by Email"}
@@ -160,15 +160,12 @@ class ReservationTable extends Component {
                     />
                 )}
 
-                {showViewDetailPopup && (
+                {showViewDetailPopup && reservationDetails && (
                     <ReservationDetailPopup 
-                        onClose={this.handleCloseViewDetailModal} 
-                        selectedOption={selectedOption}
-                        onOptionChange={this.handleOptionChange}
+                        onClose={this.handleCloseViewDetailModal}
+                        reservationDetails={reservationDetails} // Pass the fetched details
                     />
                 )}
-
-
             </>
         );
     }

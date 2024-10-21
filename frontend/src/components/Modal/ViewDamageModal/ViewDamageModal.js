@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ViewDamageModal.css'; 
 import { getSingleDamageReport } from '../../../connector'; 
 
-const ViewDamageModal = ({ show, reportId, handleClose }) => {
+const ViewDamageModal = ({ show, reportId, handleClose, handleEdit }) => {
     const [report, setReport] = useState(null);
 
     useEffect(() => {
@@ -22,6 +22,11 @@ const ViewDamageModal = ({ show, reportId, handleClose }) => {
     if (!show || !report) {
         return null;
     }
+
+    const handleEditClick = () => {
+        handleEdit(report);
+        handleClose();
+    };
 
     return (
         <div className="modal-overlay">
@@ -64,6 +69,10 @@ const ViewDamageModal = ({ show, reportId, handleClose }) => {
                             <img src={report.images[0]} alt="Damage" style={{ width: '100%' }} />
                         </div>
                     )}
+
+                    <div className="modal-footer">
+                        <button type="submit" className="damage-submit-button" onClick={handleEditClick}>Edit</button>
+                    </div>
                 </div>
             </div>
         </div>

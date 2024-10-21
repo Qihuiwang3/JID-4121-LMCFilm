@@ -66,3 +66,14 @@ html {
     font-weight: bold;
     font-size: 20px;
 }
+
+.ag-theme-alpine .ag-cell {
+    user-select: text; /* Enable text selection */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+.ag-theme-alpine .ag-header-cell {
+    user-select: none; /* Keep the header non-selectable if desired */
+}
