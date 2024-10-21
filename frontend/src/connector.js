@@ -172,6 +172,17 @@ const getClassInfoByCode = async (codeInput) => {
     }
 };
 
+const getSingleItemsByClassCode = async (codeInput) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/single-items/${codeInput}`);
+        console.log(res.data)
+        return res.data;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
 const createCartWithData = async (cartData) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/carts`, cartData, {
@@ -292,6 +303,20 @@ const toggleHideStatus = async (itemName, itemId) => {
 const createSingleItem = async (itemData) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/single-item`, itemData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error adding single item:', error);
+        throw error;
+    }
+};
+
+const updateBundleItem = async (updatedBundleItem) => {
+    try {
+        const res = await axios.put(`${BACKEND_URL}/api/bundle-items/${updatedBundleItem.bundleId}`, updatedBundleItem, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -452,6 +477,36 @@ const getOrderById = async (id) => {
     }
 };
 
+const removeSingularItem = async (itemName, itemId) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName }, 
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting single item:', error);
+        throw error;
+    }
+};
+
+
+const deleteBundleItem = async (bundleId, itemName) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/bundle-items/${bundleId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: { itemName },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error deleting bundle item:', error);
+        throw error;
+    }
+};
 
 
 export {
@@ -479,6 +534,8 @@ export {
     removeClassCode,
     updateStudentRole, 
     createSingleItem,
+    updateBundleItem,
+    getSingleItemsByClassCode,
     getAllOrders,
     createOrder,
     getOrderByEmail,
@@ -490,5 +547,7 @@ export {
     updateDamageReport,
     getRepairStatus,
     updateOrderByOrderNumber,
-    getOrderById
+    getOrderById,
+    removeSingularItem,
+    deleteBundleItem,
 };

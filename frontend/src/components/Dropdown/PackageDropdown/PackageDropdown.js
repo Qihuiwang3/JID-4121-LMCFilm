@@ -4,7 +4,7 @@ import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import PackageEquipmentDropdown from '../PackageEquipmentDropdown/PackageEquipmentDropdown.js';
 import './PackageDropdown.css';
 
-function PackageDropdown({ id, title, pk, addItem, showReserve }) {
+function PackageDropdown({ id, title, pk, addItem, showReserve, showQuantity }) {
     const [isOpen, setIsOpen] = useState(true);
 
     const toggleDropdown = () => {
@@ -34,13 +34,11 @@ function PackageDropdown({ id, title, pk, addItem, showReserve }) {
                                     itemID: equipment.itemId,
                                     quantity: equipment.quantity
                                 }))}
+                                showQuantity={showQuantity}
+                                addItem={addItem}
+                                showReserve={showReserve}
+                                fullpk={option}
                             />
-
-                            {showReserve && (
-                                <div className="general-reserve-button">
-                                    <button className="package-reserve-button" onClick={() => addItem(option)}> Reserve </button>
-                                </div>
-                            )}
 
                         </div>
                     ))}

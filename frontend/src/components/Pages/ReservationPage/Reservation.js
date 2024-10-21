@@ -123,6 +123,7 @@ function ReservationPage() {
                             quantity: item.quantity
                         }))}
                         showReserve={true}
+                        showQuantity={false}
                         addItem={addToCart}
                     />
 
@@ -136,6 +137,7 @@ function ReservationPage() {
                             bundleId: bundle._id
                         }))}
                         showReserve={true}
+                        showQuantity={false}
                         addItem={addToCart}
                     />
                 </div>
