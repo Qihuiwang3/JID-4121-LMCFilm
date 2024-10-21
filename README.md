@@ -11,6 +11,55 @@ The system is built using the MERN stack (MongoDB, Express.js, React.js, Node.js
 
 # Release Notes: 
 
+## Version 0.3.0
+**Release Date:** [10/20/2024]
+
+### Overview
+
+In this initial release, we focused on completing the development of the key features for the Admin Portal, which include submitting damage reports and creating interfaces where admins can view current reservations and check students in and out accordingly. Additionally, we developed an interface for both the Admin Portal and Student Portal to view reservation history, including order barcodes, damage reports, and detailed check-in and check-out dates and times for each order. We also updated the navigation bar to a side panel instead of a drop-down menu and fixed some UI bugs from the last sprint.
+
+#### New Features
+
+- In this release, Admins can now create a damage report if they find equipment is damaged when returned by students.
+- Admins can now check students in when they pick up equipment and check them out when they return the equipment by scanning the barcode provided by the students and the barcode attached to each piece of equipment to ensure accurate tracking.
+- Both Admins and Students can now view their current and past reservation history, including the order barcode, check-in and check-out dates, order details, and any associated damage reports.
+
+#### Bug Fixes
+
+- Fixed functionality and UI issues with the "Add New" pop-up modal on the **Class Code** page. 
+- Fixed UI issues on the **Cart** page.
+- Resolved UI consistency issues across all pages containing tables.
+
+#### Known Issues
+- Need to implement a method to verify successful payment before generating a barcode for each order.
+- Admin: Unable to return to the main page after selecting 'Reserve Equipment.'
+- Admin: No option to edit equipment name and price after it's been added to the database.
+- ecurity Issue: Unable to navigate directly to other pages via URL.
+- Consistency across the website. 
+  
+## Version 0.2.0
+**Release Date:** [9/30/2024]
+
+### Overview
+
+In this initial release, we focused on developing key features for the **Admin Portal**.This portal allows Admins to interact with the system by editing film equipment, create class code, and view students for those who has signed up to use this website. Also, we fixed some issues in **Student protal** such as create a login system, and local storage.
+
+#### New Features
+
+- For this release, Admins can now create a class code, select a class section, add or remove equipment in the database and view students class deatil.
+- For this release, We Update UI in Student portal.
+
+#### Bug Fixes
+
+- Fixed students info cannot be passing in.
+- Fixed the some edge cases for cart api.
+- fixed some UI issues.
+
+#### Known Issues
+- Barcodes need to be properly generated and stored in the database.
+- The email sender system needs to verify successful payment before sending confirmation emails.
+- If a student has multiple class, the Admin cannot view all the classes registered by this student.
+  
 ## Version 0.1.0
 **Release Date:** [9/8/2024]
 
@@ -35,31 +84,6 @@ In this initial release, we focused on developing key features for the **Student
 - Data passing between pages needs to be updated with React Redux.
 - Barcodes need to be properly generated and stored in the database.
 - The email sender system needs to verify successful payment before sending confirmation emails.
-
-
-## Version 0.2.0
-**Release Date:** [9/30/2024]
-
-### Overview
-
-In this initial release, we focused on developing key features for the **Admin Portal**.This portal allows Admins to interact with the system by editing film equipment, create class code, and view students for those who has signed up to use this website. Also, we fixed some issues in **Student protal** such as create a login system, and local storage.
-
-#### New Features
-
-- For this release, Admins can now create a class code, select a class section, add or remove equipment in the database and view students class deatil.
-- For this release, We Update UI in Student portal.
-
-#### Bug Fixes
-
-- Fixed students info cannot be passing in.
-- Fixed the some edge cases for cart api.
-- fixed some UI issues.
-
-#### Known Issues
-- Barcodes need to be properly generated and stored in the database.
-- The email sender system needs to verify successful payment before sending confirmation emails.
-- If a student has multiple class, the Admin cannot view all the classes registered by this student.
-
 
 # How to build
 <!-- Frontend Initial Setup -->
