@@ -21,13 +21,13 @@ const TopNavBar = () => {
         setIsSidebarOpen(false);
     };
 
-    toggleDropdown = () => {
+    const toggleDropdown = () => {
         const { isDroppedDown } = this.state;
         this.setState({ isDroppedDown: !isDroppedDown })
     }
 
-    profileNav = () => {
-        this.props.navigate("/ReservationHistory");
+    const profileNav = () => {
+        navigate("/ReservationHistory");
     }
     
     const closeProfileModal = () => {
@@ -60,7 +60,7 @@ const TopNavBar = () => {
 
                     <div className="nav-links">
                         <div className="nav-link" onClick={openProfileModal}>Profile</div>
-                        <div className="nav-link">Reservation History</div>
+                        <div className="nav-link" onClick={profileNav}> Reservation History</div>
                         <div className="nav-link" onClick={logoutNav}>Logout</div>
 
                     </div>

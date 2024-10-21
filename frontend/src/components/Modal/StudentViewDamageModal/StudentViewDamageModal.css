@@ -1,0 +1,163 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+.modal-contentC {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    width: 400px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #3361AE;
+}
+
+
+.modal-header h2 {
+    font-size: 30px;
+    color: #3361AE;
+    font-weight: bold;
+    margin: 5px;
+}
+
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+    color: #3361AE;
+}
+
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    width: 475px;
+    margin-bottom: 10px;
+}
+
+
+.input-group-row {
+    display: flex;
+    gap: 10px;
+}
+
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 350;
+    color: #3361AE;
+    border-color: #3361AE;
+    margin-bottom: 5px;
+}
+
+
+.modal-input {
+    padding: 10px;
+    border: 1px solid #3361AE;
+    border-radius: 5px;
+    background-color: #e7eff2;
+    font-size: 14px;
+    width: 100%;
+}
+
+
+input[readonly] {
+    cursor: not-allowed;
+}
+
+
+.input-group-row .modal-input {
+    width: calc(50% + 97px);
+}
+
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+    gap: 10px;
+}
+
+
+.cancelModal-button, .saveModal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+.cancelModal-button {
+    background-color: white;
+    color: #3361AE;
+}
+
+
+.saveModal-button {
+    background-color: white;
+    color: #3361AE;
+    border: 1px solid #3361AE;
+}
+
+
+.saveModal-button:hover {
+    background-color: lightgrey;
+}
+
+
+.saveModal-button:hover, .cancelModal-button:hover {
+    opacity: 0.9;
+}
+
+
+.report-details p {
+    padding-left: 10px;
+    padding-top: 2px;
+    text-align: left;
+    margin: 8px 0;
+    font-size: 16px;
+    color: #3361AE;
+}
+
+
+.camera-icon {
+    display: block;
+    margin: 0 auto;  
+    width: 260px;  
+    height: auto;  
+    margin-top: -10px;
+    background-color: transparent;
+}
+
+
+.image-scroll-container {
+    display: flex;
+    overflow-x: scroll;  /* Horizontal scroll for multiple images */
+    max-width: 100%;     /* Adjust based on your modal width */
+}
+
+
+.image-scroll-container img {
+    margin-right: 10px;  /* Add space between images */
+    flex-shrink: 0;      /* Prevent the images from shrinking */
+}
+
