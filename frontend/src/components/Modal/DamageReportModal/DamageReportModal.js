@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './DamageReportModal.css';
-import { createDamageReport } from '../../../connector'; 
-const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
-    const [reporter, setReporter] = useState('Admin A');
+import { createDamageReport, getItems, getStudents, updateDamageReport } from '../../../connector'; 
+import { useSelector } from 'react-redux';
+const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) => {
+    const reporter = useSelector((state) => state.studentData.name);
     const [dateReported] = useState(new Date().toISOString().split('T')[0]); 
-    const [studentEmail, setStudentEmail] = useState('');
-    const [itemId, setItemId] = useState('');
-    const [itemName, setItemName] = useState('');
-    const [description, setDescription] = useState('');
-    const [uploadedImage, setUploadedImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const [studentEmail, setStudentEmail] = useState(reportToEdit?.studentEmail || '');
+    const [itemId, setItemId] = useState(reportToEdit?.itemId || '');
+    const [itemName, setItemName] = useState(reportToEdit?.itemName || '');
+    const [description, setDescription] = useState(reportToEdit?.description || '');
+    const [uploadedImage, setUploadedImage] = useState(reportToEdit?.images || null);
+    const [imagePreview, setImagePreview] = useState(reportToEdit?.images || null);
     const [error, setError] = useState('');
+    const [items, setItems] = useState([]);
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const fetchedItems = await getItems(); 
+                const fetchedStudents = await getStudents();
+                setStudents(fetchedStudents);
+                setItems(fetchedItems);
+            } catch (error) {
+                console.error('Error fetching items:', error);
+            }
+        };
+        fetchItems();
+    }, []);
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
@@ -29,16 +46,30 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
         }
     };
 
-    const handleImageRemove = () => {
-        setUploadedImage(null);
-        setImagePreview(null);
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!studentEmail || !itemId || !itemName || !description) {
             setError('Please fill out all required fields.');
+            return;
+        }
+
+        const studentExists = students.some(student => student.email === studentEmail);
+        if (!studentExists) {
+            setError('Student email not found.');
+            return;
+        }
+
+        const item = items.find(item => item.itemName === itemName);
+        if (!item) {
+            setError('Item name not found.');
+            return;
+        }
+
+        const itemIdExists = item.itemIds.some(idObj => idObj.itemId === itemId);
+        if (!itemIdExists) {
+            setError('Item ID not found.');
             return;
         }
 
@@ -53,8 +84,12 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
         };
 
         try {
-            const newReport = await createDamageReport(data);
-            onReportAdded(newReport);
+            if (reportToEdit) {
+                await updateDamageReport(reportToEdit._id, data);
+            } else {
+                const newReport = await createDamageReport(data);
+                onReportAdded(newReport);
+            }
             handleClose(); 
         } catch (error) {
             console.error('Error submitting damage report:', error);
@@ -105,12 +140,18 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
                     </div>
                     <div className='damage-info'>
                         <div className='damage-lable'>Item Name</div>
-                        <input
-                            type="text"
+                        <select
                             value={itemName}
                             onChange={(e) => setItemName(e.target.value)}
                             required
-                        />
+                        >
+                            <option value="">Select Item</option>
+                            {items.map(item => (
+                                <option key={item.itemName} value={item.itemName}>
+                                    {item.itemName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className='damage-info'>
@@ -122,18 +163,16 @@ const DamageReportModal = ({ show, handleClose, onReportAdded }) => {
                         ></input>
                     </div>
                     <div className='damage-info'>
-                        <div className='damage-label'>Upload Image (optional)</div>
+                        <div className='damage-lable'>Upload Image (optional)</div>
                         <input type="file" accept="image/jpeg, image/png, image/jpg" onChange={handleImageUpload} />
                         {imagePreview && (
                             <div className="uploaded-image-preview">
-                                <img src={imagePreview} alt="Uploaded Preview" />
-                                <button type="button" onClick={handleImageRemove}>Remove</button>
+                                <img src={imagePreview} alt="Uploaded Preview" className="image-preview-size"/>
                             </div>
                         )}
                     </div>
                     {error && <div className="error-message">{error}</div>}
                     <div className="modal-footer">
-                        <button type="button" className="cancel-button" onClick={handleClose}>Cancel</button>
                         <button type="submit" className="damage-submit-button">Save</button>
                     </div>
                 </form>

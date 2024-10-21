@@ -12,7 +12,7 @@ const createDamageReport = asyncHandler(async (req, res) => {
         throw new Error('Please provide all required fields');
     }
 
-    const damageReport = new DamageReport({
+    const newReport = new DamageReport({
         reporter,
         studentEmail,
         itemName,
@@ -20,8 +20,7 @@ const createDamageReport = asyncHandler(async (req, res) => {
         description,
         images: images || [],
     });
-
-    const savedReport = await damageReport.save();
+    const savedReport = await newReport.save();
     res.status(201).json(savedReport);
 });
 
@@ -69,7 +68,7 @@ const deleteDamageReport = asyncHandler(async (req, res) => {
 // @route PUT /damage-reports/:id
 // @access Private (Admin)
 const updateDamageReport = asyncHandler(async (req, res) => {
-    const { description, images } = req.body;
+    const { reporter, studentEmail, itemName, itemId, description, images } = req.body;
 
     const report = await DamageReport.findById(req.params.id);
 
@@ -77,12 +76,11 @@ const updateDamageReport = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('Damage report not found');
     }
-    if (description) {
-        report.description = description;
-    }
-
-    if (images) {
-        report.images = images;
+    report.description = description;
+    if (images && Array.isArray(images)) {
+        report.images = images[0];
+    } else if (images && typeof images === 'string') {
+        report.images = [images];
     }
 
     const updatedReport = await report.save();
