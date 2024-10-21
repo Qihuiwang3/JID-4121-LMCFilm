@@ -20,32 +20,32 @@ const DamageTable = () => {
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
 
+    const fetchRecords = async () => {
+        try {
+            const fetchedRecords = await getAllDamageReports();
+            const updatedRecords = await Promise.all(
+                fetchedRecords.map(async (record) => {
+                    try {
+                        const repairStatus = await getRepairStatus(record.itemName, record.itemId);
+                        return {
+                            ...record,
+                            isRepaired: repairStatus.repair,
+                        };
+                    } catch (error) {
+                        console.error('Error fetching repair status:', error);
+                        return { ...record, isRepaired: false };
+                    }
+                })
+            );
+
+            setRecords(updatedRecords);
+            setFilteredRecords(updatedRecords);
+        } catch (error) {
+            console.error("Error loading records:", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const fetchedRecords = await getAllDamageReports();
-                const updatedRecords = await Promise.all(
-                    fetchedRecords.map(async (record) => {
-                        try {
-                            const repairStatus = await getRepairStatus(record.itemName, record.itemId);
-                            return {
-                                ...record,
-                                isRepaired: repairStatus.repair,
-                            };
-                        } catch (error) {
-                            console.error('Error fetching repair status:', error);
-                            return { ...record, isRepaired: false };
-                        }
-                    })
-                );
-
-                setRecords(updatedRecords);
-                setFilteredRecords(updatedRecords);
-            } catch (error) {
-                console.error("Error loading records:", error);
-            }
-        };
-
         fetchRecords();
     }, []);
 
