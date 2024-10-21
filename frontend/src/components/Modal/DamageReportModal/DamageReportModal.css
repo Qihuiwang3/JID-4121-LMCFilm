@@ -34,7 +34,7 @@
     cursor: pointer;
 }
 
-.damage-lable {
+.damage-modal-label {
     font-family: 'Lato';
     font-style: normal;
     font-weight: 400;
@@ -43,52 +43,53 @@
     color: #3361AE;
 }
 
-.damage-info {
+.damage-modal-info {
     margin-left: 2%;
     width: 90%;
     margin-bottom: 3%;
 }
 
-.damage-report {
+.damage-modal-report {
     display: flex;
     justify-content: space-between;
     width: 90%;
 }
 
-.damage-reportor {
+.damage-modal-reportor {
     margin-left: 2%;
     margin-right: 40%;
     width: 50%;
 }
 
 
-.damage-info input {
+.damage-modal-info input {
     width: 100%;
     border-radius: 5px;
     background-color: #E7EFF2;
     border: 1px solid #3361AE;
 }
 
-.damage-info select {
+.damage-modal-info select {
     width: 104%;
     border-radius: 5px;
     background-color: #E7EFF2;
     border: 1px solid #3361AE;
 }
 
-.damage-reportor input, .damage-date input {
+.damage-modal-reportor input,
+.damage-modal-date input {
     width: 100%;
     border-radius: 5px;
     background-color: #E7EFF2;
     border: 1px solid #3361AE;
 }
 
-.damage-date {
+.damage-modal-date {
     margin-left: auto;
     width: 45%;
 }
 
-.modal-footer {
+.damage-modal-footer {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -108,7 +109,7 @@
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.3s ease;
     font-family: sans-serif;
     border-color: #3361AE;
     background-color: transparent;
@@ -121,18 +122,18 @@
     color: white;
 }
 
-.uploaded-image-preview {
+.damage-modal-uploaded-image-preview {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.error-message {
+.damage-modal-error-message {
     color: red;
     font-weight: bold;
 }
 
-.image-preview-size {
-    width: 100%; 
-    height: auto; 
+.damage-modal-image-preview-size {
+    width: 100%;
+    height: auto;
 }
