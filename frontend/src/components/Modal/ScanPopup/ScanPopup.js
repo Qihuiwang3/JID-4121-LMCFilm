@@ -1,18 +1,109 @@
 import React, { useState } from 'react';
 import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
+import SearchPopupCheckin from '../SearchPopup/SearchPopupCheckin';
+import { getOrderByOrderNumber } from '../../../connector'; 
 
 const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
+    const [showCheckinPopup, setShowCheckinPopup] = useState(false);
+    const [orderNumber, setOrderNumber] = useState('');
+    const [orderInfo, setOrderInfo] = useState(null); 
+    const [isOrderNumberValid, setIsOrderNumberValid] = useState(false);
+    const [orderNotFound, setOrderNotFound] = useState(false);
 
     const handleSearchClick = () => {
-        console.log("showSearchPopup?", showSearchPopup)
-
-        setShowSearchPopup(true);
+        if (selectedOption === 'checkout') {
+            setShowSearchPopup(true);
+        } else if (selectedOption === 'checkin') {
+            setShowCheckinPopup(true);
+        }
     };
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
+        setShowCheckinPopup(false);
+    };
+
+    const closeAllModals = () => {
+        setShowSearchPopup(false);
+        setShowCheckinPopup(false);
+        onClose();
+    };
+
+    const handleOrderNumberChange = (e) => {
+        setOrderNumber(e.target.value);
+        setIsOrderNumberValid(false);
+        setOrderNotFound(false);
+    };
+
+    const handleOrderNumberBlur = async () => {
+        try {
+            if (orderNumber) {
+                const fetchedOrderInfo = await getOrderByOrderNumber(orderNumber);
+                if (fetchedOrderInfo) {
+                    setOrderInfo(fetchedOrderInfo);
+                    setIsOrderNumberValid(true);
+                    setOrderNotFound(false);
+
+                    if (!fetchedOrderInfo.checkedinStatus && !fetchedOrderInfo.checkedoutStatus) {
+                        onOptionChange({ target: { value: 'checkout' } });
+                    } else if (fetchedOrderInfo.checkedoutStatus && !fetchedOrderInfo.checkedinStatus) {
+                        onOptionChange({ target: { value: 'checkin' } });
+                    }
+                } else {
+                    setIsOrderNumberValid(false); 
+                    setOrderNotFound(true);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching order:', error);
+            setIsOrderNumberValid(false); 
+            setOrderNotFound(true);
+        }
+    };
+
+    const renderRadioButtonsOrMessage = () => {
+        if (orderInfo && isOrderNumberValid) {
+            const { checkedinStatus, checkedoutStatus } = orderInfo;
+
+            if (!checkedinStatus && !checkedoutStatus) {
+                return (
+                    <div className="radio-input">
+                        <label>
+                            <input
+                                type="radio"
+                                value="checkout"
+                                checked={selectedOption === 'checkout'}
+                                onChange={onOptionChange}
+                            />
+                            Equipment Check Out
+                        </label>
+                    </div>
+                );
+            }
+
+            if (checkedoutStatus && !checkedinStatus) {
+                return (
+                    <div className="radio-input">
+                        <label>
+                            <input
+                                type="radio"
+                                value="checkin"
+                                checked={selectedOption === 'checkin'}
+                                onChange={onOptionChange}
+                            />
+                            Equipment Check In
+                        </label>
+                    </div>
+                );
+            }
+
+            if (checkedoutStatus && checkedinStatus) {
+                return <p className="error-message">This order is complete.</p>;
+            }
+        }
+        return null;
     };
 
     return (
@@ -22,55 +113,35 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     <h2>Scan</h2>
                     <button className="close-button" onClick={onClose}>&times;</button>
                 </div>
-                
-                <div className="radio-input">
-                    <label>
-                        <input
-                            type="radio"
-                            value="checkout"
-                            checked={selectedOption === 'checkout'}
-                            onChange={onOptionChange}
-                        />
-                        Equipment Check Out
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            value="checkin"
-                            checked={selectedOption === 'checkin'}
-                            onChange={onOptionChange}
-                        />
-                        Equipment Check In
-                    </label>
-                </div>
 
                 <div className="scan-input">
-                    <label htmlFor="barcode">Order Number</label>
-                    <input type="text" id="barcode" className="checkout-modal-input"/>
+                    <label htmlFor="orderNumber">Order Number</label>
+                    <input
+                        type="text"
+                        id="orderNumber"
+                        className="checkout-modal-input"
+                        value={orderNumber}
+                        onChange={handleOrderNumberChange}
+                        onBlur={handleOrderNumberBlur} 
+                    />
+                    {orderNotFound && <p className="error-message">Order Number is invalid.</p>}
                 </div>
 
-                <div className="or-text">
-                    OR
-                </div>
-                
-                <div className="scan-input">
-                    <label htmlFor="email">Student Email</label>
-                    <input type="email" id="email" className="checkout-modal-input"/>
-                </div>
-                
+                {isOrderNumberValid && renderRadioButtonsOrMessage()}
+
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
-                    <button 
-                        className="scan-search-button" 
+                    <button
+                        className={`scan-search-button ${!isOrderNumberValid ? 'disabled-button' : ''}`} 
                         onClick={handleSearchClick}
+                        disabled={!isOrderNumberValid} 
                     >
                         Search
                     </button>
                 </div>
-                
-                {showSearchPopup && 
-                    <SearchPopup onClose={closeSearchPopup} />
-                }
+
+                {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup} />}
+                {showCheckinPopup && <SearchPopupCheckin orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup} />}
             </div>
         </div>
     );

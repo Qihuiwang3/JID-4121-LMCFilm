@@ -17,7 +17,6 @@ import ReservationPage from "./components/Pages/ReservationPage/Reservation";
 import ViewReservation from "./components/Pages/ViewReservation/ViewReservation";
 import Login from "./components/Pages/Login/Login";
 import DamageReport from "./components/Pages/DamageReport/DamageReport";
-// import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask"
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
 
@@ -53,7 +52,7 @@ class App extends Component {
             <Route path="/CartConfirmation" element={<CartConfirmation />} />
             <Route path="/Payment" element={<Payment />} />
             <Route path="/ClassCodes" element={<ClassCodes />} />
-            <Route path="/Message" element={<ReservationConfirmationMessagePage />} />
+            <Route path="/ReservationConfirmationMessagePage" element={<ReservationConfirmationMessagePage />} />
             <Route path="/Equipment" element={<Equipment />} />
             <Route path="/Students" element={<Students />} />
             <Route path="/ViewEquipment" element={<ViewEquipment />} />

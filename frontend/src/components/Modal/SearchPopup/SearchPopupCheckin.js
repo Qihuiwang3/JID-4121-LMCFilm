@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SearchPopup.css';
 import { updateOrderByOrderNumber } from '../../../connector'; 
 
-const SearchPopup = ({ goBack, onClose, orderInfo }) => {
+const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
     const [itemIds, setItemIds] = useState([]);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
@@ -32,9 +32,8 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
             await updateOrderByOrderNumber(orderInfo.orderNumber, {
                 equipment: updatedEquipment,
                 checkedoutStatus: true,
-                checkedinStatus: false,
-                checkedout: null,
-                checkedout: new Date() 
+                checkedinStatus: true,
+                checkedin: new Date(),
             });
             console.log('Order updated successfully');
             onClose();
@@ -88,7 +87,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                     </div>
                 </div>
 
-                <h3 className="equipment-header">Equipment Check Out</h3>
+                <h3 className="equipment-header">Equipment Check In</h3>
 
                 {orderInfo.equipment.map((item, index) => (
                     <div key={index} className="search-row">
@@ -120,7 +119,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                         disabled={isButtonDisabled}
                         onClick={handleEquipmentCheckout}
                     >
-                        Student Checked In
+                        Student Checked Out
                     </button>
                 </div>
             </div>
@@ -128,4 +127,4 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
     );
 };
 
-export default SearchPopup;
+export default SearchPopupCheckin;
