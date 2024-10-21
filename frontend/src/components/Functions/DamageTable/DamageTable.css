@@ -46,6 +46,7 @@
 .view-details {
     border: none;
     background-color: transparent;
+    text-decoration: underline;
 }
 
 .view-details:hover {
