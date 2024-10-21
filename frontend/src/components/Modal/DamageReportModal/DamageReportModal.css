@@ -69,6 +69,13 @@
     border: 1px solid #3361AE;
 }
 
+.damage-info select {
+    width: 104%;
+    border-radius: 5px;
+    background-color: #E7EFF2;
+    border: 1px solid #3361AE;
+}
+
 .damage-reportor input, .damage-date input {
     width: 100%;
     border-radius: 5px;
@@ -87,18 +94,14 @@
     gap: 10px;
 }
 
-.cancel-button,
 .damage-submit-button {
     font-size: 21px;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    margin-right: 4%;
 }
 
-.cancel-button {
-    background-color: transparent;
-    color: #3361AE;
-}
 
 .damage-submit-button {
     font-size: 21px;
@@ -127,4 +130,9 @@
 .error-message {
     color: red;
     font-weight: bold;
+}
+
+.image-preview-size {
+    width: 100%; 
+    height: auto; 
 }

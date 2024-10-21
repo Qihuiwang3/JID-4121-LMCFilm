@@ -14,35 +14,36 @@ const DamageTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showAddNewPopup, setShowAddNewPopup] = useState(false);
     const [viewReportId, setViewReportId] = useState(null);
+    const [editReportData, setEditReportData] = useState(null);
 
     useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const fetchedRecords = await getAllDamageReports();
-                const updatedRecords = await Promise.all(
-                    fetchedRecords.map(async (record) => {
-                        try {
-                            const repairStatus = await getRepairStatus(record.itemName, record.itemId);
-                            return {
-                                ...record,
-                                isRepaired: repairStatus.repair,  
-                            };
-                        } catch (error) {
-                            console.error('Error fetching repair status:', error);
-                            return { ...record, isRepaired: false }; 
-                        }
-                    })
-                );
-
-                setRecords(updatedRecords);
-                setFilteredRecords(updatedRecords);
-            } catch (error) {
-                console.error("Error loading records:", error);
-            }
-        };
-
         fetchRecords();
     }, []);
+
+    const fetchRecords = async () => {
+        try {
+            const fetchedRecords = await getAllDamageReports();
+            const updatedRecords = await Promise.all(
+                fetchedRecords.map(async (record) => {
+                    try {
+                        const repairStatus = await getRepairStatus(record.itemName, record.itemId);
+                        return {
+                            ...record,
+                            isRepaired: repairStatus.repair,  
+                        };
+                    } catch (error) {
+                        console.error('Error fetching repair status:', error);
+                        return { ...record, isRepaired: false }; 
+                    }
+                })
+            );
+
+            setRecords(updatedRecords);
+            setFilteredRecords(updatedRecords);
+        } catch (error) {
+            console.error("Error loading records:", error);
+        }
+    };
 
     const handleDeleteRow = async (data) => {
         try {
@@ -70,6 +71,7 @@ const DamageTable = () => {
 
             setRecords(prevRecords => [...prevRecords, newReportWithRepairStatus]);
             setFilteredRecords(prevFilteredRecords => [...prevFilteredRecords, newReportWithRepairStatus]);
+            fetchRecords();
         } catch (error) {
             console.error("Error fetching repair status for the new report:", error);
         }
@@ -77,7 +79,10 @@ const DamageTable = () => {
 
 
     const handleOpenPopup = () => setShowAddNewPopup(true);
-    const handleClosePopup = () => setShowAddNewPopup(false);
+    const handleClosePopup = () => {
+        setShowAddNewPopup(false);
+        setEditReportData(null); 
+    }
 
     const handleViewReport = (id) => {
         setViewReportId(id); 
@@ -101,19 +106,25 @@ const DamageTable = () => {
         }
     };
 
+    const handleEditReport = (report) => {
+        setEditReportData(report); 
+        setViewReportId(null); 
+        setShowAddNewPopup(true);
+    };
+
 
     const columnDefs = [
         { headerName: "Item ID", field: "itemId", flex: 1 },
-        { headerName: "Item Name", field: "itemName", flex: 1 },
+        { headerName: "Item Name", field: "itemName", flex: 1.2 },
         { 
             headerName: "Reported Date", 
             field: "dateCreated", 
-            flex: 1,
+            flex: 1.5,
             valueFormatter: (params) => {
                 return new Date(params.value).toLocaleDateString(); 
             }
         },
-        { headerName: "Reporter", field: "reporter", flex: 1 },
+        { headerName: "Reporter", field: "reporter", flex: 1.2 },
         {
             headerName: "Repair",
             field: "isRepaired",
@@ -185,6 +196,7 @@ const DamageTable = () => {
                     show={!!viewReportId} 
                     reportId={viewReportId} 
                     handleClose={handleCloseModal} 
+                    handleEdit={handleEditReport}
                 />
             )}
             {showAddNewPopup && (
@@ -192,6 +204,7 @@ const DamageTable = () => {
                     show={showAddNewPopup} 
                     handleClose={handleClosePopup} 
                     onReportAdded={handleNewReportAdded} 
+                    reportToEdit={editReportData}
                 />
             )}
         </>

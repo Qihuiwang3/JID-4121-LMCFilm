@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './ReservationConfirmationMessagePage.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import Barcode from 'react-barcode';
-import emailjs from 'emailjs-com';
 import Button from '../../Button/Button';
+import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 function ReservationConfirmationMessagePage() {
     const [orderNumber, setOrderNumber] = useState('');
@@ -69,6 +69,10 @@ function ReservationConfirmationMessagePage() {
     }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, setOrderNumber]);
 
     // Function to handle the back button click
+    const location = useLocation();
+    const orderNumber = location.state?.orderNumber || '';
+    const navigate = useNavigate(); 
+
     const goBack = () => {
         navigate('/Enter');
     };
@@ -76,23 +80,27 @@ function ReservationConfirmationMessagePage() {
     return (
         <div className="main-content">
             <h1 className='select-class-header'>
-                Your Reservation has been confirmed!
-
+                {orderNumber ? 'Your Reservation has been confirmed!' : 'Error, there\'s something wrong when making the order.'}
             </h1>
-            <div className='confirm-text'>
-                Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
-            </div>
 
-            <div className="barcode-container">
-                {/* Render the barcode with the order number */}
-                <Barcode value={orderNumber} />
-            </div>
+            {orderNumber && (
+                <>
+                    <div className='confirm-text'>
+                        Here is your QR Code for pickup and return purposes. You can also find this QR code under Profile.
+                    </div>
+
+                    <div className="barcode-container">
+                        <Barcode value={orderNumber} />
+                    </div>
+                </>
+            )}
+
             <div className="btnContainer">
                 <Button type="back" onClick={goBack}>Back</Button>
             </div>
         </div>
-
     );
 }
+
 
 export default ReservationConfirmationMessagePage;
