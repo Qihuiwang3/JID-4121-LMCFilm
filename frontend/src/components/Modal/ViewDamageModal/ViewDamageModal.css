@@ -8,6 +8,16 @@
     margin-bottom: 10px;
 }
 
+.view-damage-modal-content {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    overflow-y: auto;
+    max-height: 500px;
+    position: relative;
+}
+
 .label {
     color: #3361AE;
     margin-right: 10px;
