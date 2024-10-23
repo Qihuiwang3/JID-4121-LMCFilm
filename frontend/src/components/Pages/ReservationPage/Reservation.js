@@ -113,33 +113,37 @@ function ReservationPage() {
 
             <div className="equipment-and-cart">
                 <div className="equipment-container">
-                    <EquipmentDropdown
-                        id="equipment"
-                        title="Available Equipment"
-                        equipment={equipment.map(item => ({
-                            name: item.itemName,
-                            price: item.pricePerItem,
-                            itemId: item._id,
-                            quantity: item.quantity
-                        }))}
-                        showReserve={true}
-                        showQuantity={false}
-                        addItem={addToCart}
-                    />
+                    {equipment && equipment.length > 0 && (
+                        <EquipmentDropdown
+                            id="equipment"
+                            title="Available Equipment"
+                            equipment={equipment.map(item => ({
+                                name: item.itemName,
+                                price: item.pricePerItem,
+                                itemId: item._id,
+                                quantity: item.quantity
+                            }))}
+                            showReserve={true}
+                            showQuantity={false}
+                            addItem={addToCart}
+                        />
+                    )}
 
-                    <PackageDropdown
-                        id="packages"
-                        title="Available Packages"
-                        pk={bundles.map(bundle => ({
-                            name: bundle.bundleName,
-                            price: bundle.price,
-                            equipments: bundle.items,
-                            bundleId: bundle._id
-                        }))}
-                        showReserve={true}
-                        showQuantity={false}
-                        addItem={addToCart}
-                    />
+                    {bundles && bundles.length > 0 && (
+                        <PackageDropdown
+                            id="packages"
+                            title="Available Packages"
+                            pk={bundles.map(bundle => ({
+                                name: bundle.bundleName,
+                                price: bundle.price,
+                                equipments: bundle.items,
+                                bundleId: bundle._id
+                            }))}
+                            showReserve={true}
+                            showQuantity={false}
+                            addItem={addToCart}
+                        />
+                    )}
                 </div>
 
                 <div className="cart-container">
