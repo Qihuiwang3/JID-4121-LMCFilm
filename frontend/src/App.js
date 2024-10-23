@@ -20,6 +20,7 @@ import ReservationHistory from "./components/Pages/ReservationHistory/Reservatio
 import DamageReport from "./components/Pages/DamageReport/DamageReport";
 import { Provider } from "react-redux";
 import store from "./components/redux/store";
+import ProtectedRoute from "./ProtectedRoute";
 
 class App extends Component {
     state = {
@@ -37,34 +38,84 @@ class App extends Component {
         });
     };
   
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <TopNavBar />
-          <Routes>
-            <Route path="/Enter" element={<EnterCode />} />
-            <Route path="/" element={<Login />} />
-            <Route path="/SelectClass" element={<SelectClassPage />} />
-            <Route path="/Reservation" element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />
-            <Route path="/ReservationPage" element={<ReservationPage />} />
-            <Route path="/ViewReservation" element={<ViewReservation />} />
-            <Route path="/Payment" element={<Payment />} />
-            <Route path="/CartConfirmation" element={<CartConfirmation />} />
-            <Route path="/Payment" element={<Payment />} />
-            <Route path="/ClassCodes" element={<ClassCodes />} />
-            <Route path="/ReservationConfirmationMessagePage" element={<ReservationConfirmationMessagePage />} />
-            <Route path="/Equipment" element={<Equipment />} />
-            <Route path="/Students" element={<Students />} />
-            <Route path="/ViewEquipment" element={<ViewEquipment />} />
-            <Route path="/SelectTask" element={<SelectTask />} />
-            <Route path="/Management" element={<Management />} />
-            <Route path="/ReservationHistory" element={<ReservationHistory />} />
-            <Route path="/DamageReport" element={<DamageReport />} />
-          </Routes>
-        </Router>
-      </Provider>
-    );
+    render() {
+      return (
+          <Provider store={store}>
+              <Router>
+                  <TopNavBar />
+                  <Routes>
+                      {/* Public route - Login */}
+                      <Route path="/" element={<Login />} />
+
+                      {/* Protected routes */}
+                      <Route
+                          path="/Enter"
+                          element={<ProtectedRoute element={<EnterCode />} />}
+                      />
+                      <Route
+                          path="/SelectClass"
+                          element={<ProtectedRoute element={<SelectClassPage />} />}
+                      />
+                      <Route
+                          path="/Reservation"
+                          element={<ProtectedRoute element={<ReservationTimePicker onConfirm={this.setSelectedDates} />} />}
+                      />
+                      <Route
+                          path="/ReservationPage"
+                          element={<ProtectedRoute element={<ReservationPage />} />}
+                      />
+                      <Route
+                          path="/ViewReservation"
+                          element={<ProtectedRoute element={<ViewReservation />} />}
+                      />
+                      <Route
+                          path="/Payment"
+                          element={<ProtectedRoute element={<Payment />} />}
+                      />
+                      <Route
+                          path="/CartConfirmation"
+                          element={<ProtectedRoute element={<CartConfirmation />} />}
+                      />
+                      <Route
+                          path="/ClassCodes"
+                          element={<ProtectedRoute element={<ClassCodes />} />}
+                      />
+                      <Route
+                          path="/ReservationConfirmationMessagePage"
+                          element={<ProtectedRoute element={<ReservationConfirmationMessagePage />} />}
+                      />
+                      <Route
+                          path="/Equipment"
+                          element={<ProtectedRoute element={<Equipment />} />}
+                      />
+                      <Route
+                          path="/Students"
+                          element={<ProtectedRoute element={<Students />} />}
+                      />
+                      <Route
+                          path="/ViewEquipment"
+                          element={<ProtectedRoute element={<ViewEquipment />} />}
+                      />
+                      <Route
+                          path="/SelectTask"
+                          element={<ProtectedRoute element={<SelectTask />} />}
+                      />
+                      <Route
+                          path="/Management"
+                          element={<ProtectedRoute element={<Management />} />}
+                      />
+                      <Route
+                          path="/ReservationHistory"
+                          element={<ProtectedRoute element={<ReservationHistory />} />}
+                      />
+                      <Route
+                          path="/DamageReport"
+                          element={<ProtectedRoute element={<DamageReport />} />}
+                      />
+                  </Routes>
+              </Router>
+          </Provider>
+      );
   }
 }
 
