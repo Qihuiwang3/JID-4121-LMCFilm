@@ -70,20 +70,26 @@ function CartConfirmation() {
                 <div className="cart-contents-container">
                     {!loading && (
                         <>
-                            <EquipmentDropdown
-                                id="equipment"
-                                title="Selected Equipment"
-                                equipment={equipment}
-                                showReserve={false}
-                                showQuantity={false}
-                            />
-                            <PackageDropdown
-                                id="packages"
-                                title="Selected Packages"
-                                pk={packages}
-                                showReserve={false}
-                                showQuantity={false}
-                            />
+                            {equipment && equipment.length > 0 && (
+                                <EquipmentDropdown
+                                    id="equipment"
+                                    title="Selected Equipment"
+                                    equipment={equipment}
+                                    showReserve={false}
+                                    showQuantity={false}
+                                />
+                            )}
+
+                            {packages && packages.length > 0 && (
+                                <PackageDropdown
+                                    id="packages"
+                                    title="Selected Packages"
+                                    pk={packages}
+                                    showReserve={false}
+                                    showQuantity={false}
+                                />
+                            )}
+
                         </>
                     )}
                     <div className="cart-total">Total: ${calculateTotal()} </div>
