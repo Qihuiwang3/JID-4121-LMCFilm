@@ -4,6 +4,16 @@
     align-items: center;
 }
 
+.react-datepicker__time-box::-webkit-scrollbar {
+    width: 0px; 
+    background: transparent; 
+}
+
+.react-datepicker__time-list::-webkit-scrollbar {
+    width: 0 !important;
+    background: transparent !important;
+}
+
 .time-selection {
     align-items: center;
     gap: 8px;
