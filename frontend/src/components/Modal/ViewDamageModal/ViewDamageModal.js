@@ -80,3 +80,4 @@ const ViewDamageModal = ({ show, reportId, handleClose, handleEdit }) => {
 };
 
 export default ViewDamageModal;
+
