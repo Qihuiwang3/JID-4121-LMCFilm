@@ -4,17 +4,6 @@
 }
 
 .student-btn {
-    display: inline-flex;
-    justify-content: flex-start;
-    width: 100%;
-    position: relative;
-    margin-top: 20px;
-}
-
-.bottom-btn-container {
-    display: flex;
-    justify-content: space-between;
-    padding-left: 150px;
-    width: 80%;
-    position: relative;
+    margin-left: 10%;
+    margin-right: auto;
 }

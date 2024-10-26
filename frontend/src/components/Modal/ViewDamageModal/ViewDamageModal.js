@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import './ViewDamageModal.css'; 
-import { getSingleDamageReport } from '../../../connector'; 
+import './ViewDamageModal.css';
+import { getSingleDamageReport } from '../../../connector';
 
 const ViewDamageModal = ({ show, reportId, handleClose, handleEdit }) => {
     const [report, setReport] = useState(null);
@@ -30,7 +30,7 @@ const ViewDamageModal = ({ show, reportId, handleClose, handleEdit }) => {
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="view-damage-modal-content">
                 <div className="modal-header">
                     <h2>View Damage Report</h2>
                     <button className="close-button" onClick={handleClose}>
@@ -80,3 +80,4 @@ const ViewDamageModal = ({ show, reportId, handleClose, handleEdit }) => {
 };
 
 export default ViewDamageModal;
+

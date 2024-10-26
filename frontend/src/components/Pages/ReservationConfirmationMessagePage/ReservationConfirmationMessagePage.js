@@ -69,6 +69,7 @@ function ReservationConfirmationMessagePage() {
     }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, setOrderNumber]);
 
     // Function to handle the back button click
+    
 
     const goBack = () => {
         navigate('/Enter');
