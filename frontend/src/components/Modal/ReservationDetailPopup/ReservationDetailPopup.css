@@ -112,6 +112,17 @@
     width: 100%;
 }
 
+.cancel-reservation {
+    background-color: #3361AE;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 500px;
+}
+
 .view-equipment-group:nth-child(1) {
     width: 20%;
 }

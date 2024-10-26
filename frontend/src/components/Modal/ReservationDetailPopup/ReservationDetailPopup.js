@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ReservationDetailPopup.css'; 
+import ViewCancelOrder from '../viewCancelOrder/viewCancelOrder';
+import ViewExtendOrder from '../ViewExtendOrder/ViewExtendOrder';
+
 
 const formatDate = (dateString) => {
+    console.log(dateString)
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -10,8 +14,27 @@ const formatDate = (dateString) => {
     return `${year}-${month}-${day}`;
 };
 
-const ReservationDetailPopup = ({ onClose, reservationDetails }) => {
+const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled }) => {
+
+    const [viewCancelID, setViewCancel] = useState(null);
+    const [viewExtendID, setViewExtend] = useState(null);
+    const [viewExtendIDDate, setViewExtendDate] = useState(null);
+    const [viewExtendIDEquipment, setViewExtendEquipment] = useState(null);
+    const handleViewCancel = (orderNumber) => {
+        setViewCancel(orderNumber);
+    }
+    const handleCloseModal = () => {
+        setViewExtend(null);
+    };
+    const handleViewExtend = (orderNumber, returnDate, equipment) => {
+        
+        setViewExtend(orderNumber);
+        setViewExtendDate(returnDate);
+        setViewExtendEquipment(equipment)
+
+    }
     return (
+    <>
         <div className="view-modal-overlay" onClick={onClose}>
             <div className="view-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
@@ -100,12 +123,46 @@ const ReservationDetailPopup = ({ onClose, reservationDetails }) => {
                         ))}
                     </div>
                 </div>
+                
                 <div className="modal-footer">
-                    <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
+                <button 
+    className="cancel-reservation" 
+    onClick={() => handleViewCancel(reservationDetails.orderNumber)}
+>
+    Cancel Reservation
+</button>
+
+                    <button className="cancel-reservation" onClick={() => handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkin, reservationDetails.equipment)}>Extend Reservation</button>
                 </div>
             </div>
         </div>
+        {viewCancelID && (
+            <ViewCancelOrder
+                show={!!viewCancelID}
+                orderNumber = {viewCancelID}
+                handleClose={() => {
+                    onClose();
+                }}
+                onOrderCancelled={onOrderCancelled}
+            />
+        )}
+        {viewExtendID && (
+            <ViewExtendOrder
+                show={!!viewExtendID}
+                orderNumber = {viewExtendID}
+                currentReturnDate={viewExtendIDDate}
+                equipment= {viewExtendIDEquipment}
+                handleClose={() => {
+                    onClose();
+                }}
+                    
+            />
+        )}
+
+    </>
+        
     );
+    
 };
 
 export default ReservationDetailPopup;
