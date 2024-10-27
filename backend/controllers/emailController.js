@@ -1,8 +1,10 @@
 const nodemailer = require('nodemailer');
- // Import the User model (defined in another file)
+const USERNAME = process.env.EMAIL_USERNAME;
+const PASSWORD = process.env.EMAIL_PASSWORD;
+ 
 
 
-// Function to send an email
+
 const sendEmail = async (req, res) => {
     const { to, subject, text } = req.body;
 
@@ -16,8 +18,8 @@ const sendEmail = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'exampleEmail',
-                pass: 'examplePass'
+                user: `${USERNAME}`,
+                pass: `${PASSWORD}`
             }
         });
 
@@ -40,12 +42,7 @@ const sendEmail = async (req, res) => {
 };
 
 
-// Function to save user data into MongoDB
-
-
-
-
-module.exports = { sendEmail }; // Export the controller functions
+module.exports = { sendEmail }; 
 
 
 
