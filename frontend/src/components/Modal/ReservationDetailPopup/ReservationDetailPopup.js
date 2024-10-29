@@ -9,13 +9,14 @@ const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 };
 
 const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled }) => {
-
+    const [canCancelOrder, setCanCancelOrder] = useState(false);
+    const [cantExtendOrder, setCantExtendOrder] = useState(false);
     const [viewCancelID, setViewCancel] = useState(null);
     const [viewExtendID, setViewExtend] = useState(null);
     const [viewExtendIDDate, setViewExtendDate] = useState(null);
@@ -23,6 +24,20 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled 
     const handleViewCancel = (orderNumber) => {
         setViewCancel(orderNumber);
     }
+
+    useEffect(() => {
+        
+        const now = new Date().toISOString();
+    
+       
+        const checkoutDate = new Date(reservationDetails.checkin).toISOString();
+        const timeDifference = new Date(checkoutDate) - new Date(now);
+    
+        setCanCancelOrder(timeDifference > 24 * 60 * 60 * 1000);
+        setCantExtendOrder(reservationDetails.beenExtended)
+
+    }, );
+    
     const handleCloseModal = () => {
         setViewExtend(null);
     };
@@ -127,12 +142,12 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled 
                 <div className="modal-footer">
                 <button 
     className="cancel-reservation" 
-    onClick={() => handleViewCancel(reservationDetails.orderNumber)}
+    onClick={() => handleViewCancel(reservationDetails.orderNumber)} disabled={!canCancelOrder}
 >
     Cancel Reservation
 </button>
 
-                    <button className="cancel-reservation" onClick={() => handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkin, reservationDetails.equipment)}>Extend Reservation</button>
+                    <button className="extend-reservation" onClick={() => handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkout, reservationDetails.equipment)} disabled={cantExtendOrder} >Extend Reservation</button>
                 </div>
             </div>
         </div>

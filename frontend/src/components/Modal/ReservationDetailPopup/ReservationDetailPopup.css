@@ -17,14 +17,14 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 1000px;
     overflow: auto;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none; 
     -ms-overflow-style: none; 
     max-height: 500px;
     position: relative;
 }
 
 .view-modal-content::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, and Opera */
+    display: none; 
 }
 
 .details-section {
@@ -114,13 +114,35 @@
 
 .cancel-reservation {
     background-color: #3361AE;
-    color: white;
-    padding: 5px 15px;
+    color: white; 
+    padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     font-size: 15px;
-    font-weight: 500px;
+    font-weight: 500;
+}
+
+.cancel-reservation:disabled {
+    background-color: #d3d3d3; 
+    color: #a9a9a9; 
+    cursor: not-allowed; 
+}
+.extend-reservation {
+    background-color: #3361AE; 
+    color: white; 
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.extend-reservation:disabled {
+    background-color: #d3d3d3; 
+    color: #a9a9a9; 
+    cursor: not-allowed; 
 }
 
 .view-equipment-group:nth-child(1) {

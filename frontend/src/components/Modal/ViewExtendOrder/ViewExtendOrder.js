@@ -11,16 +11,17 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
 
     const handleUpdateOrder = async () => {
         try {
-            const combinedDateTime = combineDateTime(newDate, newTime); // Ensure this is formatted correctly
+            const combinedDateTime = combineDateTime(newDate, newTime); 
     
-            // Construct the update data
+           
             const updateData = {
-                equipment: equipment, // Make sure this is defined or replace with an actual value
-                checkedinStatus: true,            // Update based on your requirements
-                checkin: combinedDateTime,      // Use formatted UTC date-time
-                checkedoutStatus: false,          // Set to false if this is not relevant in this context
+                equipment: equipment, 
+                checkedinStatus: true,            
+                checkout: combinedDateTime,     
+                checkedoutStatus: false,         
                 checkedout: null,  
-                checkedin: null                // Set to null or keep existing if not updating
+                checkedin: null,        
+                beenExtended: true        
             };
     
             await updateOrderByOrderNumber(orderNumber, updateData);
@@ -32,22 +33,22 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
     };
     
 
-    // Function to combine date and time into an ISO string
+   
     const combineDateTime = (date, time) => {
         const [timeString, period] = time.split(" ");
         let [hours, minutes] = timeString.split(":");
     
-        // Convert to 24-hour format if time has AM/PM
+       
         if (period === "PM" && hours !== "12") {
             hours = parseInt(hours, 10) + 12;
         } else if (period === "AM" && hours === "12") {
             hours = "00";
         }
     
-        // Combine date and time to create a local Date object
+       
         const localDateTime = new Date(`${date}T${hours}:${minutes}:00`);
     
-        // Convert to UTC format
+       
         const year = localDateTime.getUTCFullYear();
         const month = String(localDateTime.getUTCMonth() + 1).padStart(2, '0');
         const day = String(localDateTime.getUTCDate()).padStart(2, '0');
@@ -56,7 +57,7 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
         const second = String(localDateTime.getUTCSeconds()).padStart(2, '0');
         const millisecond = String(localDateTime.getUTCMilliseconds()).padStart(3, '0');
     
-        // Construct the formatted UTC string
+       
         console.log (`${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}+00:00`)
         return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}+00:00`;
     };
@@ -73,7 +74,7 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
 
     
 
-    // Calculate min and max dates
+    
     console.log(currentReturnDate);
     const minDate = formatDate(currentReturnDate);
     const maxDate = formatDate(new Date(new Date(currentReturnDate).setDate(new Date(currentReturnDate).getDate() + 5)));
@@ -93,24 +94,24 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
     const currentReturnTime = formatTime(currentReturnDate);
     console.log(currentReturnTime);
 
-    // Generate time options every 15 minutes from 11:00 AM to 6:00 PM
+    
     const generateTimeOptions = () => {
         const options = [];
         const startTime = new Date();
-        startTime.setHours(11, 0, 0, 0); // Set to 11:00 AM
+        startTime.setHours(11, 0, 0, 0); 
 
         const endTime = new Date();
-        endTime.setHours(18, 0, 0, 0); // Set to 6:00 PM
+        endTime.setHours(18, 0, 0, 0); 
 
         while (startTime <= endTime) {
             const hours = startTime.getHours();
             const minutes = startTime.getMinutes();
             const period = hours >= 12 ? 'PM' : 'AM';
-            const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format
+            const formattedHours = hours % 12 || 12; 
             const formattedMinutes = minutes.toString().padStart(2, '0');
             const timeString = `${formattedHours}:${formattedMinutes} ${period}`;
             options.push(timeString);
-            startTime.setMinutes(startTime.getMinutes() + 15); // Increment by 15 minutes
+            startTime.setMinutes(startTime.getMinutes() + 15); 
         }
         return options;
     };

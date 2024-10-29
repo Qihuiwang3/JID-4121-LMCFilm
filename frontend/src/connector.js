@@ -457,7 +457,8 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
             checkedout: updateData.checkedout,
             checkedinStatus: updateData.checkedinStatus,
             checkedin: updateData.checkedout,
-            checkin: updateData.checkin
+            checkout: updateData.checkout,
+            beenExtended: updateData.beenExtended
         }, {
             headers: {
                 'Content-Type': 'application/json',

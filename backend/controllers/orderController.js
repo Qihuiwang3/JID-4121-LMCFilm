@@ -102,7 +102,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
 // @route PUT /order/:orderNumber
 // @access Private
 const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
-    const { equipment, checkedoutStatus, checkedinStatus, checkedout, checkedin, checkin } = req.body; // Expect equipment and checkout status
+    const { equipment, checkedoutStatus, checkedinStatus, checkedout, checkedin, checkout, beenExtended } = req.body; // Expect equipment and checkout status
 
     if (!equipment || equipment.length === 0) {
         return res.status(400).json({ error: "Equipment and item IDs are required." });
@@ -130,8 +130,11 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
     if (checkedout) {
         order.checkedout = checkedout;
     }
-    if (checkin) {
-        order.checkin = checkin;
+    if (checkout) {
+        order.checkout = checkout;
+    }
+    if (beenExtended) {
+        order.beenExtended = beenExtended
     }
 
     const updatedOrder = await order.save();
