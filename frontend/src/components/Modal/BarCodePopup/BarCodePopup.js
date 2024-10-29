@@ -38,7 +38,7 @@ return (
 <div className="modal-overlay">
     <div className="modal-contentB">
         <div className="modal-header">
-            <h2>View Damage Report</h2>
+            <h2>View Bar Code</h2>
             <button className="close-button" onClick={handleClose}>×</button>
         </div>
         <div className="report-details">

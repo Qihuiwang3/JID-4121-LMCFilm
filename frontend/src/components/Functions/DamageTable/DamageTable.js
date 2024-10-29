@@ -7,7 +7,6 @@ import { getAllDamageReports, deleteDamageReport, toggleRepairStatus, getRepairS
 import DamageReportModal from "../../Modal/DamageReportModal/DamageReportModal";
 import ViewDamageModal from "../../Modal/ViewDamageModal/ViewDamageModal";
 import './DamageTable.css';
-import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
 const DamageTable = () => {
     const [records, setRecords] = useState([]);
@@ -17,8 +16,9 @@ const DamageTable = () => {
     const [viewReportId, setViewReportId] = useState(null);
     const [editReportData, setEditReportData] = useState(null);
 
-    const [showDeletePopup, setShowDeletePopup] = useState(false);
-    const [itemToDelete, setItemToDelete] = useState(null);
+    useEffect(() => {
+        fetchRecords();
+    }, []);
 
     const fetchRecords = async () => {
         try {
@@ -45,30 +45,14 @@ const DamageTable = () => {
         }
     };
 
-    useEffect(() => {
-        fetchRecords();
-    }, []);
-
-    const handleDeleteRow = (data) => {
-        setItemToDelete(data);
-        setShowDeletePopup(true);
-    };
-
-    const confirmDelete = async () => {
+    const handleDeleteRow = async (data) => {
         try {
-            await deleteDamageReport(itemToDelete._id);
-            setRecords(prevRecords => prevRecords.filter(record => record._id !== itemToDelete._id));
-            setFilteredRecords(prevFiltered => prevFiltered.filter(record => record._id !== itemToDelete._id));
-            setShowDeletePopup(false);
-            setItemToDelete(null);
+            await deleteDamageReport(data._id);
+            setRecords(prevRecords => prevRecords.filter(record => record._id !== data._id));
+            setFilteredRecords(prevFiltered => prevFiltered.filter(record => record._id !== data._id));
         } catch (error) {
             console.error("Error deleting record:", error);
         }
-    };
-
-    const closeDeletePopup = () => {
-        setShowDeletePopup(false);
-        setItemToDelete(null);
     };
 
     const handleSearch = (query) => {
@@ -212,6 +196,7 @@ const DamageTable = () => {
                     show={!!viewReportId}
                     reportId={viewReportId}
                     handleClose={handleCloseModal}
+                    handleEdit={handleEditReport}
                 />
             )}
             {showAddNewPopup && (
@@ -219,15 +204,12 @@ const DamageTable = () => {
                     show={showAddNewPopup}
                     handleClose={handleClosePopup}
                     onReportAdded={handleNewReportAdded}
+                    reportToEdit={editReportData}
                 />
             )}
-            <DeletePopup
-                show={showDeletePopup}
-                handleClose={closeDeletePopup}
-                handleDelete={confirmDelete}
-            />
         </>
     );
 };
 
 export default DamageTable;
+

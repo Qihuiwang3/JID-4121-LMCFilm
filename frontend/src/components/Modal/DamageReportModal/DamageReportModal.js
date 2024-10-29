@@ -103,7 +103,7 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="view-damage-modal-content">
                 <div className="modal-header">
                     <h2>Submit Damage Report</h2>
                     <button className="close-button" onClick={handleClose}>&times;</button>
