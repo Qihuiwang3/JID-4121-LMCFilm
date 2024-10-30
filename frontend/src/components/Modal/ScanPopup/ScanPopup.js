@@ -124,7 +124,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                         onChange={handleOrderNumberChange}
                         onBlur={handleOrderNumberBlur} 
                     />
-                    {orderNotFound && <p className="error-message">Order Number is invalid.</p>}
+                    {orderNotFound && <p className="scan-error-message">Order Number is invalid.</p>}
                 </div>
 
                 {isOrderNumberValid && renderRadioButtonsOrMessage()}
@@ -132,12 +132,13 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
                     <button
-                        className={`scan-search-button ${!isOrderNumberValid ? 'disabled-button' : ''}`} 
+                        className="scan-search-button"
                         onClick={handleSearchClick}
-                        disabled={!isOrderNumberValid} 
+                        disabled={!isOrderNumberValid || (orderInfo?.checkedinStatus && orderInfo?.checkedoutStatus)}
                     >
                         Search
                     </button>
+
                 </div>
 
                 {showSearchPopup && <SearchPopup orderInfo={orderInfo} onClose={closeAllModals} goBack={closeSearchPopup} />}
