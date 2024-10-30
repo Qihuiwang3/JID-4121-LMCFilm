@@ -16,6 +16,7 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
     const handleItemIdChange = (index, value) => {
         const newItemIds = [...itemIds];
         newItemIds[index] = value;
+        setErrorMessage("")
         setItemIds(newItemIds);
     };
 
