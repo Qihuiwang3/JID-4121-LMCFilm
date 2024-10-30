@@ -23,7 +23,6 @@ const SelectTask = () => {
   const professorTaskRoutes = {
     A: '/Enter',
     B: '/ViewEquipment',
-    C: '/ViewReservation'
   };
 
   const handleClick = (id) => {
@@ -46,7 +45,6 @@ const SelectTask = () => {
   const professorClasses = [
     { id: 'A', name: 'Reserve Equipment' },
     { id: 'B', name: 'View Equipment' },
-    { id: 'C', name: 'View Reservations' },
   ];
 
   return (
