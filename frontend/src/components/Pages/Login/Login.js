@@ -59,7 +59,7 @@ const Login = () => {
 
                 dispatch(loginSuccess());
 
-                if (response.role === 'Admin') {
+                if (response.role === 'Admin' || response.role === 'Professor') {
                     navigate('/SelectTask');
                 } else {
                     navigate('/Enter');
