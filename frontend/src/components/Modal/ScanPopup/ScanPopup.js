@@ -100,7 +100,7 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
             }
 
             if (checkedoutStatus && checkedinStatus) {
-                return <p className="error-message">This order is complete.</p>;
+                return <p className="scan-error-message">This order is complete.</p>;
             }
         }
         return null;

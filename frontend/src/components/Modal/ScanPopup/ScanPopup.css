@@ -106,3 +106,7 @@
 .scan-search-button {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.scan-error-message {
+    color: red;
+}

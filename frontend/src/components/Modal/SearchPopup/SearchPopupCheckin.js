@@ -5,6 +5,7 @@ import { updateOrderByOrderNumber } from '../../../connector';
 const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
     const [itemIds, setItemIds] = useState([]);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         if (orderInfo && Array.isArray(orderInfo.equipment)) {
@@ -24,6 +25,15 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
     }, [itemIds]);
 
     const handleEquipmentCheckout = async () => {
+        const isMatching = orderInfo.equipment.every((item, index) => item.itemId === itemIds[index]);
+
+        if (!isMatching) {
+            setErrorMessage("Your Checkin itemID does not match with Checkout itemID");
+            return;
+        }
+
+        setErrorMessage('');
+
         const updatedEquipment = orderInfo.equipment.map((item, index) => ({
             itemName: item.itemName,
             itemId: itemIds[index]
@@ -111,6 +121,9 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                         </div>
                     </div>
                 ))}
+
+                {errorMessage && <p className="checkin-error-message">{errorMessage}</p>}
+
 
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={goBack}>Go Back</button>
