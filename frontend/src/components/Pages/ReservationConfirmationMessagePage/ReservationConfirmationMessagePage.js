@@ -67,7 +67,7 @@ function ReservationConfirmationMessagePage() {
 
         createOrder();
         // set cart items to empty
-        dispatch(setReservationCartItems({}));
+        dispatch(setReservationCartItems([]));
 
     }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, setOrderNumber]);
 
