@@ -36,26 +36,26 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     const createEmail = async (orderData) => {
         try {
             const barcodeBase64 = generateBarcodeBase64(orderData.orderNumber);
-            const base64Data = barcodeBase64.split(',')[1]; // Extract base64 data
+            const base64Data = barcodeBase64.split(',')[1]; // 
     
-            // Compose the email content with embedded barcode using cid
+           
             const emailContent = `
                 <p>Here is your confirmation for your LMC order. Below is the barcode to scan for check-in:</p>
                 <img src="cid:barcodeImage" alt="Order Barcode" />
             `;
     
-            // Prepare the attachment with cid
+           
             const attachments = [
                 {
                     filename: 'barcode.png',
                     content: base64Data,
-                    cid: 'barcodeImage', // Must match the cid in the img src
+                    cid: 'barcodeImage', 
                     encoding: 'base64',
                     contentType: 'image/png',
                 },
             ];
     
-            // Send the email by calling your API
+            
             await sendEmail({
                 to: orderData.email,
                 subject: `Order Confirmation: ${orderData.orderNumber}`,
@@ -63,7 +63,6 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
                 attachments: attachments,
             });
     
-            alert('Email sent successfully!');
         } catch (error) {
             console.error('Error sending email:', error);
             alert('Failed to send email.');
@@ -92,11 +91,11 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
 
         createEmail(orderData);
 
-        // Call createOrder API
+    
         return createOrder(orderData)
             .then(response => {
                 console.log('Order created successfully:', response);
-                return generatedOrderNumber; // Return the generated order number
+                return generatedOrderNumber; 
             })
             .catch(error => {
                 console.error('Error creating order:', error);
