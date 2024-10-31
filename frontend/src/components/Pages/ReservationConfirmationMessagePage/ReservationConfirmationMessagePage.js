@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Barcode from 'react-barcode';
 import Button from '../../Button/Button';
+import { setReservationCartItems } from '../../redux/actions/reservationCartActions.js';
+
 
 
 function ReservationConfirmationMessagePage() {
@@ -63,12 +65,12 @@ function ReservationConfirmationMessagePage() {
         };
 
         createOrder();
+        // set cart items to empty
+        dispatch(setReservationCartItems([]));
 
     }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, orderNumber]);
 
     // Function to handle the back button click
-    
-
     const goBack = () => {
         navigate('/Enter');
     };

@@ -4,6 +4,8 @@ import './Login.css';
 import { loginStudent, createStudent } from '../../../connector';
 import { useDispatch } from 'react-redux';
 import { setStudentInfo } from '../../redux/actions/studentActions';
+import { loginSuccess } from '../../redux/reducers/authSlice';
+
 
 
 const Login = () => {
@@ -47,7 +49,6 @@ const Login = () => {
         try {
             if (isLogin) {
                 const response = await loginStudent(formData.email, formData.password);
-                console.log(response);
 
                 dispatch(setStudentInfo({
                     email: response.email,
@@ -55,6 +56,8 @@ const Login = () => {
                     classCodes: response.classCodes,
                     role: response.role,
                 }));
+
+                dispatch(loginSuccess());
 
                 if (response.role === 'Admin') {
                     navigate('/SelectTask');
