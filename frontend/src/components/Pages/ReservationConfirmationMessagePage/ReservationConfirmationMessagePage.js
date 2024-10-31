@@ -7,10 +7,12 @@ import Button from '../../Button/Button';
 
 
 function ReservationConfirmationMessagePage() {
-    const [orderNumber, setOrderNumber] = useState('');
+   
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const orderNumber = location.state?.orderNumber || '';
    
 
     const reduxStudentInfo = useSelector(state => state.studentData);
@@ -22,23 +24,19 @@ function ReservationConfirmationMessagePage() {
     const [returnDateTime, setReturnDateTime] = useState(new Date(selectedDates?.returnDateTime || new Date()));
 
 
-    const generateOrderNumber = () => {
-        return 'Order-' + Math.floor(Math.random() * 1000000000);
-    };
+   
 
 
 
     useEffect(() => {
 
-        const generatedOrderNumber = generateOrderNumber();
-        setOrderNumber(generatedOrderNumber);
+       
 
         const createOrder = async () => {
-            const generatedOrderNumber = generateOrderNumber();
-            setOrderNumber(generatedOrderNumber);
+           
 
             const orderData = {
-                orderNumber: generatedOrderNumber,
+                orderNumber: orderNumber,
                 email: studentInfo.email,
                 checkin: pickupDateTime,
                 checkout: returnDateTime,
@@ -66,7 +64,7 @@ function ReservationConfirmationMessagePage() {
 
         createOrder();
 
-    }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, setOrderNumber]);
+    }, [pickupDateTime, returnDateTime, studentInfo, studentInfo.email, studentInfo.name, orderNumber]);
 
     // Function to handle the back button click
     

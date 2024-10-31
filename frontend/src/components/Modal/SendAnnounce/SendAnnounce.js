@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SendAnnounce.css';
-import { sendEmail } from '../../../connector';
+import { sendEmail, getStudents } from '../../../connector';
 
 
 
@@ -12,14 +12,40 @@ const SendAnnounce = ({ show, handleClose}) => {
 
 
     const handleSendEmail = async () => {
+        //code to send emails to all emails listed in students. Not gonna send an email to all the student emails right now
+        // try {
+        //     const students = await getStudents();
+        //     const emailAddresses = students.map(student => student.email); 
+        
+        //     // Send email to each student
+        //     for (const email of emailAddresses) {
+        //         await sendEmail({
+        //             to: email,
+        //             subject: subject,
+        //             html: emailBody,
+        //         });
+        //     }
+        
+        //     alert('Emails sent successfully!');
+        //     handleClose();
+        // } catch (error) {
+        //     console.error('Error sending emails:', error);
+        //     alert('Failed to send emails.');
+        // }
+        
         try {
-            await sendEmail('wwilson74@gatech.edu', subject, emailBody);
+            await sendEmail({
+                to: 'weswilson2424@gmail.com',
+                subject: subject,
+                html: emailBody,
+            });
             handleClose();
         } catch (error) {
             console.error('Error sending email:', error);
             alert('Failed to send email.');
         }
     };
+        
 
 
     if (!show) {
@@ -79,6 +105,7 @@ return (
 
 
 }
+
 
 
 export default SendAnnounce;

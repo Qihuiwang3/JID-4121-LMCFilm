@@ -510,12 +510,12 @@ const deleteBundleItem = async (bundleId, itemName) => {
     }
 };
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (emailData) => {
     try {
-        const response = await fetch(`${BACKEND_URL2}/api/send-email`, {
+        const response = await fetch(`${BACKEND_URL}/api/send-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ to, subject, text })
+            body: JSON.stringify(emailData)
         });
 
 

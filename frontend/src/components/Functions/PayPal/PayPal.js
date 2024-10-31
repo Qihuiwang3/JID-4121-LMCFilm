@@ -1,8 +1,9 @@
 import React from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
-import { createOrder } from '../../../connector.js'; 
+import { createOrder, sendEmail } from '../../../connector.js'; 
 import { connect } from 'react-redux';
+import JsBarcode from 'jsbarcode';
 
 const clientId = process.env.REACT_APP_PAYPAL_CLIENT_ID;
 
@@ -14,10 +15,61 @@ const initialOptions = {
 function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     const navigate = useNavigate();
 
+    const generateBarcodeBase64 = (orderNumber) => {
+        const canvas = document.createElement('canvas');
+        JsBarcode(canvas, orderNumber, {
+            format: 'CODE128',
+            displayValue: false,
+            width: 2,
+            height: 100,
+            background: '#ffffff',
+            lineColor: '#000000',
+            margin: 10,
+        });
+        return canvas.toDataURL('image/png');
+    };
+
     const generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
     };
 
+    const createEmail = async (orderData) => {
+        try {
+            const barcodeBase64 = generateBarcodeBase64(orderData.orderNumber);
+            const base64Data = barcodeBase64.split(',')[1]; // Extract base64 data
+    
+            // Compose the email content with embedded barcode using cid
+            const emailContent = `
+                <p>Here is your confirmation for your LMC order. Below is the barcode to scan for check-in:</p>
+                <img src="cid:barcodeImage" alt="Order Barcode" />
+            `;
+    
+            // Prepare the attachment with cid
+            const attachments = [
+                {
+                    filename: 'barcode.png',
+                    content: base64Data,
+                    cid: 'barcodeImage', // Must match the cid in the img src
+                    encoding: 'base64',
+                    contentType: 'image/png',
+                },
+            ];
+    
+            // Send the email by calling your API
+            await sendEmail({
+                to: orderData.email,
+                subject: `Order Confirmation: ${orderData.orderNumber}`,
+                html: emailContent,
+                attachments: attachments,
+            });
+    
+            alert('Email sent successfully!');
+        } catch (error) {
+            console.error('Error sending email:', error);
+            alert('Failed to send email.');
+        }
+    };
+    
     const createOrderAfterPayment = (cartItems, selectedDates, name, email) => {
         const generatedOrderNumber = generateOrderNumber();
 
@@ -38,6 +90,8 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
             })),
         };
 
+        createEmail(orderData);
+
         // Call createOrder API
         return createOrder(orderData)
             .then(response => {
@@ -57,7 +111,7 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
                     return actions.order.create({
                         purchase_units: [
                             {
-                                description: "Cool looking table",
+                                description: "Order Description",
                                 amount: {
                                     currency_code: "USD",
                                     value: cartTotalCost,
@@ -88,7 +142,7 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
 // Map Redux state to component props
 const mapStateToProps = (state) => ({
     cartItems: state.reservationCart.reservationCartItems,
-    selectedDates: state.classData.selectedDates, // Assuming selectedDates is in classData
+    selectedDates: state.classData.selectedDates,
     email: state.studentData.email, 
     name: state.studentData.name, 
 });

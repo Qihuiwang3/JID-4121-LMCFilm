@@ -1,36 +1,30 @@
 const nodemailer = require('nodemailer');
 const USERNAME = process.env.EMAIL_USERNAME;
 const PASSWORD = process.env.EMAIL_PASSWORD;
- 
-
-
 
 const sendEmail = async (req, res) => {
-    const { to, subject, text } = req.body;
+    const { to, subject, html, attachments } = req.body;
 
-
-    if (!to || !subject || !text) {
+    if (!to || !subject || !html) {
         return res.status(400).send({ message: 'Missing required fields' });
     }
-
 
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: `${USERNAME}`,
-                pass: `${PASSWORD}`
-            }
+                user: USERNAME,
+                pass: PASSWORD,
+            },
         });
 
-
         const mailOptions = {
-            from: 'Georgia Tech LMC Department',
+            from: 'Georgia Tech LMC Department <' + USERNAME + '>',
             to: to,
             subject: subject,
-            text: text
+            html: html,
+            attachments: attachments, // Include attachments
         };
-
 
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent: ' + info.response);
@@ -41,8 +35,4 @@ const sendEmail = async (req, res) => {
     }
 };
 
-
-module.exports = { sendEmail }; 
-
-
-
+module.exports = { sendEmail };

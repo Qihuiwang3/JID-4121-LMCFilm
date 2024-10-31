@@ -5,8 +5,6 @@ const express = require("express");
 const app = express();
 const path = require('path');
 const PORT = process.env.PORT || 3500;
-const PORT2 = 5000;
-const nodemailer = require('nodemailer');
 const { logger, logEvents } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 const cookieParser = require("cookie-parser");
@@ -60,6 +58,3 @@ mongoose.connection.on("error", (err) => {
 });
 
 
-app.listen(PORT2, () => {
-  console.log(`Backend server is running on http://localhost:${PORT2}`);
-});
