@@ -5,6 +5,7 @@ import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
 import { setReservationCartItems } from '../../redux/actions/reservationCartActions.js';
 import { createCartWithData } from '../../../connector.js';
@@ -17,6 +18,9 @@ function ReservationPage() {
     const classCode = useSelector(state => state.classData.classCode);
     const selectedDates = useSelector(state => state.classData.selectedDates);
     const reservationCartItems = useSelector(state => state.reservationCart.reservationCartItems);
+    const location = useLocation();
+    const reduxStudentInfo = useSelector(state => state.studentData);
+    const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
     const [pickupDateTime, setPickupDateTime] = useState(new Date(selectedDates?.pickupDateTime || new Date()));
     const [returnDateTime, setReturnDateTime] = useState(new Date(selectedDates?.returnDateTime || new Date()));
@@ -41,9 +45,15 @@ function ReservationPage() {
 
     const calculateTotal = () => {
         let total = 0;
-        cartItems.forEach(item => {
-            total += item.price;
-        });
+
+        if (studentInfo.role === 'Admin' || studentInfo.role === 'Professor') {
+            total = 0
+        } else {
+            cartItems.forEach(item => {
+                total += item.price;
+            });
+        }
+
         return total.toFixed(2);
     };
 
