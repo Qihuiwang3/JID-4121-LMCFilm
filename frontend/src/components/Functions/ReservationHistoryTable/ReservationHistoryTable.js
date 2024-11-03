@@ -65,9 +65,17 @@ const ReservationHistoryTable = () => {
     const columnDefs = [
         {
             headerName: "Code",
-            field: "code",
             flex: 1,
             cellStyle: { cursor: 'pointer' },
+            cellRenderer: params => (
+                <span
+                    onClick={() => handleViewReport(params.data.code)}
+                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
+                    className="clickable-text"
+                >
+                    View Code
+                </span>
+            )
         },
         {
             headerName: "Pick Up Date",
@@ -116,19 +124,8 @@ const ReservationHistoryTable = () => {
             flex: 1,
             cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
-            cellRenderer: params => (
-                <span
-                    onClick={() => handleViewReport(params.data.code)}
-                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
-                    className="clickable-text"
-                >
-                    View Details
-                </span>
-            )
-
-            
         }
-            
+
     ];
 
     return (
@@ -145,17 +142,17 @@ const ReservationHistoryTable = () => {
                 domLayout="autoHeight"
                 suppressHorizontalScroll={true}
             />
-    {viewReportId && (
+            {viewReportId && (
                 <BarCodePopup
                     show={!!viewReportId}
-                    orderNumber = {viewReportId}
+                    orderNumber={viewReportId}
                     handleClose={handleCloseModal}
                 />
             )}
-    {viewDamageId && (
+            {viewDamageId && (
                 <StudentViewDamageModal
                     show={!!viewDamageId}
-                    orderNumber = {viewDamageId}
+                    orderNumber={viewDamageId}
                     handleClose={handleCloseModal}
                 />
             )}
