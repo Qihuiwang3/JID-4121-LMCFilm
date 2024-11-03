@@ -63,14 +63,14 @@ const createOrder = asyncHandler(async (req, res) => {
     }
 
     const formattedEquipment = equipment.map(e => ({
-        itemName: e.itemName,
-        itemId: ''
+        itemName: e.name,
+        itemId: e.itemId,
     }));
 
     const newOrder = new Order({
         orderNumber,
         email,
-        checkin: new Date(checkin), 
+        checkin: new Date(checkin),
         checkout: new Date(checkout),
         checkedinStatus: false, // Explicitly set these to false initially
         checkedoutStatus: false, // Explicitly set these to false initially
@@ -109,7 +109,7 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
     }
 
     const order = await Order.findOne({ orderNumber: req.params.orderNumber });
-    
+
     if (!order) {
         return res.status(404).json({ error: `Order with number ${req.params.orderNumber} not found.` });
     }
@@ -136,7 +136,7 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { 
+module.exports = {
     getAllOrders,
     getOrderByOrderNumber,
     getOrderById,

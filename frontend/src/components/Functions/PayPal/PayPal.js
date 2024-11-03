@@ -1,7 +1,7 @@
 import React from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
-import { createOrder } from '../../../connector.js'; 
+import { createOrder } from '../../../connector.js';
 import { connect } from 'react-redux';
 
 const clientId = process.env.REACT_APP_PAYPAL_CLIENT_ID;
@@ -21,6 +21,7 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     const createOrderAfterPayment = (cartItems, selectedDates, name, email) => {
         const generatedOrderNumber = generateOrderNumber();
 
+
         const orderData = {
             orderNumber: generatedOrderNumber,
             email: email,
@@ -32,11 +33,11 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
             checkedoutStatus: false,
             studentName: name,
             createdAt: new Date(),
-            equipment: cartItems.map(item => ({
-                itemName: item.name, 
-                itemId: '' 
-            })),
+            equipment: cartItems,
         };
+
+        console.log("order data ITEMS");
+        console.log(orderData);
 
         // Call createOrder API
         return createOrder(orderData)
@@ -51,37 +52,52 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     };
 
     return (
-        <PayPalScriptProvider options={initialOptions}>
-            <PayPalButtons
-                createOrder={(data, actions) => {
-                    return actions.order.create({
-                        purchase_units: [
-                            {
-                                description: "Cool looking table",
-                                amount: {
-                                    currency_code: "USD",
-                                    value: cartTotalCost,
+        <>
+            <PayPalScriptProvider options={initialOptions}>
+                <PayPalButtons
+                    createOrder={(data, actions) => {
+                        return actions.order.create({
+                            purchase_units: [
+                                {
+                                    description: "Cool looking table",
+                                    amount: {
+                                        currency_code: "USD",
+                                        value: cartTotalCost,
+                                    },
                                 },
-                            },
-                        ],
-                    });
-                }}
-                onApprove={(data, actions) => {
-                    return actions.order.capture().then((details) => {
-                        console.log("Transaction completed by " + details.payer.name.given_name);
+                            ],
+                        });
+                    }}
+                    onApprove={(data, actions) => {
+                        return actions.order.capture().then((details) => {
+                            console.log("Transaction completed by " + details.payer.name.given_name);
 
-                        // Create the order and navigate to confirmation page
-                        createOrderAfterPayment(cartItems, selectedDates, name, email)
-                            .then(generatedOrderNumber => {
-                                navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
-                            })
-                            .catch(error => {
-                                console.error("Order creation failed:", error);
-                            });
+                            // Create the order and navigate to confirmation page
+                            createOrderAfterPayment(cartItems, selectedDates, name, email)
+                                .then(generatedOrderNumber => {
+                                    navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
+                                })
+                                .catch(error => {
+                                    console.error("Order creation failed:", error);
+                                });
+                        });
+                    }}
+                />
+            </PayPalScriptProvider>
+
+            {/* button to skip payment and go to confirmation page */}
+
+            {/* <button onClick={() => {
+                createOrderAfterPayment(cartItems, selectedDates, name, email)
+                    .then(generatedOrderNumber => {
+                        navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
+                    })
+                    .catch(error => {
+                        console.error("Order creation failed:", error);
                     });
-                }}
-            />
-        </PayPalScriptProvider>
+            }}>CHEAT BUTTON</button> */}
+        </>
+
     );
 }
 
@@ -89,9 +105,10 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
 const mapStateToProps = (state) => ({
     cartItems: state.reservationCart.reservationCartItems,
     selectedDates: state.classData.selectedDates, // Assuming selectedDates is in classData
-    email: state.studentData.email, 
-    name: state.studentData.name, 
+    email: state.studentData.email,
+    name: state.studentData.name,
 });
 
 // Connect the component to Redux
 export default connect(mapStateToProps)(Paypal);
+
