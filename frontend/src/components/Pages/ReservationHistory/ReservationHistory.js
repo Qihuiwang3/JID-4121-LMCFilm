@@ -20,7 +20,7 @@ function ReservationHistory() {
 
             <div className="equipment-btn">
                 <div className="rh-bottom-btn-container">
-                    <BackButton to={studentInfo.role === "Admin" ? "/SelectTask" : "/Reservation"} />
+                    <BackButton to={-1} />
 
                     {studentInfo.role === "Admin" && (
                         <button className="rh-btn-send-announcement"> Send Announcement</button>
