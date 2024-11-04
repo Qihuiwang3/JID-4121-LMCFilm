@@ -32,14 +32,7 @@ function CartConfirmation() {
     };
 
     const handleBack = async () => {
-        try {
-            await axios.delete(`http://localhost:3500/api/carts/${itemId}`);
-        } catch (error) {
-
-            console.error('Backend not started:', error.message || error);
-        } finally {
-            navigate('/ReservationPage');
-        }
+        navigate('/ReservationPage');
         dispatch(setReservationCartItems(cartItems));
     }
 
