@@ -58,7 +58,7 @@ const deleteStudentByEmail = asyncHandler(async (req, res) => {
 const updateStudentRole = asyncHandler(async (req, res) => {
     const { role } = req.body;
 
-    if (!role || (role !== 'Student' && role !== 'Admin')) {
+    if (!role || (role !== 'Student' && role !== 'Admin' && role !== 'Professor')) {
         res.status(400);
         throw new Error('Invalid role');
     }

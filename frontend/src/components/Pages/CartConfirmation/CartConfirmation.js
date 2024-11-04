@@ -12,6 +12,9 @@ function CartConfirmation() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const reduxStudentInfo = useSelector(state => state.studentData);
+    const studentInfo = location.state?.studentInfo || reduxStudentInfo;
+
     const dispatch = useDispatch();
 
     const { itemId } = location.state || {};
@@ -42,10 +45,15 @@ function CartConfirmation() {
 
     const calculateTotal = () => {
         let total = 0;
-        cartItems.forEach(item => {
-            total += item.price;
-        });
+        if (studentInfo.role === 'Admin' || studentInfo.role === 'Professor') {
+            total = 0
+        } else {
+            cartItems.forEach(item => {
+                total += item.price;
+            });
+        }
         return total.toFixed(2);
+
     }
 
     const filterCartContent = () => {
