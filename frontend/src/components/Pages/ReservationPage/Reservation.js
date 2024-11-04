@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
 import { setReservationCartItems } from '../../redux/actions/reservationCartActions.js';
-import { createCartWithData } from '../../../connector.js';
+import { createCartWithData, getSingleItemsByClassCode, getBundleItemsByClassCode, getItemByName } from '../../../connector.js';
 import Button from '../../Button/Button.js';
 
 function ReservationPage() {
@@ -66,37 +66,34 @@ function ReservationPage() {
     };
 
     useEffect(() => {
-        if (classCode) {
-            // Fetch single items
-            fetch(`http://localhost:3500/api/single-items/${classCode}`)
-                .then(res => res.json())
-                .then(data => {
-                    const promises = data.map(singleItem =>
-                        fetch(`http://localhost:3500/api/item/${singleItem.itemName}`)
-                            .then(res => res.json())
-                            .then(itemDetails => ({
-                                ...singleItem,
-                                pricePerItem: itemDetails.pricePerItem,
-                                quantity: itemDetails.quantity
-                            }))
-                    );
+        const fetchData = async () => {
+            if (classCode) {
+                try {
+                    // Fetch single items
+                    const singleItems = await getSingleItemsByClassCode(classCode);
+                    const promises = singleItems.map(async (singleItem) => {
+                        const itemDetails = await getItemByName(singleItem.itemName); // Updated
+                        return {
+                            ...singleItem,
+                            pricePerItem: itemDetails.pricePerItem,
+                            quantity: itemDetails.quantity
+                        };
+                    });
 
-                    Promise.all(promises)
-                        .then(equipmentWithPricesQuantity => {
-                            setEquipment(equipmentWithPricesQuantity);
-                        })
-                        .catch(error => console.error('Error fetching item prices:', error));
-                })
-                .catch(error => console.error('Error fetching equipment:', error));
+                    const equipmentWithPricesQuantity = await Promise.all(promises);
+                    setEquipment(equipmentWithPricesQuantity);
 
-            // Fetch bundles
-            fetch(`http://localhost:3500/api/bundle-items/${classCode}`)
-                .then(res => res.json())
-                .then(data => {
-                    setBundles(data);
-                })
-                .catch(error => console.error('Error fetching bundles:', error));
-        }
+                    // Fetch bundles
+                    const bundleItems = await getBundleItemsByClassCode(classCode);
+                    setBundles(bundleItems);
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+        };
+
+        fetchData();
     }, [classCode]);
 
     return (
