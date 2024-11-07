@@ -165,6 +165,7 @@ class ReservationTable extends Component {
                         onClose={this.handleCloseViewDetailModal}
                         reservationDetails={reservationDetails} // Pass the fetched details
                         onOrderCancelled={this.loadRecords}
+                        onOrderExtended = {this.loadRecords}
                     />
                 )}
             </>

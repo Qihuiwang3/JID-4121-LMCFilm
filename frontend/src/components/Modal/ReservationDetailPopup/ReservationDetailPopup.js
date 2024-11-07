@@ -14,7 +14,7 @@ const formatDate = (dateString) => {
     return `${year}-${month}-${day}`;
 };
 
-const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled }) => {
+const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled, onOrderExtended }) => {
     const [canCancelOrder, setCanCancelOrder] = useState(false);
     const [cantExtendOrder, setCantExtendOrder] = useState(false);
     const [viewCancelID, setViewCancel] = useState(null);
@@ -147,7 +147,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled 
     Cancel Reservation
 </button>
 
-                    <button className="extend-reservation" onClick={() => handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkout, reservationDetails.equipment)} disabled={cantExtendOrder} >Extend Reservation</button>
+                    <button className="extend-reservation" onClick={() => handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkout, reservationDetails.equipment)} disabled={cantExtendOrder} >Extend Return Date & Time</button>
                 </div>
             </div>
         </div>
@@ -170,6 +170,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled 
                 handleClose={() => {
                     onClose();
                 }}
+                onOrderExtended = {onOrderExtended}
                     
             />
         )}
