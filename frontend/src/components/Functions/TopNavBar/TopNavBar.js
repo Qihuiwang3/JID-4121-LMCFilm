@@ -29,13 +29,18 @@ const TopNavBar = () => {
     const profileNav = () => {
         navigate("/ReservationHistory");
     }
-    
+
     const closeProfileModal = () => {
         setShowProfileModal(false);
     };
 
     const logoutNav = () => {
         navigate("/");
+        setIsSidebarOpen(false);
+    };
+
+    const goToAdminSite = () => {
+        navigate("/SelectTask");
         setIsSidebarOpen(false);
     };
 
@@ -61,6 +66,9 @@ const TopNavBar = () => {
                     <div className="nav-links">
                         <div className="nav-link" onClick={openProfileModal}>Profile</div>
                         <div className="nav-link" onClick={profileNav}> Reservation History</div>
+                        {(studentData.role === 'Admin' || studentData.role === 'TA' || studentData.role === 'Professor') && (
+                            <div className="nav-link" onClick={goToAdminSite}>Admin Site</div>
+                        )}
                         <div className="nav-link" onClick={logoutNav}>Logout</div>
 
                     </div>
