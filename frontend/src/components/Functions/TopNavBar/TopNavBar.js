@@ -29,7 +29,7 @@ const TopNavBar = () => {
     const profileNav = () => {
         navigate("/ReservationHistory");
     }
-    
+
     const closeProfileModal = () => {
         setShowProfileModal(false);
     };
