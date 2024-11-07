@@ -23,7 +23,7 @@ const sendEmail = async (req, res) => {
             to: to,
             subject: subject,
             html: html,
-            attachments: attachments, // Include attachments
+            attachments: attachments, 
         };
 
         const info = await transporter.sendMail(mailOptions);
