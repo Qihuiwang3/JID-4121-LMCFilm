@@ -35,7 +35,7 @@ const SendAnnounce = ({ show, handleClose}) => {
         
         try {
             await sendEmail({
-                to: 'testEmail',
+                to: 'weswilson2424@gmail.com',
                 subject: subject,
                 html: emailBody,
             });

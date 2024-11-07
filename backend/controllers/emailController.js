@@ -2,37 +2,41 @@ const nodemailer = require('nodemailer');
 const USERNAME = process.env.EMAIL_USERNAME;
 const PASSWORD = process.env.EMAIL_PASSWORD;
 
-const sendEmail = async (req, res) => {
+const sendEmail = (req, res) => {
     const { to, subject, html, attachments } = req.body;
 
     if (!to || !subject || !html) {
         return res.status(400).send({ message: 'Missing required fields' });
     }
 
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: USERNAME,
-                pass: PASSWORD,
-            },
-        });
+    
+    res.status(200).send({ message: 'Processing email sending...' });
 
-        const mailOptions = {
-            from: 'Georgia Tech LMC Department <' + USERNAME + '>',
-            to: to,
-            subject: subject,
-            html: html,
-            attachments: attachments, 
-        };
+    
+    setImmediate(async () => {
+        try {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: USERNAME,
+                    pass: PASSWORD,
+                },
+            });
 
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
-        res.status(200).send({ message: 'Email sent successfully' });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).send({ message: 'Failed to send email', error });
-    }
+            const mailOptions = {
+                from: 'Georgia Tech LMC Department <' + USERNAME + '>',
+                to: to,
+                subject: subject,
+                html: html,
+                attachments: attachments,
+            };
+
+            const info = await transporter.sendMail(mailOptions);
+            console.log('Email sent: ' + info.response);
+        } catch (error) {
+            console.error('Error sending email:', error);
+        }
+    });
 };
 
 module.exports = { sendEmail };
