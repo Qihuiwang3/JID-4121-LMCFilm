@@ -39,6 +39,11 @@ const TopNavBar = () => {
         setIsSidebarOpen(false);
     };
 
+    const goToAdminSite = () => {
+        navigate("/SelectTask");
+        setIsSidebarOpen(false);
+    };
+
     return (
         <div className="navBar">
             <div className="navBar-left">
@@ -61,6 +66,9 @@ const TopNavBar = () => {
                     <div className="nav-links">
                         <div className="nav-link" onClick={openProfileModal}>Profile</div>
                         <div className="nav-link" onClick={profileNav}> Reservation History</div>
+                        {(studentData.role === 'Admin' || studentData.role === 'TA' || studentData.role === 'Professor') && (
+                            <div className="nav-link" onClick={goToAdminSite}>Admin Site</div>
+                        )}
                         <div className="nav-link" onClick={logoutNav}>Logout</div>
 
                     </div>
