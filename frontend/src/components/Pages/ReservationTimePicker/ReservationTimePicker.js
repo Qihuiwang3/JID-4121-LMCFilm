@@ -70,6 +70,12 @@ function ReservationTimePicker() {
     const maxPickupDate = new Date();
     maxPickupDate.setDate(maxPickupDate.getDate() + 5);
 
+    const getMaxReturnDate = () => {
+        const maxReturn = new Date(pickupDate);
+        maxReturn.setDate(maxReturn.getDate() + 5);
+        return maxReturn;
+    };
+
     return (
         <div className="main-content">
             <h1 className="select-class-header">Select Time Period</h1>
@@ -110,6 +116,7 @@ function ReservationTimePicker() {
                                     onChange={(date) => setReturnDate(date)}
                                     dateFormat="MM/dd/yyyy"
                                     minDate={minReturnDate}
+                                    maxDate={getMaxReturnDate()}
                                 />
                             </div>
                             <div className="rt-time-input-wrapper">

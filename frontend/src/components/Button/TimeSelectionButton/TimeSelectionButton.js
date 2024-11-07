@@ -46,6 +46,12 @@ function TimeSelectionButton({initialPickupDateTime, initialReturnDateTime }){
   const maxPickupDate = new Date();
   maxPickupDate.setDate(maxPickupDate.getDate() + 5);
 
+  const getMaxReturnDate = () => {
+    const maxReturn = new Date(pickupDateTime);
+    maxReturn.setDate(maxReturn.getDate() + 5);
+    return maxReturn;
+  };
+
   function endOfDay(date) {
     return new Date(date.setHours(23, 45, 0, 0));
   }
@@ -95,6 +101,7 @@ function TimeSelectionButton({initialPickupDateTime, initialReturnDateTime }){
             dateFormat="h:mm aa, MM/dd"
             showTimeSelect
             minDate={pickupDateTime}
+            maxDate={getMaxReturnDate()}
             minTime={getMinReturnDateTime(returnDateTime)}
             maxTime={endOfDay(new Date())}
             timeIntervals={15}
