@@ -535,7 +535,15 @@ const deleteOrder = async (orderNumber) => {
     }
 };
 
-
+const isItemIdExist = async (itemName, itemId) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/item/itemName/itemId/${itemName}/${itemId}/existence`);
+        return res.data;
+    } catch (error) {
+        console.error('Error checking if itemId exists:', error);
+        throw error;
+    }
+};
 
 export {
     getStudents,
@@ -580,4 +588,5 @@ export {
     removeSingularItem,
     deleteBundleItem,
     deleteOrder,
+    isItemIdExist
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SearchPopup.css';
-import { updateOrderByOrderNumber } from '../../../connector'; 
+import { updateOrderByOrderNumber, isItemIdExist } from '../../../connector'; 
 
 const SearchPopup = ({ goBack, onClose, orderInfo }) => {
     const [itemIds, setItemIds] = useState([]);
@@ -28,16 +28,25 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
             itemName: item.itemName,
             itemId: itemIds[index]
         }));
+    
         try {
-            await updateOrderByOrderNumber(orderInfo.orderNumber, {
-                equipment: updatedEquipment,
-                checkedoutStatus: true,
-                checkedinStatus: false,
-                checkedout: null,
-                checkedout: new Date() 
-            });
-            console.log('Order updated successfully');
-            onClose();
+            for (const { itemName, itemId } of updatedEquipment) {
+                const response = await isItemIdExist(itemName, itemId);
+                if (response.exist) {
+                    await updateOrderByOrderNumber(orderInfo.orderNumber, {
+                        equipment: updatedEquipment,
+                        checkedoutStatus: true,
+                        checkedinStatus: false,
+                        checkedout: new Date(),
+                    });
+                    
+                    console.log('Order updated successfully');
+                    onClose();
+                } else {
+                    
+                }
+            }
+    
         } catch (error) {
             console.error('Error updating order:', error);
         }
