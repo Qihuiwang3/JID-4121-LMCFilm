@@ -466,7 +466,9 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
             checkedoutStatus: updateData.checkedoutStatus,
             checkedout: updateData.checkedout,
             checkedinStatus: updateData.checkedinStatus,
-            checkedin: updateData.checkedin
+            checkedin: updateData.checkedout,
+            checkout: updateData.checkout,
+            beenExtended: updateData.beenExtended
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -519,6 +521,21 @@ const deleteBundleItem = async (bundleId, itemName) => {
     }
 };
 
+const deleteOrder = async (orderNumber) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/order/${orderNumber}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+
 
 export {
     getStudents,
@@ -562,4 +579,5 @@ export {
     getOrderById,
     removeSingularItem,
     deleteBundleItem,
+    deleteOrder,
 };

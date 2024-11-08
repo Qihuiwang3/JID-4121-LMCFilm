@@ -165,6 +165,8 @@ class ReservationTable extends Component {
                     <ReservationDetailPopup 
                         onClose={this.handleCloseViewDetailModal}
                         reservationDetails={reservationDetails} // Pass the fetched details
+                        onOrderCancelled={this.loadRecords}
+                        onOrderExtended = {this.loadRecords}
                     />
                 )}
             </>

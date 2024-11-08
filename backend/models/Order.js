@@ -49,6 +49,10 @@ const orderSchema = new mongoose.Schema({
         itemName: { type: String, required: true }, 
         itemId: { type: String }, 
     }],
+    beenExtended: {
+        type: Boolean,
+        default: false, 
+    },
 });
 
 module.exports = mongoose.model('Order', orderSchema);
