@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import AgGridTable from '../AgGridTable/AgGridTable'; 
-import { getStudents, deleteStudent, updateStudentRole } from '../../../connector.js';  
-import SearchBar from '../SearchBar/SearchBar'; 
-import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown'; 
+import AgGridTable from '../AgGridTable/AgGridTable';
+import { getStudents, deleteStudent, updateStudentRole } from '../../../connector.js';
+import SearchBar from '../SearchBar/SearchBar';
+import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './StudentTable.css';
+import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
+
 
 class StudentTable extends Component {
     constructor(props) {
@@ -19,7 +21,9 @@ class StudentTable extends Component {
                 sortable: true,
                 resizable: true
             },
-            searchQuery: ''
+            searchQuery: '',
+            isDeletePopupOpen: false,
+            selectedEmail: null
         };
     }
 
@@ -31,27 +35,27 @@ class StudentTable extends Component {
         try {
             const students = await getStudents();
 
-            const flattenedRecords = students.flatMap(student => 
-                student.classCodes.length > 0 
+            const flattenedRecords = students.flatMap(student =>
+                student.classCodes.length > 0
                     ? student.classCodes.map(classCode => ({
                         email: student.email,
                         name: student.name,
                         classCode: classCode,
                         role: student.role
                     }))
-                    : [{ 
+                    : [{
                         email: student.email,
                         name: student.name,
-                        classCode: "N/A", 
+                        classCode: "N/A",
                         role: student.role
                     }]
             );
-            
-            this.setState({ 
+
+            this.setState({
                 records: flattenedRecords,
-                filteredRecords: flattenedRecords, 
+                filteredRecords: flattenedRecords,
                 tempDeletedRows: [],
-                updatedRoles: {} 
+                updatedRoles: {}
             });
         } catch (error) {
             console.error("Error loading records:", error);
@@ -60,13 +64,13 @@ class StudentTable extends Component {
 
     tempDeleteRow = (data) => {
         this.setState((prevState) => {
-            const updatedRecords = prevState.records.filter(record => record.email !== data.email); 
-            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record.email !== data.email); 
+            const updatedRecords = prevState.records.filter(record => record.email !== data.email);
+            const updatedFilteredRecords = prevState.filteredRecords.filter(record => record.email !== data.email);
 
             return {
                 records: updatedRecords,
-                filteredRecords: updatedFilteredRecords, 
-                tempDeletedRows: [...prevState.tempDeletedRows, data.email] 
+                filteredRecords: updatedFilteredRecords,
+                tempDeletedRows: [...prevState.tempDeletedRows, data.email]
             };
         }, this.confirmDeleteRows);
     };
@@ -75,7 +79,7 @@ class StudentTable extends Component {
         try {
             const { tempDeletedRows } = this.state;
             for (let email of tempDeletedRows) {
-                await deleteStudent(email); 
+                await deleteStudent(email);
             }
             this.setState({ tempDeletedRows: [] });
         } catch (error) {
@@ -93,13 +97,13 @@ class StudentTable extends Component {
 
     handleRoleChange = (email, newRole) => {
         this.setState(prevState => {
-            const updatedFilteredRecords = prevState.filteredRecords.map(record => 
+            const updatedFilteredRecords = prevState.filteredRecords.map(record =>
                 record.email === email ? { ...record, role: newRole } : record
             );
-            const updatedRecords = prevState.records.map(record => 
+            const updatedRecords = prevState.records.map(record =>
                 record.email === email ? { ...record, role: newRole } : record
             );
-    
+
             return {
                 updatedRoles: {
                     ...prevState.updatedRoles,
@@ -110,28 +114,55 @@ class StudentTable extends Component {
             };
         }, this.saveChanges);
     };
-    
+
 
     saveChanges = async () => {
         try {
             const { updatedRoles } = this.state;
-    
+
             for (let [email, role] of Object.entries(updatedRoles)) {
                 await updateStudentRole(email, role);
             }
-    
+
             await this.confirmDeleteRows();
-    
+
             this.setState({ updatedRoles: {} });
         } catch (error) {
             console.error("Error saving changes:", error);
         }
     };
 
+    openDeletePopup = (email) => {
+        this.setState({ isDeletePopupOpen: true, selectedEmail: email });
+    };
+
+    handleConfirmDelete = async () => {
+        const { selectedEmail } = this.state;
+        try {
+            await deleteStudent(selectedEmail);
+            this.setState((prevState) => {
+                const updatedRecords = prevState.records.filter(record => record.email !== selectedEmail);
+                const updatedFilteredRecords = prevState.filteredRecords.filter(record => record.email !== selectedEmail);
+                return {
+                    records: updatedRecords,
+                    filteredRecords: updatedFilteredRecords,
+                    isDeletePopupOpen: false,
+                    selectedEmail: null
+                };
+            });
+        } catch (error) {
+            console.error("Error deleting student:", error);
+        }
+    };
+
+    closeDeletePopup = () => {
+        this.setState({ isDeletePopupOpen: false, selectedEmail: null });
+    };
+
     render() {
         const columnDefs = [
             { headerName: "Class", field: "classCode", flex: 1 },
-            { headerName: "Name", field: "name", flex: 1},
+            { headerName: "Name", field: "name", flex: 1 },
             { headerName: "Student Email", field: "email", flex: 2 },
             {
                 headerName: "Role",
@@ -151,8 +182,8 @@ class StudentTable extends Component {
                 field: "delete",
                 flex: 1,
                 cellRenderer: params => (
-                    <button 
-                        onClick={() => this.tempDeleteRow(params.data)} 
+                    <button
+                        onClick={() => this.openDeletePopup(params.data.email)} // Open delete popup
                         className="trash-icon"
                     >
                         <FontAwesomeIcon icon={faTrash} />
@@ -168,18 +199,23 @@ class StudentTable extends Component {
                 </div>
                 <div className="search-bar-edit-container">
                     <div className="student-searchbar" >
-                        <SearchBar 
-                            onSearch={this.handleSearch} 
+                        <SearchBar
+                            onSearch={this.handleSearch}
                             placeholder={"Search by Name"}
                         />
                     </div>
                 </div>
                 <AgGridTable
-                    rowData={this.state.filteredRecords} 
+                    rowData={this.state.filteredRecords}
                     columnDefs={columnDefs}
                     defaultColDef={this.state.defaultColDef}
                     domLayout="autoHeight"
                     suppressHorizontalScroll={true}
+                />
+                <DeletePopup
+                    show={this.state.isDeletePopupOpen}
+                    handleClose={this.closeDeletePopup}
+                    handleDelete={this.handleConfirmDelete}
                 />
             </>
         );
@@ -187,3 +223,4 @@ class StudentTable extends Component {
 }
 
 export default StudentTable;
+
