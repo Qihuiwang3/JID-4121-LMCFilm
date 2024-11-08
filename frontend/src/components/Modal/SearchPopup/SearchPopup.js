@@ -5,6 +5,7 @@ import { updateOrderByOrderNumber, isItemIdExist } from '../../../connector';
 const SearchPopup = ({ goBack, onClose, orderInfo }) => {
     const [itemIds, setItemIds] = useState([]);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [errorMessage, setErrorMessage] = useState(''); // New state for error message
 
     useEffect(() => {
         if (orderInfo && Array.isArray(orderInfo.equipment)) {
@@ -30,25 +31,29 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
         }));
     
         try {
+            setErrorMessage('');
+            
             for (const { itemName, itemId } of updatedEquipment) {
                 const response = await isItemIdExist(itemName, itemId);
-                if (response.exist) {
-                    await updateOrderByOrderNumber(orderInfo.orderNumber, {
-                        equipment: updatedEquipment,
-                        checkedoutStatus: true,
-                        checkedinStatus: false,
-                        checkedout: new Date(),
-                    });
-                    
-                    console.log('Order updated successfully');
-                    onClose();
-                } else {
-                    
+                
+                if (!response.exists) {
+                    setErrorMessage(`The item ID "${itemId}" for "${itemName}" does not exist in our database.`);
+                    return;
                 }
             }
-    
+            
+            await updateOrderByOrderNumber(orderInfo.orderNumber, {
+                equipment: updatedEquipment,
+                checkedoutStatus: true,
+                checkedinStatus: false,
+                checkedout: new Date(),
+            });
+            
+            console.log('Order updated successfully');
+            onClose();
         } catch (error) {
             console.error('Error updating order:', error);
+            setErrorMessage('An error occurred while updating the order. Please try again.');
         }
     };
 
@@ -121,6 +126,8 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                         </div>
                     </div>
                 ))}
+
+                {errorMessage && <p className="searchpopup-error-message">{errorMessage}</p>}
 
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={goBack}>Go Back</button>
