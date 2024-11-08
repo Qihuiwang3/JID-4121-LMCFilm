@@ -17,6 +17,7 @@ const RoleDropdown = (props) => {
       <option value="Student">Student</option>
       <option value="Admin">Admin</option>
       <option value="Professor">Professor</option>
+      <option value="TA">TA</option>
     </select>
   );
 };
