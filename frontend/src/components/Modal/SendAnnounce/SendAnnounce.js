@@ -12,38 +12,39 @@ const SendAnnounce = ({ show, handleClose}) => {
 
 
     const handleSendEmail = async () => {
-        //code to send emails to all emails listed in students. Not gonna send an email to all the student emails right now
-        // try {
-        //     const students = await getStudents();
-        //     const emailAddresses = students.map(student => student.email); 
-        
-        //     // Send email to each student
-        //     for (const email of emailAddresses) {
-        //         await sendEmail({
-        //             to: email,
-        //             subject: subject,
-        //             html: emailBody,
-        //         });
-        //     }
-        
-        //     alert('Emails sent successfully!');
-        //     handleClose();
-        // } catch (error) {
-        //     console.error('Error sending emails:', error);
-        //     alert('Failed to send emails.');
-        // }
-        
         try {
-            await sendEmail({
-                to: 'weswilson2424@gmail.com',
-                subject: subject,
-                html: emailBody,
-            });
+            const students = await getStudents();
+            
+            
+            const uniqueEmailAddresses = [...new Set(students.map(student => student.email))];
+            
+            
+            for (const email of uniqueEmailAddresses) {
+                await sendEmail({
+                    to: email,
+                    subject: subject,
+                    html: emailBody,
+                });
+            }
+        
             handleClose();
         } catch (error) {
-            console.error('Error sending email:', error);
-            alert('Failed to send email.');
+            console.error('Error sending emails:', error);
+            alert('Failed to send emails.');
         }
+        
+        
+        // try {
+        //     await sendEmail({
+        //         to: 'yourTestEmailyouHaveAccessTo',
+        //         subject: subject,
+        //         html: emailBody,
+        //     });
+        //     handleClose();
+        // } catch (error) {
+        //     console.error('Error sending email:', error);
+        //     alert('Failed to send email.');
+        // }
     };
         
 
