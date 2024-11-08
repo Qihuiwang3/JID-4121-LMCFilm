@@ -124,6 +124,16 @@ const getItems = async () => {
     }
 }
 
+const getItemByName = async (itemName) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/item/${itemName}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 const createGlobalItem = async (data) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/item`, data, {
@@ -337,7 +347,7 @@ const getAllOrders = async () => {
 
     }
 };
-        
+
 
 const createOrder = async (orderData) => {
     try {
@@ -422,7 +432,7 @@ const getRepairStatus = async (itemName, itemId) => {
                 'Content-Type': 'application/json',
             },
         });
-        return res.data; 
+        return res.data;
     } catch (error) {
         console.error('Error getting repair status:', error);
         throw error;
@@ -484,7 +494,7 @@ const removeSingularItem = async (itemName, itemId) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: { itemName }, 
+            data: { itemName },
         });
         return res.data;
     } catch (error) {
@@ -517,6 +527,7 @@ export {
     getCart,
     createCart,
     getItems,
+    getItemByName,
     createGlobalItem,
     deleteGlobalItem,
     toggleRepairStatus,
@@ -533,7 +544,7 @@ export {
     addClassCode,
     loginStudent,
     removeClassCode,
-    updateStudentRole, 
+    updateStudentRole,
     createSingleItem,
     updateBundleItem,
     getSingleItemsByClassCode,
