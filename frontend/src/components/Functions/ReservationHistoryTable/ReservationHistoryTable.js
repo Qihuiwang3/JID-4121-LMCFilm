@@ -65,7 +65,7 @@ const ReservationHistoryTable = () => {
     const columnDefs = [
         {
             headerName: "Code",
-            flex: 1,
+            maxWidth: 130,
             cellStyle: { cursor: 'pointer' },
             cellRenderer: params => (
                 <span
@@ -80,7 +80,7 @@ const ReservationHistoryTable = () => {
         {
             headerName: "Pick Up Date",
             field: "checkin",
-            flex: 1,
+            maxWidth: 200,
             valueFormatter: (params) => {
                 const dateValue = new Date(params.value);
                 return params.value ? dateValue.toLocaleString('en-US', {
@@ -93,7 +93,7 @@ const ReservationHistoryTable = () => {
         {
             headerName: "Return Date",
             field: "checkout",
-            flex: 1,
+            maxWidth: 200,
             valueFormatter: (params) => {
                 const dateValue = new Date(params.value);
                 return params.value ? dateValue.toLocaleString('en-US', {
