@@ -7,6 +7,8 @@ import { getAllDamageReports, deleteDamageReport, toggleRepairStatus, getRepairS
 import DamageReportModal from "../../Modal/DamageReportModal/DamageReportModal";
 import ViewDamageModal from "../../Modal/ViewDamageModal/ViewDamageModal";
 import './DamageTable.css';
+import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
+
 
 const DamageTable = () => {
     const [records, setRecords] = useState([]);
@@ -15,6 +17,8 @@ const DamageTable = () => {
     const [showAddNewPopup, setShowAddNewPopup] = useState(false);
     const [viewReportId, setViewReportId] = useState(null);
     const [editReportData, setEditReportData] = useState(null);
+    const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+    const [selectedReportId, setSelectedReportId] = useState(null);
 
     useEffect(() => {
         fetchRecords();
@@ -45,14 +49,25 @@ const DamageTable = () => {
         }
     };
 
-    const handleDeleteRow = async (data) => {
+    const openDeletePopup = (id) => {
+        setSelectedReportId(id);
+        setIsDeletePopupOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
         try {
-            await deleteDamageReport(data._id);
-            setRecords(prevRecords => prevRecords.filter(record => record._id !== data._id));
-            setFilteredRecords(prevFiltered => prevFiltered.filter(record => record._id !== data._id));
+            await deleteDamageReport(selectedReportId);
+            setRecords(prevRecords => prevRecords.filter(record => record._id !== selectedReportId));
+            setFilteredRecords(prevFiltered => prevFiltered.filter(record => record._id !== selectedReportId));
         } catch (error) {
             console.error("Error deleting record:", error);
         }
+        closeDeletePopup();
+    };
+
+    const closeDeletePopup = () => {
+        setIsDeletePopupOpen(false);
+        setSelectedReportId(null);
     };
 
     const handleSearch = (query) => {
@@ -156,7 +171,7 @@ const DamageTable = () => {
             flex: 1,
             cellRenderer: params => (
                 <button
-                    onClick={() => handleDeleteRow(params.data)}
+                    onClick={() => openDeletePopup(params.data._id)}
                     className="trash-icon"
                 >
                     <FontAwesomeIcon icon={faTrash} />
@@ -207,9 +222,15 @@ const DamageTable = () => {
                     reportToEdit={editReportData}
                 />
             )}
+            <DeletePopup
+                show={isDeletePopupOpen}
+                handleClose={closeDeletePopup}
+                handleDelete={handleConfirmDelete}
+            />
         </>
     );
 };
 
 export default DamageTable;
+
 

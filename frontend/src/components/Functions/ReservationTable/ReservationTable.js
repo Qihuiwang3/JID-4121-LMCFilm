@@ -34,9 +34,10 @@ class ReservationTable extends Component {
     loadRecords = async () => {
         try {
             const orders = await getAllOrders();
+            const reversedOrders = [...orders].reverse();
             this.setState({ 
-                records: orders,
-                filteredRecords: orders
+                records: reversedOrders,
+                filteredRecords: reversedOrders
             });
         } catch (error) {
             console.error("Error loading records:", error);
@@ -164,6 +165,8 @@ class ReservationTable extends Component {
                     <ReservationDetailPopup 
                         onClose={this.handleCloseViewDetailModal}
                         reservationDetails={reservationDetails} // Pass the fetched details
+                        onOrderCancelled={this.loadRecords}
+                        onOrderExtended = {this.loadRecords}
                     />
                 )}
             </>

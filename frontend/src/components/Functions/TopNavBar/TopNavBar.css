@@ -93,7 +93,6 @@
 .nav-links {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
 }
 
 .nav-link {
@@ -107,5 +106,7 @@
 }
 
 .nav-link:hover {
-    background-color: #f0f0f0;
+    background-color: #3361AE;
+    color: #FFFFFF;
+    font-weight: bold;
 }
