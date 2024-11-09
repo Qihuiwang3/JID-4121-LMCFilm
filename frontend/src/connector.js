@@ -1,6 +1,7 @@
 import axios from "axios";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+
 const getStudents = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/students`);
@@ -545,6 +546,28 @@ const isItemIdExist = async (itemName, itemId) => {
     }
 };
 
+const sendEmail = async (emailData) => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(emailData)
+        });
+
+
+        if (!response.ok) {
+            throw new Error('Failed to send email');
+        }
+
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
+
 export {
     getStudents,
     createStudent,
@@ -587,6 +610,7 @@ export {
     getOrderById,
     removeSingularItem,
     deleteBundleItem,
+    sendEmail,
     deleteOrder,
     isItemIdExist
 };
