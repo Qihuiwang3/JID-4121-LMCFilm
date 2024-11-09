@@ -536,6 +536,15 @@ const deleteOrder = async (orderNumber) => {
     }
 };
 
+const isItemIdExist = async (itemName, itemId) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/item/itemName/itemId/${itemName}/${itemId}/existence`);
+        return res.data;
+    } catch (error) {
+        console.error('Error checking if itemId exists:', error);
+        throw error;
+    }
+};
 
 const sendEmail = async (emailData) => {
     try {
@@ -557,7 +566,6 @@ const sendEmail = async (emailData) => {
         console.error('Error sending email:', error);
     }
 };
-
 
 
 export {
@@ -604,4 +612,5 @@ export {
     deleteBundleItem,
     sendEmail,
     deleteOrder,
+    isItemIdExist
 };

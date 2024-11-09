@@ -448,6 +448,21 @@ const getRepairStatus = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc Get the itemId status based on itemName and itemId
+// @route GET /item/itemName/itemId/:itemName/:itemId/existence
+// @access Private
+const isItemIdExist = asyncHandler(async (req, res) => {
+    const { itemName, itemId } = req.params;
+
+    const item = await Item.findOne({ itemName });
+    
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
+    }
+    
+    const exists = item.itemIds.some(i => i.itemId === itemId);
+    res.status(200).json({ exists });
+});
 
 
 module.exports = {
@@ -469,5 +484,6 @@ module.exports = {
     toggleHideStatus,
     toggleRepairStatus,
     updateBundleItem,
-    getRepairStatus
+    getRepairStatus,
+    isItemIdExist
 };

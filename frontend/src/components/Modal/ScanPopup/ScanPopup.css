@@ -102,17 +102,6 @@
     color: #fff;
 }
 
-.scan-search-button:disabled {
-    background-color: #d3d3d3;
-    color: #808080;
-    cursor: not-allowed;
-}
-.scan-search-button:disabled:hover {
-    background-color: #d3d3d3;
-    color: #808080;
-    cursor: not-allowed;
-}
-
 .scan-error-message {
     color: red;
 }
