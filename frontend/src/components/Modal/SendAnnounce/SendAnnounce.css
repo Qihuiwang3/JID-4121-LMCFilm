@@ -1,0 +1,120 @@
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-contentB {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #3361AE;
+}
+
+.modal-header h2 {
+    font-size: 24px;
+    color: #3361AE;
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #3361AE;
+    cursor: pointer;
+}
+
+/* Report Details Text */
+.report-details p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 20px;
+    font: bold;
+}
+
+/* Barcode Container */
+
+
+/* Input Group for Subject and Email Body */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 16px;
+    color: #3361AE;
+    margin-bottom: 5px;
+}
+
+/* Text Input and Textarea Styles */
+.input-field {
+    width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+textarea.input-field {
+    resize: vertical; /* Allows vertical resizing only */
+    min-height: 80px;
+}
+
+/* Modal Footer */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+    gap: 10px;
+}
+
+/* Footer Buttons */
+.cancelModal-button,
+.saveModal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancelModal-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.saveModal-button {
+    background-color: #3361AE;
+    color: white;
+}
+
+.saveModal-button:hover {
+    background-color: #285593;
+}
+
+.cancelModal-button:hover {
+    background-color: #e0e0e0;
+}
