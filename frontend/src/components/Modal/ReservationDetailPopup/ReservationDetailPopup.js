@@ -26,17 +26,23 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
     }
 
     useEffect(() => {
+        // Get current date and time
+        const now = new Date();
+        const checkoutDate = new Date(reservationDetails.checkout);
+        const checkinDate = new Date(reservationDetails.checkin);
+    
+        // Calculate if the checkout date has already passed
+        const hasCheckoutDatePassed = now > checkoutDate;
         
-        const now = new Date().toISOString();
+        // Calculate if the checkin date is more than 24 hours in the future
+        const timeDifferenceToCheckin = checkinDate - now;
+        const canCancel = timeDifferenceToCheckin > 24 * 60 * 60 * 1000;
     
-       
-        const checkoutDate = new Date(reservationDetails.checkin).toISOString();
-        const timeDifference = new Date(checkoutDate) - new Date(now);
+        // Set states based on the conditions
+        setCanCancelOrder(!hasCheckoutDatePassed && canCancel);
+        setCantExtendOrder(hasCheckoutDatePassed || reservationDetails.beenExtended);
+    }, [reservationDetails.checkout, reservationDetails.checkin, reservationDetails.beenExtended]);
     
-        setCanCancelOrder(timeDifference > 24 * 60 * 60 * 1000);
-        setCantExtendOrder(reservationDetails.beenExtended)
-
-    }, );
     
     const handleCloseModal = () => {
         setViewExtend(null);
