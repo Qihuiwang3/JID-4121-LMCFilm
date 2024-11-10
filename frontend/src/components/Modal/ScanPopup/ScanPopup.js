@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
 import SearchPopupCheckin from '../SearchPopup/SearchPopupCheckin';
-import { getOrderByOrderNumber } from '../../../connector'; 
+import { getOrderByOrderNumber } from '../../../connector';
 
-const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
+const ScanPopup = ({ onClose }) => {
     const [showSearchPopup, setShowSearchPopup] = useState(false);
     const [showCheckinPopup, setShowCheckinPopup] = useState(false);
     const [orderNumber, setOrderNumber] = useState('');
-    const [orderInfo, setOrderInfo] = useState(null); 
+    const [orderInfo, setOrderInfo] = useState(null);
     const [isOrderNumberValid, setIsOrderNumberValid] = useState(false);
     const [orderNotFound, setOrderNotFound] = useState(false);
 
     const handleSearchClick = () => {
-        if (selectedOption === 'checkout') {
-            setShowSearchPopup(true);
-        } else if (selectedOption === 'checkin') {
-            setShowCheckinPopup(true);
+        if (orderInfo && isOrderNumberValid) {
+            if (!orderInfo.checkedinStatus && !orderInfo.checkedoutStatus) {
+                setShowSearchPopup(true);
+            } else if (orderInfo.checkedoutStatus && !orderInfo.checkedinStatus) {
+                setShowCheckinPopup(true);
+            }
         }
     };
 
@@ -45,63 +47,21 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                     setOrderInfo(fetchedOrderInfo);
                     setIsOrderNumberValid(true);
                     setOrderNotFound(false);
-
-                    if (!fetchedOrderInfo.checkedinStatus && !fetchedOrderInfo.checkedoutStatus) {
-                        onOptionChange({ target: { value: 'checkout' } });
-                    } else if (fetchedOrderInfo.checkedoutStatus && !fetchedOrderInfo.checkedinStatus) {
-                        onOptionChange({ target: { value: 'checkin' } });
-                    }
                 } else {
-                    setIsOrderNumberValid(false); 
+                    setIsOrderNumberValid(false);
                     setOrderNotFound(true);
                 }
             }
         } catch (error) {
             console.error('Error fetching order:', error);
-            setIsOrderNumberValid(false); 
+            setIsOrderNumberValid(false);
             setOrderNotFound(true);
         }
     };
 
-    const renderRadioButtonsOrMessage = () => {
-        if (orderInfo && isOrderNumberValid) {
-            const { checkedinStatus, checkedoutStatus } = orderInfo;
-
-            if (!checkedinStatus && !checkedoutStatus) {
-                return (
-                    <div className="radio-input">
-                        <label>
-                            <input
-                                type="radio"
-                                value="checkout"
-                                checked={selectedOption === 'checkout'}
-                                onChange={onOptionChange}
-                            />
-                            Equipment Check Out
-                        </label>
-                    </div>
-                );
-            }
-
-            if (checkedoutStatus && !checkedinStatus) {
-                return (
-                    <div className="radio-input">
-                        <label>
-                            <input
-                                type="radio"
-                                value="checkin"
-                                checked={selectedOption === 'checkin'}
-                                onChange={onOptionChange}
-                            />
-                            Equipment Check In
-                        </label>
-                    </div>
-                );
-            }
-
-            if (checkedoutStatus && checkedinStatus) {
-                return <p className="error-message">This order is complete.</p>;
-            }
+    const renderCompletionMessage = () => {
+        if (orderInfo?.checkedinStatus && orderInfo?.checkedoutStatus) {
+            return <p className="scan-error-message">This order is complete.</p>;
         }
         return null;
     };
@@ -122,19 +82,19 @@ const ScanPopup = ({ onClose, selectedOption, onOptionChange }) => {
                         className="checkout-modal-input"
                         value={orderNumber}
                         onChange={handleOrderNumberChange}
-                        onBlur={handleOrderNumberBlur} 
+                        onBlur={handleOrderNumberBlur}
                     />
-                    {orderNotFound && <p className="error-message">Order Number is invalid.</p>}
+                    {orderNotFound && <p className="scan-error-message">Order Number is invalid.</p>}
                 </div>
 
-                {isOrderNumberValid && renderRadioButtonsOrMessage()}
+                {isOrderNumberValid && renderCompletionMessage()}
 
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={onClose}>Cancel</button>
                     <button
-                        className={`scan-search-button ${!isOrderNumberValid ? 'disabled-button' : ''}`} 
+                        className="scan-search-button"
                         onClick={handleSearchClick}
-                        disabled={!isOrderNumberValid} 
+                        disabled={!isOrderNumberValid || (orderInfo?.checkedinStatus && orderInfo?.checkedoutStatus)}
                     >
                         Search
                     </button>
