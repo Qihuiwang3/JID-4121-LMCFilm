@@ -119,7 +119,7 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
                         <input 
                             type="date" 
                             id="date" 
-                            className="input-field" 
+                            className="input-fieldExtend" 
                             value={initialDate} 
                             onChange={(e) => setNewDate(e.target.value)} 
                             min={minDate} 
@@ -131,7 +131,7 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
                         <label htmlFor="time">Time</label>
                         <select
                             id="time"
-                            className="input-field"
+                            className="input-fieldExtend"
                             value={newTime}
                             onChange={(e) => setNewTime(e.target.value)}
                         >
