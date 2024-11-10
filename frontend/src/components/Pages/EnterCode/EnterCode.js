@@ -58,7 +58,7 @@ const EnterCode = () => {
             <div className="enterCodeContainer">
                 <h1 className="enterCodeTitle">Enter Class Code</h1>
                 <input
-                    className="input-field"
+                    className="input-fieldCode"
                     type="text"
                     value={codeInput}
                     onChange={handleInputChange}
