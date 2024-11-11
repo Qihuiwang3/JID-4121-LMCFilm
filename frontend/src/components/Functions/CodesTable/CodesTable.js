@@ -69,14 +69,14 @@ function CodesTable() {
             const reverseRecords = flattenedRecords.reverse();
             setRecords(reverseRecords);
             setFilteredRecords(reverseRecords);
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const fetchEquipment = async () => {
         try {
             const equipmentList = await getItems();
             setAvailableEquipment(equipmentList);
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const handleSearch = (query) => {
@@ -157,25 +157,25 @@ function CodesTable() {
                 });
             }
             await loadRecords();
-        } catch (error) {}
+        } catch (error) { }
         closeAddModal();
     };
 
-    
+
 
     const handleDeleteRow = async (code) => {
         try {
             await deleteClassCode(code);
             setRecords(records.filter((record) => record.code !== code));
             setFilteredRecords(filteredRecords.filter((record) => record.code !== code));
-        } catch (error) {}
+        } catch (error) { }
     };
 
     const openEditModal = async (code) => {
         const classToEdit = records.find((item) => item.code === code);
         let bundleInfo = { bundleName: 'N/A', bundleId: '', price: '', bundleEquipment: [] };
         let singleItems = [];
-    
+
         try {
             const bundleItems = await getBundleItemsByClassCode(classToEdit.code);
             if (bundleItems.length > 0) {
@@ -192,14 +192,14 @@ function CodesTable() {
         } catch (error) {
             setHasExistingBundle(false); // If error, assume no bundle exists
         }
-    
+
         try {
             singleItems = await getSingleItemsByClassCode(classToEdit.code);
-        } catch (error) {}
-    
+        } catch (error) { }
+
         // Set the initial items for comparison later when saving (to avoid duplication)
         setInitialEquipment(singleItems || []);
-    
+
         setEditClassData({
             ...classToEdit,
             ...bundleInfo,
@@ -207,7 +207,7 @@ function CodesTable() {
         });
         setIsEditModalOpen(true);
     };
-    
+
 
     const closeEditModal = () => {
         setIsEditModalOpen(false);
@@ -221,7 +221,7 @@ function CodesTable() {
         }));
     };
 
-    
+
     const handleSaveEditedClass = async () => {
         try {
             // Update class data
@@ -230,11 +230,11 @@ function CodesTable() {
             const removedEquipment = initialEquipment.filter(
                 initialItem => !editClassData.equipment.some(equipmentItem => equipmentItem.itemName === initialItem.itemName)
             );
-    
+
             // Remove deselected equipment from the backend
             for (const removedItem of removedEquipment) {
                 const itemToRemove = initialEquipment.find(item => item.itemName === removedItem.itemName);
-    
+
                 if (itemToRemove && itemToRemove._id) {  // Use the _id field as itemId
                     console.log("Attempting to remove item:", removedItem.itemName, "with ID:", itemToRemove._id);  // Debugging log
                     await removeSingularItem(removedItem.itemName, itemToRemove._id); // Pass _id as itemId
@@ -242,15 +242,15 @@ function CodesTable() {
                     console.error(`Item ID for ${removedItem.itemName} is undefined, skipping removal.`);
                 }
             }
-    
+
             // Filter out new equipment items that weren't part of the initial equipment
             const newEquipment = editClassData.equipment.filter(equipmentItem => {
                 return !initialEquipment.some(initialItem => initialItem.itemName === equipmentItem.itemName);
             });
-    
+
             // Add new equipment items to the backend
             const tempBundle = [];
-    
+
             for (const equipmentItem of newEquipment) {
                 const tempItem = await createSingleItem({
                     classCode: editClassData.code,
@@ -264,10 +264,10 @@ function CodesTable() {
                     });
                 }
             }
-    
+
             // Avoid duplicating existing items by using a Set to track what we've added
             const itemNamesSet = new Set(tempBundle.map(item => item.itemName));
-    
+
             // Include existing items in the bundle, but avoid adding duplicates
             for (const equipmentItem of editClassData.bundleEquipment) {
                 if (!itemNamesSet.has(equipmentItem.itemName)) {
@@ -278,7 +278,7 @@ function CodesTable() {
                     itemNamesSet.add(equipmentItem.itemName); // Track item names
                 }
             }
-    
+
             // Create or update bundle based on whether it existed initially
             if (!hasExistingBundle) {
                 // If no existing bundle, create a new one
@@ -290,7 +290,7 @@ function CodesTable() {
                         price: editClassData.price,
                         bundleName: editClassData.bundleName,
                     });
-    
+
                     // Update the bundle ID after creation
                     setEditClassData(prevState => ({
                         ...prevState,
@@ -307,12 +307,12 @@ function CodesTable() {
                     items: tempBundle, // Use tempBundle which now includes both new and existing items
                 });
             }
-    
+
             // Update frontend records
             const updatedRecords = records.map(item => {
                 return item.code === editClassData.code ? editClassData : item;
             });
-    
+
             setRecords(updatedRecords);
             setFilteredRecords(updatedRecords);
             closeEditModal();
@@ -320,30 +320,32 @@ function CodesTable() {
             console.error("Error saving edited class:", error);
         }
     };
-    
-    
-    
-    
-    
+
+
+
+
+
 
     const columnDefs = [
-        { headerName: "Class", field: "className", flex: 1, cellRenderer: params => (
-            <>
-                <img
-                    src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
-                    alt="Edit"
-                    className="edit-icon"
-                    onClick={() => openEditModal(params.data.code)}
-                    style={{
-                        cursor: 'pointer', 
-                        width: '12px', 
-                        marginRight: '8px', 
-                        filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
-                    }}
-                />
-                {params.value}
-            </>
-        )},
+        {
+            headerName: "Class", field: "className", flex: 1, cellRenderer: params => (
+                <>
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
+                        alt="Edit"
+                        className="edit-icon"
+                        onClick={() => openEditModal(params.data.code)}
+                        style={{
+                            cursor: 'pointer',
+                            width: '12px',
+                            marginRight: '8px',
+                            filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
+                        }}
+                    />
+                    {params.value}
+                </>
+            )
+        },
         { headerName: "Code", field: "code", flex: 1 },
         { headerName: "Professor", field: "professor", flex: 1 },
         { headerName: "Package Name", field: "bundleName", flex: 1 },
@@ -367,8 +369,8 @@ function CodesTable() {
             <div className="search-bar-edit-container">
                 <div className="classCode-searchbar">
                     <SearchBar onSearch={handleSearch}
-                     placeholder={"Search by Class"} 
-                     />
+                        placeholder={"Search by Class"}
+                    />
                 </div>
                 <button className="add-class-button" onClick={openAddModal}>
                     Add New <span className="plus-icon">+</span>
@@ -403,56 +405,56 @@ function CodesTable() {
                                 </div>
                             </div>
                             <div className="input-group">
-    <label>Select Equipment For This Class</label>
-    <select
-        name="equipment"
-        value=""
-        onChange={(e) => {
-            const selectedEquipment = e.target.value;
+                                <label>Select Equipment For This Class</label>
+                                <select
+                                    name="equipment"
+                                    value=""
+                                    onChange={(e) => {
+                                        const selectedEquipment = e.target.value;
 
-            // Check if the equipment is already selected
-            if (newClass.equipment.includes(selectedEquipment)) {
-                // If it is already selected, remove it
-                setNewClass(prevState => {
-                    const updatedEquipment = prevState.equipment.filter(eq => eq !== selectedEquipment);
-                    const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be !== selectedEquipment);
+                                        // Check if the equipment is already selected
+                                        if (newClass.equipment.includes(selectedEquipment)) {
+                                            // If it is already selected, remove it
+                                            setNewClass(prevState => {
+                                                const updatedEquipment = prevState.equipment.filter(eq => eq !== selectedEquipment);
+                                                const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be !== selectedEquipment);
 
-                    return {
-                        ...prevState,
-                        equipment: updatedEquipment,
-                        bundleEquipment: updatedBundleEquipment,  // Also remove from bundle equipment
-                    };
-                });
-            } else {
-                // Otherwise, add the selected equipment
-                setNewClass(prevState => ({
-                    ...prevState,
-                    equipment: [...prevState.equipment, selectedEquipment],
-                }));
-            }
-        }}
-        className="modal-input2"
-    >
-        <option value="">
-            {newClass.equipment && newClass.equipment.length > 0
-                ? newClass.equipment.join(', ')
-                : 'Select Equipment'}
-        </option>
-        {availableEquipment.map((equipmentItem) => (
-            <option
-                key={equipmentItem._id}
-                value={equipmentItem.itemName}
-                style={{
-                    backgroundColor: newClass.equipment.includes(equipmentItem.itemName)
-                        ? '#e0e0e0' // Highlight selected items in the dropdown
-                        : 'white',
-                }}
-            >
-                {equipmentItem.itemName}
-            </option>
-        ))}
-    </select>
-</div>
+                                                return {
+                                                    ...prevState,
+                                                    equipment: updatedEquipment,
+                                                    bundleEquipment: updatedBundleEquipment,  // Also remove from bundle equipment
+                                                };
+                                            });
+                                        } else {
+                                            // Otherwise, add the selected equipment
+                                            setNewClass(prevState => ({
+                                                ...prevState,
+                                                equipment: [...prevState.equipment, selectedEquipment],
+                                            }));
+                                        }
+                                    }}
+                                    className="modal-input2"
+                                >
+                                    <option value="">
+                                        {newClass.equipment && newClass.equipment.length > 0
+                                            ? newClass.equipment.join(', ')
+                                            : 'Select Equipment'}
+                                    </option>
+                                    {availableEquipment.map((equipmentItem) => (
+                                        <option
+                                            key={equipmentItem._id}
+                                            value={equipmentItem.itemName}
+                                            style={{
+                                                backgroundColor: newClass.equipment.includes(equipmentItem.itemName)
+                                                    ? '#e0e0e0' // Highlight selected items in the dropdown
+                                                    : 'white',
+                                            }}
+                                        >
+                                            {equipmentItem.itemName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
                             <div className="input-group">
                                 <label>Package ID</label>
@@ -464,88 +466,88 @@ function CodesTable() {
                                     <input type="text" name="bundleName" value={newClass.bundleName} onChange={handleInputChange} className="modal-input" />
                                 </div>
                                 <div className="input-group">
-    <label>Price</label>
-    <input
-        type="text"
-        name="price"
-        value={newClass.price === '' ? '' : `$${newClass.price}`} // Show '' when empty, or the actual value
-        onFocus={(e) => {
-            if (newClass.price === '0') {
-                setNewClass(prevState => ({
-                    ...prevState,
-                    price: '' // Clear the input when focused
-                }));
-            }
-        }}
-        onBlur={(e) => {
-            if (newClass.price === '') {
-                setNewClass(prevState => ({
-                    ...prevState,
-                    price: '0' // Set back to '0' if empty when focus is lost
-                }));
-            }
-        }}
-        onChange={(e) => {
-            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
-            setNewClass(prevState => ({
-                ...prevState,
-                price: numericValue
-            }));
-        }}
-        className="modal-input"
-        placeholder="0" // Placeholder shows '0' if the field is empty
-        inputMode="numeric" // Mobile-friendly numeric keyboard
-        pattern="[0-9]*"    // Only numeric values allowed
-    />
+                                    <label>Price</label>
+                                    <input
+                                        type="text"
+                                        name="price"
+                                        value={newClass.price === '' ? '' : `$${newClass.price}`} // Show '' when empty, or the actual value
+                                        onFocus={(e) => {
+                                            if (newClass.price === '0') {
+                                                setNewClass(prevState => ({
+                                                    ...prevState,
+                                                    price: '' // Clear the input when focused
+                                                }));
+                                            }
+                                        }}
+                                        onBlur={(e) => {
+                                            if (newClass.price === '') {
+                                                setNewClass(prevState => ({
+                                                    ...prevState,
+                                                    price: '0' // Set back to '0' if empty when focus is lost
+                                                }));
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+                                            setNewClass(prevState => ({
+                                                ...prevState,
+                                                price: numericValue
+                                            }));
+                                        }}
+                                        className="modal-input"
+                                        placeholder="0" // Placeholder shows '0' if the field is empty
+                                        inputMode="numeric" // Mobile-friendly numeric keyboard
+                                        pattern="[0-9]*"    // Only numeric values allowed
+                                    />
 
-</div>
+                                </div>
 
                             </div>
                             <div className="input-group">
-    <label>Select Bundle Items</label>
-    <select
-        name="bundleEquipment"
-        value=""
-        onChange={(e) => {
-            const selectedBundleEquipment = e.target.value;
+                                <label>Select Bundle Items</label>
+                                <select
+                                    name="bundleEquipment"
+                                    value=""
+                                    onChange={(e) => {
+                                        const selectedBundleEquipment = e.target.value;
 
-            // Check if the bundle equipment is already selected
-            if (newClass.bundleEquipment.includes(selectedBundleEquipment)) {
-                // If it is already selected, remove it
-                setNewClass(prevState => ({
-                    ...prevState,
-                    bundleEquipment: prevState.bundleEquipment.filter(be => be !== selectedBundleEquipment),
-                }));
-            } else {
-                // Otherwise, add the selected bundle equipment
-                setNewClass(prevState => ({
-                    ...prevState,
-                    bundleEquipment: [...prevState.bundleEquipment, selectedBundleEquipment],
-                }));
-            }
-        }}
-        className="modal-input2"
-    >
-        <option value="">
-            {newClass.bundleEquipment && newClass.bundleEquipment.length > 0
-                ? newClass.bundleEquipment.join(', ')
-                : 'Select Bundle Items'}
-        </option>
-        {newClass.equipment.map((equipmentItem, index) => (
-            <option
-                key={index}
-                value={equipmentItem}
-                style={{
-                    backgroundColor: newClass.bundleEquipment.includes(equipmentItem)
-                        ? '#e0e0e0' // Highlight selected items in the dropdown
-                        : 'white',
-                }}
-            >
-                {equipmentItem}
-            </option>
-        ))}
-    </select>
-</div>
+                                        // Check if the bundle equipment is already selected
+                                        if (newClass.bundleEquipment.includes(selectedBundleEquipment)) {
+                                            // If it is already selected, remove it
+                                            setNewClass(prevState => ({
+                                                ...prevState,
+                                                bundleEquipment: prevState.bundleEquipment.filter(be => be !== selectedBundleEquipment),
+                                            }));
+                                        } else {
+                                            // Otherwise, add the selected bundle equipment
+                                            setNewClass(prevState => ({
+                                                ...prevState,
+                                                bundleEquipment: [...prevState.bundleEquipment, selectedBundleEquipment],
+                                            }));
+                                        }
+                                    }}
+                                    className="modal-input2"
+                                >
+                                    <option value="">
+                                        {newClass.bundleEquipment && newClass.bundleEquipment.length > 0
+                                            ? newClass.bundleEquipment.join(', ')
+                                            : 'Select Bundle Items'}
+                                    </option>
+                                    {newClass.equipment.map((equipmentItem, index) => (
+                                        <option
+                                            key={index}
+                                            value={equipmentItem}
+                                            style={{
+                                                backgroundColor: newClass.bundleEquipment.includes(equipmentItem)
+                                                    ? '#e0e0e0' // Highlight selected items in the dropdown
+                                                    : 'white',
+                                            }}
+                                        >
+                                            {equipmentItem}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                         <div className="modal-footer">
                             <button className="cancelModal-button" onClick={closeAddModal}>Cancel</button>
@@ -554,193 +556,193 @@ function CodesTable() {
                     </div>
                 </div>
             )}
-           {isEditModalOpen && (
-    <div className="modal-overlay">
-        <div className="modal-content2">
-            <div className="modal-header">
-                <h2>Edit Class Code</h2>
-                <button className="close-button" onClick={closeEditModal}>×</button>
-            </div>
-            <div className="modal-body">
-                <div className="input-group">
-                    <label>Code</label>
-                    <input type="text" value={editClassData.code} readOnly disabled className="modal-input" />
-                </div>
-                <div className="input-group-row">
-                    <div className="input-group">
-                        <label>Class</label>
-                        <input type="text" name="className" value={editClassData.className || ''} onChange={handleEditClassChange} className="modal-input" />
+            {isEditModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content2">
+                        <div className="modal-header">
+                            <h2>Edit Class Code</h2>
+                            <button className="close-button" onClick={closeEditModal}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="input-group">
+                                <label>Code</label>
+                                <input type="text" value={editClassData.code} readOnly disabled className="modal-input" />
+                            </div>
+                            <div className="input-group-row">
+                                <div className="input-group">
+                                    <label>Class</label>
+                                    <input type="text" name="className" value={editClassData.className || ''} onChange={handleEditClassChange} className="modal-input" />
+                                </div>
+                                <div className="input-group">
+                                    <label>Professor</label>
+                                    <input type="text" name="professor" value={editClassData.professor || ''} onChange={handleEditClassChange} className="modal-input" />
+                                </div>
+                            </div>
+
+                            {/* Equipment Dropdown */}
+                            <div className="input-group">
+                                <label>Select Equipment For This Class</label>
+                                <select
+                                    name="equipment"
+                                    value=""
+                                    onChange={(e) => {
+                                        const selectedEquipment = e.target.value;
+
+                                        // Check if the equipment is already selected
+                                        if (editClassData.equipment.some(eq => eq.itemName === selectedEquipment)) {
+                                            // If it is already selected, remove it
+                                            setEditClassData(prevState => {
+                                                const updatedEquipment = prevState.equipment.filter(eq => eq.itemName !== selectedEquipment);
+                                                const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be.itemName !== selectedEquipment);
+
+                                                return {
+                                                    ...prevState,
+                                                    equipment: updatedEquipment,
+                                                    bundleEquipment: updatedBundleEquipment,
+                                                };
+                                            });
+                                        } else {
+                                            // Otherwise, add the selected equipment
+                                            setEditClassData(prevState => ({
+                                                ...prevState,
+                                                equipment: [...prevState.equipment, { itemName: selectedEquipment, quantity: 1 }],
+                                            }));
+                                        }
+                                    }}
+                                    className="modal-input2"
+                                >
+                                    <option value="">
+                                        {editClassData.equipment && editClassData.equipment.length > 0
+                                            ? editClassData.equipment.map(eq => eq.itemName).join(', ')
+                                            : 'Select Equipment'}
+                                    </option>
+                                    {availableEquipment.map((equipmentItem) => (
+                                        <option
+                                            key={equipmentItem._id}
+                                            value={equipmentItem.itemName}
+                                            style={{
+                                                backgroundColor: editClassData.equipment.some(eq => eq.itemName === equipmentItem.itemName)
+                                                    ? '#e0e0e0' // Highlight selected items in the dropdown
+                                                    : 'white',
+                                            }}
+                                        >
+                                            {equipmentItem.itemName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+
+                            {/* Package/Bundles Section */}
+                            <div className="input-group">
+                                <label>Package ID</label>
+                                <input
+                                    type="text"
+                                    name="bundleId"
+                                    value={editClassData.bundleId || ''} // Set to an empty string if no bundleId
+                                    onChange={handleEditClassChange}
+                                    className="modal-input"
+                                    disabled={hasExistingBundle} // Disable only if there's an existing bundleId
+                                />
+                            </div>
+
+                            <div className="input-group-row">
+                                <div className="input-group">
+                                    <label>Package Name</label>
+                                    <input type="text" name="bundleName" value={editClassData.bundleName || ''} onChange={handleEditClassChange} className="modal-input" />
+                                </div>
+                                <div className="input-group">
+                                    <label>Price</label>
+                                    <input
+                                        type="text"
+                                        name="price"
+                                        value={editClassData.price === '' || editClassData.price === '0' ? '' : `$${editClassData.price}`} // Show '' when empty or '0'
+                                        onFocus={(e) => {
+                                            if (editClassData.price === '0') {
+                                                setEditClassData(prevState => ({
+                                                    ...prevState,
+                                                    price: '' // Clear the input when focused if price is '0'
+                                                }));
+                                            }
+                                        }}
+                                        onBlur={(e) => {
+                                            if (editClassData.price === '') {
+                                                setEditClassData(prevState => ({
+                                                    ...prevState,
+                                                    price: '0' // Set back to '0' if empty when focus is lost
+                                                }));
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+                                            setEditClassData(prevState => ({
+                                                ...prevState,
+                                                price: numericValue
+                                            }));
+                                        }}
+                                        className="modal-input"
+                                        placeholder="0" // Placeholder shows '0' if the field is empty
+                                        inputMode="numeric" // Mobile-friendly numeric keyboard
+                                        pattern="[0-9]*"    // Only numeric values allowed
+                                    />
+                                </div>
+
+                            </div>
+
+                            {/* Bundle Items Dropdown */}
+                            <div className="input-group">
+                                <label>Select Bundle Items</label>
+                                <select
+                                    name="bundleEquipment"
+                                    value=""
+                                    onChange={(e) => {
+                                        const selectedBundleEquipment = e.target.value;
+
+                                        if (editClassData.bundleEquipment.some(be => be.itemName === selectedBundleEquipment)) {
+                                            // Remove the selected bundle item
+                                            setEditClassData(prevState => ({
+                                                ...prevState,
+                                                bundleEquipment: prevState.bundleEquipment.filter(be => be.itemName !== selectedBundleEquipment),
+                                            }));
+                                        } else {
+                                            // Add the selected bundle item
+                                            setEditClassData(prevState => ({
+                                                ...prevState,
+                                                bundleEquipment: [...prevState.bundleEquipment, { itemName: selectedBundleEquipment, quantity: 1 }],
+                                            }));
+                                        }
+                                    }}
+                                    className="modal-input2"
+                                >
+                                    <option value="">
+                                        {editClassData.bundleEquipment.length > 0
+                                            ? editClassData.bundleEquipment.map(be => be.itemName).join(', ')
+                                            : "Select Bundle Items"}
+                                    </option>
+                                    {editClassData.equipment.map((equipmentItem, index) => (
+                                        <option
+                                            key={index}
+                                            value={equipmentItem.itemName}
+                                            style={{
+                                                backgroundColor: editClassData.bundleEquipment.some(be => be.itemName === equipmentItem.itemName)
+                                                    ? '#e0e0e0'
+                                                    : 'white',
+                                            }}
+                                        >
+                                            {equipmentItem.itemName}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="cancelModal-button" onClick={closeEditModal}>Cancel</button>
+                            <button className="saveModal-button" onClick={handleSaveEditedClass}>Save</button>
+                        </div>
                     </div>
-                    <div className="input-group">
-                        <label>Professor</label>
-                        <input type="text" name="professor" value={editClassData.professor || ''} onChange={handleEditClassChange} className="modal-input" />
-                    </div>
                 </div>
-
-                {/* Equipment Dropdown */}
-                <div className="input-group">
-    <label>Select Equipment For This Class</label>
-    <select
-        name="equipment"
-        value=""
-        onChange={(e) => {
-            const selectedEquipment = e.target.value;
-
-            // Check if the equipment is already selected
-            if (editClassData.equipment.some(eq => eq.itemName === selectedEquipment)) {
-                // If it is already selected, remove it
-                setEditClassData(prevState => {
-                    const updatedEquipment = prevState.equipment.filter(eq => eq.itemName !== selectedEquipment);
-                    const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be.itemName !== selectedEquipment);
-
-                    return {
-                        ...prevState,
-                        equipment: updatedEquipment,
-                        bundleEquipment: updatedBundleEquipment,
-                    };
-                });
-            } else {
-                // Otherwise, add the selected equipment
-                setEditClassData(prevState => ({
-                    ...prevState,
-                    equipment: [...prevState.equipment, { itemName: selectedEquipment, quantity: 1 }],
-                }));
-            }
-        }}
-        className="modal-input2"
-    >
-        <option value="">
-            {editClassData.equipment && editClassData.equipment.length > 0
-                ? editClassData.equipment.map(eq => eq.itemName).join(', ')
-                : 'Select Equipment'}
-        </option>
-        {availableEquipment.map((equipmentItem) => (
-            <option
-                key={equipmentItem._id}
-                value={equipmentItem.itemName}
-                style={{
-                    backgroundColor: editClassData.equipment.some(eq => eq.itemName === equipmentItem.itemName)
-                        ? '#e0e0e0' // Highlight selected items in the dropdown
-                        : 'white',
-                }}
-            >
-                {equipmentItem.itemName}
-            </option>
-        ))}
-    </select>
-</div>
-
-
-                {/* Package/Bundles Section */}
-                <div className="input-group">
-                    <label>Package ID</label>
-                    <input
-                        type="text"
-                        name="bundleId"
-                        value={editClassData.bundleId || ''} // Set to an empty string if no bundleId
-                        onChange={handleEditClassChange}
-                        className="modal-input"
-                        disabled={hasExistingBundle} // Disable only if there's an existing bundleId
-                    />
-                </div>
-
-                <div className="input-group-row">
-                    <div className="input-group">
-                        <label>Package Name</label>
-                        <input type="text" name="bundleName" value={editClassData.bundleName || ''} onChange={handleEditClassChange} className="modal-input" />
-                    </div>
-                    <div className="input-group">
-    <label>Price</label>
-    <input
-        type="text"
-        name="price"
-        value={editClassData.price === '' || editClassData.price === '0' ? '' : `$${editClassData.price}`} // Show '' when empty or '0'
-        onFocus={(e) => {
-            if (editClassData.price === '0') {
-                setEditClassData(prevState => ({
-                    ...prevState,
-                    price: '' // Clear the input when focused if price is '0'
-                }));
-            }
-        }}
-        onBlur={(e) => {
-            if (editClassData.price === '') {
-                setEditClassData(prevState => ({
-                    ...prevState,
-                    price: '0' // Set back to '0' if empty when focus is lost
-                }));
-            }
-        }}
-        onChange={(e) => {
-            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
-            setEditClassData(prevState => ({
-                ...prevState,
-                price: numericValue
-            }));
-        }}
-        className="modal-input"
-        placeholder="0" // Placeholder shows '0' if the field is empty
-        inputMode="numeric" // Mobile-friendly numeric keyboard
-        pattern="[0-9]*"    // Only numeric values allowed
-    />
-</div>
-
-                </div>
-
-                {/* Bundle Items Dropdown */}
-                <div className="input-group">
-                    <label>Select Bundle Items</label>
-                    <select
-                        name="bundleEquipment"
-                        value=""
-                        onChange={(e) => {
-                            const selectedBundleEquipment = e.target.value;
-
-                            if (editClassData.bundleEquipment.some(be => be.itemName === selectedBundleEquipment)) {
-                                // Remove the selected bundle item
-                                setEditClassData(prevState => ({
-                                    ...prevState,
-                                    bundleEquipment: prevState.bundleEquipment.filter(be => be.itemName !== selectedBundleEquipment),
-                                }));
-                            } else {
-                                // Add the selected bundle item
-                                setEditClassData(prevState => ({
-                                    ...prevState,
-                                    bundleEquipment: [...prevState.bundleEquipment, { itemName: selectedBundleEquipment, quantity: 1 }],
-                                }));
-                            }
-                        }}
-                        className="modal-input2"
-                    >
-                        <option value="">
-                            {editClassData.bundleEquipment.length > 0 
-                                ? editClassData.bundleEquipment.map(be => be.itemName).join(', ')
-                                : "Select Bundle Items"}
-                        </option>
-                        {editClassData.equipment.map((equipmentItem, index) => (
-                            <option
-                                key={index}
-                                value={equipmentItem.itemName}
-                                style={{
-                                    backgroundColor: editClassData.bundleEquipment.some(be => be.itemName === equipmentItem.itemName)
-                                        ? '#e0e0e0'
-                                        : 'white',
-                                }}
-                            >
-                                {equipmentItem.itemName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-
-            <div className="modal-footer">
-                <button className="cancelModal-button" onClick={closeEditModal}>Cancel</button>
-                <button className="saveModal-button" onClick={handleSaveEditedClass}>Save</button>
-            </div>
-        </div>
-    </div>
-)}
+            )}
 
         </>
     );

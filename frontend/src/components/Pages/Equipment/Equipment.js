@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import EquipmentPopup from '../../Modal/EquipmentPopup/EquipmentPopup';
+import EquipmentPopup from '../../Modal/EquipmentPopup/EquipmentAddPopup';
 
 import BackButton from '../../Button/BackButton/BackButton';
 import EquipmentTable from '../../Functions/EquipmentTable/EquipmentTable';
@@ -16,7 +16,7 @@ const Equipment = () => {
         }
         setIsEditMode(!isEditMode);
     };
-    
+
     const handleOpenPopup = () => {
         setShowPopup(true);
     };
@@ -36,7 +36,7 @@ const Equipment = () => {
 
             <div className="equipment-btn">
                 <div className="equipment-bottom-btn-container">
-                        <BackButton to="/ViewEquipment" />
+                    <BackButton to="/ViewEquipment" />
                 </div>
             </div>
 

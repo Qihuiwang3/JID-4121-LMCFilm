@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-import './EquipmentPopup.css';
+import './EquipmentAddPopup.css';
 import { getItems, createGlobalItem } from '../../../connector.js';
 
 

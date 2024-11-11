@@ -163,6 +163,22 @@ class EquipmentTable extends Component {
                 headerClass: 'header-center',
                 maxWidth: 120,
                 flex: 1,
+                cellRenderer: params => (
+                    <>
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
+                            alt="Edit"
+                            className="edit-icon"
+                            style={{
+                                cursor: 'pointer',
+                                width: '12px',
+                                marginRight: '8px',
+                                filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
+                            }}
+                        />
+                        {params.value}
+                    </>
+                )
             },
             {
                 headerName: "Item Name",
