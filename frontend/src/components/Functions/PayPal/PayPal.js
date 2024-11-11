@@ -84,7 +84,10 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
             checkedoutStatus: false,
             studentName: name,
             createdAt: new Date(),
-            equipment: cartItems,
+            equipment: cartItems.map(item => ({
+                itemName: item.name,
+                itemId: '',
+            })),
         };
 
         createEmail(orderData);
