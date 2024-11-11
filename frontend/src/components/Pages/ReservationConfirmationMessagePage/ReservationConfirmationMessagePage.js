@@ -15,9 +15,12 @@ function ReservationConfirmationMessagePage() {
     const dispatch = useDispatch();
 
     const goBack = () => {
-        dispatch(setReservationCartItems([]));
         navigate('/Enter');
     };
+
+    useEffect(() => {
+        dispatch(setReservationCartItems([]));
+    }, [])
 
     return (
         <div className="main-content">
