@@ -7,11 +7,14 @@ import { connect } from 'react-redux';
 import { sendEmail } from '../../../connector.js';
 import JsBarcode from 'jsbarcode';
 
+import { useSelector } from 'react-redux';
 
-function Payment({ cartItems, selectedDates, name, email }) {
+function Payment({ selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartTotal } = location.state || {};
+
+    const cartItems = useSelector(state => state.reservationCart.reservationCartItems);
 
     const generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
@@ -35,32 +38,32 @@ function Payment({ cartItems, selectedDates, name, email }) {
         try {
             const barcodeBase64 = generateBarcodeBase64(orderData.orderNumber);
             const base64Data = barcodeBase64.split(',')[1]; // 
-    
-           
+
+
             const emailContent = `
                 <p>Here is your confirmation for your LMC order. Below is the barcode to scan for check-in:</p>
                 <img src="cid:barcodeImage" alt="Order Barcode" />
             `;
-    
-           
+
+
             const attachments = [
                 {
                     filename: 'barcode.png',
                     content: base64Data,
-                    cid: 'barcodeImage', 
+                    cid: 'barcodeImage',
                     encoding: 'base64',
                     contentType: 'image/png',
                 },
             ];
-    
-            
+
+
             await sendEmail({
                 to: orderData.email,
                 subject: `Order Confirmation: ${orderData.orderNumber}`,
                 html: emailContent,
                 attachments: attachments,
             });
-    
+
         } catch (error) {
             console.error('Error sending email:', error);
             alert('Failed to send email.');
@@ -82,14 +85,14 @@ function Payment({ cartItems, selectedDates, name, email }) {
             studentName: name,
             createdAt: new Date(),
             equipment: cartItems.map(item => ({
-                itemName: item.name, 
-                itemId: '' 
+                itemName: item.name,
+                itemId: ''
             })),
         };
 
         return createOrder(orderData)
             .then(response => {
-                console.log('Order created successfully:', response);
+                console.log('Order response', response);
                 createEmail(orderData);
                 navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
             })
