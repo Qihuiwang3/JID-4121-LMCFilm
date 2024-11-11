@@ -53,14 +53,15 @@ const getAllGlobalEquipment = asyncHandler(async (req, res) => {
 // @route GET /item/:itemName
 // @access Private
 const getItemByName = asyncHandler(async (req, res) => {
-    const { itemName } = req.params;
-
+    const { itemName } = req.body;
     const item = await Item.findOne({ itemName });
 
     if (!item) {
-        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+        return res.status(204).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
     }
 
+    console.log({ itemName });
+    console.log(item);
     res.status(200).json(item);
 });
 
@@ -455,11 +456,11 @@ const isItemIdExist = asyncHandler(async (req, res) => {
     const { itemName, itemId } = req.params;
 
     const item = await Item.findOne({ itemName });
-    
+
     if (!item) {
         return res.status(404).json({ error: `Item ${itemName} not found.` });
     }
-    
+
     const exists = item.itemIds.some(i => i.itemId === itemId);
     res.status(200).json({ exists });
 });
