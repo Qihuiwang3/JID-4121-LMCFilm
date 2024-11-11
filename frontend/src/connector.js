@@ -127,7 +127,7 @@ const getItems = async () => {
 
 const getItemByName = async (itemName) => {
     try {
-        const res = await axios.get(`${BACKEND_URL}/api/item/${itemName}`);
+        const res = await axios.post(`${BACKEND_URL}/api/get-item`, { itemName });
         return res.data;
     } catch (error) {
         console.log(error);
@@ -186,7 +186,6 @@ const getClassInfoByCode = async (codeInput) => {
 const getSingleItemsByClassCode = async (codeInput) => {
     try {
         const res = await axios.get(`${BACKEND_URL}/api/single-items/${codeInput}`);
-        console.log(res.data)
         return res.data;
     } catch (error) {
         console.log(error)
