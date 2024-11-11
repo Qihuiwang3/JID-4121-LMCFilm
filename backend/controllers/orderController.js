@@ -63,7 +63,7 @@ const createOrder = asyncHandler(async (req, res) => {
     }
 
     const formattedEquipment = equipment.map(e => ({
-        itemName: e.name,
+        itemName: e.itemName,
         itemId: e.itemId,
     }));
 
