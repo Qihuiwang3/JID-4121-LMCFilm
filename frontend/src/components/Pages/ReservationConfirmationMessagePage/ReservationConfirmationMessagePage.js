@@ -4,13 +4,18 @@ import Barcode from 'react-barcode';
 import Button from '../../Button/Button';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setReservationCartItems } from '../../redux/actions/reservationCartActions';
 
 function ReservationConfirmationMessagePage() {
 
     const location = useLocation();
     const orderNumber = location.state?.orderNumber || '';
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const goBack = () => {
+        dispatch(setReservationCartItems([]));
         navigate('/Enter');
     };
 
