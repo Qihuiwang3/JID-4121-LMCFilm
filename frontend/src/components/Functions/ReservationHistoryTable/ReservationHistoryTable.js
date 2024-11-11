@@ -7,7 +7,7 @@ import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
 import './ReservationHistoryTable.css';
 import StudentViewDamageModal from '../../Modal/StudentViewDamageModal/StudentViewDamageModal';
 
-
+import ReservationDetailPopup from '../../Modal/ReservationDetailPopup/ReservationDetailPopup';
 
 const ReservationHistoryTable = () => {
     const [records, setRecords] = useState([]);
@@ -15,6 +15,7 @@ const ReservationHistoryTable = () => {
     const reduxStudentInfo = useSelector(state => state.studentData);
     const [viewReportId, setViewReportId] = useState(null);
     const [viewDamageId, setViewDamageId] = useState(null);
+    const [viewOrderDetailsId, setViewOrderDetailsId] = useState(null);
 
 
     useEffect(() => {
@@ -29,11 +30,12 @@ const ReservationHistoryTable = () => {
                         record.studentName === studentInfo.name && record.email === studentInfo.email
                     )
                     .map(record => ({
-                        code: record.orderNumber,
-                        checkin: record.checkin,
-                        checkout: record.checkout,
-                        email: record.email,
-                        studentName: record.studentName,
+                        // code: record.orderNumber,
+                        // checkin: record.checkin,
+                        // checkout: record.checkout,
+                        // email: record.email,
+                        // studentName: record.studentName,
+                        ...record,
                     }));
 
                 console.log(studentInfo);
@@ -50,16 +52,20 @@ const ReservationHistoryTable = () => {
         setViewReportId(orderNumber);
     };
 
-
     const handleViewDamage = (id) => {
         setViewDamageId(id);
     };
 
+    const handleViewDetailsModal = (id) => {
+        setViewOrderDetailsId(id);
+    }
 
     const handleCloseModal = () => {
         setViewReportId(null);
-        setViewDamageId(null)
+        setViewDamageId(null);
+        setViewOrderDetailsId(null);
     };
+
 
 
     const columnDefs = [
@@ -123,7 +129,18 @@ const ReservationHistoryTable = () => {
             headerName: "View Details",
             flex: 1,
             cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
-            valueGetter: () => "View Details",
+            cellRenderer: params => (
+                <span
+                    onClick={() => {
+                        console.log(params.data);
+                        handleViewDetailsModal(params.data);
+                    }}
+                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
+                    className="clickable-text"
+                >
+                    View Details
+                </span>
+            )
         }
 
     ];
@@ -156,7 +173,11 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-
+            {viewOrderDetailsId && (
+                <ReservationDetailPopup
+                    reservationDetails={viewOrderDetailsId}
+                    onClose={handleCloseModal} />
+            )}
         </>
     );
 };
