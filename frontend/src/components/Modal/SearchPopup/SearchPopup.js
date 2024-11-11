@@ -53,7 +53,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
             onClose();
         } catch (error) {
             console.error('Error updating order:', error);
-            setErrorMessage('An error occurred while updating the order. Please try again.');
+            setErrorMessage('An error occurred while updating the order.');
         }
     };
 
@@ -127,7 +127,14 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                     </div>
                 ))}
 
-                {errorMessage && <p className="searchpopup-error-message">{errorMessage}</p>}
+                {errorMessage && 
+                    <p className="searchpopup-error-message">
+                        {errorMessage}<br />
+                        <p>
+                            Please try again.
+                        </p>
+                    </p>
+                }
 
                 <div className="modal-footer">
                     <button className="scan-cancel-button" onClick={goBack}>Go Back</button>
