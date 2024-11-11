@@ -69,7 +69,7 @@ function ReservationTimePicker() {
 
     return (
         <div className="main-content">
-            <h1 className="select-class-header">Select Time Period</h1>
+            <h1 className="select-class-header">Select Time</h1>
             <div className="rt-picker">
                 <div className='rt-time'>
                     <div className="rt-time-picker">
@@ -106,6 +106,7 @@ function ReservationTimePicker() {
                                     onChange={(date) => setReturnDate(date)}
                                     dateFormat="MM/dd/yyyy"
                                     minDate={minReturnDate}
+                                    maxDate={new Date(pickupDate.getFullYear(), pickupDate.getMonth(), pickupDate.getDate() + 5)}
                                 />
                             </div>
                             <div className="rt-time-input-wrapper">
@@ -137,3 +138,4 @@ function ReservationTimePicker() {
 }
 
 export default ReservationTimePicker;
+
