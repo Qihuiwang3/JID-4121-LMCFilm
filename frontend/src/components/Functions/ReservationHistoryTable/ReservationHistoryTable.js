@@ -38,7 +38,7 @@ const ReservationHistoryTable = () => {
                         ...record,
                     }));
 
-                console.log(studentInfo);
+                // console.log(transformedRecords);
                 setRecords(transformedRecords);
             } catch (error) {
                 console.error("Error loading records:", error);
@@ -75,7 +75,7 @@ const ReservationHistoryTable = () => {
             cellStyle: { cursor: 'pointer' },
             cellRenderer: params => (
                 <span
-                    onClick={() => handleViewReport(params.data.code)}
+                    onClick={() => handleViewReport(params.data.orderNumber)}
                     style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
                     className="clickable-text"
                 >
