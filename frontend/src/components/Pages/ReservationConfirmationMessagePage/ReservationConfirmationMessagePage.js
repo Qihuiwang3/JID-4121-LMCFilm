@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 function ReservationConfirmationMessagePage() {
+
     const location = useLocation();
     const orderNumber = location.state?.orderNumber || '';
     const navigate = useNavigate();
-
     const goBack = () => {
         navigate('/Enter');
     };

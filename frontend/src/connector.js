@@ -1,6 +1,7 @@
 import axios from "axios";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+
 const getStudents = async () => {
     try {
         const res = await axios.get(`${BACKEND_URL}/students`);
@@ -123,6 +124,16 @@ const getItems = async () => {
         throw error;
     }
 }
+
+const getItemByName = async (itemName) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/item/${itemName}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
 
 const createGlobalItem = async (data) => {
     try {
@@ -337,7 +348,7 @@ const getAllOrders = async () => {
 
     }
 };
-        
+
 
 const createOrder = async (orderData) => {
     try {
@@ -422,7 +433,7 @@ const getRepairStatus = async (itemName, itemId) => {
                 'Content-Type': 'application/json',
             },
         });
-        return res.data; 
+        return res.data;
     } catch (error) {
         console.error('Error getting repair status:', error);
         throw error;
@@ -456,7 +467,9 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
             checkedoutStatus: updateData.checkedoutStatus,
             checkedout: updateData.checkedout,
             checkedinStatus: updateData.checkedinStatus,
-            checkedin: updateData.checkedin
+            checkedin: updateData.checkedout,
+            checkout: updateData.checkout,
+            beenExtended: updateData.beenExtended
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -484,7 +497,7 @@ const removeSingularItem = async (itemName, itemId) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: { itemName }, 
+            data: { itemName },
         });
         return res.data;
     } catch (error) {
@@ -509,6 +522,51 @@ const deleteBundleItem = async (bundleId, itemName) => {
     }
 };
 
+const deleteOrder = async (orderNumber) => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/order/${orderNumber}/`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const isItemIdExist = async (itemName, itemId) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/item/itemName/itemId/${itemName}/${itemId}/existence`);
+        return res.data;
+    } catch (error) {
+        console.error('Error checking if itemId exists:', error);
+        throw error;
+    }
+};
+
+const sendEmail = async (emailData) => {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(emailData)
+        });
+
+
+        if (!response.ok) {
+            throw new Error('Failed to send email');
+        }
+
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
 
 export {
     getStudents,
@@ -517,6 +575,7 @@ export {
     getCart,
     createCart,
     getItems,
+    getItemByName,
     createGlobalItem,
     deleteGlobalItem,
     toggleRepairStatus,
@@ -533,7 +592,7 @@ export {
     addClassCode,
     loginStudent,
     removeClassCode,
-    updateStudentRole, 
+    updateStudentRole,
     createSingleItem,
     updateBundleItem,
     getSingleItemsByClassCode,
@@ -551,4 +610,7 @@ export {
     getOrderById,
     removeSingularItem,
     deleteBundleItem,
+    sendEmail,
+    deleteOrder,
+    isItemIdExist
 };
