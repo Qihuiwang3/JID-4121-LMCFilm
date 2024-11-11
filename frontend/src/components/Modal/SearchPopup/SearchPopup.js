@@ -37,7 +37,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                 const response = await isItemIdExist(itemName, itemId);
                 
                 if (!response.exists) {
-                    setErrorMessage(`The item ID "${itemId}" for "${itemName}" does not exist in our database.`);
+                    setErrorMessage(`The item ID "${itemId}" for "${itemName}" does not exist in our database. \n Please try again.`);
                     return;
                 }
             }
