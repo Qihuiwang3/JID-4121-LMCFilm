@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './ReservationConfirmationMessagePage.css';
 import Barcode from 'react-barcode';
 import Button from '../../Button/Button';
