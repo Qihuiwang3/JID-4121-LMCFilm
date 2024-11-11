@@ -65,11 +65,30 @@ function ReservationTimePicker() {
         pickupDate.getMinutes()
     );
 
+    const handlePickupDateChange = (newPickupDate) => {
+        setPickupDate(newPickupDate);
+
+        const newReturnDate = new Date(newPickupDate);
+        newReturnDate.setDate(newPickupDate.getDate() + 1);
+        setReturnDate(newReturnDate);
+
+        setReturnTime(new Date(newReturnDate.getFullYear(), newReturnDate.getMonth(), newReturnDate.getDate(), 9, 0));
+    };
+
     const minReturnTime = returnDate.toDateString() === pickupDate.toDateString() ? pickupTime : new Date().setHours(0, 0, 0, 0);
+
+    const maxPickupDate = new Date();
+    maxPickupDate.setDate(maxPickupDate.getDate() + 5);
+
+    const getMaxReturnDate = () => {
+        const maxReturn = new Date(pickupDate);
+        maxReturn.setDate(maxReturn.getDate() + 5);
+        return maxReturn;
+    };
 
     return (
         <div className="main-content">
-            <h1 className="select-class-header">Select Time</h1>
+            <h1 className="select-class-header">Select Time Period</h1>
             <div className="rt-picker">
                 <div className='rt-time'>
                     <div className="rt-time-picker">
@@ -78,9 +97,10 @@ function ReservationTimePicker() {
                                 <label>Pick Up</label>
                                 <DatePicker
                                     selected={pickupDate}
-                                    onChange={setPickupDate}
+                                    onChange={handlePickupDateChange}
                                     dateFormat="MM/dd/yyyy"
                                     minDate={new Date()}
+                                    maxDate={maxPickupDate}
                                     wrapperClassName="date-picker"
                                 />
                             </div>
@@ -106,7 +126,7 @@ function ReservationTimePicker() {
                                     onChange={(date) => setReturnDate(date)}
                                     dateFormat="MM/dd/yyyy"
                                     minDate={minReturnDate}
-                                    maxDate={new Date(pickupDate.getFullYear(), pickupDate.getMonth(), pickupDate.getDate() + 5)}
+                                    maxDate={getMaxReturnDate()}
                                 />
                             </div>
                             <div className="rt-time-input-wrapper">

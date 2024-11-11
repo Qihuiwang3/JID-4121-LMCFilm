@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './TimeSelectionButton.css';
-import calendarIcon from '../../../Image/calendar.svg';
+import './TimeSelectionButton.css'
+import calendarIcon from '../../../Image/calendar.svg'
 
-function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime, onPickupDateTimeChange, onReturnDateTimeChange }) {
+function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime }) {
     const [pickupDateTime, setPickupDateTime] = useState(initialPickupDateTime);
     const [returnDateTime, setReturnDateTime] = useState(initialReturnDateTime);
     const pickupRef = useRef(null);
@@ -22,19 +22,47 @@ function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime, onP
     const handlePickupChange = (date) => {
         const newDate = new Date(date);
         setPickupDateTime(newDate);
-        onPickupDateTimeChange(newDate);  // Call the prop function to notify the parent
         if (newDate >= returnDateTime) {
-            const newReturnDateTime = new Date(newDate.getTime() + 15 * 60000);
-            setReturnDateTime(newReturnDateTime);
-            onReturnDateTimeChange(newReturnDateTime); // Adjust the return time if necessary
+            setReturnDateTime(new Date(newDate.getTime() + 15 * 60000));
         }
     };
 
     const handleReturnChange = (date) => {
-        const newDate = new Date(date);
-        setReturnDateTime(newDate);
-        onReturnDateTimeChange(newDate); // Call the prop function to notify the parent
+        setReturnDateTime(date);
     };
+
+    const getMinReturnDateTime = (selectedDate) => {
+        if (pickupDateTime.toDateString() === returnDateTime.toDateString()) {
+            if (new Date().toDateString() === pickupDateTime.toDateString()) {
+                return new Date(Math.max(pickupDateTime.getTime(), new Date().getTime()) + 15 * 60000);
+            }
+            return new Date(pickupDateTime.getTime() + 15 * 60000);
+        } else {
+            const selectedDayStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+            return new Date(selectedDayStart);
+        }
+    };
+
+    const maxPickupDate = new Date();
+    maxPickupDate.setDate(maxPickupDate.getDate() + 5);
+
+    const getMaxReturnDate = () => {
+        const maxReturn = new Date(pickupDateTime);
+        maxReturn.setDate(maxReturn.getDate() + 5);
+        return maxReturn;
+    };
+
+    function endOfDay(date) {
+        return new Date(date.setHours(23, 45, 0, 0));
+    }
+
+    const minTimeForPickup = (selectedDate) => {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const selectedDayStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        return today.getTime() === selectedDayStart.getTime() ? now : new Date(selectedDayStart);
+    };
+
 
     const openPickupCalendar = () => {
         pickupRef.current.setOpen(true);
@@ -55,6 +83,9 @@ function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime, onP
                         dateFormat="h:mm aa, MM/dd"
                         showTimeSelect
                         minDate={new Date()}
+                        maxDate={maxPickupDate}
+                        minTime={minTimeForPickup(pickupDateTime)}
+                        maxTime={endOfDay(new Date())}
                         timeIntervals={15}
                     />
                     <div className="icon-container" onClick={openPickupCalendar}>
@@ -70,6 +101,9 @@ function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime, onP
                         dateFormat="h:mm aa, MM/dd"
                         showTimeSelect
                         minDate={pickupDateTime}
+                        maxDate={getMaxReturnDate()}
+                        minTime={getMinReturnDateTime(returnDateTime)}
+                        maxTime={endOfDay(new Date())}
                         timeIntervals={15}
                     />
                     <div className="icon-container" onClick={openReturnCalendar}>
