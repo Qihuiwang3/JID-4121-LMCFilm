@@ -82,7 +82,7 @@ function ReservationPage() {
                     // Fetch single items
                     const singleItems = await getSingleItemsByClassCode(classCode);
                     const promises = singleItems.map(async (singleItem) => {
-                        const itemDetails = await getItemByName(singleItem.itemName); // Updated
+                        const itemDetails = await getItemByName(singleItem.itemName);
                         return {
                             ...singleItem,
                             pricePerItem: itemDetails.pricePerItem,
