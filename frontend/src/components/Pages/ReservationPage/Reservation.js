@@ -93,6 +93,7 @@ function ReservationPage() {
                     const equipmentWithPricesQuantity = await Promise.all(promises);
                     setEquipment(equipmentWithPricesQuantity);
 
+                    console.log(equipmentWithPricesQuantity);
                     // Fetch bundles
                     const bundleItems = await getBundleItemsByClassCode(classCode);
                     setBundles(bundleItems);
@@ -120,7 +121,7 @@ function ReservationPage() {
 
             <div className="equipment-and-cart">
                 <div className="equipment-container">
-                    {equipment && equipment.length > 0 && (
+                    {equipment && equipment.length > 0 && !equipment.every(item => item.quantity === 0 || item.quantity === undefined) && (
                         <EquipmentDropdown
                             id="equipment"
                             title="Available Equipment"
