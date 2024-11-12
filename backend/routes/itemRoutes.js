@@ -18,20 +18,23 @@ const {
     toggleRepairStatus,
     toggleHideStatus,
     updateBundleItem,
-    getRepairStatus
+    getRepairStatus,
+    isItemIdExist,
+    updateGlobalItem,
 } = require('../controllers/itemController');
 
 const router = express.Router();
 
 // Route to create global items in the equipment checkout center
 router.post('/item', createGlobalItem);
+// Route to update an existing global item in the equipment checkout center
+router.put('/item/:id', updateGlobalItem);
 
 // Route to get all global equipment
 router.get('/items', getAllGlobalEquipment);
 
 // Route to get a specific item by item name
 router.get('/item/:itemName', getItemByName);
-
 // Routes for picking up and returning items
 router.post('/pickup-item/:itemName/:itemId', pickUpItem);
 router.post('/return-item/:itemName/:itemId', returnItem);
@@ -61,4 +64,7 @@ router.patch('/item/itemId/:itemId/hide', toggleHideStatus);
 
 router.post('/item/repair-status', getRepairStatus);
 
+router.get('/item/itemName/itemId/:itemName/:itemId/existence', isItemIdExist);
+
 module.exports = router;
+
