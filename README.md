@@ -21,9 +21,9 @@ In this sprint, we focused on addressing critical bugs and inconsistencies ident
 #### New Features
 
 - Students can now limit time selection for reservations to only 5 days between pickup and return dates, ensuring better equipment availability management.
-- Professors/TA has limitaion on view the entire equipment database.
-- Reservation History now includes the ability to cancel reservations 24 hours before the pickup time, providing flexibility for students.
-- The "Send Announcement" button is now linked to the Outlook page for easier communication from admins.
+- Professors/TA have limitations on certain functionalities.
+- Reservation History now includes the ability to cancel reservations 24 hours before the pickup time and extend reservations once for free, which provides flexibility for students.
+- The “Send Announcement” button is now functional for administrators who want to send out announcements.
 
 #### Bug Fixes
 
@@ -33,7 +33,7 @@ In this sprint, we focused on addressing critical bugs and inconsistencies ident
 - Resolved an inconsistency in method connections between frontend and backend for the reservation process.
 
 #### Known Issues
-- We don't have GT official login in system
+- The GT SSO Login feature has not yet been implemented on the website.
 - UI inconsistencies in titles across the website require further attention.
 
 ## Version 0.3.0
