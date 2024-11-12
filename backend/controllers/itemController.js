@@ -36,6 +36,38 @@ const createGlobalItem = asyncHandler(async (req, res) => {
     res.status(201).json(savedItem);
 });
 
+// @desc Update an existing global item in the equipment checkout center
+// @route PUT /item/:id
+// @access Private
+const updateGlobalItem = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { itemName, pricePerItem, itemIds } = req.body;
+
+    // Find the item by its ID
+    let item = await Item.findById(id);
+
+    if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+    }
+
+    // Update fields if provided in the request body
+    if (itemName) item.itemName = itemName;
+    if (pricePerItem) item.pricePerItem = pricePerItem;
+
+    // Update itemIds if provided
+    if (itemIds && itemIds.length > 0) {
+        const updatedItemIds = itemIds.map(id => ({
+            itemId: id,
+            repair: false,
+            hide: false
+        }));
+        item.itemIds = updatedItemIds;
+    }
+
+    const updatedItem = await item.save();
+    res.status(200).json(updatedItem);
+});
+
 // @desc Get all global equipment
 // @route GET /items
 // @access Private
@@ -132,35 +164,27 @@ const removeItem = asyncHandler(async (req, res) => {
 // @route DELETE /item/itemId/:itemId
 // @access Private
 const removeSingularItem = asyncHandler(async (req, res) => {
-    const { itemName } = req.body;  // Extract itemName from body
-    const { itemId } = req.params;  // itemId remains in the URL (this should be the MongoDB _id)
+    const { itemName } = req.body; // Extract itemName from body
+    const { itemId } = req.params; // itemId remains in the URL
+    const item = await Item.findOne({ itemName });
 
-    const item = await Item.findOne({ "itemIds._id": itemId });
-    const singularItem = await SingleItem.findOneAndDelete({ _id : itemId})
-    if (!singularItem && !item) {
-        return res.status(404).json({ error: `Item ${itemId} not found in the equipment checkout center.` });
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
     }
-    res.status(200).json({ message: `Item ${itemName} and all associated records removed successfully.` });
 
-
-    // Find the index of the itemId
-    const itemIndex = item.itemIds.findIndex(i => i._id.toString() === itemId);
-    const singularItemIndex = singularItem.itemIds.findIndex(i => i._id.toString() === itemId)
+    // Check if the itemId exists
+    const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
     if (itemIndex === -1) {
-        return res.status(404).json({ error: `Item ID ${itemId} not found in the list of items for ${itemName}.` });
+        return res.status(404).json({ error: `Item ID ${itemId} not found for item ${itemName}.` });
     }
 
     // Remove the itemId from the list
     item.itemIds.splice(itemIndex, 1);
     item.quantity -= 1;  // Decrease the quantity of the item
-    singularItem.itemIds.splice(singularItemIndex, 1)
-    await singularItem.save()
     await item.save();
 
     res.status(200).json({ message: `Item ID ${itemId} removed successfully from ${itemName}.` });
 });
-
-
 
 // @desc Create new single item
 // @route POST /single-item
@@ -172,7 +196,7 @@ const createSingleItem = asyncHandler(async (req, res) => {
     if (!item) {
         return res.status(404).json({ error: "Item not found in the equipment checkout center." });
     }
-   
+
     const newSingleItem = new SingleItem({
         classCode,
         itemName,
@@ -270,7 +294,7 @@ const createBundleItem = asyncHandler(async (req, res) => {
 
 const updateBundleItem = asyncHandler(async (req, res) => {
     const { bundleId } = req.params;
-    const { price, bundleName, items} = req.body;
+    const { price, bundleName, items } = req.body;
 
     // Corrected model name: BundleItem instead of BundleItemModel
     let bundleItem = await BundleItem.findOne({ bundleId });
@@ -456,6 +480,21 @@ const getRepairStatus = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc Get the itemId status based on itemName and itemId
+// @route GET /item/itemName/itemId/:itemName/:itemId/existence
+// @access Private
+const isItemIdExist = asyncHandler(async (req, res) => {
+    const { itemName, itemId } = req.params;
+
+    const item = await Item.findOne({ itemName });
+
+    if (!item) {
+        return res.status(404).json({ error: `Item ${itemName} not found.` });
+    }
+
+    const exists = item.itemIds.some(i => i.itemId === itemId);
+    res.status(200).json({ exists });
+});
 
 
 module.exports = {
@@ -477,5 +516,8 @@ module.exports = {
     toggleHideStatus,
     toggleRepairStatus,
     updateBundleItem,
-    getRepairStatus
+    getRepairStatus,
+    isItemIdExist,
+    updateGlobalItem,
 };
+
