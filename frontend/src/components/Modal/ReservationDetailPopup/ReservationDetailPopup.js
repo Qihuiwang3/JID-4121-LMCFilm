@@ -68,7 +68,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                             <label htmlFor="order-number" className="details-info-label">Order Number</label>
                             <input
                                 type="text"
-                                className="input-field"
+                                className="input-field-detail"
                                 defaultValue={reservationDetails.orderNumber}
                                 readOnly
                             />
@@ -77,7 +77,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                             <label htmlFor="student-name" className="details-info-label">Student Name</label>
                             <input
                                 type="text"
-                                className="input-field"
+                                className="input-field-detail"
                                 defaultValue={reservationDetails.studentName}
                                 readOnly
                             />
@@ -86,7 +86,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                             <label htmlFor="student-email" className="details-info-label">Student Email</label>
                             <input
                                 type="email"
-                                className="input-field"
+                                className="input-field-detail"
                                 defaultValue={reservationDetails.email}
                                 readOnly
                             />
