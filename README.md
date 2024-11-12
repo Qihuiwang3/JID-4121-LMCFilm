@@ -11,6 +11,31 @@ The system is built using the MERN stack (MongoDB, Express.js, React.js, Node.js
 
 # Release Notes: 
 
+## Version 0.4.0
+**Release Date:** [11/11/2024]
+
+### Overview
+
+In this sprint, we focused on addressing critical bugs and inconsistencies identified in previous releases, improving UI/UX for a more seamless experience, and enhancing functionality for both admins and students. Key updates include improved reservation management, damage report integration, and system-wide consistency enhancements.
+
+#### New Features
+
+- Students can now limit time selection for reservations to only 5 days between pickup and return dates, ensuring better equipment availability management.
+- Professors/TA has limitaion on view the entire equipment database.
+- Reservation History now includes the ability to cancel reservations 24 hours before the pickup time, providing flexibility for students.
+- The "Send Announcement" button is now linked to the Outlook page for easier communication from admins.
+
+#### Bug Fixes
+
+- Fixed an issue where cart items were not cleared after order completion.
+- Addressed bundles-related errors on the Cart and Reservation pages caused by Bundles.map
+- Resolved the 'fetchRecords' undefined error in the DamageTable component.
+- Resolved an inconsistency in method connections between frontend and backend for the reservation process.
+
+#### Known Issues
+- We don't have GT official login in system
+- UI inconsistencies in titles across the website require further attention.
+
 ## Version 0.3.0
 **Release Date:** [10/20/2024]
 
