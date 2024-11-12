@@ -72,6 +72,7 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     const createOrderAfterPayment = (cartItems, selectedDates, name, email) => {
         const generatedOrderNumber = generateOrderNumber();
 
+        console.log(cartItems);
 
         const orderData = {
             orderNumber: generatedOrderNumber,
@@ -84,10 +85,21 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
             checkedoutStatus: false,
             studentName: name,
             createdAt: new Date(),
-            equipment: cartItems.map(item => ({
-                itemName: item.name,
-                itemId: '',
-            })),
+            equipment: cartItems.flatMap(item => {
+                if (item.bundleId && item.equipments) {
+                    // For bundled items, add each individual item in the equipment array
+                    return item.equipments.map(subItem => ({
+                        itemName: subItem.itemName,
+                        itemId: '',
+                    }));
+                } else {
+                    // For standalone items, add them directly
+                    return {
+                        itemName: item.name,
+                        itemId: item.itemId,
+                    };
+                }
+            }),
         };
 
         createEmail(orderData);
