@@ -4,7 +4,7 @@ import './EquipmentAddPopup.css';
 import { getItems, createGlobalItem } from '../../../connector.js';
 
 
-const EquipmentPopup = ({ show, handleClose }) => {
+const EquipmentAddPopup = ({ show, handleClose }) => {
     const [itemID, setItemID] = useState('');
     const [itemName, setItemName] = useState('');
     const [price, setPrice] = useState(0);
@@ -154,4 +154,5 @@ const EquipmentPopup = ({ show, handleClose }) => {
     );
 };
 
-export default EquipmentPopup;
+export default EquipmentAddPopup;
+
