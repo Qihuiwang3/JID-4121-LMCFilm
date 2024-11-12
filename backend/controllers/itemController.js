@@ -517,7 +517,7 @@ module.exports = {
     toggleRepairStatus,
     updateBundleItem,
     getRepairStatus,
-    isItemIdExist
+    isItemIdExist,
     updateGlobalItem,
 };
 
