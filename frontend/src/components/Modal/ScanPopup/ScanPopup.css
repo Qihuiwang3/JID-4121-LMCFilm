@@ -92,17 +92,16 @@
     font-size: 14px;
 }
 
-.disabled-button {
-    background-color: #d3d3d3;
-    color: #808080;
-    cursor: not-allowed;
-}
-
-.disabled-button:hover {
-    background-color: #d3d3d3;
-    color: #808080;
-}
-
 .scan-search-button {
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.scan-search-button:hover {
+    opacity: 0.9;
+    background-color: #3361AE;
+    color: #fff;
+}
+
+.scan-error-message {
+    color: red;
 }

@@ -5,6 +5,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
+import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
 function CodesTable() {
     const [records, setRecords] = useState([]);
@@ -15,6 +16,9 @@ function CodesTable() {
     const [availableEquipment, setAvailableEquipment] = useState([]);
     const [initialEquipment, setInitialEquipment] = useState([]);
     const [hasExistingBundle, setHasExistingBundle] = useState(false);
+
+    const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+    const [selectedCode, setSelectedCode] = useState(null);
 
     const [newClass, setNewClass] = useState({
         className: '',
@@ -161,14 +165,25 @@ function CodesTable() {
         closeAddModal();
     };
 
+    const handleDeleteRow = (code) => {
+        setSelectedCode(code);
+        setIsDeletePopupOpen(true);
+    };
 
-
-    const handleDeleteRow = async (code) => {
+    const handleConfirmDelete = async () => {
         try {
-            await deleteClassCode(code);
-            setRecords(records.filter((record) => record.code !== code));
-            setFilteredRecords(filteredRecords.filter((record) => record.code !== code));
-        } catch (error) { }
+            await deleteClassCode(selectedCode);
+            setRecords(records.filter((record) => record.code !== selectedCode));
+            setFilteredRecords(filteredRecords.filter((record) => record.code !== selectedCode));
+        } catch (error) {
+            console.error("Failed to delete record:", error);
+        }
+        closeDeletePopup();
+    };
+
+    const closeDeletePopup = () => {
+        setIsDeletePopupOpen(false);
+        setSelectedCode(null);
     };
 
     const openEditModal = async (code) => {
@@ -744,9 +759,16 @@ function CodesTable() {
                 </div>
             )}
 
+            <DeletePopup
+                show={isDeletePopupOpen}
+                handleClose={closeDeletePopup}
+                handleDelete={handleConfirmDelete}
+            />
+
         </>
     );
 }
 
 export default CodesTable;
+
 

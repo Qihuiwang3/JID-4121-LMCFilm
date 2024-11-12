@@ -12,6 +12,9 @@ function CartConfirmation() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const reduxStudentInfo = useSelector(state => state.studentData);
+    const studentInfo = location.state?.studentInfo || reduxStudentInfo;
+
     const dispatch = useDispatch();
 
     const { itemId } = location.state || {};
@@ -29,23 +32,21 @@ function CartConfirmation() {
     };
 
     const handleBack = async () => {
-        try {
-            await axios.delete(`http://localhost:3500/api/carts/${itemId}`);
-        } catch (error) {
-
-            console.error('Backend not started:', error.message || error);
-        } finally {
-            navigate('/ReservationPage');
-        }
+        navigate('/ReservationPage');
         dispatch(setReservationCartItems(cartItems));
     }
 
     const calculateTotal = () => {
         let total = 0;
-        cartItems.forEach(item => {
-            total += item.price;
-        });
+        if (studentInfo.role === 'Admin' || studentInfo.role === 'Professor') {
+            total = 0
+        } else {
+            cartItems.forEach(item => {
+                total += item.price;
+            });
+        }
         return total.toFixed(2);
+
     }
 
     const filterCartContent = () => {
