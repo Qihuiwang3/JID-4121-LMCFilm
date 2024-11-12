@@ -166,14 +166,19 @@ class EquipmentTable extends Component {
                 cellRenderer: params => (
                     <>
                         <img
-                            src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
-                            alt="Edit"
-                            className="edit-icon"
+                            src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"  // Use an appropriate icon URL
+                            alt="Item Icon"
+                            className="item-icon"
+                            onClick={() => {
+                                console.log(params.data);
+                                this.props.handleOpenUpdatePopup(params.data)
+                            }}
                             style={{
                                 cursor: 'pointer',
                                 width: '12px',
                                 marginRight: '8px',
-                                filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
+                                verticalAlign: 'middle',
+                                filter: 'invert(50%) sepia(50%) saturate(200%) hue-rotate(150deg) brightness(90%) contrast(85%)'  // Customize color if needed
                             }}
                         />
                         {params.value}
@@ -183,7 +188,7 @@ class EquipmentTable extends Component {
             {
                 headerName: "Item Name",
                 field: "itemName",
-                maxWidth: 150,
+                maxWidth: 200,
                 flex: 1,
             },
             {
@@ -318,3 +323,4 @@ class EquipmentTable extends Component {
 }
 
 export default EquipmentTable;
+
