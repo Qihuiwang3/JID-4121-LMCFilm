@@ -14,7 +14,7 @@ const ReservationHistoryTable = () => {
     const location = useLocation();
     const reduxStudentInfo = useSelector(state => state.studentData);
     const [viewReportId, setViewReportId] = useState(null);
-    const [viewDamageId, setViewDamageId] = useState(null);
+    const [viewDamageItems, setViewDamageItems] = useState(null);
     const [viewOrderDetailsId, setViewOrderDetailsId] = useState(null);
 
 
@@ -38,7 +38,6 @@ const ReservationHistoryTable = () => {
                         ...record,
                     }));
 
-                // console.log(transformedRecords);
                 setRecords(transformedRecords);
             } catch (error) {
                 console.error("Error loading records:", error);
@@ -53,7 +52,7 @@ const ReservationHistoryTable = () => {
     };
 
     const handleViewDamage = (id) => {
-        setViewDamageId(id);
+        setViewDamageItems(id);
     };
 
     const handleViewDetailsModal = (id) => {
@@ -62,7 +61,7 @@ const ReservationHistoryTable = () => {
 
     const handleCloseModal = () => {
         setViewReportId(null);
-        setViewDamageId(null);
+        setViewDamageItems(null);
         setViewOrderDetailsId(null);
     };
 
@@ -116,7 +115,9 @@ const ReservationHistoryTable = () => {
             valueGetter: () => "View Details",
             cellRenderer: params => (
                 <span
-                    onClick={() => handleViewDamage(params.data.code)}
+                    onClick={() => {
+                        setViewDamageItems(params.data.equipment);
+                    }}
                     style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
                     className="clickable-text"
                 >
@@ -132,7 +133,6 @@ const ReservationHistoryTable = () => {
             cellRenderer: params => (
                 <span
                     onClick={() => {
-                        console.log(params.data);
                         handleViewDetailsModal(params.data);
                     }}
                     style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
@@ -166,10 +166,9 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-            {viewDamageId && (
+            {viewDamageItems && (
                 <StudentViewDamageModal
-                    show={!!viewDamageId}
-                    orderNumber={viewDamageId}
+                    orderItems={viewDamageItems}
                     handleClose={handleCloseModal}
                 />
             )}
