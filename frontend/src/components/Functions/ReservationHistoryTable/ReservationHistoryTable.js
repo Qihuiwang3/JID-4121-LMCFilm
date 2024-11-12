@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AgGridTable from '../AgGridTable/AgGridTable';
-import { getAllOrders } from '../../../connector';
+import { getAllOrders, getAllDamageReports } from '../../../connector';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
@@ -17,11 +17,16 @@ const ReservationHistoryTable = () => {
     const [viewDamageItems, setViewDamageItems] = useState(null);
     const [viewOrderDetailsId, setViewOrderDetailsId] = useState(null);
 
+    const [allDamageReports, setAllDamageReports] = useState([]);
 
     useEffect(() => {
         const loadRecords = async () => {
             try {
                 const records = await getAllOrders();
+                const damageReportData = await getAllDamageReports();
+                // console.log("HELLO");
+                console.log(damageReportData);
+                setAllDamageReports(damageReportData);
                 const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
                 // Filter orders based on account email and student name
@@ -46,6 +51,17 @@ const ReservationHistoryTable = () => {
 
         loadRecords();
     }, [location.state, reduxStudentInfo]);
+
+    const handleFilterDamageReports = (equipment) => {
+        console.log(equipment);
+        const filteredDamage = allDamageReports
+            .filter(report =>
+                equipment.some(orderItem =>
+                    orderItem.itemId === report.itemId && orderItem.itemName === report.itemName
+                )
+            )
+            .map(report => report._id);
+    }
 
     const handleViewReport = (orderNumber) => {
         setViewReportId(orderNumber);
@@ -111,20 +127,43 @@ const ReservationHistoryTable = () => {
         {
             headerName: "View Damage Report",
             flex: 1,
-            cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
-            cellRenderer: params => (
-                <span
-                    onClick={() => {
-                        setViewDamageItems(params.data.equipment);
-                    }}
-                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
-                    className="clickable-text"
-                >
-                    View Damage Report
-                </span>
-            )
+            cellRenderer: params => {
+                const studentInfo = location.state?.studentInfo || reduxStudentInfo;
+                const equipment = params.data.equipment;
 
+                const filteredDamage = allDamageReports
+                    .filter(report =>
+                        equipment
+                            .filter(orderItem => orderItem)
+                            .some(orderItem => {
+                                return orderItem.itemId === report.itemId && orderItem.itemName === report.itemName && report.studentEmail === studentInfo.email;
+                            })
+                    )
+                    .map(report => report._id);
+                console.log(filteredDamage);
+                const displayText = filteredDamage.length === 0 ? "No Damage Report" : "View Damage Report";
+
+                const style = {
+                    color: 'black',
+                    textDecoration: filteredDamage.length === 0 ? 'none' : 'underline',
+                    cursor: filteredDamage.length > 0 ? 'pointer' : 'default'
+                };
+
+                return (
+                    <span
+                        onClick={() => {
+                            if (filteredDamage.length > 0) {
+                                handleFilterDamageReports(params.data.equipment);
+                                setViewDamageItems(params.data.equipment);
+                            }
+                        }}
+                        style={style}
+                    >
+                        {displayText}
+                    </span>
+                );
+            }
         },
         {
             headerName: "View Details",
