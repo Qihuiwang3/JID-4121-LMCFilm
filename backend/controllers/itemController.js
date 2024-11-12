@@ -60,8 +60,6 @@ const getItemByName = asyncHandler(async (req, res) => {
         return res.status(204).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
     }
 
-    console.log({ itemName });
-    console.log(item);
     res.status(200).json(item);
 });
 
