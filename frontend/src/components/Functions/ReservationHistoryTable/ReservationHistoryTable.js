@@ -24,8 +24,6 @@ const ReservationHistoryTable = () => {
             try {
                 const records = await getAllOrders();
                 const damageReportData = await getAllDamageReports();
-                // console.log("HELLO");
-                console.log(damageReportData);
                 setAllDamageReports(damageReportData);
                 const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
@@ -44,6 +42,7 @@ const ReservationHistoryTable = () => {
                     }));
 
                 setRecords(transformedRecords);
+
             } catch (error) {
                 console.error("Error loading records:", error);
             }
@@ -51,17 +50,6 @@ const ReservationHistoryTable = () => {
 
         loadRecords();
     }, [location.state, reduxStudentInfo]);
-
-    const handleFilterDamageReports = (equipment) => {
-        console.log(equipment);
-        const filteredDamage = allDamageReports
-            .filter(report =>
-                equipment.some(orderItem =>
-                    orderItem.itemId === report.itemId && orderItem.itemName === report.itemName
-                )
-            )
-            .map(report => report._id);
-    }
 
     const handleViewReport = (orderNumber) => {
         setViewReportId(orderNumber);
@@ -141,7 +129,6 @@ const ReservationHistoryTable = () => {
                             })
                     )
                     .map(report => report._id);
-                console.log(filteredDamage);
                 const displayText = filteredDamage.length === 0 ? "No Damage Report" : "View Damage Report";
 
                 const style = {
@@ -154,7 +141,6 @@ const ReservationHistoryTable = () => {
                     <span
                         onClick={() => {
                             if (filteredDamage.length > 0) {
-                                handleFilterDamageReports(params.data.equipment);
                                 setViewDamageItems(params.data.equipment);
                             }
                         }}
@@ -180,6 +166,23 @@ const ReservationHistoryTable = () => {
                     View Details
                 </span>
             )
+        },
+        {
+            headerName: "Created At",
+            field: "createdAt",
+            hide: true, // Hide this column but still use it for sorting
+            sort: 'desc', // Sort by createdAt in descending order by default
+            valueFormatter: (params) => {
+                const dateValue = new Date(params.value);
+                return dateValue.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                });
+            }
         }
 
     ];
