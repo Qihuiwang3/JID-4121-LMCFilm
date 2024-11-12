@@ -67,7 +67,7 @@ const StudentViewDamageModal = ({ orderItems, handleClose }) => {
                     <button className="close-button" onClick={handleClose}>×</button>
                 </div>
                 <div className="report-details">
-                    <p><strong>Reporter:</strong> {report?.reporter || 'Admin (All Test before blank)'}</p>
+                    <p><strong>Reporter:</strong> {report?.reporter || 'Loading...'}</p>
                     <p>
                         <strong>Date Reported:</strong> {
                             report?.dateCreated
@@ -76,10 +76,10 @@ const StudentViewDamageModal = ({ orderItems, handleClose }) => {
                                     day: '2-digit',
                                     year: '2-digit'
                                 })
-                                : '10/25/25'
+                                : 'Loading...'
                         }
                     </p>
-                    <p><strong>Description:</strong> {report?.description || 'The lens of the camera is broken. Everything is always broken'}</p>
+                    <p><strong>Description:</strong> {report?.description || 'Loading...'}</p>
                     <div>
                         {report?.images && report.images.length > 0 ? (
                             <div
