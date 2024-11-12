@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './TimeSelectionButton.css'
 import calendarIcon from '../../../Image/calendar.svg'
 
-function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime }) {
+function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime, onPickupDateTimeChange, onReturnDateTimeChange }) {
     const [pickupDateTime, setPickupDateTime] = useState(initialPickupDateTime);
     const [returnDateTime, setReturnDateTime] = useState(initialReturnDateTime);
     const pickupRef = useRef(null);
@@ -22,13 +22,18 @@ function TimeSelectionButton({ initialPickupDateTime, initialReturnDateTime }) {
     const handlePickupChange = (date) => {
         const newDate = new Date(date);
         setPickupDateTime(newDate);
+        onPickupDateTimeChange(newDate);  // Call the prop function to notify the parent
         if (newDate >= returnDateTime) {
-            setReturnDateTime(new Date(newDate.getTime() + 15 * 60000));
+            const newReturnDateTime = new Date(newDate.getTime() + 15 * 60000);
+            setReturnDateTime(newReturnDateTime);
+            onReturnDateTimeChange(newReturnDateTime); // Adjust the return time if necessary
         }
     };
 
     const handleReturnChange = (date) => {
-        setReturnDateTime(date);
+        const newDate = new Date(date);
+        setReturnDateTime(newDate);
+        onReturnDateTimeChange(newDate); // Call the prop function to notify the parent
     };
 
     const getMinReturnDateTime = (selectedDate) => {
