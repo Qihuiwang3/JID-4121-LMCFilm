@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PayPal from "../../Functions/PayPal/PayPal";
 import './Payment.css';
@@ -7,14 +7,12 @@ import { connect } from 'react-redux';
 import { sendEmail } from '../../../connector.js';
 import JsBarcode from 'jsbarcode';
 
-import { useSelector } from 'react-redux';
 
-function Payment({ selectedDates, name, email }) {
+function Payment({ cartItems, selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartTotal } = location.state || {};
-
-    const cartItems = useSelector(state => state.reservationCart.reservationCartItems);
+    const [runOnce, setRunOnce] = useState(true);
 
     const generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
@@ -73,8 +71,6 @@ function Payment({ selectedDates, name, email }) {
     const createOrderAfterPayment = (cartItems, selectedDates, name, email) => {
         const generatedOrderNumber = generateOrderNumber();
 
-        console.log(cartItems);
-
         const orderData = {
             orderNumber: generatedOrderNumber,
             email: email,
@@ -86,28 +82,15 @@ function Payment({ selectedDates, name, email }) {
             checkedoutStatus: false,
             studentName: name,
             createdAt: new Date(),
-            equipment: cartItems.flatMap(item => {
-                if (item.bundleId && item.equipments) {
-                    // For bundled items, add each individual item in the equipment array
-                    return item.equipments.map(subItem => ({
-                        itemName: subItem.itemName,
-                        itemId: '',
-                    }));
-                } else {
-                    // For standalone items, add them directly
-                    return {
-                        itemName: item.name,
-                        itemId: item.itemId,
-                    };
-                }
-            }),
+            equipment: cartItems.map(item => ({
+                itemName: item.name,
+                itemId: ''
+            })),
         };
-
-        console.log(orderData)
 
         return createOrder(orderData)
             .then(response => {
-                console.log('Order response', response);
+                console.log('Order created successfully:', response);
                 createEmail(orderData);
                 navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
             })
@@ -115,10 +98,12 @@ function Payment({ selectedDates, name, email }) {
                 console.error('Error creating order:', error);
                 throw error;
             });
+
+        setRunOnce(false);
     };
 
     useEffect(() => {
-        if (Number(cartTotal) === 0) {
+        if (Number(cartTotal) === 0 && runOnce) {
             createOrderAfterPayment(cartItems, selectedDates, name, email);
         }
     }, [cartTotal, cartItems, selectedDates, name, email, navigate]);
@@ -139,4 +124,5 @@ const mapStateToProps = (state) => ({
     name: state.studentData.name,
 });
 
-export default connect(mapStateToProps)(Payment); 
+export default connect(mapStateToProps)(Payment);
+
