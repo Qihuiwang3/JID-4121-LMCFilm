@@ -43,65 +43,29 @@ const updateGlobalItem = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { itemName, pricePerItem, itemIds } = req.body;
 
-    // Check if another item with the same itemName exists, excluding the current item
-    let duplicateItem = await Item.findOne({ itemName, _id: { $ne: id } });
-    if (duplicateItem) {
-        // If a duplicate is found, update the duplicate item with new details
-        duplicateItem.quantity += 1;
-        duplicateItem.pricePerItem = pricePerItem;
+    // Find the item by its ID
+    let item = await Item.findById(id);
 
+    if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+    }
+
+    // Update fields if provided in the request body
+    if (itemName) item.itemName = itemName;
+    if (pricePerItem) item.pricePerItem = pricePerItem;
+
+    // Merge new itemIds if provided, ensuring uniqueness
+    if (itemIds && itemIds.length > 0) {
         const newItemIds = itemIds.map(id => ({
             itemId: id,
             repair: false,
             hide: false
         }));
-
-        // Add new itemIds to duplicateItem, avoiding duplicates
-        const uniqueItemIds = [
-            ...duplicateItem.itemIds,
-            ...newItemIds.filter(newId => !duplicateItem.itemIds.some(existingId => existingId.itemId === newId.itemId))
-        ];
-        duplicateItem.itemIds = uniqueItemIds;
-
-        // Save the updated duplicate item
-        const savedItem = await duplicateItem.save();
-
-        // Remove the original item
-        await Item.findByIdAndDelete(id);
-
-        // Return the updated duplicate item
-        return res.status(200).json(savedItem);
-    } else {
-        // If no duplicate is found, proceed with updating the original item
-        let item = await Item.findById(id);
-
-        if (!item) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-
-        // Update fields if provided in the request body
-        if (itemName) item.itemName = itemName;
-        if (pricePerItem) item.pricePerItem = pricePerItem;
-
-        // Add new item IDs if provided, appending to the existing itemIds without duplicates
-        if (itemIds && itemIds.length > 0) {
-            const newItemIds = itemIds.map(id => ({
-                itemId: id,
-                repair: false,
-                hide: false
-            }));
-
-            const uniqueItemIds = [
-                ...item.itemIds,
-                ...newItemIds.filter(newId => !item.itemIds.some(existingId => existingId.itemId === newId.itemId))
-            ];
-            item.itemIds = uniqueItemIds;
-            item.quantity = uniqueItemIds.length; // Update quantity to reflect unique item count
-        }
-
-        const updatedItem = await item.save();
-        res.status(200).json(updatedItem);
+        item.itemIds = [...item.itemIds, ...newItemIds.filter(newId => !item.itemIds.some(existing => existing.itemId === newId.itemId))];
     }
+
+    const updatedItem = await item.save();
+    res.status(200).json(updatedItem);
 });
 
 // @desc Get all global equipment
