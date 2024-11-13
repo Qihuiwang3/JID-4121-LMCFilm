@@ -25,6 +25,7 @@ const Equipment = () => {
 
     const handleClosePopup = () => {
         setShowPopup(false);
+        refreshTableData(); // Refresh table data when add popup closes
     };
 
     const handleOpenUpdatePopup = (itemData) => {
@@ -60,7 +61,11 @@ const Equipment = () => {
             </div>
 
             {/* Render Add Popup */}
-            <EquipmentAddPopup show={showPopup} handleClose={handleClosePopup} />
+            <EquipmentAddPopup
+                show={showPopup}
+                handleClose={handleClosePopup}
+                onAddComplete={refreshTableData} // Callback to refresh table after adding item
+            />
 
             {/* Render Update Popup with selected data */}
             <EquipmentUpdatePopup
