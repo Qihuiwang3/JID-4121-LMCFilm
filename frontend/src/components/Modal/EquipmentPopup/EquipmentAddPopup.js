@@ -4,7 +4,7 @@ import './EquipmentAddPopup.css';
 import { getItems, createGlobalItem } from '../../../connector.js';
 
 
-const EquipmentAddPopup = ({ show, handleClose }) => {
+const EquipmentAddPopup = ({ show, handleClose, onAddComplete }) => {
     const [itemID, setItemID] = useState('');
     const [itemName, setItemName] = useState('');
     const [price, setPrice] = useState(0);
@@ -48,6 +48,10 @@ const EquipmentAddPopup = ({ show, handleClose }) => {
         try {
             const response = await createGlobalItem(data);
             console.log('Global item created:', response);
+
+            if (onAddComplete) {
+                onAddComplete(); // Refresh the table data after adding
+            }
 
             handleClose();
         } catch (error) {
