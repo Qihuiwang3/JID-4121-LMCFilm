@@ -19,35 +19,33 @@ const ReservationHistoryTable = () => {
 
     const [allDamageReports, setAllDamageReports] = useState([]);
 
+    const loadRecords = async () => {
+        try {
+            const records = await getAllOrders();
+            const studentInfo = location.state?.studentInfo || reduxStudentInfo;
+
+            // Filter orders based on account email and student name
+            const transformedRecords = records
+                .filter(record =>
+                    record.studentName === studentInfo.name && record.email === studentInfo.email
+                )
+                .map(record => ({
+                    // code: record.orderNumber,
+                    // checkin: record.checkin,
+                    // checkout: record.checkout,
+                    // email: record.email,
+                    // studentName: record.studentName,
+                    ...record,
+                }));
+
+            setRecords(transformedRecords);
+
+        } catch (error) {
+            console.error("Error loading records:", error);
+        }
+    };
+
     useEffect(() => {
-        const loadRecords = async () => {
-            try {
-                const records = await getAllOrders();
-                const damageReportData = await getAllDamageReports();
-                setAllDamageReports(damageReportData);
-                const studentInfo = location.state?.studentInfo || reduxStudentInfo;
-
-                // Filter orders based on account email and student name
-                const transformedRecords = records
-                    .filter(record =>
-                        record.studentName === studentInfo.name && record.email === studentInfo.email
-                    )
-                    .map(record => ({
-                        // code: record.orderNumber,
-                        // checkin: record.checkin,
-                        // checkout: record.checkout,
-                        // email: record.email,
-                        // studentName: record.studentName,
-                        ...record,
-                    }));
-
-                setRecords(transformedRecords);
-
-            } catch (error) {
-                console.error("Error loading records:", error);
-            }
-        };
-
         loadRecords();
     }, [location.state, reduxStudentInfo]);
 
@@ -217,7 +215,11 @@ const ReservationHistoryTable = () => {
             {viewOrderDetailsId && (
                 <ReservationDetailPopup
                     reservationDetails={viewOrderDetailsId}
-                    onClose={handleCloseModal} />
+                    onClose={handleCloseModal}
+                    onOrderCancelled={loadRecords}
+                    onOrderExtended={loadRecords}
+
+                     />
             )}
         </>
     );
