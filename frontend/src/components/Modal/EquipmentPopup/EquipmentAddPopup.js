@@ -13,6 +13,7 @@ const EquipmentAddPopup = ({ show, handleClose, onAddComplete }) => {
     const [databasePrices, setDatabasePrices] = useState([]);
 
     useEffect(() => {
+
         const fetchItems = async () => {
             try {
                 const items = await getItems();
@@ -50,6 +51,9 @@ const EquipmentAddPopup = ({ show, handleClose, onAddComplete }) => {
             console.log('Global item created:', response);
 
             if (onAddComplete) {
+                setItemID('');
+                setItemName('');
+                setPrice(0);
                 onAddComplete(); // Refresh the table data after adding
             }
 
