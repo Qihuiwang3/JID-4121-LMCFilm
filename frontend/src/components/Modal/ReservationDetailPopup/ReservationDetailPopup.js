@@ -148,7 +148,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                     <div className="modal-footer">
                         <button
                             className="cancel-reservation"
-                            onClick={() => handleViewCancel(reservationDetails.orderNumber)} disabled={!canCancelOrder}
+                            onClick={() => handleViewCancel(reservationDetails.orderNumber)}
                         >
                             Cancel Reservation
                         </button>
@@ -159,12 +159,13 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
             </div>
             {viewCancelID && (
                 <ViewCancelOrder
-                    show={!!viewCancelID}
-                    orderNumber={viewCancelID}
-                    handleClose={() => {
-                        onClose();
-                    }}
-                    onOrderCancelled={onOrderCancelled}
+                show={!!viewCancelID}
+                orderNumber={viewCancelID}
+                handleClose={() => {
+                    onClose();
+                }}
+                onOrderCancelled={onOrderCancelled}
+                canCancelOrder={canCancelOrder} // Pass the state here
                 />
             )}
             {viewExtendID && (

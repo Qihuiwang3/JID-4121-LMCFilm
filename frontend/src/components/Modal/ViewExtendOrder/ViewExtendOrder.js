@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import './ViewExtendOrder.css';
 import { updateOrderByOrderNumber } from '../../../connector';
+import ExtendDate from '../ExtendDateModal/ExtendDate';
+import SuccessPopup from '../SuccessPopup/SuccessPopup';
 
 const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, handleClose, onOrderExtended }) => {
     const [newDate, setNewDate] = useState('');
     const [newTime, setNewTime] = useState('');
+    const [showExtendPopup, setShowExtendPopup] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
-    const handleUpdateOrder = async () => {
+    const handleConfirmExtension = async () => {
         try {
-            // If newDate or newTime is empty, fall back to currentReturnDate and currentReturnTime
             const dateToUse = newDate || formatDate(currentReturnDate);
             const timeToUse = newTime || formatTime(currentReturnDate);
             const combinedDateTime = combineDateTime(dateToUse, timeToUse);
@@ -20,12 +23,14 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
                 checkedoutStatus: false,
                 checkedout: null,
                 checkedin: null,
-                beenExtended: true
+                beenExtended: true,
             };
 
             await updateOrderByOrderNumber(orderNumber, updateData);
-            onOrderExtended();
-            handleClose();
+
+            setShowExtendPopup(false); // Close ExtendPopup
+            setShowSuccessPopup(true); // Show SuccessPopup
+            onOrderExtended(); // Notify parent about the update
         } catch (error) {
             console.error('Error updating order:', error);
             alert('Failed to update order.');
@@ -33,26 +38,16 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
     };
 
     const combineDateTime = (date, time) => {
-        const [timeString, period] = time.split(" ");
-        let [hours, minutes] = timeString.split(":");
+        const [timeString, period] = time.split(' ');
+        let [hours, minutes] = timeString.split(':');
 
-        if (period === "PM" && hours !== "12") {
+        if (period === 'PM' && hours !== '12') {
             hours = parseInt(hours, 10) + 12;
-        } else if (period === "AM" && hours === "12") {
-            hours = "00";
+        } else if (period === 'AM' && hours === '12') {
+            hours = '00';
         }
 
-        const localDateTime = new Date(`${date}T${hours}:${minutes}:00`);
-
-        const year = localDateTime.getUTCFullYear();
-        const month = String(localDateTime.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(localDateTime.getUTCDate()).padStart(2, '0');
-        const hour = String(localDateTime.getUTCHours()).padStart(2, '0');
-        const minute = String(localDateTime.getUTCMinutes()).padStart(2, '0');
-        const second = String(localDateTime.getUTCSeconds()).padStart(2, '0');
-        const millisecond = String(localDateTime.getUTCMilliseconds()).padStart(3, '0');
-
-        return `${year}-${month}-${day}T${hour}:${minute}:${second}.${millisecond}+00:00`;
+        return `${date}T${hours}:${minutes}:00.000+00:00`;
     };
 
     const formatDate = (dateString) => {
@@ -63,10 +58,6 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
         return `${year}-${month}-${day}`;
     };
 
-    const minDate = formatDate(currentReturnDate);
-    const maxDate = formatDate(new Date(new Date(currentReturnDate).setDate(new Date(currentReturnDate).getDate() + 5)));
-    const initialDate = newDate || minDate;
-
     const formatTime = (dateString) => {
         const date = new Date(dateString);
         const hours = date.getHours();
@@ -76,24 +67,20 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
         return `${formattedHours}:${minutes} ${period}`;
     };
 
-    const currentReturnTime = formatTime(currentReturnDate);
-
     const generateTimeOptions = () => {
         const options = [];
         const startTime = new Date();
-        startTime.setHours(11, 0, 0, 0);
+        startTime.setHours(9, 0, 0, 0);
 
         const endTime = new Date();
         endTime.setHours(18, 0, 0, 0);
 
         while (startTime <= endTime) {
             const hours = startTime.getHours();
-            const minutes = startTime.getMinutes();
+            const minutes = String(startTime.getMinutes()).padStart(2, '0');
             const period = hours >= 12 ? 'PM' : 'AM';
             const formattedHours = hours % 12 || 12;
-            const formattedMinutes = minutes.toString().padStart(2, '0');
-            const timeString = `${formattedHours}:${formattedMinutes} ${period}`;
-            options.push(timeString);
+            options.push(`${formattedHours}:${minutes} ${period}`);
             startTime.setMinutes(startTime.getMinutes() + 15);
         }
         return options;
@@ -106,49 +93,78 @@ const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, hand
     }
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content4">
-                <div className="modal-header">
-                    <h2>Extend Return Date & Time</h2>
-                    <button className="close-button" onClick={handleClose}>&times;</button>
-                </div>
-
-                <div className="extend-reservation-form">
-                    <div className="form-group">
-                        <label htmlFor="date">Date</label>
-                        <input 
-                            type="date" 
-                            id="date" 
-                            className="input-fieldExtend" 
-                            value={initialDate} 
-                            onChange={(e) => setNewDate(e.target.value)} 
-                            min={minDate} 
-                            max={maxDate}
-                        />
+        <>
+            {/* Main Modal */}
+            <div className="modal-overlay">
+                <div className="modal-content4">
+                    <div className="modal-header">
+                        <h2>Extend Return Date & Time</h2>
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="time">Time</label>
-                        <select
-                            id="time"
-                            className="input-fieldExtend"
-                            value={newTime}
-                            onChange={(e) => setNewTime(e.target.value)}
+                    <div className="extend-reservation-form">
+                        <div className="form-group">
+                            <label htmlFor="date">Date</label>
+                            <input
+                                type="date"
+                                id="date"
+                                className="input-fieldExtend"
+                                value={newDate}
+                                onChange={(e) => setNewDate(e.target.value)}
+                                min={formatDate(currentReturnDate)}
+                                max={formatDate(new Date(new Date(currentReturnDate).setDate(new Date(currentReturnDate).getDate() + 5)))}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="time">Time</label>
+                            <select
+                                id="time"
+                                className="input-fieldExtend"
+                                value={newTime}
+                                onChange={(e) => setNewTime(e.target.value)}
+                            >
+                                <option value="" disabled hidden>
+                                    Select Time
+                                </option>
+                                {timeOptions.map((time, index) => (
+                                    <option key={index} value={time}>
+                                        {time}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="modal-footer">
+                        <button className="cancelModal-button" onClick={handleClose}>
+                            Cancel
+                        </button>
+                        <button
+                            className="saveModal-button"
+                            disabled={!newDate || !newTime}
+                            onClick={() => setShowExtendPopup(true)} // Trigger ExtendPopup
                         >
-                            <option value="" disabled hidden>{currentReturnTime}</option>
-                            {timeOptions.map((time, index) => (
-                                <option key={index} value={time}>{time}</option>
-                            ))}
-                        </select>
+                            Done
+                        </button>
                     </div>
-                </div>
-
-                <div className="modal-footer">
-                    <button className="cancelModal-button" onClick={handleClose}>Cancel</button>
-                    <button className="saveModal-button" onClick={handleUpdateOrder}>Done</button>
                 </div>
             </div>
-        </div>
+
+            {/* ExtendPopup */}
+            <ExtendDate
+                show={showExtendPopup}
+                handleClose={() => setShowExtendPopup(false)}
+                handleConfirm={handleConfirmExtension} // Update order on confirm
+            />
+
+            {/* SuccessPopup */}
+            <SuccessPopup
+                show={showSuccessPopup}
+                handleClose={() => {
+                    setShowSuccessPopup(false);
+                    handleClose(); // Optionally close the parent modal
+                }}
+            />
+        </>
     );
 };
 

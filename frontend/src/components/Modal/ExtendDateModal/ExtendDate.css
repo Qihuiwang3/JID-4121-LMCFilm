@@ -11,26 +11,26 @@
     z-index: 1000;
 }
 
-.cancel-popup-container {
+.extend-popup-container {
     background-color: #FAF3E5;
     padding: 50px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.cancel-header {
+.extend-header {
     color: #3361AE;
-    font-size: 40px;
-    font-weight: bold;
+    font-size: 25px;
+    font-weight: 900;
     text-align: center;
-    padding-bottom: 15px;
+    padding-bottom: 25px;
 }
 
-.cancel-message {
+.extend-message {
     text-align: center;
 }
 
-.cancel-modal-btn {
+.extend-modal-btn {
     padding-top: 30px;
     display: flex;
     flex-direction: row;
@@ -39,12 +39,7 @@
     margin-inline: auto;
 }
 
-/* Center the Back button when Confirm button is not present */
-.cancel-modal-btn.single-button {
-    justify-content: center;
-}
-
-.cancel-cancel {
+.extend-cancel {
     background-color: #3361AE;
     color: white;
     padding-block: 15px;
@@ -54,7 +49,7 @@
     transition: background-color 0.3s ease;
 }
 
-.cancel-confirm {
+.extend-confirm {
     background-color: #3361AE;
     color: white;
     padding-block: 15px;
@@ -64,10 +59,10 @@
     transition: background-color 0.3s ease;
 }
 
-.cancel-cancel:hover {
+.extend-cancel:hover {
     background-color: #2e4a7a;
 }
 
-.cancel-confirm:hover {
+.extend-confirm:hover {
     background-color: #2e4a7a;
 }
