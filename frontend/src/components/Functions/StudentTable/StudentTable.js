@@ -25,7 +25,7 @@ class StudentTable extends Component {
             searchQuery: '',
             isDeletePopupOpen: false,
             selectedEmail: null,
-            currentUserId: null,
+            currentUserEmail: null,
             isUserClassCodeModalOpen: false
         };
     }
@@ -162,12 +162,13 @@ class StudentTable extends Component {
         this.setState({ isDeletePopupOpen: false, selectedEmail: null });
     };
     
-    handleViewClass = (id) => {
-        this.setState({ currentUserId: id, isUserClassCodeModalOpen: true });
+    handleViewClass = (email) => {
+        console.log("current student id row: ", email)
+        this.setState({ currentUserEmail: email, isUserClassCodeModalOpen: true });
     };
 
     handleCloseViewClass = () => {
-        this.setState({ currentUserId: null, isUserClassCodeModalOpen: false });
+        this.setState({ currentUserEmail: null, isUserClassCodeModalOpen: false });
     };
 
     render() {
@@ -177,7 +178,7 @@ class StudentTable extends Component {
                 field: "classCode", 
                 flex: 1,
                 cellRenderer: params => (
-                    <button onClick={() => this.handleViewClass(params.data._id)} className="view-details">
+                    <button onClick={() => this.handleViewClass(params.data.email)} className="view-details">
                         View Details
                     </button>
                 )
@@ -237,11 +238,11 @@ class StudentTable extends Component {
                     handleClose={this.closeDeletePopup}
                     handleDelete={this.handleConfirmDelete}
                 />
-                
+
                 {this.state.isUserClassCodeModalOpen && (
                     <UserClassCodeModal
                         show={!!this.state.isUserClassCodeModalOpen}
-                        userId={this.state.currentUserId}
+                        userEmail={this.state.currentUserEmail}
                         onClose={this.handleCloseViewClass}
                     />
                 )}

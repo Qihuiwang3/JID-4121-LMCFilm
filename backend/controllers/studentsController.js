@@ -166,6 +166,23 @@ const removeClassCode = asyncHandler(async (req, res) => {
     res.status(200).json(student); 
 });
 
+// @desc Get student by ID
+// @route GET /students/:id
+// @access Private
+const getStudentById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const student = await Student.findById(id);
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    res.status(200).json(student);
+});
+
+
 module.exports = {
     getStudents,
     createStudent,
@@ -175,4 +192,5 @@ module.exports = {
     addClassCode,
     loginStudent,
     removeClassCode,
+    getStudentById
 };

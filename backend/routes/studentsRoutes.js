@@ -6,6 +6,9 @@ const limiter = require('../middleware/rateLimiter');
 // Get all students
 router.get('/', limiter, studentsController.getStudents);
 
+// Get student by id
+router.get('/:id', limiter, studentsController.getStudentById);
+
 // Create new student
 router.post('/', limiter, studentsController.createStudent);
 
