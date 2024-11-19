@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './StudentTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
+import UserClassCodeModal from "../../Modal/UserClassCodeModal/UserClassCodeModal";
 
 
 class StudentTable extends Component {
@@ -23,7 +24,9 @@ class StudentTable extends Component {
             },
             searchQuery: '',
             isDeletePopupOpen: false,
-            selectedEmail: null
+            selectedEmail: null,
+            currentUserId: null,
+            isUserClassCodeModalOpen: false
         };
     }
 
@@ -158,10 +161,27 @@ class StudentTable extends Component {
     closeDeletePopup = () => {
         this.setState({ isDeletePopupOpen: false, selectedEmail: null });
     };
+    
+    handleViewClass = (id) => {
+        this.setState({ currentUserId: id, isUserClassCodeModalOpen: true });
+    };
+
+    handleCloseViewClass = () => {
+        this.setState({ currentUserId: null, isUserClassCodeModalOpen: false });
+    };
 
     render() {
         const columnDefs = [
-            { headerName: "Class", field: "classCode", flex: 1 },
+            { 
+                headerName: "Class", 
+                field: "classCode", 
+                flex: 1,
+                cellRenderer: params => (
+                    <button onClick={() => this.handleViewClass(params.data._id)} className="view-details">
+                        View Details
+                    </button>
+                )
+            },
             { headerName: "Name", field: "name", flex: 1 },
             { headerName: "User Email", field: "email", flex: 2 },
             {
@@ -217,6 +237,14 @@ class StudentTable extends Component {
                     handleClose={this.closeDeletePopup}
                     handleDelete={this.handleConfirmDelete}
                 />
+                
+                {this.state.isUserClassCodeModalOpen && (
+                    <UserClassCodeModal
+                        show={!!this.state.isUserClassCodeModalOpen}
+                        userId={this.state.currentUserId}
+                        onClose={this.handleCloseViewClass}
+                    />
+                )}
             </>
         );
     }

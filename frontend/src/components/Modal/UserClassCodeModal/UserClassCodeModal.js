@@ -1,7 +1,7 @@
 import React from 'react';
 import './UserClassCodeModal.css';
 
-const UserClassCodeModal = ({ show, onClose, studentData }) => {
+const UserClassCodeModal = ({ show, onClose, userId }) => {
   if (!show) return null;
 
   return (
@@ -14,15 +14,15 @@ const UserClassCodeModal = ({ show, onClose, studentData }) => {
         <div className="modal-body">
             <div className="class-code-report-info">
                 <span className="label">Class Name</span>
-                <input type="text" value={studentData.name} readOnly />
+                <input type="text" value={userId.name} readOnly />
             </div>
             <div className="class-code-report-info">
                 <span className="label">Code</span>
-                <input type="text" value={studentData.email} readOnly />
+                <input type="text" value={userId.email} readOnly />
             </div>
             <div className="class-code-report-info">
                 <span className="label">Professor</span>
-                <input type="text" value={studentData.role} readOnly />
+                <input type="text" value={userId.role} readOnly />
             </div>
         </div>
         <div className="modal-footer">
