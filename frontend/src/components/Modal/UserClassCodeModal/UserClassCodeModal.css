@@ -98,3 +98,20 @@
     background-color: #3361AE;
     color: white;
 }
+
+.class-code-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px; /* Optional: Adjust the spacing between each input */
+}
+
+.class-code-row .class-code-report-info {
+    flex: 1; /* Ensures each input takes equal space */
+    display: flex;
+    flex-direction: column; /* Labels stack above the inputs */
+}
+
+.class-code-row .label {
+    margin-bottom: 5px; /* Space between the label and the input */
+}

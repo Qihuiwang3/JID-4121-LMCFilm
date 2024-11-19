@@ -166,20 +166,20 @@ const removeClassCode = asyncHandler(async (req, res) => {
     res.status(200).json(student); 
 });
 
-// @desc Get student by ID
-// @route GET /students/:id
+// @desc Get student by email. This will only return classCodes array
+// @route GET /students/:email
 // @access Private
-const getStudentById = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+const getStudentClassCodeByEmail = asyncHandler(async (req, res) => {
+    const { email } = req.params;
 
-    const student = await Student.findById(id);
+    const student = await Student.findOne({ email }).select('classCodes');
 
     if (!student) {
         res.status(404);
         throw new Error('Student not found');
     }
 
-    res.status(200).json(student);
+    res.status(200).json(student.classCodes);
 });
 
 
@@ -192,5 +192,5 @@ module.exports = {
     addClassCode,
     loginStudent,
     removeClassCode,
-    getStudentById
+    getStudentClassCodeByEmail
 };
