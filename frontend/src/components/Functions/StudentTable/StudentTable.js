@@ -163,7 +163,7 @@ class StudentTable extends Component {
         const columnDefs = [
             { headerName: "Class", field: "classCode", flex: 1 },
             { headerName: "Name", field: "name", flex: 1 },
-            { headerName: "Student Email", field: "email", flex: 2 },
+            { headerName: "User Email", field: "email", flex: 2 },
             {
                 headerName: "Role",
                 field: "role",
@@ -195,7 +195,7 @@ class StudentTable extends Component {
         return (
             <>
                 <div className="student-title">
-                    <h2>Students</h2>
+                    <h2>Users</h2>
                 </div>
                 <div className="search-bar-edit-container">
                     <div className="student-searchbar" >
