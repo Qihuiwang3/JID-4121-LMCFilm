@@ -1,0 +1,100 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.class-code-modal-content {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 400px;
+    overflow-y: auto;
+    max-height: 500px;
+    position: relative;
+    border-radius: 10px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3361AE;
+    padding-bottom: 10px;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #3361AE;
+}
+
+.class-code-modal-content h2 {
+    color: #3361AE;
+    font-family: 'Lato', sans-serif;
+}
+
+.modal-body {
+    margin-top: 20px;
+}
+
+.class-code-report-info {
+    margin-bottom: 15px;
+    margin-left: 2%;
+    width: 100%;
+}
+
+.class-code-role-email {
+    display: flex;
+}
+
+.class-code-report-info .label {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #3361AE;
+    display: inline-block;
+    width: 100px;
+}
+
+.class-code-report-info input {
+    width: 90%;
+    border-radius: 5px;
+    background-color: #E7EFF2;
+    border: 1px solid #3361AE;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.class-code-done {
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #3361AE;
+    border: 1px solid #3361AE;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.class-code-done:hover {
+    background-color: #3361AE;
+    color: white;
+}
