@@ -39,6 +39,8 @@ class StudentTable extends Component {
             const students = await getStudents();
 
             const flattenedRecords = students.flatMap(student =>
+                // console.log("student.classCodes.length: ", student.classCodes.length)
+
                 student.classCodes.length > 0
                     ? student.classCodes.map(classCode => ({
                         email: student.email,
@@ -46,7 +48,8 @@ class StudentTable extends Component {
                         classCode: classCode,
                         role: student.role
                     }))
-                    : [{
+                    : 
+                    [{
                         email: student.email,
                         name: student.name,
                         classCode: "N/A",
@@ -163,7 +166,6 @@ class StudentTable extends Component {
     };
     
     handleViewClass = (email) => {
-        console.log("current student id row: ", email)
         this.setState({ currentUserEmail: email, isUserClassCodeModalOpen: true });
     };
 
@@ -178,9 +180,16 @@ class StudentTable extends Component {
                 field: "classCode", 
                 flex: 1,
                 cellRenderer: params => (
-                    <button onClick={() => this.handleViewClass(params.data.email)} className="view-details">
-                        View Details
-                    </button>
+                    params.data.classCode === "N/A" ? (
+                        <span className="no-class-code">No Class</span>
+                    ) : (
+                        <button 
+                            onClick={() => this.handleViewClass(params.data.email)} 
+                            className="view-details"
+                        >
+                            View Details
+                        </button>
+                    )
                 )
             },
             { headerName: "Name", field: "name", flex: 1 },

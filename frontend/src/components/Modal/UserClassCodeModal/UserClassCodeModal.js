@@ -3,19 +3,19 @@ import './UserClassCodeModal.css';
 import { getStudentClassCodeByEmail } from '../../../connector';
 
 const UserClassCodeModal = ({ show, onClose, userEmail }) => {
-    const [classCode, setClassCode] = useState({});
+    const [classCodes, setClassCodes] = useState([]);
 
     useEffect(() => {
-        const fetchClassCode = async () => {
-            try {
-                const info = await getStudentClassCodeByEmail(userEmail);
-                setClassCode(info);
-            } catch (error) {
-                console.error('Error fetching class codes:', error);
-            }
-        };
-        if (userEmail) fetchClassCode();
-    }, [userEmail]);
+      const fetchClassCodes = async () => {
+          try {
+              const codes = await getStudentClassCodeByEmail(userEmail);
+              setClassCodes(codes);
+          } catch (error) {
+              console.error('Error fetching class codes:', error);
+          }
+      };
+      if (userEmail) fetchClassCodes();
+  }, [userEmail]);
 
     if (!show) return null;
 
@@ -27,20 +27,23 @@ const UserClassCodeModal = ({ show, onClose, userEmail }) => {
                     <button className="close-button" onClick={onClose}>×</button>
                 </div>
                 <div className="modal-body">
-                    <div className="class-code-row">
-                        <div className="class-code-report-info">
-                            <span className="label">Class Name</span>
-                            <input type="text" value={classCode.name || ''} readOnly />
-                        </div>
-                        <div className="class-code-report-info">
-                            <span className="label">Code</span>
-                            <input type="text" value={classCode.email || ''} readOnly />
-                        </div>
-                        <div className="class-code-report-info">
-                            <span className="label">Professor</span>
-                            <input type="text" value={classCode.role || ''} readOnly />
-                        </div>
-                    </div>
+                    {classCodes.map((code, index) => (
+                          <div key={index} className="class-code-row">
+                            <div className="class-code-report-info">
+                                <span className="label">Class Code {index + 1}</span>
+                                <input type="text" value={code} readOnly />
+                            </div>
+                            {/* <div className="class-code-report-info">
+                              <span className="label">Code</span>
+                              <input type="text" value={''} readOnly />
+                            </div>
+                            <div className="class-code-report-info">
+                              <span className="label">Professor</span>
+                              <input type="text" value={''} readOnly />
+                            </div> */}
+                          </div>
+                          
+                      ))}
                 </div>
                 <div className="modal-footer">
                     <button className="class-code-done" onClick={onClose}>Done</button>

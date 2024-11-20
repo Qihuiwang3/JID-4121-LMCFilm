@@ -22,6 +22,10 @@
     border-radius: 10px;
 }
 
+.class-code-modal-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+}
+
 .modal-header {
     display: flex;
     justify-content: space-between;

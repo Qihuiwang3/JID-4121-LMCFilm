@@ -43,6 +43,10 @@
     margin-left: auto;
 }
 
+.no-class-code {
+    margin-left: 6px;
+}
+
 @media (max-width: 800px) {
 
     .student-title {
