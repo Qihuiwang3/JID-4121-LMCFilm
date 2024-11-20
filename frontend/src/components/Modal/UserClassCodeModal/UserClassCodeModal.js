@@ -3,7 +3,6 @@ import './UserClassCodeModal.css';
 
 const UserClassCodeModal = ({ show, onClose, userInfo }) => {
     if (!show) return null;
-    console.log("userInfo: ", userInfo)
     return (
         <div className="modal-overlay">
             <div className="class-code-modal-content">

@@ -41,9 +41,11 @@ class StudentTable extends Component {
             const records = students.map(student => ({
                 email: student.email,
                 name: student.name,
-                classCodes: student.classCodes.length > 0 ? student.classCodes : ["N/A"],
+                classCodes: student.classCodes,
                 role: student.role
             }));
+
+            console.log("records: ", records)
     
             this.setState({
                 records: records,
@@ -157,10 +159,12 @@ class StudentTable extends Component {
     handleViewClass = async (email) => {
         try {
             const classCodes = await getStudentClassCodeByEmail(email);
+            // console.log("classCodes: ", classCodes)
             
             const classInfoForUser = await Promise.all(
                 classCodes.map(async (classCode) => {
                     const classInfo = await getClassInfoByCode(classCode)
+                    console.log("classInfo: ", classInfo) 
                     return {classCode, ...classInfo}
                 })
                 
@@ -182,8 +186,9 @@ class StudentTable extends Component {
                 headerName: "Class", 
                 field: "classCodes", 
                 flex: 1,
-                cellRenderer: params => (
-                    params.data.classCode === "N/A" ? (
+                cellRenderer: params => {
+                    const classCodes = params.data.classCodes; 
+                    return classCodes && classCodes.length === 0 ? (
                         <span className="no-class-code">No Class</span>
                     ) : (
                         <button 
@@ -192,8 +197,8 @@ class StudentTable extends Component {
                         >
                             View Details
                         </button>
-                    )
-                )
+                    );
+                }
             },
             { headerName: "Name", field: "name", flex: 1 },
             { headerName: "User Email", field: "email", flex: 2 },
