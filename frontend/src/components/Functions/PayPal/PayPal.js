@@ -94,7 +94,6 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     
         return createOrder(orderData)
             .then(response => {
-                console.log('Order created successfully:', response);
                 return generatedOrderNumber; 
             })
             .catch(error => {
@@ -121,7 +120,6 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
                 }}
                 onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
-                        console.log("Transaction completed by " + details.payer.name.given_name);
 
                         // Create the order and navigate to confirmation page
                         createOrderAfterPayment(cartItems, selectedDates, name, email)

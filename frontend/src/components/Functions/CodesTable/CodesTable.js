@@ -256,7 +256,6 @@ const CodesTable = forwardRef((props, ref) => {
                 const itemToRemove = initialEquipment.find(item => item.itemName === removedItem.itemName);
 
                 if (itemToRemove && itemToRemove._id) {  // Use the _id field as itemId
-                    console.log("Attempting to remove item:", removedItem.itemName, "with ID:", itemToRemove._id);  // Debugging log
                     await removeSingularItem(removedItem.itemName, itemToRemove._id); // Pass _id as itemId
                 } else {
                     console.error(`Item ID for ${removedItem.itemName} is undefined, skipping removal.`);

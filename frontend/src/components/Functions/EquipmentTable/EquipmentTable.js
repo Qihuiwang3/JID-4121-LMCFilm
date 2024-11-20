@@ -5,6 +5,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentTable.css';
+import StatusModal from "../../Modal/StatusModal/StatusModal.js";
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
 class EquipmentTable extends Component {
@@ -22,7 +23,9 @@ class EquipmentTable extends Component {
             },
             searchQuery: '',
             showDeletePopup: false, // New state for showing the delete popup
+            showModal: false,
             itemToDelete: null,      // New state to track the item to delete
+            selectedItem: null
         };
     }
 
@@ -153,63 +156,81 @@ class EquipmentTable extends Component {
         this.setState({ filteredRecords, searchQuery: query });
     };
 
+    handleStatusClick = (item) => {
+        this.setState({ showModal: true, selectedItem: item });
+    };
+
+    closeModal = () => {
+        this.setState({ showModal: false, selectedItem: null });
+    };
+
+    openEditModal = (item) => {
+
+    }
+
     render() {
-        const { handleOpenPopup } = this.props;
+        const { handleOpenPopup, showModal, selectedItem, openEditModal } = this.props;
 
         const columnDefs = [
             {
                 headerName: "ItemID",
                 field: "itemId",
                 headerClass: 'header-center',
-                maxWidth: 120,
                 flex: 1,
+                cellRenderer: params => (
+                    <>
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
+                            alt="Edit"
+                            className="edit-icon"
+                            onClick={() => openEditModal(params.data)}
+                            style={{
+                                cursor: 'pointer',
+                                width: '12px',
+                                marginRight: '8px',
+                                filter: 'invert(27%) sepia(78%) saturate(668%) hue-rotate(177deg) brightness(97%) contrast(96%)'
+                            }}
+                        />
+                        {params.value}
+                    </>
+                )
             },
             {
                 headerName: "Item Name",
                 field: "itemName",
-                maxWidth: 150,
                 flex: 1,
             },
             {
                 headerName: "Price",
                 field: "pricePerItem",
-                maxWidth: 100,
                 flex: 1,
                 valueFormatter: (params) => {
                     return params.value !== undefined ? `$${params.value.toFixed(2)}` : 'Available';
                 }
             },
             {
-                headerName: "Checked-in",
-                field: "checkin",
-                maxWidth: 300,
+                headerName: "Status",
+                field: "status",
                 flex: 1,
-                valueFormatter: (params) => {
-                    const dateValue = new Date(params.value);
-                    return params.value ? dateValue.toLocaleString('en-US', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                    }).replace(',', '') : 'Available';
-                }
+                cellRenderer: (params) => {
+                    const isAvailable = !params.data.checkout && !params.data.checkin;
+                    if (isAvailable) {
+                        return "Available";
+                    }
+                    return (
+                        <span
+                            style={{ color: "#3361AE", cursor: "pointer" }}
+                            className="not-available-text"
+                            onClick={() => this.handleStatusClick(params.data)}
+                        >
+                            Not Available
+                        </span>
+                    );
+                },
             },
             {
-                headerName: "Checked-out",
-                field: "checkout",
-                flex: 1,
-                valueFormatter: (params) => {
-                    const dateValue = new Date(params.value);
-                    return params.value ? dateValue.toLocaleString('en-US', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                    }).replace(',', '') : 'Available';
-                }
-            },
-            {
-                headerName: "Repair",
+                headerName: "Repairing",
                 field: "repair",
-                maxWidth: 110,
                 flex: 1,
                 editable: false,
                 cellRenderer: (params) => {
@@ -219,7 +240,6 @@ class EquipmentTable extends Component {
             {
                 headerName: "Hide",
                 field: "hide",
-                maxWidth: 110,
                 flex: 1,
                 cellRenderer: params => {
                     return (
@@ -246,7 +266,6 @@ class EquipmentTable extends Component {
                 headerName: "Delete",
                 field: "delete",
                 flex: 1,
-                maxWidth: 110,
                 cellRenderer: params => {
                     return (
                         <button
@@ -294,6 +313,12 @@ class EquipmentTable extends Component {
                     show={this.state.showDeletePopup}
                     handleClose={this.closeDeletePopup}
                     handleDelete={this.confirmDelete}
+                />
+
+                <StatusModal
+                    show={this.state.showModal}
+                    onClose={this.closeModal}
+                    item={this.state.selectedItem}
                 />
 
             </>

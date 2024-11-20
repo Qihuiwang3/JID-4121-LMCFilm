@@ -27,7 +27,7 @@ const EquipmentPopup = ({ show, handleClose }) => {
                 setDatabasePrices(prices);
                 const uniqueNames = [...new Set(prices.map(item => item.itemName))];
                 setUniqueItemNames(uniqueNames);
-                console.log(prices);
+
             } catch (error) {
                 console.error("Error fetching items:", error);
             }
@@ -47,7 +47,6 @@ const EquipmentPopup = ({ show, handleClose }) => {
 
         try {
             const response = await createGlobalItem(data);
-            console.log('Global item created:', response);
 
             handleClose();
         } catch (error) {

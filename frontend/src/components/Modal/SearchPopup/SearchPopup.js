@@ -49,7 +49,6 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                 checkedout: new Date(),
             });
             
-            console.log('Order updated successfully');
             onClose();
         } catch (error) {
             console.error('Error updating order:', error);

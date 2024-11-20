@@ -149,7 +149,6 @@ const addClassCode = asyncHandler(async (req, res) => {
 // @access Private
 const removeClassCode = asyncHandler(async (req, res) => {
     const { classCode } = req.body;
-    console.log(classCode);
     const student = await Student.findOne({ email: req.params.email });
     if (!student) {
         return res.status(404).json({ error: 'Student not found' });
