@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
 import { getClassCodes, createClassCode, createBundleItem, getItems, createSingleItem, deleteClassCode, getBundleItemsByClassCode, updateClassCode, updateBundleItem, getSingleItemsByClassCode, removeSingularItem } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
@@ -7,7 +7,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
-function CodesTable() {
+const CodesTable = forwardRef((props, ref) => {
     const [records, setRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -42,6 +42,11 @@ function CodesTable() {
         bundleEquipment: [],
     });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    
+    useImperativeHandle(ref, () => ({
+        loadRecords,
+    }));
+
 
     useEffect(() => {
         loadRecords();
@@ -766,7 +771,7 @@ function CodesTable() {
 
         </>
     );
-}
+});
 
 export default CodesTable;
 

@@ -3,7 +3,20 @@
     background-color: #FFFDF8;
 }
 
-.student-btn {
-    margin-left: 10%;
+.classcode-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
     margin-right: auto;
+    width: 80%;
+    position: relative;
+    margin-top: 20px;
+}
+
+.clearAll {
+    background-color: #3361AE;
+    color: white;
+    margin-right: 0%;
+    margin-left: auto;
 }

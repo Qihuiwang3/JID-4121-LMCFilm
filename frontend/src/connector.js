@@ -221,6 +221,20 @@ const removeClassCode = async (email, classCode) => {
     }
 };
 
+const clearAllClassCodes = async () => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/class-codes/clear-all`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error clearing all class codes:', error);
+        throw error;
+    }
+};
+
 const createClassCode = async (newClassCode) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/class-code/`, {
@@ -612,5 +626,6 @@ export {
     deleteBundleItem,
     sendEmail,
     deleteOrder,
-    isItemIdExist
+    isItemIdExist,
+    clearAllClassCodes
 };
