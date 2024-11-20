@@ -106,7 +106,6 @@ function Payment({ cartItems, selectedDates, name, email }) {
 
         if (Number(cartTotal) === 0 && runOnce) {
             createOrderAfterPayment(cartItems, selectedDates, name, email);
-            orderCreatedRef.current = true;
         }
     }, [cartTotal, cartItems, selectedDates, name, email, navigate]);
 
