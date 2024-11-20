@@ -7,7 +7,7 @@ import Equipment from "./components/Pages/Equipment/Equipment";
 import CartConfirmation from "./components/Pages/CartConfirmation/CartConfirmation";
 import ReservationTimePicker from "./components/Pages/ReservationTimePicker/ReservationTimePicker";
 import ReservationConfirmationMessagePage from "./components/Pages/ReservationConfirmationMessagePage/ReservationConfirmationMessagePage";
-import Students from "./components/Pages/Students/Students";
+import Users from "./components/Pages/Users/Users";
 import ViewEquipment from "./components/Pages/SelectTaskPages/AdminViewEquipment/ViewEquipment";
 import SelectTask from "./components/Pages/SelectTaskPages/AdminSelectTaskPage/SelectTask";
 import Management from "./components/Pages/SelectTaskPages/AdminManagementPage/Management";
@@ -89,8 +89,8 @@ class App extends Component {
                           element={<ProtectedRoute element={<Equipment />} />}
                       />
                       <Route
-                          path="/Students"
-                          element={<ProtectedRoute element={<Students />} />}
+                          path="/Users"
+                          element={<ProtectedRoute element={<Users />} />}
                       />
                       <Route
                           path="/ViewEquipment"
