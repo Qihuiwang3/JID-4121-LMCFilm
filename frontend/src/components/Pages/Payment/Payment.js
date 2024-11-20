@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PayPal from "../../Functions/PayPal/PayPal";
 import './Payment.css';
@@ -12,8 +12,6 @@ function Payment({ cartItems, selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartTotal } = location.state || {};
-    const orderCreatedRef = useRef(false);
-    const cartItems = useSelector(state => state.reservationCart.reservationCartItems);
     const [runOnce, setRunOnce] = useState(true);
 
     const generateOrderNumber = () => {
@@ -106,7 +104,7 @@ function Payment({ cartItems, selectedDates, name, email }) {
 
     useEffect(() => {
 
-        if (Number(cartTotal) === 0 && !orderCreatedRef.current) {
+        if (Number(cartTotal) === 0 && runOnce) {
             createOrderAfterPayment(cartItems, selectedDates, name, email);
             orderCreatedRef.current = true;
         }
