@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
-import { getStudents, deleteStudent, updateStudentRole } from '../../../connector.js';
+import { getStudents, deleteStudent, updateStudentRole, getStudentClassCodeByEmail, getClassInfoByCode } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,8 +25,8 @@ class StudentTable extends Component {
             searchQuery: '',
             isDeletePopupOpen: false,
             selectedEmail: null,
-            currentUserEmail: null,
-            isUserClassCodeModalOpen: false
+            currentUserClassInfo: null,
+            isUserClassCodeModalOpen: false,
         };
     }
 
@@ -165,12 +165,26 @@ class StudentTable extends Component {
         this.setState({ isDeletePopupOpen: false, selectedEmail: null });
     };
     
-    handleViewClass = (email) => {
-        this.setState({ currentUserEmail: email, isUserClassCodeModalOpen: true });
+    handleViewClass = async (email) => {
+        try {
+            const classCodes = await getStudentClassCodeByEmail(email);
+            
+            const classInfoForUser = await Promise.all(
+                classCodes.map(async (classCode) => {
+                    const classInfo = await getClassInfoByCode(classCode)
+                    return {classCode, ...classInfo}
+                })
+                
+            )
+            this.setState({ currentUserClassInfo: classInfoForUser, isUserClassCodeModalOpen: true });
+
+        } catch (error) {
+            console.error("Error fetching class information:", error);
+        }
     };
 
     handleCloseViewClass = () => {
-        this.setState({ currentUserEmail: null, isUserClassCodeModalOpen: false });
+        this.setState({ currentUserClassInfo: null, isUserClassCodeModalOpen: false });
     };
 
     render() {
@@ -251,7 +265,7 @@ class StudentTable extends Component {
                 {this.state.isUserClassCodeModalOpen && (
                     <UserClassCodeModal
                         show={!!this.state.isUserClassCodeModalOpen}
-                        userEmail={this.state.currentUserEmail}
+                        userInfo={this.state.currentUserClassInfo}
                         onClose={this.handleCloseViewClass}
                     />
                 )}
