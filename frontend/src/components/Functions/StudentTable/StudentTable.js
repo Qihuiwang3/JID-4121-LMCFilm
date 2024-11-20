@@ -38,31 +38,20 @@ class StudentTable extends Component {
         try {
             const students = await getStudents();
 
-            const flattenedRecords = students.flatMap(student =>
-                // console.log("student.classCodes.length: ", student.classCodes.length)
-
-                student.classCodes.length > 0
-                    ? student.classCodes.map(classCode => ({
-                        email: student.email,
-                        name: student.name,
-                        classCode: classCode,
-                        role: student.role
-                    }))
-                    : 
-                    [{
-                        email: student.email,
-                        name: student.name,
-                        classCode: "N/A",
-                        role: student.role
-                    }]
-            );
-
+            const records = students.map(student => ({
+                email: student.email,
+                name: student.name,
+                classCodes: student.classCodes.length > 0 ? student.classCodes : ["N/A"],
+                role: student.role
+            }));
+    
             this.setState({
-                records: flattenedRecords,
-                filteredRecords: flattenedRecords,
+                records: records,
+                filteredRecords: records,
                 tempDeletedRows: [],
                 updatedRoles: {}
             });
+
         } catch (error) {
             console.error("Error loading records:", error);
         }
@@ -191,7 +180,7 @@ class StudentTable extends Component {
         const columnDefs = [
             { 
                 headerName: "Class", 
-                field: "classCode", 
+                field: "classCodes", 
                 flex: 1,
                 cellRenderer: params => (
                     params.data.classCode === "N/A" ? (
