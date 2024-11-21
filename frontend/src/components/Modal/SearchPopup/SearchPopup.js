@@ -32,23 +32,35 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
     
         try {
             setErrorMessage('');
-            
+    
+            const itemGroups = {};
+            for (const { itemName, itemId } of updatedEquipment) {
+                if (!itemGroups[itemName]) {
+                    itemGroups[itemName] = new Set();
+                }
+                if (itemGroups[itemName].has(itemId)) {
+                    setErrorMessage(`Item IDs for same item "${itemName}" cannot be repetitive.`);
+                    return;
+                }
+                itemGroups[itemName].add(itemId);
+            }
+    
             for (const { itemName, itemId } of updatedEquipment) {
                 const response = await isItemIdExist(itemName, itemId);
-                
+    
                 if (!response.exists) {
                     setErrorMessage(`The item ID "${itemId}" for "${itemName}" does not exist in our database.`);
                     return;
                 }
             }
-            
+    
             await updateOrderByOrderNumber(orderInfo.orderNumber, {
                 equipment: updatedEquipment,
                 checkedoutStatus: true,
                 checkedinStatus: false,
-                checkedout: new Date(),
+                checkedout: new Date()
             });
-            
+    
             console.log('Order updated successfully');
             onClose();
         } catch (error) {
@@ -56,6 +68,8 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
             setErrorMessage('An error occurred while updating the order.');
         }
     };
+    
+    
 
     if (!orderInfo) {
         return null;
