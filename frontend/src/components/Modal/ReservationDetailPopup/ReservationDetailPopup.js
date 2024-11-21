@@ -100,9 +100,15 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                         <input type="text" className="view-input-field" defaultValue={item.itemName} readOnly />
                                     </div>
                                     <div className="view-equipment-group">
-                                        <label className="view-equipment-label">Item ID</label>
-                                        <input type="text" className="view-input-field" defaultValue={""} readOnly />
-                                    </div>
+                                    <label className="view-equipment-label">Item ID</label>
+                                    <input
+                                        type="text"
+                                        className="view-input-field"
+                                        defaultValue={formatDate(reservationDetails.checkedout) ? " " : item.itemId}
+                                        readOnly
+                                    />
+                                </div>
+
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Date Checked Out</label>
                                         <input
@@ -125,9 +131,15 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                         <input type="text" className="view-input-field" defaultValue={item.itemName} readOnly />
                                     </div>
                                     <div className="view-equipment-group">
-                                        <label className="view-equipment-label">Item ID</label>
-                                        <input type="text" className="view-input-field" defaultValue={""} readOnly />
-                                    </div>
+                            <label className="view-equipment-label">Item ID</label>
+                                <input
+                                type="text"
+                                className="view-input-field"
+                                defaultValue={formatDate(reservationDetails.checkedin) ? " " : item.itemId}
+                                readOnly
+                            />
+                        </div>
+
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Date Checked In</label>
                                         <input
