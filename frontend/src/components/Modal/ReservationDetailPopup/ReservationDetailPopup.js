@@ -101,7 +101,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                     </div>
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Item ID</label>
-                                        <input type="text" className="view-input-field" defaultValue={item.itemId} readOnly />
+                                        <input type="text" className="view-input-field" defaultValue={""} readOnly />
                                     </div>
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Date Checked Out</label>
@@ -126,7 +126,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                     </div>
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Item ID</label>
-                                        <input type="text" className="view-input-field" defaultValue={item.itemId} readOnly />
+                                        <input type="text" className="view-input-field" defaultValue={""} readOnly />
                                     </div>
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Date Checked In</label>
