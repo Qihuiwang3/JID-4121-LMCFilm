@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
-import { getStudents, deleteStudent, updateStudentRole } from '../../../connector.js';
+import { getStudents, deleteStudent, updateStudentRole, getStudentClassCodeByEmail, getClassInfoByCode } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
 import RoleDropdown from '../../Dropdown/RoleDropdown/RoleDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './StudentTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
+import UserClassCodeModal from "../../Modal/UserClassCodeModal/UserClassCodeModal";
 
 
 class StudentTable extends Component {
@@ -23,7 +24,9 @@ class StudentTable extends Component {
             },
             searchQuery: '',
             isDeletePopupOpen: false,
-            selectedEmail: null
+            selectedEmail: null,
+            currentUserClassInfo: null,
+            isUserClassCodeModalOpen: false,
         };
     }
 
@@ -35,28 +38,22 @@ class StudentTable extends Component {
         try {
             const students = await getStudents();
 
-            const flattenedRecords = students.flatMap(student =>
-                student.classCodes.length > 0
-                    ? student.classCodes.map(classCode => ({
-                        email: student.email,
-                        name: student.name,
-                        classCode: classCode,
-                        role: student.role
-                    }))
-                    : [{
-                        email: student.email,
-                        name: student.name,
-                        classCode: "N/A",
-                        role: student.role
-                    }]
-            );
+            const records = students.map(student => ({
+                email: student.email,
+                name: student.name,
+                classCodes: student.classCodes,
+                role: student.role
+            }));
 
+            console.log("records: ", records)
+    
             this.setState({
-                records: flattenedRecords,
-                filteredRecords: flattenedRecords,
+                records: records,
+                filteredRecords: records,
                 tempDeletedRows: [],
                 updatedRoles: {}
             });
+
         } catch (error) {
             console.error("Error loading records:", error);
         }
@@ -158,12 +155,53 @@ class StudentTable extends Component {
     closeDeletePopup = () => {
         this.setState({ isDeletePopupOpen: false, selectedEmail: null });
     };
+    
+    handleViewClass = async (email) => {
+        try {
+            const classCodes = await getStudentClassCodeByEmail(email);
+            // console.log("classCodes: ", classCodes)
+            
+            const classInfoForUser = await Promise.all(
+                classCodes.map(async (classCode) => {
+                    const classInfo = await getClassInfoByCode(classCode)
+                    console.log("classInfo: ", classInfo) 
+                    return {classCode, ...classInfo}
+                })
+                
+            )
+            this.setState({ currentUserClassInfo: classInfoForUser, isUserClassCodeModalOpen: true });
+
+        } catch (error) {
+            console.error("Error fetching class information:", error);
+        }
+    };
+
+    handleCloseViewClass = () => {
+        this.setState({ currentUserClassInfo: null, isUserClassCodeModalOpen: false });
+    };
 
     render() {
         const columnDefs = [
-            { headerName: "Class", field: "classCode", flex: 1 },
+            { 
+                headerName: "Class", 
+                field: "classCodes", 
+                flex: 1,
+                cellRenderer: params => {
+                    const classCodes = params.data.classCodes; 
+                    return classCodes && classCodes.length === 0 ? (
+                        <span className="no-class-code">No Class</span>
+                    ) : (
+                        <button 
+                            onClick={() => this.handleViewClass(params.data.email)} 
+                            className="view-details"
+                        >
+                            View Details
+                        </button>
+                    );
+                }
+            },
             { headerName: "Name", field: "name", flex: 1 },
-            { headerName: "Student Email", field: "email", flex: 2 },
+            { headerName: "User Email", field: "email", flex: 2 },
             {
                 headerName: "Role",
                 field: "role",
@@ -195,7 +233,7 @@ class StudentTable extends Component {
         return (
             <>
                 <div className="student-title">
-                    <h2>Students</h2>
+                    <h2>Users</h2>
                 </div>
                 <div className="search-bar-edit-container">
                     <div className="student-searchbar" >
@@ -217,6 +255,14 @@ class StudentTable extends Component {
                     handleClose={this.closeDeletePopup}
                     handleDelete={this.handleConfirmDelete}
                 />
+
+                {this.state.isUserClassCodeModalOpen && (
+                    <UserClassCodeModal
+                        show={!!this.state.isUserClassCodeModalOpen}
+                        userInfo={this.state.currentUserClassInfo}
+                        onClose={this.handleCloseViewClass}
+                    />
+                )}
             </>
         );
     }

@@ -580,6 +580,17 @@ const sendEmail = async (emailData) => {
     }
 };
 
+const getStudentClassCodeByEmail = async (email) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/students/${email}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching student class codes by email:', error);
+        throw error;
+    }
+};
+
+
 
 export {
     getStudents,
@@ -627,4 +638,5 @@ export {
     deleteOrder,
     isItemIdExist,
     clearAllClassCodes
+    getStudentClassCodeByEmail
 };
