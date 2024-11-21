@@ -66,7 +66,7 @@ const TopNavBar = () => {
                     <div className="nav-links">
                         <div className="nav-link" onClick={openProfileModal}>Profile</div>
                         <div className="nav-link" onClick={profileNav}> Reservation History</div>
-                        {(studentData.role === 'Admin' || studentData.role === 'TA' || studentData.role === 'Professor') && (
+                        {(studentData.role === 'Admin' || studentData.role === 'SA' || studentData.role === 'Professor') && (
                             <div className="nav-link" onClick={goToAdminSite}>Admin Site</div>
                         )}
                         <div className="nav-link" onClick={logoutNav}>Logout</div>
