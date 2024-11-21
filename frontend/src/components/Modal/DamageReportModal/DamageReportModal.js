@@ -50,8 +50,9 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
 
     const validateOrderNumber = async () => {
         try {
-            await getOrderByOrderNumber(orderNumber);
+            const order = await getOrderByOrderNumber(orderNumber);
             setIsOrderValid(true);
+            setStudentEmail(order.email);
         } catch (error) {
             setIsOrderValid(false);
             setError('Order number does not exist in the system.');
