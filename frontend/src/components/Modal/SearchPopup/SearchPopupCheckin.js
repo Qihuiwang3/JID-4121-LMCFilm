@@ -156,7 +156,7 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                         disabled={isButtonDisabled}
                         onClick={handleEquipmentCheckout}
                     >
-                        Student Checked Out
+                        Student Checked-out Confirmed
                     </button>
                 </div>
             </div>
