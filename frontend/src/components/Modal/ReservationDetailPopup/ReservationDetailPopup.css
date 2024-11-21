@@ -11,6 +11,7 @@
     z-index: 1000;
 }
 
+
 .view-modal-content {
     background: white;
     padding: 20px;
@@ -101,6 +102,19 @@
     font-size: 14px;
     color: #3361AE;
 }
+.gray-button {
+    background-color: gray;
+    color: white; 
+    cursor: pointer; 
+  }
+
+  .cancel-reservation.gray-button {
+    background-color: #d3d3d3;
+    color: #a9a9a9; 
+    cursor: pointer; 
+  }
+  
+  
 
 .view-input-field {
     padding: 10px;
@@ -127,7 +141,7 @@
 .cancel-reservation:disabled {
     background-color: #d3d3d3;
     color: #a9a9a9;
-    cursor: not-allowed;
+    cursor: pointer;
 }
 
 .extend-reservation {

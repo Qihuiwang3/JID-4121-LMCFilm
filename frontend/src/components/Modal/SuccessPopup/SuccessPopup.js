@@ -7,7 +7,7 @@ const SuccessPopup = ({ show, handleClose }) => {
     }
 
     return (
-        <div className="modal-overlay">
+        <div className="modal-overlay2">
             <div className="success-popup-container">
                 <div className="success-header">
                     Successful!

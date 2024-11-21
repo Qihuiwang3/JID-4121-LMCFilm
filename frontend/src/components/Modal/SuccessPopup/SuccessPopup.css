@@ -1,4 +1,4 @@
-.modal-overlay {
+.modal-overlay2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,12 +8,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1050;
 }
 
 .success-popup-container {
     background-color: #FAF3E5;
     padding: 50px;
+    width: 550px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }

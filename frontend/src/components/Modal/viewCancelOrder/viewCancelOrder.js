@@ -23,10 +23,16 @@ const ViewCancelOrder = ({ show, orderNumber, handleClose, canCancelOrder, onOrd
             <div className="cancel-popup-container">
                 <div className="cancel-header">Attention!</div>
                 <div className="cancel-message">
-                    <p>Canceling order is available only when the pickup time is more than 24 hours away.</p>
+                    {canCancelOrder ? (
+                        <p>You are about to cancel your reservation. Are you sure you want to proceed?</p>
+                    ) : (
+                        <p>You cannot cancel your reservation as the pick-up<p></p> time is within the next 24 hours.</p>
+                    )}
                 </div>
                 <div className={`cancel-modal-btn ${!canCancelOrder ? 'single-button' : ''}`}>
-                    <div onClick={handleClose} className="cancel-cancel">Back</div>
+                    <div onClick={handleClose} className="cancel-cancel">
+                        {canCancelOrder ? 'Cancel' : 'Okay'}
+                    </div>
                     {canCancelOrder && (
                         <div
                             onClick={() => {

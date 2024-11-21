@@ -157,10 +157,9 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                     {showButtons && (
                         <div className="modal-footer">
                             <button
-                                className="cancel-reservation"
+                                 className={`cancel-reservation ${!canCancelOrder ? 'gray-button' : ''}`}
                                 onClick={() => handleViewCancel(reservationDetails.orderNumber)}
-                                disabled={!canCancelOrder}
-                            >
+                                >
                                 Cancel Reservation
                             </button>
 

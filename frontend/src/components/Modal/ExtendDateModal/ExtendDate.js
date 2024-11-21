@@ -7,7 +7,7 @@ const ExtendDate = ({ show, handleConfirm, handleClose }) => {
     }
 
     return (
-        <div className="modal-overlay">
+        <div className="modal-overlay1">
             <div className="extend-popup-container">
                 <div className="extend-header">
                     Attention!

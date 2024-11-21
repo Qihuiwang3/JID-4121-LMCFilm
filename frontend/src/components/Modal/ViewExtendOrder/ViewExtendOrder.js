@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './ViewExtendOrder.css';
 import { updateOrderByOrderNumber } from '../../../connector';
-import ExtendDate from '../ExtendDateModal/ExtendDate';
-import SuccessPopup from '../SuccessPopup/SuccessPopup';
+import ExtendDate from '../ExtendDateModal/ExtendDate';import SuccessPopup from '../SuccessPopup/SuccessPopup';
 
 const ViewExtendOrder = ({ show, orderNumber, currentReturnDate, equipment, handleClose, onOrderExtended }) => {
     const [newDate, setNewDate] = useState('');
