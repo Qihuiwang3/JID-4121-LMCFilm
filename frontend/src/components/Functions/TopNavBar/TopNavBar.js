@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import './TopNavBar.css';
@@ -11,6 +11,8 @@ const TopNavBar = () => {
     const [showProfileModal, setShowProfileModal] = useState(false);
     const navigate = useNavigate();
     const studentData = useSelector((state) => state.studentData);
+    const sidebarRef = useRef(null);
+
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -43,6 +45,23 @@ const TopNavBar = () => {
         navigate("/SelectTask");
         setIsSidebarOpen(false);
     };
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setIsSidebarOpen(false);
+            }
+        };
+
+        if (isSidebarOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isSidebarOpen]);
 
     return (
         <div className="navBar">
@@ -56,7 +75,7 @@ const TopNavBar = () => {
                 >
                     <FontAwesomeIcon icon={isSidebarOpen ? faTimes : faBars} />
                 </div>
-                <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+                <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`} ref={sidebarRef}>
                     <div className="profile-section">
                         <div className="profile-info">
                             <h3 className="student-name-bar">{studentData.name}</h3>
@@ -70,7 +89,6 @@ const TopNavBar = () => {
                             <div className="nav-link" onClick={goToAdminSite}>Admin Site</div>
                         )}
                         <div className="nav-link" onClick={logoutNav}>Logout</div>
-
                     </div>
                 </div>
             </div>
