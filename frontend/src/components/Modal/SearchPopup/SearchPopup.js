@@ -46,7 +46,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                 equipment: updatedEquipment,
                 checkedoutStatus: true,
                 checkedinStatus: false,
-                checkedout: new Date(),
+                checkedout: new Date()
             });
             
             console.log('Order updated successfully');
