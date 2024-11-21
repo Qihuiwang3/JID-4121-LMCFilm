@@ -53,8 +53,8 @@ function CodesTable() {
             const classCodes = await getClassCodes();
             const flattenedRecords = await Promise.all(classCodes.map(async (classCode) => {
                 try {
-                    const bundleItems = await getBundleItemsByClassCode(classCode.code);
-                    const bundleName = bundleItems.length > 0 ? bundleItems[0].bundleName : "N/A";
+                    const bundleData = await getBundleItemsByClassCode(classCode.code);
+                    const bundleName = bundleData.bundleName || "N/A";
                     return {
                         code: classCode.code,
                         className: classCode.className,
@@ -62,6 +62,7 @@ function CodesTable() {
                         bundleName: bundleName,
                     };
                 } catch (error) {
+                    console.error('Error fetching bundle data:', error);
                     return {
                         code: classCode.code,
                         className: classCode.className,
@@ -73,14 +74,22 @@ function CodesTable() {
             const reverseRecords = flattenedRecords.reverse();
             setRecords(reverseRecords);
             setFilteredRecords(reverseRecords);
-        } catch (error) { }
+        } catch (error) {
+            console.error('Error loading records:', error);
+        }
     };
 
     const fetchEquipment = async () => {
         try {
             const equipmentList = await getItems();
-            setAvailableEquipment(equipmentList);
-        } catch (error) { }
+
+            // Filter out items where quantity is less than or equal to zero
+            const filteredEquipment = equipmentList.filter(item => item.quantity > 0);
+
+            setAvailableEquipment(filteredEquipment);
+        } catch (error) {
+            console.error('Error fetching equipment:', error);
+        }
     };
 
     const handleSearch = (query) => {
@@ -92,7 +101,6 @@ function CodesTable() {
     };
 
     const openAddModal = () => {
-
         const randomCode = Math.floor(1000 + Math.random() * 9000);
         setGeneratedCode(randomCode);
         setNewClass({
@@ -133,17 +141,23 @@ function CodesTable() {
             bundleEquipment: newClass.bundleEquipment || [],
         };
         try {
+            // Create the class code
             await createClassCode({
                 code: newEntry.code,
                 professor: newEntry.professor,
                 className: newEntry.className,
             });
+            console.log('Class code created:', newEntry.code);
+
+            // Add single items and build the tempBundle
             const tempBundle = [];
             for (let equipmentItem of newClass.equipment) {
                 const tempItem = await createSingleItem({
                     classCode: newEntry.code,
                     itemName: equipmentItem,
                 });
+                console.log('Single item created:', tempItem);
+
                 if (newClass.bundleEquipment.includes(equipmentItem)) {
                     tempBundle.push({
                         itemName: tempItem.itemName,
@@ -151,7 +165,9 @@ function CodesTable() {
                     });
                 }
             }
-            if (newClass.bundleId && newClass.bundleName) {
+
+            // Create bundle item if bundleId and bundleName are provided
+            if (newClass.bundleId) {
                 await createBundleItem({
                     bundleId: newClass.bundleId,
                     classCode: newEntry.code,
@@ -159,9 +175,15 @@ function CodesTable() {
                     price: newClass.price,
                     bundleName: newClass.bundleName,
                 });
+                console.log('Bundle item created:', newClass.bundleName);
             }
+
+            // Reload records after all operations are complete
             await loadRecords();
-        } catch (error) { }
+            console.log('Records reloaded');
+        } catch (error) {
+            console.error('Error adding new class code:', error);
+        }
         closeAddModal();
     };
 
@@ -187,42 +209,58 @@ function CodesTable() {
     };
 
     const openEditModal = async (code) => {
-        const classToEdit = records.find((item) => item.code === code);
-        let bundleInfo = { bundleName: 'N/A', bundleId: '', price: '', bundleEquipment: [] };
-        let singleItems = [];
+    const classToEdit = records.find((item) => item.code === code);
+    let bundleInfo = { bundleName: 'N/A', bundleId: '', price: '', bundleEquipment: [] };
+    let singleItems = [];
 
-        try {
-            const bundleItems = await getBundleItemsByClassCode(classToEdit.code);
-            if (bundleItems.length > 0) {
-                bundleInfo = {
-                    bundleName: bundleItems[0].bundleName,
-                    bundleId: bundleItems[0].bundleId,
-                    price: bundleItems[0].price,
-                    bundleEquipment: bundleItems[0].items || [],
-                };
-                setHasExistingBundle(true); // Set to true if there's an existing bundle
-            } else {
-                setHasExistingBundle(false); // Set to false if no bundle exists
-            }
-        } catch (error) {
-            setHasExistingBundle(false); // If error, assume no bundle exists
+    try {
+        const bundleItems = await getBundleItemsByClassCode(classToEdit.code);
+        console.log("Fetched bundle items:", bundleItems); // Debug log
+
+        // Ensure bundleItems.items is an array before mapping
+        if (bundleItems.items && Array.isArray(bundleItems.items)) {
+            bundleInfo = {
+                bundleName: bundleItems.bundleName || 'N/A',
+                bundleId: bundleItems.bundleId || '',
+                price: bundleItems.price || '',
+                bundleEquipment: bundleItems.items.map((item) => {
+                    // Ensure itemName exists and log if it doesn't
+                    if (!item.itemName) {
+                        console.error("Item with missing itemName:", item);
+                        return undefined;
+                    }
+                    return item.itemName; // Map itemName to bundleEquipment
+                }),
+            };
         }
 
-        try {
-            singleItems = await getSingleItemsByClassCode(classToEdit.code);
-        } catch (error) { }
+        setHasExistingBundle(true);
+    } catch (error) {
+        console.error("Error fetching bundle items:", error);
+        setHasExistingBundle(false);
+    }
 
-        // Set the initial items for comparison later when saving (to avoid duplication)
-        setInitialEquipment(singleItems || []);
+    try {
+        singleItems = await getSingleItemsByClassCode(classToEdit.code);
+        console.log("Fetched single items:", singleItems); // Debug log
+    } catch (error) {
+        console.error("Error fetching single items:", error);
+    }
+    setInitialEquipment(singleItems || []);
+    setEditClassData({
+        ...classToEdit,
+        ...bundleInfo,
+        equipment: singleItems || [],
+    });
 
-        setEditClassData({
-            ...classToEdit,
-            ...bundleInfo,
-            equipment: singleItems || [],
-        });
-        setIsEditModalOpen(true);
-    };
+    console.log("Updated editClassData:", {
+        ...classToEdit,
+        ...bundleInfo,
+        equipment: singleItems || [],
+    });
 
+    setIsEditModalOpen(true);
+};
 
     const closeEditModal = () => {
         setIsEditModalOpen(false);
@@ -236,42 +274,45 @@ function CodesTable() {
         }));
     };
 
-
     const handleSaveEditedClass = async () => {
         try {
             // Update class data
             await updateClassCode(editClassData);
-
+    
+            // Determine which equipment items have been removed
             const removedEquipment = initialEquipment.filter(
                 initialItem => !editClassData.equipment.some(equipmentItem => equipmentItem.itemName === initialItem.itemName)
             );
-
-            // Remove deselected equipment from the backend
+    
+            // Remove deselected equipment items
             for (const removedItem of removedEquipment) {
                 const itemToRemove = initialEquipment.find(item => item.itemName === removedItem.itemName);
-
-                if (itemToRemove && itemToRemove._id) {  // Use the _id field as itemId
-                    console.log("Attempting to remove item:", removedItem.itemName, "with ID:", itemToRemove._id);  // Debugging log
-                    await removeSingularItem(removedItem.itemName, itemToRemove._id); // Pass _id as itemId
+    
+                if (itemToRemove && itemToRemove._id) {
+                    console.log("Removing item:", removedItem.itemName, "ID:", itemToRemove._id);
+                    await removeSingularItem(removedItem.itemName, itemToRemove._id);
                 } else {
-                    console.error(`Item ID for ${removedItem.itemName} is undefined, skipping removal.`);
+                    console.error(`Item ID for ${removedItem.itemName} is undefined. Skipping removal.`);
                 }
             }
+    
+            // Filter out new equipment items that were not part of the initial equipment
+            const newEquipment = editClassData.equipment.filter(
+                equipmentItem => !initialEquipment.some(initialItem => initialItem.itemName === equipmentItem.itemName)
+            );
+    
+            // Add only unique new items
+            const updatedEquipment = [...new Set([...editClassData.equipment])];
+            console.log("Items in newEquipment:", newEquipment);
 
-            // Filter out new equipment items that weren't part of the initial equipment
-            const newEquipment = editClassData.equipment.filter(equipmentItem => {
-                return !initialEquipment.some(initialItem => initialItem.itemName === equipmentItem.itemName);
-            });
-
-            // Add new equipment items to the backend
+    
             const tempBundle = [];
-
             for (const equipmentItem of newEquipment) {
                 const tempItem = await createSingleItem({
                     classCode: editClassData.code,
                     itemName: equipmentItem.itemName,
                 });
-                // Add only new items that are part of the bundle
+                // Add new items to the bundle if they belong to `bundleEquipment`
                 if (editClassData.bundleEquipment.includes(equipmentItem.itemName)) {
                     tempBundle.push({
                         itemName: tempItem.itemName,
@@ -279,55 +320,53 @@ function CodesTable() {
                     });
                 }
             }
-
-            // Avoid duplicating existing items by using a Set to track what we've added
-            const itemNamesSet = new Set(tempBundle.map(item => item.itemName));
-
-            // Include existing items in the bundle, but avoid adding duplicates
-            for (const equipmentItem of editClassData.bundleEquipment) {
-                if (!itemNamesSet.has(equipmentItem.itemName)) {
-                    tempBundle.push({
-                        itemName: equipmentItem.itemName,
-                        quantity: 1,
-                    });
-                    itemNamesSet.add(equipmentItem.itemName); // Track item names
+    
+            // Use a Set to avoid duplicate bundle items
+            const bundleSet = new Set(tempBundle.map(item => item.itemName));
+            for (const bundleItem of editClassData.bundleEquipment) {
+                if (!bundleSet.has(bundleItem)) {
+                    tempBundle.push({ itemName: bundleItem, quantity: 1 });
+                    bundleSet.add(bundleItem);
                 }
             }
-
-            // Create or update bundle based on whether it existed initially
+    
+            // Create or update bundle
             if (!hasExistingBundle) {
-                // If no existing bundle, create a new one
                 if (editClassData.bundleName && editClassData.price && tempBundle.length > 0) {
                     const newBundle = await createBundleItem({
-                        bundleId: editClassData.bundleId,  // Might be null if it's a new bundle
+                        bundleId: editClassData.bundleId,
                         classCode: editClassData.code,
-                        items: tempBundle, // Use the tempBundle array created above
+                        items: tempBundle,
                         price: editClassData.price,
                         bundleName: editClassData.bundleName,
                     });
-
-                    // Update the bundle ID after creation
+    
                     setEditClassData(prevState => ({
                         ...prevState,
                         bundleId: newBundle.bundleId,
                     }));
                 }
             } else {
-                // Update existing bundle with the new bundle items
                 await updateBundleItem({
                     bundleName: editClassData.bundleName,
                     code: editClassData.code,
                     bundleId: editClassData.bundleId,
                     price: editClassData.price,
-                    items: tempBundle, // Use tempBundle which now includes both new and existing items
+                    items: tempBundle,
                 });
             }
-
-            // Update frontend records
-            const updatedRecords = records.map(item => {
-                return item.code === editClassData.code ? editClassData : item;
-            });
-
+    
+            // Update the state with unique equipment
+            setEditClassData(prevState => ({
+                ...prevState,
+                equipment: updatedEquipment,
+            }));
+    
+            // Update records on the frontend
+            const updatedRecords = records.map(record =>
+                record.code === editClassData.code ? editClassData : record
+            );
+    
             setRecords(updatedRecords);
             setFilteredRecords(updatedRecords);
             closeEditModal();
@@ -335,11 +374,9 @@ function CodesTable() {
             console.error("Error saving edited class:", error);
         }
     };
-
-
-
-
-
+    
+    
+    
 
     const columnDefs = [
         {
@@ -608,7 +645,7 @@ function CodesTable() {
                                             // If it is already selected, remove it
                                             setEditClassData(prevState => {
                                                 const updatedEquipment = prevState.equipment.filter(eq => eq.itemName !== selectedEquipment);
-                                                const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be.itemName !== selectedEquipment);
+                                                const updatedBundleEquipment = prevState.bundleEquipment.filter(be => be !== selectedEquipment);
 
                                                 return {
                                                     ...prevState,
@@ -647,17 +684,16 @@ function CodesTable() {
                                 </select>
                             </div>
 
-
                             {/* Package/Bundles Section */}
                             <div className="input-group">
                                 <label>Package ID</label>
                                 <input
                                     type="text"
                                     name="bundleId"
-                                    value={editClassData.bundleId || ''} // Set to an empty string if no bundleId
+                                    value={editClassData.bundleId || ''}
                                     onChange={handleEditClassChange}
                                     className="modal-input"
-                                    disabled={hasExistingBundle} // Disable only if there's an existing bundleId
+                                    disabled={hasExistingBundle}
                                 />
                             </div>
 
@@ -671,12 +707,12 @@ function CodesTable() {
                                     <input
                                         type="text"
                                         name="price"
-                                        value={editClassData.price === '' || editClassData.price === '0' ? '' : `$${editClassData.price}`} // Show '' when empty or '0'
+                                        value={editClassData.price === '' || editClassData.price === '0' ? '' : `$${editClassData.price}`}
                                         onFocus={(e) => {
                                             if (editClassData.price === '0') {
                                                 setEditClassData(prevState => ({
                                                     ...prevState,
-                                                    price: '' // Clear the input when focused if price is '0'
+                                                    price: ''
                                                 }));
                                             }
                                         }}
@@ -684,21 +720,21 @@ function CodesTable() {
                                             if (editClassData.price === '') {
                                                 setEditClassData(prevState => ({
                                                     ...prevState,
-                                                    price: '0' // Set back to '0' if empty when focus is lost
+                                                    price: '0'
                                                 }));
                                             }
                                         }}
                                         onChange={(e) => {
-                                            const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+                                            const numericValue = e.target.value.replace(/[^0-9]/g, '');
                                             setEditClassData(prevState => ({
                                                 ...prevState,
                                                 price: numericValue
                                             }));
                                         }}
                                         className="modal-input"
-                                        placeholder="0" // Placeholder shows '0' if the field is empty
-                                        inputMode="numeric" // Mobile-friendly numeric keyboard
-                                        pattern="[0-9]*"    // Only numeric values allowed
+                                        placeholder="0"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
                                     />
                                 </div>
 
@@ -713,17 +749,17 @@ function CodesTable() {
                                     onChange={(e) => {
                                         const selectedBundleEquipment = e.target.value;
 
-                                        if (editClassData.bundleEquipment.some(be => be.itemName === selectedBundleEquipment)) {
+                                        if (editClassData.bundleEquipment.includes(selectedBundleEquipment)) {
                                             // Remove the selected bundle item
                                             setEditClassData(prevState => ({
                                                 ...prevState,
-                                                bundleEquipment: prevState.bundleEquipment.filter(be => be.itemName !== selectedBundleEquipment),
+                                                bundleEquipment: prevState.bundleEquipment.filter(be => be !== selectedBundleEquipment),
                                             }));
                                         } else {
                                             // Add the selected bundle item
                                             setEditClassData(prevState => ({
                                                 ...prevState,
-                                                bundleEquipment: [...prevState.bundleEquipment, { itemName: selectedBundleEquipment, quantity: 1 }],
+                                                bundleEquipment: [...prevState.bundleEquipment, selectedBundleEquipment],
                                             }));
                                         }
                                     }}
@@ -731,7 +767,7 @@ function CodesTable() {
                                 >
                                     <option value="">
                                         {editClassData.bundleEquipment.length > 0
-                                            ? editClassData.bundleEquipment.map(be => be.itemName).join(', ')
+                                            ? editClassData.bundleEquipment.join(', ')
                                             : "Select Bundle Items"}
                                     </option>
                                     {editClassData.equipment.map((equipmentItem, index) => (
@@ -739,7 +775,7 @@ function CodesTable() {
                                             key={index}
                                             value={equipmentItem.itemName}
                                             style={{
-                                                backgroundColor: editClassData.bundleEquipment.some(be => be.itemName === equipmentItem.itemName)
+                                                backgroundColor: editClassData.bundleEquipment.includes(equipmentItem.itemName)
                                                     ? '#e0e0e0'
                                                     : 'white',
                                             }}
@@ -763,11 +799,8 @@ function CodesTable() {
                 handleClose={closeDeletePopup}
                 handleDelete={handleConfirmDelete}
             />
-
         </>
     );
 }
 
 export default CodesTable;
-
-

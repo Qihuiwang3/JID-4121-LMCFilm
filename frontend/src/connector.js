@@ -268,6 +268,16 @@ const getBundleItemsByClassCode = async (classCode) => {
     }
 };
 
+const getBundleNameByClassCode = async (classCode) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/api/bundle-items/${classCode}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
 const createBundleItem = async (itemData) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/bundle-item`, itemData, {
@@ -611,5 +621,6 @@ export {
     deleteBundleItem,
     sendEmail,
     deleteOrder,
-    isItemIdExist
+    isItemIdExist,
+    getBundleNameByClassCode
 };

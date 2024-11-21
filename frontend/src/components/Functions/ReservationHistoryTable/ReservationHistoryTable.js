@@ -212,15 +212,16 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-            {viewOrderDetailsId && (
+           {viewOrderDetailsId && (
                 <ReservationDetailPopup
                     reservationDetails={viewOrderDetailsId}
                     onClose={handleCloseModal}
                     onOrderCancelled={loadRecords}
                     onOrderExtended={loadRecords}
+                    showButtons={true} 
+    />
+)}
 
-                     />
-            )}
         </>
     );
 };
