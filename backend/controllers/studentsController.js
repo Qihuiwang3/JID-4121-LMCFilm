@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Student = require('../models/Student');
+const jwt = require("jsonwebtoken");
 
 // @desc Get all students
 // @route GET /students
@@ -58,7 +59,7 @@ const deleteStudentByEmail = asyncHandler(async (req, res) => {
 const updateStudentRole = asyncHandler(async (req, res) => {
     const { role } = req.body;
 
-    if (!role || (role !== 'Student' && role !== 'Admin' && role !== 'Professor'  && role !== 'TA')) {
+    if (!role || (role !== 'Student' && role !== 'Admin' && role !== 'Professor'  && role !== 'SA')) {
         res.status(400);
         throw new Error('Invalid role');
     }
@@ -115,11 +116,20 @@ const loginStudent = asyncHandler(async (req, res) => {
         throw new Error('Invalid email or password');
     }
 
-    res.status(200).json({
-        email: student.email,
-        name: student.name,
-        role: student.role,
-        classCodes: student.classCodes
+    const token = jwt.sign(
+        { email: student.email, role: student.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+    );
+
+    res.json({ 
+        token,
+        student: {
+            email: student.email,
+            name: student.name,
+            classCodes: student.classCodes,
+            role: student.role
+        }
     });
 });
 
@@ -166,6 +176,23 @@ const removeClassCode = asyncHandler(async (req, res) => {
     res.status(200).json(student); 
 });
 
+// @desc Get student by email. This will only return classCodes array
+// @route GET /students/:email
+// @access Private
+const getStudentClassCodeByEmail = asyncHandler(async (req, res) => {
+    const { email } = req.params;
+
+    const student = await Student.findOne({ email }).select('classCodes');
+
+    if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+    }
+
+    res.status(200).json(student.classCodes);
+});
+
+
 module.exports = {
     getStudents,
     createStudent,
@@ -175,4 +202,5 @@ module.exports = {
     addClassCode,
     loginStudent,
     removeClassCode,
+    getStudentClassCodeByEmail
 };

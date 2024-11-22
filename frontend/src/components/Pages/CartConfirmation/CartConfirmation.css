@@ -22,8 +22,7 @@
 }
 
 .cart-total {
-
-    font-family: Montserrat;
+    font-family: Montserrat, sans-serif;
     font-weight: 700;
     font-size: 20px;
     height: 50px;
@@ -31,6 +30,7 @@
 
     display: flex;
     justify-content: space-between;
+    /* Reduce the gap below Total */
 }
 
 .button-footers {
@@ -52,19 +52,69 @@
 
 .button-back:hover {
     background-color: #003a99;
-  }
+}
 
-.button-continue {
-    background-color: #3361AE;
-    border-radius: 37.5px;
-    width: 300px;
-    height: 75px;
-    line-height: 75px;
-    text-align: center;
-    color: white;
+
+
+button.button.next:disabled {
+    background-color: #cccccc;
+    /* Grey background for disabled button */
+    color: #a0a0a0;
+    /* Grey text */
+    cursor: not-allowed;
+    /* Blocked cursor */
+    opacity: 1;
+    /* Maintain consistent opacity */
+    border: none;
+}
+
+button.button.next:disabled:hover {
+    background-color: #cccccc;
+    /* Maintain grey background */
+    cursor: not-allowed;
+}
+
+div.terms-container label {
+    all: unset;
+    font-family: Montserrat, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+    line-height: 50px !important;
+    color: black !important;
+    display: flex;
+    align-items: center;
+}
+
+.terms-container {
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 50px;
+    color: black;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: -35px;
+}
+
+.terms-container label {
+    display: flex;
+    align-items: center;
+}
+
+.terms-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.terms-container .terms-link {
+    color: #3361AE;
+    /* Link color */
+    text-decoration: underline;
     cursor: pointer;
 }
 
-.button-continue:hover {
-    background-color: #003a99;
-  }
+.term-modal-footer input[type="checkbox"] {
+    margin-right: 10px;
+    /* Space between checkbox and text */
+}

@@ -268,15 +268,7 @@ const getBundleItemsByClassCode = async (classCode) => {
     }
 };
 
-const getBundleNameByClassCode = async (classCode) => {
-    try {
-        const res = await axios.get(`${BACKEND_URL}/api/bundle-items/${classCode}`);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-};
+
 
 const createBundleItem = async (itemData) => {
     try {
@@ -576,6 +568,17 @@ const sendEmail = async (emailData) => {
     }
 };
 
+const getStudentClassCodeByEmail = async (email) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/students/${email}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching student class codes by email:', error);
+        throw error;
+    }
+};
+
+
 
 export {
     getStudents,
@@ -622,5 +625,5 @@ export {
     sendEmail,
     deleteOrder,
     isItemIdExist,
-    getBundleNameByClassCode
+    getStudentClassCodeByEmail
 };

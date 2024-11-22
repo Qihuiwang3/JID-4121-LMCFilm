@@ -21,7 +21,7 @@ In this sprint, we focused on addressing critical bugs and inconsistencies ident
 #### New Features
 
 - Students can now limit time selection for reservations to only 5 days between pickup and return dates, ensuring better equipment availability management.
-- Professors/TA have limitations on certain functionalities.
+- Professors/SA have limitations on certain functionalities.
 - Reservation History now includes the ability to cancel reservations 24 hours before the pickup time and extend reservations once for free, which provides flexibility for students.
 - The “Send Announcement” button is now functional for administrators who want to send out announcements.
 
