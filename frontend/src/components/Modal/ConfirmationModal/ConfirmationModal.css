@@ -1,0 +1,63 @@
+.clear-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.clear-modal-content {
+    background: #fff9f0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    border: 2px solid #619ae0;
+}
+
+.clear-modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2d5ba7;
+    margin-bottom: 15px;
+}
+
+.clear-modal-message {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 20px;
+}
+
+.clear-modal-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.clear-modal-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+}
+
+.clear-modal-button.cancel {
+    background-color: #3361AE;
+    color: #fff;
+}
+
+.clear-modal-button.confirm {
+    background-color: #3361AE;
+    color: #fff;
+}
+
+.clear-modal-button:hover {
+    opacity: 0.9;
+}

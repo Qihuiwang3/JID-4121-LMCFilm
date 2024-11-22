@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
 import { getClassCodes, createClassCode, createBundleItem, getItems, createSingleItem, deleteClassCode, getBundleItemsByClassCode, updateClassCode, updateBundleItem, getSingleItemsByClassCode, removeSingularItem } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
@@ -7,7 +7,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
-function CodesTable() {
+const CodesTable = forwardRef((props, ref) => {
     const [records, setRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -42,6 +42,11 @@ function CodesTable() {
         bundleEquipment: [],
     });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    
+    useImperativeHandle(ref, () => ({
+        loadRecords,
+    }));
+
 
     useEffect(() => {
         loadRecords();
@@ -287,10 +292,9 @@ function CodesTable() {
             // Remove deselected equipment items
             for (const removedItem of removedEquipment) {
                 const itemToRemove = initialEquipment.find(item => item.itemName === removedItem.itemName);
-    
-                if (itemToRemove && itemToRemove._id) {
-                    console.log("Removing item:", removedItem.itemName, "ID:", itemToRemove._id);
-                    await removeSingularItem(removedItem.itemName, itemToRemove._id);
+
+                if (itemToRemove && itemToRemove._id) {  // Use the _id field as itemId
+                    await removeSingularItem(removedItem.itemName, itemToRemove._id); // Pass _id as itemId
                 } else {
                     console.error(`Item ID for ${removedItem.itemName} is undefined. Skipping removal.`);
                 }
@@ -801,6 +805,6 @@ function CodesTable() {
             />
         </>
     );
-}
+});
 
 export default CodesTable;

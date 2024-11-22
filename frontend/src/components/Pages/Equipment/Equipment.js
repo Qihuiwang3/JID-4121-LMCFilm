@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
-import EquipmentPopup from '../../Modal/EquipmentPopup/EquipmentPopup';
-
-import BackButton from '../../Button/BackButton/BackButton';
+import Button from '../../Button/Button';
 import EquipmentTable from '../../Functions/EquipmentTable/EquipmentTable';
+import { useNavigate } from 'react-router-dom';
 
 const Equipment = () => {
     const [showPopup, setShowPopup] = useState(false);
+    const navigate = useNavigate();
 
     const [isEditMode, setIsEditMode] = useState(false);
     const equipmentTableRef = useRef(null);
@@ -25,6 +25,10 @@ const Equipment = () => {
         setShowPopup(false);
     };
 
+    const handleBack = () => {
+        navigate('/ViewEquipment');
+    };
+
     return (
         <div>
             <EquipmentTable
@@ -35,12 +39,9 @@ const Equipment = () => {
             />
 
             <div className="equipment-btn">
-                <div className="equipment-bottom-btn-container">
-                        <BackButton to="/ViewEquipment" />
-                </div>
+                <Button type="back" onClick={() => handleBack()}>Back</Button>
             </div>
 
-            <EquipmentPopup show={showPopup} handleClose={handleClosePopup} />
         </div>
     );
 };

@@ -4,7 +4,6 @@ import ViewCancelOrder from '../viewCancelOrder/viewCancelOrder';
 import ViewExtendOrder from '../ViewExtendOrder/ViewExtendOrder';
 
 const formatDate = (dateString) => {
-    console.log(dateString);
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     const year = date.getFullYear();
