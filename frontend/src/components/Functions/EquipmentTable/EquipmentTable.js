@@ -7,6 +7,9 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './EquipmentTable.css';
 import StatusModal from "../../Modal/StatusModal/StatusModal.js";
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
+import EditEquipmentModal from "../../Modal/EditEquipmentModal/EditEquipmentModal";
+import EquipmentPopup from "../../Modal/EquipmentPopup/EquipmentPopup.js";
+
 
 class EquipmentTable extends Component {
     constructor(props) {
@@ -22,10 +25,13 @@ class EquipmentTable extends Component {
                 resizable: true
             },
             searchQuery: '',
-            showDeletePopup: false, // New state for showing the delete popup
+            showDeletePopup: false,
             showModal: false,
-            itemToDelete: null,      // New state to track the item to delete
-            selectedItem: null
+            itemToDelete: null, 
+            selectedItem: null,
+            showEditModal: false,
+            equipmentToEdit: null,
+            showAddModal: false,
         };
     }
 
@@ -148,6 +154,28 @@ class EquipmentTable extends Component {
         this.loadRecords();
     };
 
+    openEditModal = (equipment) => {
+        this.setState({ showEditModal: true, equipmentToEdit: equipment });
+    };
+
+    closeEditModal = () => {
+        this.setState({ showEditModal: false, equipmentToEdit: null });
+    };
+
+    openAddModal = () => {
+        this.setState({ showAddModal: true });
+    };
+
+    closeAddModal = () => {
+        this.setState({ showAddModal: false });
+    };
+
+
+    handleEquipmentUpdated = async () => {
+        await this.loadRecords(); 
+    };
+    
+
     handleSearch = (query) => {
         const { records } = this.state;
         const filteredRecords = records.filter(record =>
@@ -160,16 +188,9 @@ class EquipmentTable extends Component {
         this.setState({ showModal: true, selectedItem: item });
     };
 
-    closeModal = () => {
-        this.setState({ showModal: false, selectedItem: null });
-    };
-
-    openEditModal = (item) => {
-
-    }
 
     render() {
-        const { handleOpenPopup, showModal, selectedItem, openEditModal } = this.props;
+        const { handleOpenPopup, openEditModal, showEditModal, equipmentToEdit } = this.props;
 
         const columnDefs = [
             {
@@ -183,7 +204,7 @@ class EquipmentTable extends Component {
                             src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png"
                             alt="Edit"
                             className="edit-icon"
-                            onClick={() => openEditModal(params.data)}
+                            onClick={() => this.openEditModal(params.data)}
                             style={{
                                 cursor: 'pointer',
                                 width: '12px',
@@ -293,7 +314,7 @@ class EquipmentTable extends Component {
                     </div>
 
                     <div className="">
-                        <button className="add-new-button" onClick={handleOpenPopup}>
+                        <button className="add-new-button" onClick={this.openAddModal}>
                             Add New +
                         </button>
                     </div>
@@ -319,6 +340,20 @@ class EquipmentTable extends Component {
                     show={this.state.showModal}
                     onClose={this.closeModal}
                     item={this.state.selectedItem}
+                    onEquipmentUpdated={this.handleEquipmentUpdated}
+                />
+
+                <EditEquipmentModal
+                    show={this.state.showEditModal}
+                    handleClose={this.closeEditModal}
+                    equipmentToEdit={this.state.equipmentToEdit}
+                    onEquipmentUpdated={this.handleEquipmentUpdated}
+                />
+
+                <EquipmentPopup
+                    show={this.state.showAddModal}
+                    handleClose={this.closeAddModal}
+                    onEquipmentUpdated={this.handleEquipmentUpdated}
                 />
 
             </>

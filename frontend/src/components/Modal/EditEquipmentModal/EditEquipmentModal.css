@@ -14,72 +14,59 @@
 .edit-item-modal-content {
     background: white;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 500px;
+    overflow-y: auto;
+    max-height: 500px;
+    position: relative;
 }
 
-.edit-item-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
 
-.close-button {
+.edit-item-close-button {
     background: none;
     border: none;
     font-size: 30px;
     cursor: pointer;
-    color: #3361AE;
-}
-
-.edit-item-modal-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.edit-item-modal-info {
-    margin-bottom: 10px;
 }
 
 .edit-item-modal-label {
-    display: block;
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
     font-size: 16px;
+    line-height: 19px;
     color: #3361AE;
-    margin-bottom: 5px;
+    display: inline-block;
 }
 
-.edit-item-modal-select,
-.edit-item-modal-input {
-    width: 100%;
-    padding: 8px;
+.edit-item-modal-info {
+    margin-bottom: 20px;
+}
+
+.edit-item-modal-info input {
+    width: 95%;
     border-radius: 5px;
-    border: 1px solid #3361AE;
-    font-size: 14px;
     background-color: #E7EFF2;
-}
-
-.edit-item-modal-select {
-    width: 98%;
+    border: 1px solid #3361AE;
+    padding: 8px;
+    font-size: 14px;
 }
 
 .edit-item-modal-footer {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
-.edit-item-cancel-button,
 .edit-item-submit-button {
+    font-size: 18px;
     padding: 10px 20px;
-    font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
     border: 1px solid #3361AE;
     background-color: transparent;
     color: #3361AE;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 .edit-item-submit-button:hover {
@@ -89,6 +76,6 @@
 
 .edit-item-modal-error-message {
     color: red;
-    font-size: 14px;
-    margin-top: 5px;
+    font-weight: bold;
+    margin-top: 10px;
 }

@@ -77,6 +77,16 @@ const deleteClassCode = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: "Class code not found" });
     }
 
+    try {
+        await Student.updateMany(
+            { classCodes: code }, 
+            { $pull: { classCodes: code } } 
+        );
+    } catch (error) {
+        res.status(500);
+        throw new Error(`Failed to remove class code ${code} from students: ${error.message}`);
+    }
+
     res.status(200).json({ message: `Class code ${code} deleted successfully` });
 });
 

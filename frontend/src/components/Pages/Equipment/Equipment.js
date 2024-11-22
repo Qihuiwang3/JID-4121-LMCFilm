@@ -40,7 +40,6 @@ const Equipment = () => {
                 </div>
             </div>
 
-            <EquipmentPopup show={showPopup} handleClose={handleClosePopup} />
         </div>
     );
 };

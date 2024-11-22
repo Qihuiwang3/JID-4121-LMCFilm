@@ -8,6 +8,16 @@ const BundleItem = require('../models/BundleItem');
 // @access Private
 const createGlobalItem = asyncHandler(async (req, res) => {
     const { itemName, pricePerItem, itemIds } = req.body;
+
+    if (!itemName || !pricePerItem || !itemIds || !itemIds.length) {
+        return res.status(400).json({ error: "All fields are required." });
+    }
+
+    const duplicateId = await Item.findOne({ "itemIds.itemId": { $in: itemIds } });
+
+    if (duplicateId) {
+        return res.status(400).json({ error: "Item ID already exists." });
+    }
     let item = await Item.findOne({ itemName });
     if (item) {
         item.quantity += 1;
@@ -464,6 +474,47 @@ const isItemIdExist = asyncHandler(async (req, res) => {
     res.status(200).json({ exists });
 });
 
+const updateItem = asyncHandler(async (req, res) => {
+    const { itemName, itemId, newPrice, newItemId } = req.body;
+    if (!itemName || !itemId) {
+        console.error("Validation error: Missing itemName or itemId", req.body);
+        return res.status(400).json({ error: "Item name and item ID are required." });
+    }
+
+    // Find the specific item by name and ID
+    const item = await Item.findOne({ itemName, "itemIds.itemId": itemId });
+    if (!item) {
+        return res.status(404).json({ error: "Item not found." });
+    }
+
+    if (newPrice) {
+        await Item.updateMany(
+            { itemName },
+            { $set: { pricePerItem: newPrice } }
+        );
+        item.pricePerItem = newPrice; // Reflect updated price locally
+    }
+    // Update the specific item's ID
+    if (newItemId && newItemId !== itemId) {
+        const duplicateId = await Item.findOne({ "itemIds.itemId": newItemId });
+        if (duplicateId) {
+            return res.status(400).json({ error: "New item ID already exists." });
+        }
+        const itemIndex = item.itemIds.findIndex(i => i.itemId === itemId);
+        if (itemIndex !== -1) {
+            item.itemIds[itemIndex].itemId = newItemId;
+        } else {
+            return res.status(404).json({ error: "Item ID not found." });
+        }
+    }
+
+    await item.save();
+
+    const updatedItems = await Item.find({ itemName });
+    res.status(200).json({ message: "Item updated successfully.", updatedItems });
+});
+
+
 
 module.exports = {
     createGlobalItem,
@@ -485,5 +536,6 @@ module.exports = {
     toggleRepairStatus,
     updateBundleItem,
     getRepairStatus,
-    isItemIdExist
+    isItemIdExist,
+    updateItem
 };
