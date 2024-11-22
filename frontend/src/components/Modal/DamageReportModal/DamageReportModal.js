@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './DamageReportModal.css';
-import { createDamageReport, getItems, getStudents, updateDamageReport } from '../../../connector';
+import { createDamageReport, getItems, getStudents, updateDamageReport, getOrderByOrderNumber } from '../../../connector';
 import { useSelector } from 'react-redux';
 const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) => {
     const reporter = useSelector((state) => state.studentData.name);
     const [dateReported] = useState(new Date().toISOString().split('T')[0]);
     const [studentEmail, setStudentEmail] = useState(reportToEdit?.studentEmail || '');
+    const [orderNumber, setOrderNumber] = useState(reportToEdit?.orderNumber || '');
     const [itemId, setItemId] = useState(reportToEdit?.itemId || '');
     const [itemName, setItemName] = useState(reportToEdit?.itemName || '');
     const [description, setDescription] = useState(reportToEdit?.description || '');
@@ -14,6 +15,7 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
     const [error, setError] = useState('');
     const [items, setItems] = useState([]);
     const [students, setStudents] = useState([]);
+    const [isOrderValid, setIsOrderValid] = useState(true);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -46,12 +48,28 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
         }
     };
 
+    const validateOrderNumber = async () => {
+        try {
+            const order = await getOrderByOrderNumber(orderNumber);
+            setIsOrderValid(true);
+            setStudentEmail(order.email);
+        } catch (error) {
+            setIsOrderValid(false);
+            setError('Order number does not exist in the system.');
+        }
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!studentEmail || !itemId || !itemName || !description) {
             setError('Please fill out all required fields.');
+            return;
+        }
+
+        if (!isOrderValid) {
+            setError('Invalid order number. Please correct it.');
             return;
         }
 
@@ -76,6 +94,7 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
         const data = {
             reporter: reporter,
             dateCreated: dateReported,
+            orderNumber: orderNumber,
             studentEmail: studentEmail,
             itemId: itemId,
             itemName: itemName,
@@ -118,6 +137,17 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
                             <div className='damage-modal-label'>Date Reported</div>
                             <input type="date" value={dateReported} readOnly />
                         </div>
+                    </div>
+
+                    <div className='damage-modal-info'>
+                        <div className='damage-modal-label'>Order Number</div>
+                        <input
+                            type="text"
+                            value={orderNumber}
+                            onChange={(e) => setOrderNumber(e.target.value)}
+                            onBlur={validateOrderNumber}
+                            required
+                        />
                     </div>
 
                     <div className='damage-modal-info'>

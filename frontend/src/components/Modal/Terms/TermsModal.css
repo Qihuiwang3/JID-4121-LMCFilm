@@ -1,0 +1,135 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    width: 500px;
+    height: 400px;
+    /* Set a fixed height */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-outer-content {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    width: 550px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #3361AE;
+    margin-bottom: 10px;
+}
+
+.modal-header h2 {
+    font-size: 24px;
+    color: #3361AE;
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #3361AE;
+}
+
+.modal-content {
+    max-height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.term-modal-footer label {
+    font-family: Montserrat, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 50px;
+}
+
+.term-modal-footer .disabled-label {
+    color: grey;
+    cursor: not-allowed;
+}
+
+.term-modal-footer .enabled-label {
+    color: black;
+    cursor: pointer;
+}
+
+.term-modal-footer input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.term-modal-footer input[type="checkbox"]:not(:disabled) {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.modal-content {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: auto;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+}
+
+.modal-content ol {
+    margin-left: 20px;
+    padding-left: 20px;
+}
+
+.modal-content ol li {
+    margin-bottom: 20px;
+}
+
+.modal-content ul {
+    margin-left: 20px;
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+.modal-content ul li {
+    margin-bottom: 5px;
+}
+
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

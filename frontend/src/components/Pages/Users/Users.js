@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import StudentTable from '../../Functions/StudentTable/StudentTable'; 
 import Button from '../../Button/Button';
-import './Students.css';
+import './Users.css';
 import { useNavigate } from 'react-router-dom';
 
-const Students = () => {
+const Users = () => {
     const navigate = useNavigate();
     const [isEditMode, setIsEditMode] = useState(false);
     const studentTableRef = useRef(null); 
@@ -35,4 +35,4 @@ const Students = () => {
     );
 }
 
-export default Students;
+export default Users;

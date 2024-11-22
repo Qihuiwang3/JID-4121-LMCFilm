@@ -46,7 +46,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                 equipment: updatedEquipment,
                 checkedoutStatus: true,
                 checkedinStatus: false,
-                checkedout: new Date(),
+                checkedout: new Date()
             });
             
             console.log('Order updated successfully');
@@ -102,7 +102,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                     </div>
                 </div>
 
-                <h3 className="equipment-header">Equipment Check Out</h3>
+                <h3 className="equipment-header">Equipment Checked-out</h3>
 
                 {orderInfo.equipment.map((item, index) => (
                     <div key={index} className="search-row">
@@ -143,7 +143,7 @@ const SearchPopup = ({ goBack, onClose, orderInfo }) => {
                         disabled={isButtonDisabled}
                         onClick={handleEquipmentCheckout}
                     >
-                        Student Checked In
+                        Student Checked-in Confirmed
                     </button>
                 </div>
             </div>
