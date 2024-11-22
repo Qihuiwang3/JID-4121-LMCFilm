@@ -19,7 +19,8 @@ const {
     toggleHideStatus,
     updateBundleItem,
     getRepairStatus,
-    isItemIdExist
+    isItemIdExist,
+    updateItem
 } = require('../controllers/itemController');
 
 const router = express.Router();
@@ -62,5 +63,6 @@ router.patch('/item/itemId/:itemId/hide', toggleHideStatus);
 router.post('/item/repair-status', getRepairStatus);
 
 router.get('/item/itemName/itemId/:itemName/:itemId/existence', isItemIdExist);
+router.put('/item/update', updateItem);
 
 module.exports = router;

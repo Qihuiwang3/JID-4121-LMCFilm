@@ -36,7 +36,6 @@ const ReservationHistoryTable = () => {
                         studentName: record.studentName,
                     }));
 
-                console.log(studentInfo);
                 setRecords(transformedRecords);
             } catch (error) {
                 console.error("Error loading records:", error);

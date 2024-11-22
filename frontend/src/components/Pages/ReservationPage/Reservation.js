@@ -62,9 +62,7 @@ function ReservationPage() {
         dispatch(setReservationCartItems(cartItems));
         try {
             const response = await createCartWithData(cartData);
-            console.log('Cart created:', response);
             navigate('/CartConfirmation', { state: { cartItems } });
-            console.log(cartItems);
         } catch (error) {
             console.error('Error creating cart:', error);
         }

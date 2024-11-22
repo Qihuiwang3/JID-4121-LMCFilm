@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import AgGridTable from '../AgGridTable/AgGridTable';
 import { getClassCodes, createClassCode, createBundleItem, getItems, createSingleItem, deleteClassCode, getBundleItemsByClassCode, updateClassCode, updateBundleItem, getSingleItemsByClassCode, removeSingularItem } from '../../../connector.js';
 import SearchBar from '../SearchBar/SearchBar';
@@ -7,7 +7,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
-function CodesTable() {
+const CodesTable = forwardRef((props, ref) => {
     const [records, setRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -42,6 +42,11 @@ function CodesTable() {
         bundleEquipment: [],
     });
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    
+    useImperativeHandle(ref, () => ({
+        loadRecords,
+    }));
+
 
     useEffect(() => {
         loadRecords();
@@ -251,7 +256,6 @@ function CodesTable() {
                 const itemToRemove = initialEquipment.find(item => item.itemName === removedItem.itemName);
 
                 if (itemToRemove && itemToRemove._id) {  // Use the _id field as itemId
-                    console.log("Attempting to remove item:", removedItem.itemName, "with ID:", itemToRemove._id);  // Debugging log
                     await removeSingularItem(removedItem.itemName, itemToRemove._id); // Pass _id as itemId
                 } else {
                     console.error(`Item ID for ${removedItem.itemName} is undefined, skipping removal.`);
@@ -766,7 +770,7 @@ function CodesTable() {
 
         </>
     );
-}
+});
 
 export default CodesTable;
 

@@ -45,7 +45,6 @@ function ReservationConfirmationMessagePage() {
                 studentName: studentInfo.name
             };
 
-            console.log(orderData);
 
             try {
                 const response = await fetch('http://localhost:3500/api/order', {
@@ -55,7 +54,6 @@ function ReservationConfirmationMessagePage() {
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    console.log('Order created successfully:', data);
                 } else {
                     console.error('Error creating order:', data.error);
                 }
