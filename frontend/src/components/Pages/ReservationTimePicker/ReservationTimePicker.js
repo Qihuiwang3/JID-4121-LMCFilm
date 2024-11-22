@@ -69,10 +69,10 @@ function ReservationTimePicker() {
         setPickupDate(newPickupDate);
 
         const newReturnDate = new Date(newPickupDate);
-        newReturnDate.setDate(newPickupDate.getDate() + 1); 
+        newReturnDate.setDate(newPickupDate.getDate() + 1);
         setReturnDate(newReturnDate);
 
-        setReturnTime(new Date(newReturnDate.getFullYear(), newReturnDate.getMonth(), newReturnDate.getDate(), 9, 0)); 
+        setReturnTime(new Date(newReturnDate.getFullYear(), newReturnDate.getMonth(), newReturnDate.getDate(), 9, 0));
     };
 
     const minReturnTime = returnDate.toDateString() === pickupDate.toDateString() ? pickupTime : new Date().setHours(0, 0, 0, 0);
@@ -158,3 +158,4 @@ function ReservationTimePicker() {
 }
 
 export default ReservationTimePicker;
+

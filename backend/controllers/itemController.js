@@ -63,12 +63,11 @@ const getAllGlobalEquipment = asyncHandler(async (req, res) => {
 // @route GET /item/:itemName
 // @access Private
 const getItemByName = asyncHandler(async (req, res) => {
-    const { itemName } = req.params;
-
+    const { itemName } = req.body;
     const item = await Item.findOne({ itemName });
 
     if (!item) {
-        return res.status(404).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
+        return res.status(204).json({ error: `Item ${itemName} not found in the equipment checkout center.` });
     }
 
     res.status(200).json(item);
@@ -305,16 +304,34 @@ const updateBundleItem = asyncHandler(async (req, res) => {
 // @desc Get all bundle items for a specific class code
 // @route GET /bundle-items/:classCode
 // @access Private
+// server/controllers/bundleController.js
+
 const getBundleItemsByClassCode = asyncHandler(async (req, res) => {
     const { classCode } = req.params;
+
+    // Fetch all bundle items for the given classCode
     const bundleItems = await BundleItem.find({ classCode });
 
     if (!bundleItems || bundleItems.length === 0) {
         return res.status(404).json({ error: "No bundle items found for this class code" });
     }
 
-    res.status(200).json(bundleItems);
+    // Extract common fields from the first item
+    const { bundleName, bundleId, price, items } = bundleItems[0];
+
+    // Prepare the response object with the raw items array
+    const response = {
+        bundleName: bundleName || "N/A",
+        bundleId: bundleId || "",
+        price: price || 0,
+        items: items, // Return the raw array of bundle items
+    };
+
+    res.status(200).json(response);
 });
+
+
+
 
 // @desc Purchase a bundle item and decrease quantity of each single item in the bundle
 // @route POST /purchase-bundle/:bundleId
@@ -465,11 +482,11 @@ const isItemIdExist = asyncHandler(async (req, res) => {
     const { itemName, itemId } = req.params;
 
     const item = await Item.findOne({ itemName });
-    
+
     if (!item) {
         return res.status(404).json({ error: `Item ${itemName} not found.` });
     }
-    
+
     const exists = item.itemIds.some(i => i.itemId === itemId);
     res.status(200).json({ exists });
 });

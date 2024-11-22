@@ -1,4 +1,4 @@
-.modal-overlay {
+.modal-overlay2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,43 +8,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1050;
 }
 
-.cancel-popup-container {
+.success-popup-container {
     background-color: #FAF3E5;
     padding: 50px;
+    width: 550px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.cancel-header {
+.success-header {
     color: #3361AE;
-    font-size: 40px;
-    font-weight: bold;
+    font-size: 25px;
+    font-weight: 900;
     text-align: center;
-    padding-bottom: 15px;
+    padding-bottom: 25px;
 }
 
-.cancel-message {
+.success-message {
     text-align: center;
 }
 
-.cancel-modal-btn {
+.success-modal-btn {
     padding-top: 30px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 60%;
-    margin-inline: auto;
-}
-
-/* Center the Back button when Confirm button is not present */
-.cancel-modal-btn.single-button {
     justify-content: center;
 }
 
-.cancel-cancel {
+.success-back {
     background-color: #3361AE;
     color: white;
     padding-block: 15px;
@@ -54,20 +48,6 @@
     transition: background-color 0.3s ease;
 }
 
-.cancel-confirm {
-    background-color: #3361AE;
-    color: white;
-    padding-block: 15px;
-    padding-inline: 40px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.cancel-cancel:hover {
-    background-color: #2e4a7a;
-}
-
-.cancel-confirm:hover {
+.success-back:hover {
     background-color: #2e4a7a;
 }

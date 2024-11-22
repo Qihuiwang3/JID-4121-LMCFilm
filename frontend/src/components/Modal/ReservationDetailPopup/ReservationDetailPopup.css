@@ -11,20 +11,21 @@
     z-index: 1000;
 }
 
+
 .view-modal-content {
     background: white;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 1000px;
     overflow: auto;
-    scrollbar-width: none; 
-    -ms-overflow-style: none; 
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     max-height: 500px;
     position: relative;
 }
 
 .view-modal-content::-webkit-scrollbar {
-    display: none; 
+    display: none;
 }
 
 .details-section {
@@ -35,7 +36,8 @@
     width: 95%;
 }
 
-.details-info-group, .info-group {
+.details-info-group,
+.info-group {
     text-align: left;
     width: 28%;
 }
@@ -48,7 +50,7 @@
     font-size: 14px;
 }
 
-.input-field {
+.input-field-detail {
     width: 100%;
     padding: 10px;
     border: 1.5px solid #3361AE;
@@ -70,7 +72,7 @@
 }
 
 .view-equipment-checkin {
-    width: 49%; 
+    width: 49%;
 }
 
 .view-section-header {
@@ -90,7 +92,7 @@
 .view-equipment-group {
     display: flex;
     flex-direction: column;
-    width: 32%; 
+    width: 32%;
     margin-right: 30px;
 }
 
@@ -100,6 +102,19 @@
     font-size: 14px;
     color: #3361AE;
 }
+.gray-button {
+    background-color: gray;
+    color: white; 
+    cursor: pointer; 
+  }
+
+  .cancel-reservation.gray-button {
+    background-color: #d3d3d3;
+    color: #a9a9a9; 
+    cursor: pointer; 
+  }
+  
+  
 
 .view-input-field {
     padding: 10px;
@@ -114,7 +129,7 @@
 
 .cancel-reservation {
     background-color: #3361AE;
-    color: white; 
+    color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -124,13 +139,14 @@
 }
 
 .cancel-reservation:disabled {
-    background-color: #d3d3d3; 
-    color: #a9a9a9; 
-    cursor: not-allowed; 
+    background-color: #d3d3d3;
+    color: #a9a9a9;
+    cursor: pointer;
 }
+
 .extend-reservation {
-    background-color: #3361AE; 
-    color: white; 
+    background-color: #3361AE;
+    color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -140,9 +156,9 @@
 }
 
 .extend-reservation:disabled {
-    background-color: #d3d3d3; 
-    color: #a9a9a9; 
-    cursor: not-allowed; 
+    background-color: #d3d3d3;
+    color: #a9a9a9;
+    cursor: not-allowed;
 }
 
 .view-equipment-group:nth-child(1) {

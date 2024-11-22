@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Order = require('../models/Order');
+const Item = require('../models/Item');
 
 // @desc Get all orders
 // @route GET /orders
@@ -62,15 +63,44 @@ const createOrder = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: `Order with number ${orderNumber} already exists.` });
     }
 
-    const formattedEquipment = equipment.map(e => ({
-        itemName: e.itemName,
-        itemId: ''
-    }));
+    const items = await Item.find({});
+    // console.log(items);
+    // console.log("HELLO");
+    // console.log(items);
+    // console.log(equipment);
+
+    const formattedEquipment = equipment.map((requestedEquipment) => {
+        console.log(requestedEquipment.itemName);
+        // Find the item in the inventory that matches the requested equipment name
+        const inventoryItem = items.find((invItem) => invItem.itemName === requestedEquipment.itemName);
+
+        if (!inventoryItem || !inventoryItem.itemIds || inventoryItem.itemIds.length === 0) {
+            throw new Error(`No items found in inventory for ${requestedEquipment.name}`);
+        }
+
+        // Filter itemIds to only include those that are available (not hidden or in repair)
+        const availableItems = inventoryItem.itemIds.filter(
+            (itemDetail) => !itemDetail.hide && !itemDetail.repair
+        );
+
+        if (availableItems.length === 0) {
+            throw new Error(`No available items for ${requestedEquipment.name}`);
+        }
+
+        // Select a random item from the available items
+        const randomIndex = Math.floor(Math.random() * availableItems.length);
+        const selectedItem = availableItems[randomIndex];
+
+        return {
+            itemName: requestedEquipment.itemName,
+            itemId: selectedItem.itemId, // Add the randomly selected specific item's ID to the order
+        };
+    });
 
     const newOrder = new Order({
         orderNumber,
         email,
-        checkin: new Date(checkin), 
+        checkin: new Date(checkin),
         checkout: new Date(checkout),
         checkedinStatus: false, // Explicitly set these to false initially
         checkedoutStatus: false, // Explicitly set these to false initially
@@ -80,6 +110,8 @@ const createOrder = asyncHandler(async (req, res) => {
 
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
+    // res.status(201).json(items);
+
 });
 
 
@@ -109,7 +141,7 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
     }
 
     const order = await Order.findOne({ orderNumber: req.params.orderNumber });
-    
+
     if (!order) {
         return res.status(404).json({ error: `Order with number ${req.params.orderNumber} not found.` });
     }
@@ -142,7 +174,7 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { 
+module.exports = {
     getAllOrders,
     getOrderByOrderNumber,
     getOrderById,

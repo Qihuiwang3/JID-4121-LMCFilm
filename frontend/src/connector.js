@@ -127,7 +127,7 @@ const getItems = async () => {
 
 const getItemByName = async (itemName) => {
     try {
-        const res = await axios.get(`${BACKEND_URL}/api/item/${itemName}`);
+        const res = await axios.post(`${BACKEND_URL}/api/get-item`, { itemName });
         return res.data;
     } catch (error) {
         console.log(error);
@@ -296,6 +296,8 @@ const getBundleItemsByClassCode = async (classCode) => {
         throw error;
     }
 };
+
+
 
 const createBundleItem = async (itemData) => {
     try {
@@ -495,7 +497,7 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
             checkedoutStatus: updateData.checkedoutStatus,
             checkedout: updateData.checkedout,
             checkedinStatus: updateData.checkedinStatus,
-            checkedin: updateData.checkedout,
+            checkedin: updateData.checkedin,
             checkout: updateData.checkout,
             beenExtended: updateData.beenExtended
         }, {

@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import AgGridTable from '../AgGridTable/AgGridTable';
-import { getAllOrders } from '../../../connector';
+import { getAllOrders, getAllDamageReports } from '../../../connector';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
 import './ReservationHistoryTable.css';
 import StudentViewDamageModal from '../../Modal/StudentViewDamageModal/StudentViewDamageModal';
 
-
+import ReservationDetailPopup from '../../Modal/ReservationDetailPopup/ReservationDetailPopup';
 
 const ReservationHistoryTable = () => {
     const [records, setRecords] = useState([]);
     const location = useLocation();
     const reduxStudentInfo = useSelector(state => state.studentData);
     const [viewReportId, setViewReportId] = useState(null);
-    const [viewDamageId, setViewDamageId] = useState(null);
+    const [viewDamageItems, setViewDamageItems] = useState(null);
+    const [viewOrderDetailsId, setViewOrderDetailsId] = useState(null);
 
+    const [allDamageReports, setAllDamageReports] = useState([]);
 
-    useEffect(() => {
-        const loadRecords = async () => {
-            try {
-                const records = await getAllOrders();
-                const studentInfo = location.state?.studentInfo || reduxStudentInfo;
+    const loadRecords = async () => {
+        try {
+            const records = await getAllOrders();
+            const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
                 // Filter orders based on account email and student name
                 const transformedRecords = records
@@ -42,6 +43,7 @@ const ReservationHistoryTable = () => {
             }
         };
 
+    useEffect(() => {
         loadRecords();
     }, [location.state, reduxStudentInfo]);
 
@@ -49,16 +51,20 @@ const ReservationHistoryTable = () => {
         setViewReportId(orderNumber);
     };
 
-
     const handleViewDamage = (id) => {
-        setViewDamageId(id);
+        setViewDamageItems(id);
     };
 
+    const handleViewDetailsModal = (id) => {
+        setViewOrderDetailsId(id);
+    }
 
     const handleCloseModal = () => {
         setViewReportId(null);
-        setViewDamageId(null)
+        setViewDamageItems(null);
+        setViewOrderDetailsId(null);
     };
+
 
 
     const columnDefs = [
@@ -68,7 +74,7 @@ const ReservationHistoryTable = () => {
             cellStyle: { cursor: 'pointer' },
             cellRenderer: params => (
                 <span
-                    onClick={() => handleViewReport(params.data.code)}
+                    onClick={() => handleViewReport(params.data.orderNumber)}
                     style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
                     className="clickable-text"
                 >
@@ -105,24 +111,74 @@ const ReservationHistoryTable = () => {
         {
             headerName: "View Damage Report",
             flex: 1,
-            cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
             valueGetter: () => "View Details",
-            cellRenderer: params => (
-                <span
-                    onClick={() => handleViewDamage(params.data.code)}
-                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
-                    className="clickable-text"
-                >
-                    View Damage Report
-                </span>
-            )
+            cellRenderer: params => {
+                const studentInfo = location.state?.studentInfo || reduxStudentInfo;
+                const equipment = params.data.equipment;
 
+                const filteredDamage = allDamageReports
+                    .filter(report =>
+                        equipment
+                            .filter(orderItem => orderItem)
+                            .some(orderItem => {
+                                return orderItem.itemId === report.itemId && orderItem.itemName === report.itemName && report.studentEmail === studentInfo.email;
+                            })
+                    )
+                    .map(report => report._id);
+                const displayText = filteredDamage.length === 0 ? "No Damage Report" : "View Damage Report";
+
+                const style = {
+                    color: 'black',
+                    textDecoration: filteredDamage.length === 0 ? 'none' : 'underline',
+                    cursor: filteredDamage.length > 0 ? 'pointer' : 'default'
+                };
+
+                return (
+                    <span
+                        onClick={() => {
+                            if (filteredDamage.length > 0) {
+                                setViewDamageItems(params.data.equipment);
+                            }
+                        }}
+                        style={style}
+                    >
+                        {displayText}
+                    </span>
+                );
+            }
         },
         {
             headerName: "View Details",
             flex: 1,
             cellStyle: { cursor: 'pointer', textDecoration: 'underline' },
-            valueGetter: () => "View Details",
+            cellRenderer: params => (
+                <span
+                    onClick={() => {
+                        handleViewDetailsModal(params.data);
+                    }}
+                    style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
+                    className="clickable-text"
+                >
+                    View Details
+                </span>
+            )
+        },
+        {
+            headerName: "Created At",
+            field: "createdAt",
+            hide: true, // Hide this column but still use it for sorting
+            sort: 'desc', // Sort by createdAt in descending order by default
+            valueFormatter: (params) => {
+                const dateValue = new Date(params.value);
+                return dateValue.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                });
+            }
         }
 
     ];
@@ -148,13 +204,21 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-            {viewDamageId && (
+            {viewDamageItems && (
                 <StudentViewDamageModal
-                    show={!!viewDamageId}
-                    orderNumber={viewDamageId}
+                    orderItems={viewDamageItems}
                     handleClose={handleCloseModal}
                 />
             )}
+           {viewOrderDetailsId && (
+                <ReservationDetailPopup
+                    reservationDetails={viewOrderDetailsId}
+                    onClose={handleCloseModal}
+                    onOrderCancelled={loadRecords}
+                    onOrderExtended={loadRecords}
+                    showButtons={true} 
+    />
+)}
 
         </>
     );

@@ -10,7 +10,7 @@ function PackageEquipmentDropdown({ id, title, equipment, showQuantity, showRese
 
     return (
 
-        <div style={{ width: "100%", paddingRight: "10px" }}>
+        <div style={{ width: "100%" }}>
             <div className="package-dropdown-header">
                 <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <div>{title}</div>

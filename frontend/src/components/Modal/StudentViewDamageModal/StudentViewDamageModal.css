@@ -89,15 +89,38 @@ input[readonly] {
 }
 
 
-.modal-footer {
+.student-view-damage-modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding-top: 10px;
     gap: 10px;
 }
 
+.student-view-damage-modal-navigate {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
 
-.cancelModal-button, .saveModal-button {
+
+.cancelModal-button,
+.saveModal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.student-view-damage-modal-back {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.student-view-damage-modal-next {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -124,7 +147,8 @@ input[readonly] {
 }
 
 
-.saveModal-button:hover, .cancelModal-button:hover {
+.saveModal-button:hover,
+.cancelModal-button:hover {
     opacity: 0.9;
 }
 
@@ -141,9 +165,9 @@ input[readonly] {
 
 .camera-icon {
     display: block;
-    margin: 0 auto;  
-    width: 260px;  
-    height: auto;  
+    margin: 0 auto;
+    width: 260px;
+    height: auto;
     margin-top: -10px;
     background-color: transparent;
 }
@@ -151,13 +175,16 @@ input[readonly] {
 
 .image-scroll-container {
     display: flex;
-    overflow-x: scroll;  /* Horizontal scroll for multiple images */
-    max-width: 100%;     /* Adjust based on your modal width */
+    overflow-x: scroll;
+    /* Horizontal scroll for multiple images */
+    max-width: 100%;
+    /* Adjust based on your modal width */
 }
 
 
 .image-scroll-container img {
-    margin-right: 10px;  /* Add space between images */
-    flex-shrink: 0;      /* Prevent the images from shrinking */
+    margin-right: 10px;
+    /* Add space between images */
+    flex-shrink: 0;
+    /* Prevent the images from shrinking */
 }
-
