@@ -104,7 +104,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                     <input
                                         type="text"
                                         className="view-input-field"
-                                        defaultValue={formatDate(reservationDetails.checkedout) ? " " : item.itemId}
+                                        defaultValue={!reservationDetails.checkedout ? " " : item.itemId}
                                         readOnly
                                     />
                                 </div>
@@ -135,7 +135,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                 <input
                                 type="text"
                                 className="view-input-field"
-                                defaultValue={formatDate(reservationDetails.checkedin) ? " " : item.itemId}
+                                defaultValue={!reservationDetails.checkedin ? " " : item.itemId}
                                 readOnly
                             />
                         </div>
