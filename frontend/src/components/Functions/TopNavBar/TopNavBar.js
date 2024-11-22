@@ -37,6 +37,7 @@ const TopNavBar = () => {
     };
 
     const logoutNav = () => {
+        localStorage.removeItem('authToken');
         navigate("/");
         setIsSidebarOpen(false);
     };

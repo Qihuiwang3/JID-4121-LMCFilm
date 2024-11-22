@@ -49,17 +49,20 @@ const Login = () => {
         try {
             if (isLogin) {
                 const response = await loginStudent(formData.email, formData.password);
+                console.log(response);
+                localStorage.setItem('authToken', response.token);
 
                 dispatch(setStudentInfo({
-                    email: response.email,
-                    name: response.name,
-                    classCodes: response.classCodes,
-                    role: response.role,
+                    email: response.student.email,
+                    name: response.student.name,
+                    classCodes: response.student.classCodes,
+                    role: response.student.role,
                 }));
 
                 dispatch(loginSuccess());
 
-                if (response.role === 'Admin' || response.role === 'Professor' || response.role === 'SA') {
+
+                if (response.student.role === 'Admin' || response.student.role === 'Professor' || response.student.role === 'SA') {
                     navigate('/SelectTask');
                 } else {
                     navigate('/Enter');

@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Student = require('../models/Student');
+const jwt = require("jsonwebtoken");
 
 // @desc Get all students
 // @route GET /students
@@ -115,11 +116,20 @@ const loginStudent = asyncHandler(async (req, res) => {
         throw new Error('Invalid email or password');
     }
 
-    res.status(200).json({
-        email: student.email,
-        name: student.name,
-        role: student.role,
-        classCodes: student.classCodes
+    const token = jwt.sign(
+        { email: student.email, role: student.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+    );
+
+    res.json({ 
+        token,
+        student: {
+            email: student.email,
+            name: student.name,
+            classCodes: student.classCodes,
+            role: student.role
+        }
     });
 });
 

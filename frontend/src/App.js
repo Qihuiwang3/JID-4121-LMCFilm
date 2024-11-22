@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Payment from "./components/Pages/Payment/Payment";
 import TopNavBar from "./components/Functions/TopNavBar/TopNavBar";
@@ -18,9 +18,11 @@ import ViewReservation from "./components/Pages/ViewReservation/ViewReservation"
 import Login from "./components/Pages/Login/Login";
 import ReservationHistory from "./components/Pages/ReservationHistory/ReservationHistory";
 import DamageReport from "./components/Pages/DamageReport/DamageReport";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./components/redux/store";
+import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./ProtectedRoute";
+import { setStudentInfo } from "./components/redux/actions/studentActions";
 
 class App extends Component {
     state = {
@@ -37,11 +39,13 @@ class App extends Component {
             selectedDates: { pickupDate, pickupTime, returnDate, returnTime }
         });
     };
+
   
     render() {
       return (
           <Provider store={store}>
               <Router>
+                  <TokenVerification />
                   <TopNavBar />
                   <Routes>
                       {/* Public route - Login */}
@@ -118,5 +122,33 @@ class App extends Component {
       );
   }
 }
+
+const TokenVerification = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+
+                if (decoded.exp * 1000 > Date.now()) {
+                    const { email, role } = decoded;
+
+                    dispatch(setStudentInfo({ email, role }));
+                } else {
+                    localStorage.removeItem('authToken');
+                }
+            } catch (error) {
+                console.error('Token verification failed:', error);
+                localStorage.removeItem('authToken');
+            }
+        }
+    }, [dispatch]);
+
+    return null;
+};
+
+
 
 export default App;
