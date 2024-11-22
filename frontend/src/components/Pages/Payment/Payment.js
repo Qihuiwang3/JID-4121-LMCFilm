@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PayPal from "../../Functions/PayPal/PayPal";
 import './Payment.css';
@@ -12,7 +12,7 @@ function Payment({ cartItems, selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartTotal } = location.state || {};
-    const [runOnce, setRunOnce] = useState(true);
+    const orderCreatedRef = useRef(false);
 
     const generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
@@ -98,15 +98,15 @@ function Payment({ cartItems, selectedDates, name, email }) {
                 console.error('Error creating order:', error);
                 throw error;
             });
-
-        setRunOnce(false);
     };
 
     useEffect(() => {
 
-        if (Number(cartTotal) === 0 && runOnce) {
+        if (Number(cartTotal) === 0 && !orderCreatedRef.current) {
             createOrderAfterPayment(cartItems, selectedDates, name, email);
+            orderCreatedRef.current = true;
         }
+
     }, [cartTotal, cartItems, selectedDates, name, email, navigate]);
 
     return (
