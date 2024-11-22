@@ -37,7 +37,7 @@ const SelectTask = () => {
       navigate(adminTaskRoutes[id]);
     } else if (studentInfo.role === "Professor") {
       navigate(professorTaskRoutes[id]);
-    } else if (studentInfo.role === "TA") {
+    } else if (studentInfo.role === "SA") {
       navigate(TATaskRoutes[id]);
     }
   };
@@ -55,7 +55,7 @@ const SelectTask = () => {
     { id: 'B', name: 'View Equipment' },
   ];
 
-  const TAClasses = [
+  const SAClasses = [
     { id: 'A', name: 'Reserve Equipment' },
     { id: 'B', name: 'View Equipment' },
     { id: 'C', name: 'View Reservations' },
@@ -67,8 +67,8 @@ const SelectTask = () => {
         return adminClasses;
       case "Professor":
         return professorClasses;
-      case "TA":
-        return TAClasses;
+      case "SA":
+        return SAClasses;
       default:
         return [];
     }

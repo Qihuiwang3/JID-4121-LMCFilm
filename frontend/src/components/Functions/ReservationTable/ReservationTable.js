@@ -67,7 +67,6 @@ class ReservationTable extends Component {
     handleViewReport = async (id) => {
         try {
             const reservationDetails = await getOrderById(id);
-            console.log("reservationDetails: ", reservationDetails)
             this.setState({
                 viewReportId: id,
                 reservationDetails, 

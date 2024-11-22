@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const ClassCode = require('../models/ClassCode');
+const Student = require('../models/Student');
 
 // @desc Get a class code by code
 // @route GET /class-code/:code
@@ -76,7 +77,35 @@ const deleteClassCode = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: "Class code not found" });
     }
 
+    try {
+        await Student.updateMany(
+            { classCodes: code }, 
+            { $pull: { classCodes: code } } 
+        );
+    } catch (error) {
+        res.status(500);
+        throw new Error(`Failed to remove class code ${code} from students: ${error.message}`);
+    }
+
     res.status(200).json({ message: `Class code ${code} deleted successfully` });
 });
 
-module.exports = { getClassCode, createClassCode, getAllClassCodes, updateClassCode, deleteClassCode };
+// @desc Clear all class codes and remove from students
+// @route DELETE /class-codes/clear-all
+// @access Private
+const clearAllClassCodes = asyncHandler(async (req, res) => {
+    try {
+        // Remove all class codes
+        await ClassCode.deleteMany();
+
+        // Update all students to remove class codes
+        await Student.updateMany({}, { $set: { classCodes: [] } });
+
+        res.status(200).json({ message: 'All class codes cleared and removed from students' });
+    } catch (error) {
+        res.status(500);
+        throw new Error('Failed to clear class codes');
+    }
+});
+
+module.exports = { getClassCode, createClassCode, getAllClassCodes, updateClassCode, deleteClassCode, clearAllClassCodes };

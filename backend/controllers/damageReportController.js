@@ -5,15 +5,16 @@ const DamageReport = require('../models/damageReport');
 // @route POST /damage-reports
 // @access Private (Admin)
 const createDamageReport = asyncHandler(async (req, res) => {
-    const { reporter, studentEmail, itemName, itemId, description, images } = req.body;
+    const { reporter, orderNumber, studentEmail, itemName, itemId, description, images } = req.body;
 
-    if (!reporter || !studentEmail || !itemName || !itemId || !description) {
+    if (!reporter || !orderNumber || !studentEmail || !itemName || !itemId || !description) {
         res.status(400);
         throw new Error('Please provide all required fields');
     }
 
     const newReport = new DamageReport({
         reporter,
+        orderNumber,
         studentEmail,
         itemName,
         itemId,
@@ -68,7 +69,7 @@ const deleteDamageReport = asyncHandler(async (req, res) => {
 // @route PUT /damage-reports/:id
 // @access Private (Admin)
 const updateDamageReport = asyncHandler(async (req, res) => {
-    const { reporter, studentEmail, itemName, itemId, description, images } = req.body;
+    const { reporter, orderNumber, studentEmail, itemName, itemId, description, images } = req.body;
 
     const report = await DamageReport.findById(req.params.id);
 

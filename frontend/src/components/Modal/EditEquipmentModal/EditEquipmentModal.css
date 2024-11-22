@@ -1,0 +1,81 @@
+.edit-item-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.edit-item-modal-content {
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 500px;
+    overflow-y: auto;
+    max-height: 500px;
+    position: relative;
+}
+
+
+.edit-item-close-button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.edit-item-modal-label {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: #3361AE;
+    display: inline-block;
+}
+
+.edit-item-modal-info {
+    margin-bottom: 20px;
+}
+
+.edit-item-modal-info input {
+    width: 95%;
+    border-radius: 5px;
+    background-color: #E7EFF2;
+    border: 1px solid #3361AE;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.edit-item-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.edit-item-submit-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #3361AE;
+    background-color: transparent;
+    color: #3361AE;
+    transition: background-color 0.3s ease;
+}
+
+.edit-item-submit-button:hover {
+    background-color: #3361AE;
+    color: white;
+}
+
+.edit-item-modal-error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}

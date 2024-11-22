@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { createClassCode, getClassCode, getAllClassCodes, updateClassCode, deleteClassCode } = require('../controllers/classCodeController');
+const { createClassCode, getClassCode, getAllClassCodes, updateClassCode, deleteClassCode, clearAllClassCodes } = require('../controllers/classCodeController');
 
 const router = express.Router();
 
@@ -15,5 +15,6 @@ router.get('/class-codes', getAllClassCodes);
 router.put('/class-code/:code', updateClassCode);
 
 router.delete('/class-code/:code', deleteClassCode);
+router.delete('/class-codes/clear-all', clearAllClassCodes);
 module.exports = router;
 

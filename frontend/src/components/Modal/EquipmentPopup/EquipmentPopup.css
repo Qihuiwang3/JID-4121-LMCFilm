@@ -1,4 +1,4 @@
-.modal-overlay {
+.edit-item-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,18 +11,19 @@
     z-index: 1000;
 }
 
-.modal-content {
+.edit-item-modal-content {
     background: white;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    min-width: 500px;
-    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 500px;
 }
 
-.modal-header {
+.edit-item-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .close-button {
@@ -31,115 +32,63 @@
     font-size: 30px;
     cursor: pointer;
     color: #3361AE;
-    margin-top: 5px;
 }
 
-.modal-form .form-text {
-    margin: 15px 0 10px 0;
+.edit-item-modal-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-item-modal-info {
+    margin-bottom: 10px;
+}
+
+.edit-item-modal-label {
+    display: block;
+    font-size: 16px;
     color: #3361AE;
-}
-
-.modal-form div {
     margin-bottom: 5px;
 }
 
-.modal-form input {
-    width: 500px;
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 14px;
-    background-color: #E7EFF2;
-}
-
-.modal-form select {
+.edit-item-modal-select,
+.edit-item-modal-input {
     width: 100%;
     padding: 8px;
-    border: 1px solid #3361AE;
-    color: #3361AE;
     border-radius: 5px;
+    border: 1px solid #3361AE;
     font-size: 14px;
     background-color: #E7EFF2;
 }
 
-.modal-footer {
+.edit-item-modal-select {
+    width: 98%;
+}
+
+.edit-item-modal-footer {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    justify-content: space-between;
     margin-top: 20px;
 }
 
-.equipment-cancel-button,
-.equipment-popup-submit-button {
-    background-color: transparent;
-    color: #3361AE;
-    font-weight: 500;
+.edit-item-cancel-button,
+.edit-item-submit-button {
     padding: 10px 20px;
-    border: none;
+    font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
-.equipment-popup-submit-button:disabled {
-    background-color: #cccccc;
-    /* Light gray color */
-    color: #666666;
-    /* Darker gray text */
-    cursor: not-allowed;
-    /* Show "not-allowed" cursor */
-    border: 1px solid #999999;
-    /* Optional border color */
-}
-
-.equipment-popup-submit-button {
     border: 1px solid #3361AE;
+    background-color: transparent;
+    color: #3361AE;
+    transition: background-color 0.3s;
 }
 
-.equipment-popup-submit-button:hover {
-    color: white;
+.edit-item-submit-button:hover {
     background-color: #3361AE;
+    color: white;
 }
 
-.equipment-popup-submit-button:disabled:hover {
-    background-color: #cccccc;
-    color: #666666;
-    cursor: not-allowed;
-    border: 1px solid #999999;
-}
-
-
-.header-text {
-    color: #3361AE;
-    font-size: 28px;
-}
-
-.header-divider {
-    border: 0;
-    height: 1.5px;
-    background: #3361AE;
-    margin: 0 0 15px 0;
-    width: 100%;
-}
-
-.mui-textfield .MuiOutlinedInput-root {
-    padding: 0;
-    background-color: #E7EFF2;
-    border-radius: 5px;
+.edit-item-modal-error-message {
+    color: red;
     font-size: 14px;
-    border: 1px solid #3361AE;
-
-}
-
-.mui-textfield .MuiOutlinedInput-notchedOutline {
-    border-color: transparent;
-}
-
-.css-20bmp1-MuiSvgIcon-root {
-    color: #3361AE;
-}
-
-.MuiAutocomplete-hasPopupIcon.css-ka7ti6-MuiAutocomplete-root .MuiOutlinedInput-root,
-.MuiAutocomplete-hasClearIcon.css-ka7ti6-MuiAutocomplete-root .MuiOutlinedInput-root {
-    height: 43px;
+    margin-top: 5px;
 }

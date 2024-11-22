@@ -26,19 +26,33 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
     }, [itemIds]);
 
     const handleEquipmentCheckout = async () => {
-        const isMatching = orderInfo.equipment.every((item, index) => item.itemId === itemIds[index]);
-
-        if (!isMatching) {
-            setErrorMessage("Your Checkin itemID does not match with Checkout itemID");
+        const mismatchedItems = orderInfo.equipment.map((item, index) => {
+            const inputItemId = itemIds[index];
+            if (!inputItemId) {
+                return { itemName: item.itemName, currentItemId: inputItemId, expectedItemId: item.itemId };
+            }
+            return item.itemId !== inputItemId
+                ? { itemName: item.itemName, currentItemId: inputItemId, expectedItemId: item.itemId }
+                : null;
+        }).filter(Boolean);
+    
+        if (mismatchedItems.length > 0) {
+            const errorMessages = mismatchedItems.map(
+                ({ itemName, currentItemId, expectedItemId }) =>
+                    `The item ID "${currentItemId || 'N/A'}" for "${itemName}" does not match the expected item ID "${expectedItemId}".`
+            ).join('\n');
+    
+            setErrorMessage(errorMessages);
             return;
         }
-
+    
         setErrorMessage('');
-
+    
         const updatedEquipment = orderInfo.equipment.map((item, index) => ({
             itemName: item.itemName,
             itemId: itemIds[index]
         }));
+    
         try {
             await updateOrderByOrderNumber(orderInfo.orderNumber, {
                 equipment: updatedEquipment,
@@ -46,7 +60,6 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                 checkedinStatus: true,
                 checkedin: new Date(),
             });
-            console.log('Order updated successfully');
             onClose();
         } catch (error) {
             console.error('Error updating order:', error);
@@ -123,7 +136,16 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                     </div>
                 ))}
 
-                {errorMessage && <p className="checkin-error-message">{errorMessage}</p>}
+                {errorMessage && 
+                    <p className="searchpopup-error-message">
+                        {errorMessage} <br />
+                        <p>
+                            Please try again.
+                        </p>
+                    </p>
+                }
+
+
 
 
                 <div className="modal-footer">
@@ -133,7 +155,7 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                         disabled={isButtonDisabled}
                         onClick={handleEquipmentCheckout}
                     >
-                        Student Checked Out
+                        Student Checked-out Confirmed
                     </button>
                 </div>
             </div>

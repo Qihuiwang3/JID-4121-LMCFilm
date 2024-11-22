@@ -148,6 +148,21 @@ const createGlobalItem = async (data) => {
     }
 };
 
+const updateItem = async (updateData) => {
+    try {
+        const response = await axios.put(`${BACKEND_URL}/api/item/update`, updateData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data; // Return updated data
+    } catch (error) {
+        console.error('Error updating item:', error);
+        throw error;
+    }
+};
+
+
 const deleteGlobalItem = async (itemName, itemId) => {
     try {
         const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}/`, {
@@ -220,6 +235,20 @@ const removeClassCode = async (email, classCode) => {
     }
 };
 
+const clearAllClassCodes = async () => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/class-codes/clear-all`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error clearing all class codes:', error);
+        throw error;
+    }
+};
+
 const createClassCode = async (newClassCode) => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/class-code/`, {
@@ -267,6 +296,8 @@ const getBundleItemsByClassCode = async (classCode) => {
         throw error;
     }
 };
+
+
 
 const createBundleItem = async (itemData) => {
     try {
@@ -466,7 +497,7 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
             checkedoutStatus: updateData.checkedoutStatus,
             checkedout: updateData.checkedout,
             checkedinStatus: updateData.checkedinStatus,
-            checkedin: updateData.checkedout,
+            checkedin: updateData.checkedin,
             checkout: updateData.checkout,
             beenExtended: updateData.beenExtended
         }, {
@@ -566,6 +597,17 @@ const sendEmail = async (emailData) => {
     }
 };
 
+const getStudentClassCodeByEmail = async (email) => {
+    try {
+        const res = await axios.get(`${BACKEND_URL}/students/${email}`);
+        return res.data;
+    } catch (error) {
+        console.error('Error fetching student class codes by email:', error);
+        throw error;
+    }
+};
+
+
 
 export {
     getStudents,
@@ -611,5 +653,8 @@ export {
     deleteBundleItem,
     sendEmail,
     deleteOrder,
-    isItemIdExist
+    isItemIdExist,
+    clearAllClassCodes,
+    getStudentClassCodeByEmail,
+    updateItem
 };

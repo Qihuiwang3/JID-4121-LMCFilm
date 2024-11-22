@@ -44,6 +44,10 @@ const ViewDamageModal = ({ show, reportId, handleClose, handleEdit }) => {
                         <span className="info">{report.reporter}</span>
                     </div>
                     <div className="report-info">
+                        <span className="label">Order Number:</span>
+                        <span className="info">{report.orderNumber}</span>
+                    </div>
+                    <div className="report-info">
                         <span className="label">Student Info:</span>
                         <span className="info">{report.studentEmail}</span>
                     </div>

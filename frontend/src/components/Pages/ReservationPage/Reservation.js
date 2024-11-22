@@ -61,10 +61,8 @@ function ReservationPage() {
         const cartData = { cartItems };
         dispatch(setReservationCartItems(cartItems));
         try {
-            // const response = await createCartWithData(cartData);
-            // console.log('Cart created:', response);
+            const response = await createCartWithData(cartData);
             navigate('/CartConfirmation', { state: { cartItems } });
-            console.log(cartItems);
         } catch (error) {
             console.error('Error creating cart:', error);
         }
@@ -82,7 +80,7 @@ function ReservationPage() {
                     // Fetch single items
                     const singleItems = await getSingleItemsByClassCode(classCode);
                     const promises = singleItems.map(async (singleItem) => {
-                        const itemDetails = await getItemByName(singleItem.itemName);
+                        const itemDetails = await getItemByName(singleItem.itemName); // Updated
                         return {
                             ...singleItem,
                             pricePerItem: itemDetails.pricePerItem,
@@ -93,7 +91,6 @@ function ReservationPage() {
                     const equipmentWithPricesQuantity = await Promise.all(promises);
                     setEquipment(equipmentWithPricesQuantity);
 
-                    console.log(equipmentWithPricesQuantity);
                     // Fetch bundles
                     const bundleItems = await getBundleItemsByClassCode(classCode);
                     setBundles(bundleItems);
@@ -121,7 +118,7 @@ function ReservationPage() {
 
             <div className="equipment-and-cart">
                 <div className="equipment-container">
-                    {equipment && equipment.length > 0 && !equipment.every(item => item.quantity === 0 || item.quantity === undefined) && (
+                    {equipment && equipment.length > 0 && (
                         <EquipmentDropdown
                             id="equipment"
                             title="Available Equipment"
