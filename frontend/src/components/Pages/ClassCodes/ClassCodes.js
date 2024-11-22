@@ -28,7 +28,7 @@ const ClassCodes = () => {
                 toggleEditMode={toggleEditMode} 
             /> 
 
-            <div className="student-btn">
+            <div className="classCode-btn">
                 <div className="bottom-btn-container">
                     <Button type="back" onClick={() => handleBack()}>Back</Button>
                 </div>
