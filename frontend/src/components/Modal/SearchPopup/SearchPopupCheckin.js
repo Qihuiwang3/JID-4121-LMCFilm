@@ -60,7 +60,6 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                 checkedinStatus: true,
                 checkedin: new Date(),
             });
-            console.log('Order updated successfully');
             onClose();
         } catch (error) {
             console.error('Error updating order:', error);

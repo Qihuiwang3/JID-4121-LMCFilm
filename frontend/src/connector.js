@@ -148,6 +148,21 @@ const createGlobalItem = async (data) => {
     }
 };
 
+const updateItem = async (updateData) => {
+    try {
+        const response = await axios.put(`${BACKEND_URL}/api/item/update`, updateData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data; // Return updated data
+    } catch (error) {
+        console.error('Error updating item:', error);
+        throw error;
+    }
+};
+
+
 const deleteGlobalItem = async (itemName, itemId) => {
     try {
         const res = await axios.delete(`${BACKEND_URL}/api/deleteItemId/${itemId}/`, {
@@ -216,6 +231,20 @@ const removeClassCode = async (email, classCode) => {
         });
         return res.data;
     } catch (error) {
+        throw error;
+    }
+};
+
+const clearAllClassCodes = async () => {
+    try {
+        const res = await axios.delete(`${BACKEND_URL}/api/class-codes/clear-all`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res.data;
+    } catch (error) {
+        console.error('Error clearing all class codes:', error);
         throw error;
     }
 };
@@ -625,5 +654,7 @@ export {
     sendEmail,
     deleteOrder,
     isItemIdExist,
-    getStudentClassCodeByEmail
+    clearAllClassCodes,
+    getStudentClassCodeByEmail,
+    updateItem
 };

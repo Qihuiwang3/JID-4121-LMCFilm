@@ -106,8 +106,7 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
 
         return createOrder(orderData)
             .then(response => {
-                console.log('Order created successfully:', response);
-                return generatedOrderNumber;
+                return generatedOrderNumber; 
             })
             .catch(error => {
                 console.error('Error creating order:', error);
@@ -116,26 +115,23 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     };
 
     return (
-        <>
-            <PayPalScriptProvider options={initialOptions}>
-                <PayPalButtons
-                    createOrder={(data, actions) => {
-                        return actions.order.create({
-                            purchase_units: [
-                                {
-                                    description: "Order Description",
-                                    amount: {
-                                        currency_code: "USD",
-                                        value: cartTotalCost,
-
-                                    },
+        <PayPalScriptProvider options={initialOptions}>
+            <PayPalButtons
+                createOrder={(data, actions) => {
+                    return actions.order.create({
+                        purchase_units: [
+                            {
+                                description: "Order Description",
+                                amount: {
+                                    currency_code: "USD",
+                                    value: cartTotalCost,
                                 },
-                            ],
-                        });
-                    }}
-                    onApprove={(data, actions) => {
-                        return actions.order.capture().then((details) => {
-                            console.log("Transaction completed by " + details.payer.name.given_name);
+                            },
+                        ],
+                    });
+                }}
+                onApprove={(data, actions) => {
+                    return actions.order.capture().then((details) => {
 
                             // Create the order and navigate to confirmation page
                             createOrderAfterPayment(cartItems, selectedDates, name, email)

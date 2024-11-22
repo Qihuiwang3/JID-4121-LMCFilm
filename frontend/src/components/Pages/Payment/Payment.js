@@ -90,7 +90,6 @@ function Payment({ cartItems, selectedDates, name, email }) {
 
         return createOrder(orderData)
             .then(response => {
-                console.log('Order created successfully:', response);
                 createEmail(orderData);
                 navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
             })
