@@ -468,7 +468,7 @@ const updateOrderByOrderNumber = async (orderNumber, updateData) => {
             checkedoutStatus: updateData.checkedoutStatus,
             checkedout: updateData.checkedout,
             checkedinStatus: updateData.checkedinStatus,
-            checkedin: updateData.checkedout,
+            checkedin: updateData.checkedin,
             checkout: updateData.checkout,
             beenExtended: updateData.beenExtended
         }, {
