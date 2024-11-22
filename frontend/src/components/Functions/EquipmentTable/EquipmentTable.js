@@ -170,6 +170,10 @@ class EquipmentTable extends Component {
         this.setState({ showAddModal: false });
     };
 
+    closeModal = () => {
+        this.setState({ showModal: false });
+    }
+
 
     handleEquipmentUpdated = async () => {
         await this.loadRecords(); 
@@ -340,7 +344,6 @@ class EquipmentTable extends Component {
                     show={this.state.showModal}
                     onClose={this.closeModal}
                     item={this.state.selectedItem}
-                    onEquipmentUpdated={this.handleEquipmentUpdated}
                 />
 
                 <EditEquipmentModal
