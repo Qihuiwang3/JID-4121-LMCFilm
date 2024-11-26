@@ -30,15 +30,17 @@ const ReservationHistoryTable = () => {
                         record.studentName === studentInfo.name && record.email === studentInfo.email
                     )
                     .map(record => ({
-                        code: record.orderNumber,
+                        orderNumber: record.orderNumber,
                         checkin: record.checkin,
                         checkout: record.checkout,
                         email: record.email,
                         studentName: record.studentName,
                         equipment: record.equipment
                     }));
+                   
+                    
 
-                setRecords(transformedRecords);
+                    setRecords([...transformedRecords].reverse());
             } catch (error) {
                 console.error("Error loading records:", error);
             }
@@ -75,7 +77,7 @@ const ReservationHistoryTable = () => {
             cellStyle: { cursor: 'pointer' },
             cellRenderer: params => (
                 <span
-                    onClick={() => handleViewReport(params.data.code)}
+                    onClick={() => handleViewReport(params.data.orderNumber)}
                     style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
                     className="clickable-text"
                 >
