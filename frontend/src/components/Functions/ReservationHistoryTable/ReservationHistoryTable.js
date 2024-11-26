@@ -35,6 +35,7 @@ const ReservationHistoryTable = () => {
                         checkout: record.checkout,
                         email: record.email,
                         studentName: record.studentName,
+                        equipment: record.equipment
                     }));
 
                 setRecords(transformedRecords);
@@ -74,7 +75,7 @@ const ReservationHistoryTable = () => {
             cellStyle: { cursor: 'pointer' },
             cellRenderer: params => (
                 <span
-                    onClick={() => handleViewReport(params.data.orderNumber)}
+                    onClick={() => handleViewReport(params.data.code)}
                     style={{ color: 'black', textDecoration: 'underline', cursor: 'pointer' }}
                     className="clickable-text"
                 >
@@ -199,7 +200,7 @@ const ReservationHistoryTable = () => {
             />
             {viewReportId && (
                 <BarCodePopup
-                    show={!!viewReportId}
+                    show={viewReportId}
                     orderNumber={viewReportId}
                     handleClose={handleCloseModal}
                 />
