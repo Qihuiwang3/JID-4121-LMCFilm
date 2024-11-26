@@ -84,3 +84,15 @@
     background-color: #3361AE;
     /* Same hover color as back button */
 }
+
+.clearAll {
+    background-color: #3361AE;
+    color: white;
+    margin-right: 0%;
+    margin-left: auto;
+}
+
+.clearAll:hover {
+    background-color: #3361AE;
+}
+

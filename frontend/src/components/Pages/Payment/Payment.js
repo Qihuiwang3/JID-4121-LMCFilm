@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PayPal from "../../Functions/PayPal/PayPal";
 import './Payment.css';
@@ -12,7 +12,6 @@ function Payment({ cartItems, selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartTotal } = location.state || {};
-    const orderCreatedRef = useRef(false);
 
     const generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
@@ -36,32 +35,32 @@ function Payment({ cartItems, selectedDates, name, email }) {
         try {
             const barcodeBase64 = generateBarcodeBase64(orderData.orderNumber);
             const base64Data = barcodeBase64.split(',')[1]; // 
-
-
+    
+           
             const emailContent = `
                 <p>Here is your confirmation for your LMC order. Below is the barcode to scan for check-in:</p>
                 <img src="cid:barcodeImage" alt="Order Barcode" />
             `;
-
-
+    
+           
             const attachments = [
                 {
                     filename: 'barcode.png',
                     content: base64Data,
-                    cid: 'barcodeImage',
+                    cid: 'barcodeImage', 
                     encoding: 'base64',
                     contentType: 'image/png',
                 },
             ];
-
-
+    
+            
             await sendEmail({
                 to: orderData.email,
                 subject: `Order Confirmation: ${orderData.orderNumber}`,
                 html: emailContent,
                 attachments: attachments,
             });
-
+    
         } catch (error) {
             console.error('Error sending email:', error);
             alert('Failed to send email.');
@@ -83,14 +82,13 @@ function Payment({ cartItems, selectedDates, name, email }) {
             studentName: name,
             createdAt: new Date(),
             equipment: cartItems.map(item => ({
-                itemName: item.name,
-                itemId: ''
+                itemName: item.name, 
+                itemId: '' 
             })),
         };
 
         return createOrder(orderData)
             .then(response => {
-                console.log('Order created successfully:', response);
                 createEmail(orderData);
                 navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
             })
@@ -101,12 +99,9 @@ function Payment({ cartItems, selectedDates, name, email }) {
     };
 
     useEffect(() => {
-
-        if (Number(cartTotal) === 0 && !orderCreatedRef.current) {
+        if (Number(cartTotal) === 0) {
             createOrderAfterPayment(cartItems, selectedDates, name, email);
-            orderCreatedRef.current = true;
         }
-
     }, [cartTotal, cartItems, selectedDates, name, email, navigate]);
 
     return (
@@ -125,5 +120,4 @@ const mapStateToProps = (state) => ({
     name: state.studentData.name,
 });
 
-export default connect(mapStateToProps)(Payment);
-
+export default connect(mapStateToProps)(Payment); 

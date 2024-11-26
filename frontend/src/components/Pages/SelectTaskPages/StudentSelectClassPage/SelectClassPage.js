@@ -20,7 +20,6 @@ const SelectClassPage = () => {
 
   useEffect(() => {
     const fetchAndValidateClasses = async () => {
-      console.log(studentInfo);
       if (studentInfo && studentInfo.classCodes) {
         const uniqueClassCodes = [...new Set(studentInfo.classCodes)];
         const validClasses = [];
