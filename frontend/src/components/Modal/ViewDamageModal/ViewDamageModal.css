@@ -17,7 +17,16 @@
     overflow-y: auto;
     max-height: 600px;
     position: relative;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    max-height: 500px;
 }
+
+
+.view-damage-modal-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+}
+
 
 .label {
     color: #3361AE;

@@ -53,6 +53,11 @@ const ReservationHistoryViewDamageReportModal = ({ show, damageReportInfo, handl
                         <span className="label">Description:</span>
                         <span className="info">{currentReport.description}</span>
                     </div>
+                    {currentReport.images && currentReport.images.length > 0 && (
+                        <div className="report-info">
+                            <img src={currentReport.images[0]} alt="Damage" style={{ width: '100%' }} />
+                        </div>
+                    )}
                 </div>
 
                 <div className="modal-footer">
