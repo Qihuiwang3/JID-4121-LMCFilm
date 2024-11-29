@@ -56,9 +56,9 @@ const ReservationHistoryTable = () => {
     }
 
     const handleViewDamageReport = (orderNumber) => {
-        const damageReport = allDamageReports.find(report => report.orderNumber === orderNumber);
-        if (damageReport) {
-            setViewDamageReportInfo(damageReport);
+        const damageReports = allDamageReports.filter(report => report.orderNumber === orderNumber);
+        if (damageReports.length > 0) {
+            setViewDamageReportInfo(damageReports);
         } else {
             setViewDamageReportInfo(null);
         }
@@ -132,10 +132,6 @@ const ReservationHistoryTable = () => {
                 const hasDamageReport = allDamageReports.some(
                     (report) => report.orderNumber == orderNumber
                 );
-
-                // console.log("allDamageReports: ", allDamageReports)
-                // console.log("orderNumber: ", orderNumber)
-                // console.log("hasDamageReport: ", hasDamageReport)
 
                 return hasDamageReport ? (
                     <button
