@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
 import './ReservationHistoryTable.css';
-import StudentViewDamageModal from '../../Modal/StudentViewDamageModal/StudentViewDamageModal';
+import ReservationHistoryViewDamageReportModal from '../../Modal/ReservationHistoryViewDamageReportModal/ReservationHistoryViewDamageReportModal';
 
 import ReservationDetailPopup from '../../Modal/ReservationDetailPopup/ReservationDetailPopup';
 
@@ -14,7 +14,7 @@ const ReservationHistoryTable = () => {
     const location = useLocation();
     const reduxStudentInfo = useSelector(state => state.studentData);
     const [viewReportId, setViewReportId] = useState(null);
-    const [viewDamageItems, setViewDamageItems] = useState(null);
+    const [viewDamageReportInfo, setViewDamageReportInfo] = useState(null);
     const [viewOrderDetailsId, setViewOrderDetailsId] = useState(null);
 
     const [allDamageReports, setAllDamageReports] = useState([]);
@@ -51,17 +51,22 @@ const ReservationHistoryTable = () => {
         setViewReportId(orderNumber);
     };
 
-    const handleViewDamage = (id) => {
-        setViewDamageItems(id);
-    };
-
     const handleViewDetailsModal = (id) => {
         setViewOrderDetailsId(id);
     }
 
+    const handleViewDamageReport = (orderNumber) => {
+        const damageReport = allDamageReports.find(report => report.orderNumber === orderNumber);
+        if (damageReport) {
+            setViewDamageReportInfo(damageReport);
+        } else {
+            setViewDamageReportInfo(null);
+        }
+    };
+
     const handleCloseModal = () => {
         setViewReportId(null);
-        setViewDamageItems(null);
+        setViewDamageReportInfo(null);
         setViewOrderDetailsId(null);
     };
 
@@ -128,15 +133,19 @@ const ReservationHistoryTable = () => {
                     (report) => report.orderNumber == orderNumber
                 );
 
+                // console.log("allDamageReports: ", allDamageReports)
+                // console.log("orderNumber: ", orderNumber)
+                // console.log("hasDamageReport: ", hasDamageReport)
+
                 return hasDamageReport ? (
-                    <span className="no-class-code">No Damage Report</span>
-                ) : (
                     <button
-                        onClick={() => this.handleViewDamageReport(orderNumber)}
+                        onClick={() => handleViewDamageReport(orderNumber)}
                         className="view-details"
                     >
                         View Details
                     </button>
+                ) : (
+                    <span className="no-class-code">No Damage Report</span>
                 )
             }
         },
@@ -197,9 +206,10 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-            {viewDamageItems && (
-                <StudentViewDamageModal
-                    orderItems={viewDamageItems}
+            {viewDamageReportInfo && (
+                <ReservationHistoryViewDamageReportModal
+                    show={!!viewDamageReportInfo}
+                    damageReportInfo={viewDamageReportInfo}
                     handleClose={handleCloseModal}
                 />
             )}
