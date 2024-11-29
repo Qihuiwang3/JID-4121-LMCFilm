@@ -4,11 +4,15 @@ import './ReservationHistoryViewDamageReportModal.css';
 const ReservationHistoryViewDamageReportModal = ({ show, damageReportInfo, handleClose }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    console.log("damageReportInfo: ", damageReportInfo)
+
     if (!show || !damageReportInfo || damageReportInfo.length === 0) {
         return null;
     }
     
+    console.log("currentIndex: ", currentIndex)
     const currentReport = damageReportInfo[currentIndex];
+    console.log("currentReport: ", currentReport)
 
     const handleNext = () => {
         if (currentIndex < damageReportInfo.length - 1) {
@@ -70,13 +74,22 @@ const ReservationHistoryViewDamageReportModal = ({ show, damageReportInfo, handl
                                 Next
                             </button>
                         </>
-                    ) : (
+                    ) : currentIndex === damageReportInfo.length - 1 ? (
                         <>
                             <button onClick={handleBack} className="res-history-damage-cancel-button">
                                 Back
                             </button>
                             <button onClick={handleClose} className="student-view-damage-modal-submit">
                                 Done
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button onClick={handleBack} className="res-history-damage-cancel-button">
+                                Back
+                            </button>
+                            <button onClick={handleNext} className="student-view-damage-modal-submit">
+                                Next
                             </button>
                         </>
                     )}
