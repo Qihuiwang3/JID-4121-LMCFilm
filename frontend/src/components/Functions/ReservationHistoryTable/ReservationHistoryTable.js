@@ -36,15 +36,16 @@ const ReservationHistoryTable = () => {
                         email: record.email,
                         studentName: record.studentName,
                     }));
-
+                console.log("transformedRecords: ", transformedRecords)
                 setRecords(transformedRecords);
             } catch (error) {
                 console.error("Error loading records:", error);
-            }
-        };
+        }
+    };
 
     useEffect(() => {
         loadRecords();
+        loadDamageReports();
     }, [location.state, reduxStudentInfo]);
 
     const handleViewReport = (orderNumber) => {
@@ -63,6 +64,15 @@ const ReservationHistoryTable = () => {
         setViewReportId(null);
         setViewDamageItems(null);
         setViewOrderDetailsId(null);
+    };
+
+    const loadDamageReports = async () => {
+        try {
+            const damageReports = await getAllDamageReports();
+            setAllDamageReports(damageReports);
+        } catch (error) {
+            console.error("Error loading damage reports:", error);
+        }
     };
 
 
@@ -113,34 +123,28 @@ const ReservationHistoryTable = () => {
             flex: 1,
             valueGetter: () => "View Details",
             cellRenderer: params => {
-                const studentInfo = location.state?.studentInfo || reduxStudentInfo;
-                const equipment = params.data.equipment;
+                const orderNumber = params.data.code;
+                console.log("orderNumber: ", orderNumber)
 
-                const filteredDamage = allDamageReports
-                    .filter(report =>
-                        equipment
-                            .filter(orderItem => orderItem)
-                            .some(orderItem => {
-                                return orderItem.itemId === report.itemId && orderItem.itemName === report.itemName && report.studentEmail === studentInfo.email;
-                            })
-                    )
-                    .map(report => report._id);
-                const displayText = filteredDamage.length === 0 ? "No Damage Report" : "View Damage Report";
+                const hasDamageReport = allDamageReports.some(
+                    (report) => report.orderNumber == orderNumber
+                );
+
+                const displayText = hasDamageReport ? "View Details" : "No Damage Report";
 
                 const style = {
-                    color: 'black',
-                    textDecoration: filteredDamage.length === 0 ? 'none' : 'underline',
-                    cursor: filteredDamage.length > 0 ? 'pointer' : 'default'
+                    color: "black",
+                    textDecoration: hasDamageReport ? "underline" : "none",
+                    cursor: hasDamageReport ? "pointer" : "default",
                 };
-
                 return (
                     <span
+                        style={style}
                         onClick={() => {
-                            if (filteredDamage.length > 0) {
-                                setViewDamageItems(params.data.equipment);
+                            if (hasDamageReport) {
+                                setViewDamageItems(orderNumber);
                             }
                         }}
-                        style={style}
                     >
                         {displayText}
                     </span>
