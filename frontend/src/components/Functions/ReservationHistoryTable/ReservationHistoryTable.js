@@ -27,7 +27,7 @@ const ReservationHistoryTable = () => {
                 // Filter orders based on account email and student name
                 const transformedRecords = records
                     .filter(record =>
-                        record.studentName === studentInfo.name && record.email === studentInfo.email
+                        record.email === studentInfo.email
                     )
                     .map(record => ({
                         code: record.orderNumber,
