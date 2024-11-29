@@ -36,7 +36,6 @@ const ReservationHistoryTable = () => {
                         email: record.email,
                         studentName: record.studentName,
                     }));
-                console.log("transformedRecords: ", transformedRecords)
                 setRecords(transformedRecords);
             } catch (error) {
                 console.error("Error loading records:", error);
@@ -124,31 +123,21 @@ const ReservationHistoryTable = () => {
             valueGetter: () => "View Details",
             cellRenderer: params => {
                 const orderNumber = params.data.code;
-                console.log("orderNumber: ", orderNumber)
 
                 const hasDamageReport = allDamageReports.some(
                     (report) => report.orderNumber == orderNumber
                 );
 
-                const displayText = hasDamageReport ? "View Details" : "No Damage Report";
-
-                const style = {
-                    color: "black",
-                    textDecoration: hasDamageReport ? "underline" : "none",
-                    cursor: hasDamageReport ? "pointer" : "default",
-                };
-                return (
-                    <span
-                        style={style}
-                        onClick={() => {
-                            if (hasDamageReport) {
-                                setViewDamageItems(orderNumber);
-                            }
-                        }}
+                return hasDamageReport ? (
+                    <span className="no-class-code">No Damage Report</span>
+                ) : (
+                    <button
+                        onClick={() => this.handleViewDamageReport(orderNumber)}
+                        className="view-details"
                     >
-                        {displayText}
-                    </span>
-                );
+                        View Details
+                    </button>
+                )
             }
         },
         {
