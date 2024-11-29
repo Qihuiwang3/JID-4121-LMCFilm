@@ -35,5 +35,17 @@
 }
 
 .info {
-    color: #000;
+    color: #3361AE;
+}
+
+.res-history-damage-description {
+    display: flex;
+    flex-direction: column; /* This will stack the elements vertically */
+    margin-bottom: 10px; /* Optional: Adds space between each report item */
+}
+
+.res-history-damage-description .info {
+    white-space: pre-wrap; /* Ensures the description text wraps properly */
+    word-wrap: break-word; /* Breaks long words when necessary */
+    margin: 10px 20px;
 }

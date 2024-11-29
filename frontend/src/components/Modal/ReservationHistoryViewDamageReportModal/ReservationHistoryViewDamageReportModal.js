@@ -49,7 +49,7 @@ const ReservationHistoryViewDamageReportModal = ({ show, damageReportInfo, handl
                             {new Date(currentReport.dateCreated).toLocaleDateString()}
                         </span>
                     </div>
-                    <div className="report-info">
+                    <div className="res-history-damage-description">
                         <span className="label">Description:</span>
                         <span className="info">{currentReport.description}</span>
                     </div>
