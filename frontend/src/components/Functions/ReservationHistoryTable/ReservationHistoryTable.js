@@ -24,27 +24,26 @@ const ReservationHistoryTable = () => {
             const records = await getAllOrders();
             const studentInfo = location.state?.studentInfo || reduxStudentInfo;
 
-                // Filter orders based on account email and student name
-                const transformedRecords = records
-                    .filter(record =>
-                        record.studentName === studentInfo.name && record.email === studentInfo.email
-                    )
-                    .map(record => ({
-                        orderNumber: record.orderNumber,
-                        checkin: record.checkin,
-                        checkout: record.checkout,
-                        email: record.email,
-                        studentName: record.studentName,
-                        equipment: record.equipment
-                    }));
-                   
-                    
+            // Filter orders based on account email and student name
+            const transformedRecords = records
+                .filter(record =>
+                    record.studentName === studentInfo.name && record.email === studentInfo.email
+                )
+                .map(record => ({
+                    // code: record.orderNumber,
+                    // checkin: record.checkin,
+                    // checkout: record.checkout,
+                    // email: record.email,
+                    // studentName: record.studentName,
+                    ...record,
+                }));
 
-                    setRecords([...transformedRecords].reverse());
-            } catch (error) {
-                console.error("Error loading records:", error);
-            }
-        };
+            setRecords(transformedRecords);
+
+        } catch (error) {
+            console.error("Error loading records:", error);
+        }
+    };
 
     useEffect(() => {
         loadRecords();
@@ -202,7 +201,7 @@ const ReservationHistoryTable = () => {
             />
             {viewReportId && (
                 <BarCodePopup
-                    show={viewReportId}
+                    show={!!viewReportId}
                     orderNumber={viewReportId}
                     handleClose={handleCloseModal}
                 />
