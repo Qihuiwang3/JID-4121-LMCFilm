@@ -48,7 +48,6 @@ const Login = () => {
         try {
             if (isLogin) {
                 const response = await loginStudent(formData.email, formData.password);
-                console.log(response);
                 localStorage.setItem('authToken', response.token);
 
                 dispatch(setStudentInfo({
