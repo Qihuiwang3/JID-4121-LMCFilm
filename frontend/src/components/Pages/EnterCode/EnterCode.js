@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setStudentInfo } from "../../redux/actions/studentActions";
 import './EnterCode.css';
-import { getClassInfoByCode, addClassCode } from "../../../connector";
+import { getClassInfoByCode, addClassCode, getStudentClassCodeByEmail } from "../../../connector";
 import Button from "../../Button/Button";
 
 const EnterCode = () => {
@@ -17,6 +17,7 @@ const EnterCode = () => {
     };
 
     const studentInfo = useSelector((state) => state.studentData);
+
 
     const handleSubmit = () => {
         if (codeInput.length < 2) {
@@ -45,9 +46,10 @@ const EnterCode = () => {
         }
     };
 
-    const handleNext = () => {
-        if (studentInfo.classCodes && studentInfo.classCodes.length > 0) {
-            navigate("/SelectClass", { state: { studentInfo } });
+    const handleNext = async () => {
+        const codes = await getStudentClassCodeByEmail(studentInfo.email)
+        if (codes && codes.length > 0) {
+            navigate("/SelectClass", { state: {studentInfo } });
         } else {
             setErrorMessage("No class codes found in your account. Please enter a new code.");
         }
