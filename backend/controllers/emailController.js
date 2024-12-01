@@ -24,7 +24,7 @@ const sendEmail = (req, res) => {
             });
 
             const mailOptions = {
-                from: 'Georgia Tech LMC Department <' + USERNAME + '>',
+                from: 'Georgia Tech LMC Department doNotReply <' + USERNAME + '>',
                 to: to,
                 subject: subject,
                 html: html,

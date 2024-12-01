@@ -36,12 +36,23 @@ function ReservationPage() {
     }, [pickupDateTime, returnDateTime, dispatch]);
 
     const addToCart = (item) => {
+        const cartItem = cartItems.find(cartItem => cartItem.name === item.name);
+        const itemQuantityInCart = cartItem ? cartItems.filter(cartItem => cartItem.name === item.name).length : 0;
+    
+        if (itemQuantityInCart >= item.quantity) {
+
+        
+        }
+    
         if (!cartItems.includes(item)) {
-            setCartItems([...cartItems, item]);
+            if (itemQuantityInCart < item.quantity) {
+                setCartItems([...cartItems, item]);  
+            }
         } else {
             setCartItems(cartItems.filter(cartItems => cartItems !== item));
         }
     };
+    
 
     const calculateTotal = () => {
         let total = 0;
@@ -129,7 +140,7 @@ function ReservationPage() {
                                 quantity: item.quantity
                             }))}
                             showReserve={true}
-                            showQuantity={false}
+                            showQuantity={true}
                             addItem={addToCart}
                         />
                     )}
