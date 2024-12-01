@@ -39,7 +39,7 @@ const TermsModal = ({ show, handleClose, isModalChecked, onCheckboxChange }) => 
                         ×
                     </button>
                 </div>
-                <div className="modal-content" onScroll={handleScroll}>
+                <div className="modal-content-term" onScroll={handleScroll}>
                     <h2>LMCFilms Rental Terms and Conditions</h2>
                     <p>
                         By reserving and using the film and video equipment provided by LMCFilms, you ("Patron")

@@ -141,17 +141,17 @@ const DamageTable = () => {
         },
         { headerName: "Reporter", field: "reporter", flex: 1.2 },
         {
-            headerName: "Repair",
+            headerName: "Repair Status",
             field: "isRepaired",
-            flex: 1,
+            flex: 1.4,
             cellRenderer: (params) => (
                 <select
                     value={params.value ? "Yes" : "No"}
                     onChange={(e) => handleRepairStatusChange(params.data, e.target.value)}
                     className="repair-dropdown"
                 >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <option value="Yes">Out for repair</option>
+                    <option value="No">Currently Available</option>
                 </select>
             )
         },

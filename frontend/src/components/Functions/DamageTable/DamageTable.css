@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600&display=swap');
-.damage-title{
+
+.damage-title {
     font-size: 24px;
     font-weight: bold;
     color: #3361AE;
@@ -8,6 +9,7 @@
     margin-top: 8%;
     margin-bottom: 4%;
     left: 10%;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .search-bar-edit-container {
@@ -63,6 +65,7 @@
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
+    width: auto;
 }
 
 @media (max-width: 800px) {

@@ -27,7 +27,7 @@ class EquipmentTable extends Component {
             searchQuery: '',
             showDeletePopup: false,
             showModal: false,
-            itemToDelete: null, 
+            itemToDelete: null,
             selectedItem: null,
             showEditModal: false,
             equipmentToEdit: null,
@@ -176,9 +176,9 @@ class EquipmentTable extends Component {
 
 
     handleEquipmentUpdated = async () => {
-        await this.loadRecords(); 
+        await this.loadRecords();
     };
-    
+
 
     handleSearch = (query) => {
         const { records } = this.state;
@@ -254,12 +254,12 @@ class EquipmentTable extends Component {
                 },
             },
             {
-                headerName: "Repairing",
+                headerName: "Repair Status",
                 field: "repair",
-                flex: 1,
+                flex: 1.3,
                 editable: false,
                 cellRenderer: (params) => {
-                    return params.value ? 'Yes' : 'No'; // render 'Yes' or 'No' based on the value
+                    return params.value ? 'Out for repair' : 'Currently Available'; // render 'Yes' or 'No' based on the value
                 }
             },
             {

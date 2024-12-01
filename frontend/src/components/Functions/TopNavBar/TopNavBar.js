@@ -12,6 +12,7 @@ const TopNavBar = () => {
     const navigate = useNavigate();
     const studentData = useSelector((state) => state.studentData);
     const sidebarRef = useRef(null);
+    const closeButtonRef = useRef(null);
 
 
     const toggleSidebar = () => {
@@ -48,7 +49,11 @@ const TopNavBar = () => {
     };
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+            if (
+                sidebarRef.current && // Ensure the sidebar exists
+                !sidebarRef.current.contains(event.target) && // Check if click is outside the sidebar
+                (!closeButtonRef.current || !closeButtonRef.current.contains(event.target)) // Exclude "X" button clicks
+            ) {
                 setIsSidebarOpen(false);
             }
         };
@@ -67,12 +72,13 @@ const TopNavBar = () => {
     return (
         <div className="navBar">
             <div className="navBar-left">
-                <div className="navTitle">LMC Film</div>
+                <div className="navTitle">LMCFilms</div>
             </div>
             <div className="navBar-right">
                 <div
                     className={`hamburgerIcon ${isSidebarOpen ? 'hamburgerIcon-shifted' : ''}`}
                     onClick={toggleSidebar}
+                    ref={closeButtonRef}
                 >
                     <FontAwesomeIcon icon={isSidebarOpen ? faTimes : faBars} />
                 </div>
