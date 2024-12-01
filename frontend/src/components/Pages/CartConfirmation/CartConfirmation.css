@@ -11,14 +11,13 @@
 
 .cart-contents-container {
     padding-left: 50px;
-    height: 80%;
     margin-inline: 40px;
     margin-top: 20px;
     padding: 10px;
-
     display: flex;
     flex-direction: column;
     gap: 25px;
+    width: 90vw;
 }
 
 .cart-total {
@@ -55,22 +54,29 @@
 }
 
 
+.cart-header-text {
+    display: inline-flex;
+    width: 90vw;
+    font-size: 38px;
+    font-size: calc(2vw + 1vh);
+    margin-top: 120px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    line-height: normal;
+    color: #3361AE;
+}
+
 
 button.button.next:disabled {
     background-color: #cccccc;
-    /* Grey background for disabled button */
     color: #a0a0a0;
-    /* Grey text */
     cursor: not-allowed;
-    /* Blocked cursor */
     opacity: 1;
-    /* Maintain consistent opacity */
     border: none;
 }
 
 button.button.next:disabled:hover {
     background-color: #cccccc;
-    /* Maintain grey background */
     cursor: not-allowed;
 }
 

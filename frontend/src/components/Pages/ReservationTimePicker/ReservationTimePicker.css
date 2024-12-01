@@ -114,3 +114,15 @@ label {
   height: auto;
   width: auto;
 }
+
+.select-class-header {
+  display: inline-flex;
+  width: 90vw;
+  font-size: 38px;
+  font-size: calc(2vw + 1vh);
+  margin-top: 120px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  line-height: normal;
+  color: #3361AE;
+}

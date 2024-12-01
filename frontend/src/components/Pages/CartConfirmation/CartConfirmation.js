@@ -76,42 +76,40 @@ function CartConfirmation() {
     return (
         <>
             <div className="main-content">
-                <div className="cart-confirm-container">
-                    <h1 style={{ paddingLeft: '50px', color: '#3361AE' }}>Cart</h1>
-                    <div className="cart-contents-container">
-                        {equipment && equipment.length > 0 && (
-                            <EquipmentDropdown
-                                id="equipment"
-                                title="Selected Equipment"
-                                equipment={equipment}
-                                showReserve={false}
-                                showQuantity={false}
-                            />
-                        )}
-                        {packages && packages.length > 0 && (
-                            <PackageDropdown
-                                id="packages"
-                                title="Selected Packages"
-                                pk={packages}
-                                showReserve={false}
-                                showQuantity={false}
-                            />
-                        )}
-                        <div className="cart-total">Total: ${calculateTotal()}</div>
-                        <div className="terms-container">
-                            <input
-                                id="termsCheckbox"
-                                type="checkbox"
-                                checked={isTermsChecked}
-                                onChange={(e) => handleTermsCheckboxChange(e.target.checked)}
-                            />
-                            <span>
-                                I have read and agree to the&nbsp;
-                                <span className="terms-link" onClick={openTermsModal}>
-                                    Rental Terms and Conditions
-                                </span>
+                <h1 className="cart-header-text">Cart</h1>
+                <div className="cart-contents-container">
+                    {equipment && equipment.length > 0 && (
+                        <EquipmentDropdown
+                            id="equipment"
+                            title="Selected Equipment"
+                            equipment={equipment}
+                            showReserve={false}
+                            showQuantity={false}
+                        />
+                    )}
+                    {packages && packages.length > 0 && (
+                        <PackageDropdown
+                            id="packages"
+                            title="Selected Packages"
+                            pk={packages}
+                            showReserve={false}
+                            showQuantity={false}
+                        />
+                    )}
+                    <div className="cart-total">Total: ${calculateTotal()}</div>
+                    <div className="terms-container">
+                        <input
+                            id="termsCheckbox"
+                            type="checkbox"
+                            checked={isTermsChecked}
+                            onChange={(e) => handleTermsCheckboxChange(e.target.checked)}
+                        />
+                        <span>
+                            I have read and agree to the&nbsp;
+                            <span className="terms-link" onClick={openTermsModal}>
+                                Rental Terms and Conditions
                             </span>
-                        </div>
+                        </span>
                     </div>
                 </div>
                 <div className="btnContainer">
