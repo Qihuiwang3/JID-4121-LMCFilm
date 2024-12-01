@@ -30,11 +30,11 @@ const ReservationHistoryTable = () => {
                     record.email === studentInfo.email
                 )
                 .map(record => ({
-                    // code: record.orderNumber,
-                    // checkin: record.checkin,
-                    // checkout: record.checkout,
-                    // email: record.email,
-                    // studentName: record.studentName,
+                    code: record.orderNumber,
+                    checkin: record.checkin,
+                    checkout: record.checkout,
+                    email: record.email,
+                    studentName: record.studentName,
                     ...record,
                 }));
                 setRecords(transformedRecords);
