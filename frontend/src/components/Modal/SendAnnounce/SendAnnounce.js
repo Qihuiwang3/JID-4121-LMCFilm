@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './SendAnnounce.css';
 import { sendEmail, getStudents } from '../../../connector';
 
@@ -32,19 +32,6 @@ const SendAnnounce = ({ show, handleClose}) => {
             console.error('Error sending emails:', error);
             alert('Failed to send emails.');
         }
-        
-        
-        // try {
-        //     await sendEmail({
-        //         to: 'yourTestEmailyouHaveAccessTo',
-        //         subject: subject,
-        //         html: emailBody,
-        //     });
-        //     handleClose();
-        // } catch (error) {
-        //     console.error('Error sending email:', error);
-        //     alert('Failed to send email.');
-        // }
     };
         
 
