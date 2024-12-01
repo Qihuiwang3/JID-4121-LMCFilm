@@ -1,0 +1,32 @@
+.student-view-damage-modal-submit {
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #3361AE;
+    border: 1px solid #3361AE;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.student-view-damage-modal-submit:hover {
+    background-color: #3361AE;
+    color: white;
+}
+
+
+.res-history-damage-cancel-button {
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #3361AE;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.res-history-modal-body {
+    margin-top: 20px;
+    margin-left: 20px;
+}

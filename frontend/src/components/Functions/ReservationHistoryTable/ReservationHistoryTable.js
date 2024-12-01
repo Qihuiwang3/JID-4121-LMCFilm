@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BarCodePopup from '../../Modal/BarCodePopup/BarCodePopup';
 import './ReservationHistoryTable.css';
-import StudentViewDamageModal from '../../Modal/StudentViewDamageModal/StudentViewDamageModal';
+import ReservationHistoryViewDamageReportModal from '../../Modal/ReservationHistoryViewDamageReportModal/ReservationHistoryViewDamageReportModal';
 
 import ReservationDetailPopup from '../../Modal/ReservationDetailPopup/ReservationDetailPopup';
 
@@ -14,7 +14,7 @@ const ReservationHistoryTable = () => {
     const location = useLocation();
     const reduxStudentInfo = useSelector(state => state.studentData);
     const [viewReportId, setViewReportId] = useState(null);
-    const [viewDamageItems, setViewDamageItems] = useState(null);
+    const [viewDamageReportInfo, setViewDamageReportInfo] = useState(null);
     const [viewOrderDetailsId, setViewOrderDetailsId] = useState(null);
 
     const [allDamageReports, setAllDamageReports] = useState([]);
@@ -27,44 +27,57 @@ const ReservationHistoryTable = () => {
             // Filter orders based on account email and student name
             const transformedRecords = records
                 .filter(record =>
-                    record.studentName === studentInfo.name && record.email === studentInfo.email
+                    record.email === studentInfo.email
                 )
                 .map(record => ({
-                    // code: record.orderNumber,
-                    // checkin: record.checkin,
-                    // checkout: record.checkout,
-                    // email: record.email,
-                    // studentName: record.studentName,
+                    code: record.orderNumber,
+                    checkin: record.checkin,
+                    checkout: record.checkout,
+                    email: record.email,
+                    studentName: record.studentName,
                     ...record,
                 }));
-
-            setRecords(transformedRecords);
-
-        } catch (error) {
-            console.error("Error loading records:", error);
+                setRecords(transformedRecords);
+            } catch (error) {
+                console.error("Error loading records:", error);
         }
     };
 
     useEffect(() => {
         loadRecords();
+        loadDamageReports();
     }, [location.state, reduxStudentInfo]);
 
     const handleViewReport = (orderNumber) => {
         setViewReportId(orderNumber);
     };
 
-    const handleViewDamage = (id) => {
-        setViewDamageItems(id);
-    };
-
     const handleViewDetailsModal = (id) => {
         setViewOrderDetailsId(id);
     }
 
+    const handleViewDamageReport = (orderNumber) => {
+        const damageReports = allDamageReports.filter(report => report.orderNumber === orderNumber);
+        if (damageReports.length > 0) {
+            setViewDamageReportInfo(damageReports);
+        } else {
+            setViewDamageReportInfo(null);
+        }
+    };
+
     const handleCloseModal = () => {
         setViewReportId(null);
-        setViewDamageItems(null);
+        setViewDamageReportInfo(null);
         setViewOrderDetailsId(null);
+    };
+
+    const loadDamageReports = async () => {
+        try {
+            const damageReports = await getAllDamageReports();
+            setAllDamageReports(damageReports);
+        } catch (error) {
+            console.error("Error loading damage reports:", error);
+        }
     };
 
 
@@ -115,38 +128,22 @@ const ReservationHistoryTable = () => {
             flex: 1,
             valueGetter: () => "View Details",
             cellRenderer: params => {
-                const studentInfo = location.state?.studentInfo || reduxStudentInfo;
-                const equipment = params.data.equipment;
+                const orderNumber = params.data.code;
 
-                const filteredDamage = allDamageReports
-                    .filter(report =>
-                        equipment
-                            .filter(orderItem => orderItem)
-                            .some(orderItem => {
-                                return orderItem.itemId === report.itemId && orderItem.itemName === report.itemName && report.studentEmail === studentInfo.email;
-                            })
-                    )
-                    .map(report => report._id);
-                const displayText = filteredDamage.length === 0 ? "No Damage Report" : "View Damage Report";
-
-                const style = {
-                    color: 'black',
-                    textDecoration: filteredDamage.length === 0 ? 'none' : 'underline',
-                    cursor: filteredDamage.length > 0 ? 'pointer' : 'default'
-                };
-
-                return (
-                    <span
-                        onClick={() => {
-                            if (filteredDamage.length > 0) {
-                                setViewDamageItems(params.data.equipment);
-                            }
-                        }}
-                        style={style}
-                    >
-                        {displayText}
-                    </span>
+                const hasDamageReport = allDamageReports.some(
+                    (report) => report.orderNumber == orderNumber
                 );
+
+                return hasDamageReport ? (
+                    <button
+                        onClick={() => handleViewDamageReport(orderNumber)}
+                        className="view-details"
+                    >
+                        View Details
+                    </button>
+                ) : (
+                    <span className="no-class-code">No Damage Report</span>
+                )
             }
         },
         {
@@ -206,9 +203,10 @@ const ReservationHistoryTable = () => {
                     handleClose={handleCloseModal}
                 />
             )}
-            {viewDamageItems && (
-                <StudentViewDamageModal
-                    orderItems={viewDamageItems}
+            {viewDamageReportInfo && (
+                <ReservationHistoryViewDamageReportModal
+                    show={!!viewDamageReportInfo}
+                    damageReportInfo={viewDamageReportInfo}
                     handleClose={handleCloseModal}
                 />
             )}

@@ -7,7 +7,6 @@ import { setStudentInfo } from '../../redux/actions/studentActions';
 import { loginSuccess } from '../../redux/reducers/authSlice';
 
 
-
 const Login = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({ email: '', password: '', name: '' });

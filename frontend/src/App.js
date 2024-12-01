@@ -133,9 +133,9 @@ const TokenVerification = () => {
                 const decoded = jwtDecode(token);
 
                 if (decoded.exp * 1000 > Date.now()) {
-                    const { email, role } = decoded;
+                    const { email, role, name } = decoded;
 
-                    dispatch(setStudentInfo({ email, role }));
+                    dispatch(setStudentInfo({ email, role, name }));
                 } else {
                     localStorage.removeItem('authToken');
                 }

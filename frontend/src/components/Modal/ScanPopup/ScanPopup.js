@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ScanPopup.css';
 import SearchPopup from '../SearchPopup/SearchPopup';
 import SearchPopupCheckin from '../SearchPopup/SearchPopupCheckin';
@@ -11,6 +11,7 @@ const ScanPopup = ({ onClose }) => {
     const [orderInfo, setOrderInfo] = useState(null);
     const [isOrderNumberValid, setIsOrderNumberValid] = useState(false);
     const [orderNotFound, setOrderNotFound] = useState(false);
+    const inputRef = useRef(null);
 
     const handleSearchClick = () => {
         if (orderInfo && isOrderNumberValid) {
@@ -21,6 +22,12 @@ const ScanPopup = ({ onClose }) => {
             }
         }
     };
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
 
     const closeSearchPopup = () => {
         setShowSearchPopup(false);
@@ -83,6 +90,7 @@ const ScanPopup = ({ onClose }) => {
                         value={orderNumber}
                         onChange={handleOrderNumberChange}
                         onBlur={handleOrderNumberBlur}
+                        ref={inputRef}
                     />
                     {orderNotFound && <p className="scan-error-message">Order Number is invalid.</p>}
                 </div>
