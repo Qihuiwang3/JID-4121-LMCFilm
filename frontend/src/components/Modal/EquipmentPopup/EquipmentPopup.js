@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './EquipmentPopup.css';
-import { getItems } from '../../../connector.js';
+import { getItems, createGlobalItem } from '../../../connector.js';
 
 
 const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
@@ -52,7 +52,14 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
             return;
         }
 
+        const data = {
+            itemName,
+            pricePerItem: price,
+            itemIds: [itemID]
+        };
+
         try {
+            await createGlobalItem(data);
             await onEquipmentUpdated();
             resetFields();
             handleClose();
@@ -84,18 +91,25 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
                     <button className="close-button" onClick={handleClose}>&times;</button>
                 </div>
                 <form onSubmit={handleSubmit} className="edit-item-modal-form">
+
                     <div className="edit-item-modal-info">
                         <label className="edit-item-modal-label">Item Name</label>
-                        <select
+                        <input
+                            type="text"
                             value={itemName}
                             onChange={(e) => handleItemNameChange(e.target.value)}
-                            className="edit-item-modal-select"
-                        >
-                            <option value=""></option>
-                            {uniqueItemNames.map(name => (
-                                <option key={name} value={name}>{name}</option>
-                            ))}
-                        </select>
+                            className="edit-item-modal-input"
+                            list="unique-item-names"
+                        />
+                        <datalist id="unique-item-names">
+                            {uniqueItemNames.length > 0 ? (
+                                uniqueItemNames.map(name => (
+                                    <option key={name} value={name} />
+                                ))
+                            ) : (
+                                <option value="No items available" disabled />
+                            )}
+                        </datalist>
                     </div>
                     <div className="edit-item-modal-info">
                         <label className="edit-item-modal-label">Item ID</label>

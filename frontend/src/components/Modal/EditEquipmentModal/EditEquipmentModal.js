@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './EditEquipmentModal.css';
+import { updateItem } from '../../../connector';
 
 const EditEquipmentModal = ({ show, handleClose, equipmentToEdit, onEquipmentUpdated }) => {
     const [itemName, setItemName] = useState(equipmentToEdit?.itemName || '');
@@ -23,7 +24,15 @@ const EditEquipmentModal = ({ show, handleClose, equipmentToEdit, onEquipmentUpd
             return;
         }
 
+        const updateData = {
+            itemName: equipmentToEdit.itemName,
+            itemId: equipmentToEdit.itemId,
+            newPrice: parseFloat(pricePerItem),
+            newItemId: itemId,  
+        };
+
         try {
+            await updateItem(updateData);
             onEquipmentUpdated(); 
             handleClose();
         } catch (error) {
