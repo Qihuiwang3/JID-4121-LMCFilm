@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, TextField } from '@mui/material';
 import './EquipmentPopup.css';
-import { getItems, createGlobalItem } from '../../../connector.js';
+import { getItems } from '../../../connector.js';
 
 
 const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
@@ -53,14 +52,7 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
             return;
         }
 
-        const data = {
-            itemName,
-            pricePerItem: price,
-            itemIds: [itemID]
-        };
-
         try {
-            const response = await createGlobalItem(data);
             await onEquipmentUpdated();
             resetFields();
             handleClose();
@@ -83,10 +75,6 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
     if (!show) {
         return null;
     }
-
-    const isSubmitDisabled = !itemID || !itemName;
-
-
 
     return (
         <div className="edit-item-modal-overlay">

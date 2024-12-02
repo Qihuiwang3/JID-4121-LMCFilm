@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React from 'react'; 
 import './UserClassCodeModal.css';
 
 const UserClassCodeModal = ({ show, onClose, userInfo }) => {
