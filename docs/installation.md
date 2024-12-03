@@ -4,14 +4,14 @@ The following contains the process and requirements to install and run this proj
 
 ## Prerequisites
 
-- Git >= `2.41.x`
-- Node >= `v18.x.x`
-- Mongo backend URI
-- Paypal client ID
+1. Git >= `2.41.x`
+2. Node >= `v18.x.x`
+3. Mongo backend URI
+4. Paypal client ID
 
-## Dependent libraries that must be installed
+## Dependent Libraries that must be Installed
 
-### 2. Install NPM packages for both frontend and backend
+### 1. Install NPM packages for both frontend and backend
 
 ```
 cd frontend
@@ -20,18 +20,20 @@ cd backend
 npm i
 ```
 
-## Download instructions(We didn't deploy our app yet, so right now need to clone from github, please follow the Installation of actual application below to download instructions)
+## Download Instructions
+
+### Our application has not been deployed yet. To use it, you will need to clone the repository from GitHub. Please follow the installation instructions provided below to set up the application.
 
 
-## Installation of actual application:
+## Installation of Actual Application:
 
-### 1. Clone repo
+### 1. Clone repo on your terminal
 ```
 git clone https://github.com/Qihuiwang3/JID-4121-LMCFilm.git
 ```
 
 
-## Run instructions: 
+## Run Instructions: 
 
 ### 1. Generate a Secure JWT Secret:
 You need a secure JWT_SECRET for authentication. Use the following command to generate a random 256-byte base64 string:
@@ -70,13 +72,12 @@ npm run dev
 
 ## Troubleshooting:
 
-### 1. frontend error after enter ```npm start```:
-``` it might because missing package, just need to run npm install xxx(xxx will be the missing packge error name)```
-
-### 2. login in info missing when this project is running: 
-```the solution is to re-login, since we using token to store user's info, the token will expire in 1 hour. re-login will solve this issue.```
-
-### 3. When you have some unknown error showing: 
-```Please re-run the frontend to resolve this issue.```
+### 1. Frontend error after running ```npm start```:
+``` This issue might occur due to a missing package. To resolve it, run npm install <missing-package-name> (replace <missing-package-name> with the name of the missing package mentioned in the error).```
 
 
+### 2. Login information missing while the project is running: 
+```This occurs because the user’s token, used to store login information, expires after 1 hour. To resolve this issue, simply re-login to refresh the token.```
+
+### 3. Unknown error encountered: 
+```Restart the frontend by stopping the current session and running it again using npm start. This should resolve most unknown errors.```
