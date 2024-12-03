@@ -7,10 +7,9 @@ This project is a **film equipment inventory system** developed for the School o
 ## Technology Stack
 
 The system is built using the MERN stack (MongoDB, Express.js, React.js, Node.js), ensuring a scalable, full-stack architecture with smooth integration between the frontend and backend. Additional tools include:
-
-	•	**PayPal Integration:** For secure and seamless payment processing.
-	•	**React Barcode:** For efficient check-in/out processes.
-	•	**EmailJS:** For automated notifications and confirmations.
+1. **PayPal Integration:** For secure and seamless payment processing.
+2. **React Barcode:** For efficient check-in/out processes.
+3. **EmailJS:** For automated notifications and confirmations.
 
  ## Features
  1. **Reserve Equipment:** Students can view equipment specific to their assigned classes, reserve items for a designated time frame, and complete payments seamlessly within the website using PayPal.
@@ -18,16 +17,17 @@ The system is built using the MERN stack (MongoDB, Express.js, React.js, Node.js
  3. **Equipment Management:** Administrators have full control over the database, including the ability to add, edit, view, or delete equipment as needed.
  4. **Damage Reporting System:** Administrators can log and document equipment damage, record incidents, and hide damaged items while they are under repair to prevent further reservations.
  5. **Role Management:** Administrators can assign and customize user roles, such as professors or admins, to streamline operations and ensure role-specific access.
- 6. **Class Code Management: **Administrators can generate unique class codes for different classes, assigning specific equipment to each class to ensure tailored accessibility.
+ 6. **Class Code Management:** Administrators can generate unique class codes for different classes, assigning specific equipment to each class to ensure tailored accessibility.
 
 ## Known Issues
 1. **GT SSO Login:** Single sign-on functionality has not yet been implemented.
 2. **Class Code Page:** When creating a new package while setting up a class code, the package name occasionally does not display as expected.
 3. **Cart Cache Issue:** The cart fails to clear when switching between classes, causing outdated selections to persist.
 4. **PayPal Payment Errors:** No notifications are triggered when a payment fails due to issues such as network errors or incorrect credentials.
+
 ## How to Build
 
-For detailed instructions, refer to the Installation Guide on our GitHub repository.
+For detailed instructions, refer to the [Installation Guide](https://github.com/Qihuiwang3/JID-4121-LMCFilm/blob/main/installation.md#installation) on our GitHub repository.
 
 # Frontend Setup
 
