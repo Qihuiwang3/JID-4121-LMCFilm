@@ -24,20 +24,29 @@ npm i
 cd backend
 npm i
 ```
+### 3. Generate a Secure JWT Secret:
+You need a secure JWT_SECRET for authentication. Use the following command to generate a random 256-byte base64 string:
 
-### 3. Create `.env` files for both frontend and backend:
+```
+node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
+
+```
+Copy the generated string and use it in the backend .env file (explained below).
+
+
+### 4. Create `.env` files for both frontend and backend:
 
 #### Frontend
 ```
 REACT_APP_BACKEND_URL=http://localhost:3500
 REACT_APP_PAYPAL_CLIENT_ID=[paypal client id]
-JWT_SECRET=[random jwt secret]
 ```
 
 #### Backend
 ```
 NODE_ENV=development 
 DATABASE_URI=[mongo backend URI]
+JWT_SECRET=[random jwt secret] 
 ```
 
 ### 5. Run frontend and backend
