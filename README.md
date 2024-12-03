@@ -45,7 +45,7 @@ The system is built using the MERN stack (MongoDB, Express.js, React.js, Node.js
 
 ## How to Build
 
-For detailed instructions, refer to the [Installation Guide](https://github.com/Qihuiwang3/JID-4121-LMCFilm/blob/main/installation.md#installation) on our GitHub repository.
+For detailed instructions, refer to the [Installation Guide](https://qihuiwang3.github.io/JID-4121-LMCFilm/installation.md) on our GitHub repository.
 
 ### Frontend Setup
 
