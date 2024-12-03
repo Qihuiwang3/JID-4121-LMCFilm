@@ -70,10 +70,13 @@ npm run dev
 
 ## Troubleshooting:
 
-### frontend error after enter ```npm start```, it might because missing package, just need to run npm install xxx(xxx will be the missing packge error name)
+### 1. frontend error after enter ```npm start```:
+``` it might because missing package, just need to run npm install xxx(xxx will be the missing packge error name)```
 
-### login in info missing when this project is running: the solution is to re-login, since we using token to store user's info, the token will expire in 1 hour. re-login will solve this issue.
+### 2. login in info missing when this project is running: 
+```the solution is to re-login, since we using token to store user's info, the token will expire in 1 hour. re-login will solve this issue.```
 
-### When you have some unknown error showing: Please re-run the frontend to resolve this issue.
+### 3. When you have some unknown error showing: 
+```Please re-run the frontend to resolve this issue.```
 
 
