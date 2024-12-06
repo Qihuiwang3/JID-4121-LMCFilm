@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PayPal from "../../Functions/PayPal/PayPal";
 import './Payment.css';
@@ -12,6 +12,7 @@ function Payment({ cartItems, selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { cartTotal } = location.state || {};
+    const orderCreated = useRef(false);
 
     const generateOrderNumber = () => {
         return 'Order-' + Math.floor(Math.random() * 1000000000);
@@ -99,10 +100,14 @@ function Payment({ cartItems, selectedDates, name, email }) {
     };
 
     useEffect(() => {
-        if (Number(cartTotal) === 0) {
+        if (Number(cartTotal) === 0 && !orderCreated.current) {
+            console.log("I am admin so I don't pay");
+            // set the flag to prevent duplicate orders
+            orderCreated.current = true; 
             createOrderAfterPayment(cartItems, selectedDates, name, email);
         }
     }, [cartTotal, cartItems, selectedDates, name, email, navigate]);
+
 
     return (
         <div className="paymentBody">
