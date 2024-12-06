@@ -35,23 +35,39 @@ function ReservationPage() {
         setCartItems(reservationCartItems);
     }, [pickupDateTime, returnDateTime, dispatch]);
 
-    const addToCart = (item) => {
-        const cartItem = cartItems.find(cartItem => cartItem.name === item.name);
-        const itemQuantityInCart = cartItem ? cartItems.filter(cartItem => cartItem.name === item.name).length : 0;
-    
-        if (itemQuantityInCart >= item.quantity) {
+    // const addToCart = (item) => {
 
-        
-        }
+    // const cartItem = cartItems.find(cartItem => cartItem.name === item.name);
+    // const itemQuantityInCart = cartItem ? cartItems.filter(cartItem => cartItem.name === item.name).length : 0;
+    // if (!cartItems.includes(item)) {
+    //     if (itemQuantityInCart < item.quantity) {
+    //         setCartItems([...cartItems, item]);  
+    //     }
+    // } else {
+    //     setCartItems(cartItems.filter(cartItems => cartItems !== item));
+    // }
+    // };
+
+    const addToCart = (item) => {
+        console.log("item: ", item);
     
-        if (!cartItems.includes(item)) {
-            if (itemQuantityInCart < item.quantity) {
-                setCartItems([...cartItems, item]);  
-            }
-        } else {
-            setCartItems(cartItems.filter(cartItems => cartItems !== item));
-        }
+        const isBundle = !!item.bundleName; // Check if it's a bundle
+    
+        const cartItem = isBundle
+            ? cartItems.find(cartItem => cartItem.bundleName === item.bundleName)
+            : cartItems.find(cartItem => cartItem.name === item.name);
+    
+        const updatedCart = !cartItem
+            ? [...cartItems, { ...item, displayName: isBundle ? item.bundleName : item.name }]
+            : cartItems.filter(cartItem => cartItem !== item);
+    
+        console.log("updatedCart: ", updatedCart);
+    
+        setCartItems(updatedCart);
+        dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
     };
+    
+    
     
 
     const calculateTotal = () => {
@@ -171,7 +187,7 @@ function ReservationPage() {
                                 <div className="cart-item">
                                     <div>
                                         <div className="cart-first-row">
-                                            <div>{id.name}</div>
+                                            <div>{id.displayName}</div>
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
