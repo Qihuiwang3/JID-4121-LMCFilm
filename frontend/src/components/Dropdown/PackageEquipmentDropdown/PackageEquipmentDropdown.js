@@ -33,7 +33,7 @@ function PackageEquipmentDropdown({ id, title, equipment, showQuantity, showRese
                 <div className="equipment-dropdown-content">
                     {equipment.map((option, index) => (
                         <div className="package-equipment-dropdown-item" key={index}>
-                            {index + 1}. {option.itemID} | {option.name} {showQuantity && ` | Quantity: ${option.quantity}`}
+                            {index + 1}. {option.name} {showQuantity && ` | Quantity: ${option.quantity}`}
                         </div>
                     ))}
                 </div>

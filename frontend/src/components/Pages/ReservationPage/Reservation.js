@@ -104,6 +104,9 @@ function ReservationPage() {
 
                     // Fetch bundles
                     const bundleItems = await getBundleItemsByClassCode(classCode);
+                    // console.log("bundleItems: ", bundleItems)
+                    // console.log("bundleItems.items: ", bundleItems.items)
+                    
                     setBundles(bundleItems);
 
                 } catch (error) {
@@ -114,6 +117,10 @@ function ReservationPage() {
 
         fetchData();
     }, [classCode]);
+
+    // console.log("bundles: ", bundles)
+    // console.log("bundles.length > 0 : ", bundles.length > 0 )
+
 
     return (
         <div className="main-content">
@@ -144,20 +151,14 @@ function ReservationPage() {
                             addItem={addToCart}
                         />
                     )}
-
-                    {bundles && bundles.length > 0 && (
+                    {bundles && bundles.items && (
                         <PackageDropdown
                             id="packages"
-                            title="Available Packages"
-                            pk={bundles.map(bundle => ({
-                                name: bundle.bundleName,
-                                price: bundle.price,
-                                equipments: bundle.items,
-                                bundleId: bundle._id
-                            }))}
+                            title="Available Package"
+                            bundle={bundles} 
+                            addItem={addToCart}
                             showReserve={true}
                             showQuantity={false}
-                            addItem={addToCart}
                         />
                     )}
                 </div>

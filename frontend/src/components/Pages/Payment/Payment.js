@@ -101,7 +101,6 @@ function Payment({ cartItems, selectedDates, name, email }) {
 
     useEffect(() => {
         if (Number(cartTotal) === 0 && !orderCreated.current) {
-            console.log("I am admin so I don't pay");
             // set the flag to prevent duplicate orders
             orderCreated.current = true; 
             createOrderAfterPayment(cartItems, selectedDates, name, email);
