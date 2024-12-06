@@ -194,8 +194,6 @@ class EquipmentTable extends Component {
 
 
     render() {
-        const { handleOpenPopup, openEditModal, showEditModal, equipmentToEdit } = this.props;
-
         const columnDefs = [
             {
                 headerName: "ItemID",

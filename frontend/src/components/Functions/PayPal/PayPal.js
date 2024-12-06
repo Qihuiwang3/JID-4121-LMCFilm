@@ -149,18 +149,6 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
                     }}
                 />
             </PayPalScriptProvider>
-
-            {/* button to skip payment and go to confirmation page */}
-
-            {/* <button onClick={() => {
-                createOrderAfterPayment(cartItems, selectedDates, name, email)
-                    .then(generatedOrderNumber => {
-                        navigate("/ReservationConfirmationMessagePage", { state: { orderNumber: generatedOrderNumber } });
-                    })
-                    .catch(error => {
-                        console.error("Order creation failed:", error);
-                    });
-            }}>CHEAT BUTTON</button> */}
         </>
 
     );

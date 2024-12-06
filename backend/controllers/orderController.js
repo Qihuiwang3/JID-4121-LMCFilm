@@ -58,61 +58,51 @@ const createOrder = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: "All fields are required, including equipment." });
     }
 
+    // Check if the order number already exists
     const existingOrder = await Order.findOne({ orderNumber });
     if (existingOrder) {
         return res.status(400).json({ error: `Order with number ${orderNumber} already exists.` });
     }
 
-    const items = await Item.find({});
-    // console.log(items);
-    // console.log("HELLO");
-    // console.log(items);
-    // console.log(equipment);
+    for (const equipmentItem of equipment) {
+        const inventoryItem = await Item.findOne({ itemName: equipmentItem.itemName });
 
-    const formattedEquipment = equipment.map((requestedEquipment) => {
-        console.log(requestedEquipment.itemName);
-        // Find the item in the inventory that matches the requested equipment name
-        const inventoryItem = items.find((invItem) => invItem.itemName === requestedEquipment.itemName);
-
-        if (!inventoryItem || !inventoryItem.itemIds || inventoryItem.itemIds.length === 0) {
-            throw new Error(`No items found in inventory for ${requestedEquipment.name}`);
+        if (!inventoryItem) {
+            throw new Error(`Inventory item not found for ${equipmentItem.itemName}`);
         }
 
-        // Filter itemIds to only include those that are available (not hidden or in repair)
-        const availableItems = inventoryItem.itemIds.filter(
-            (itemDetail) => !itemDetail.hide && !itemDetail.repair
+        if (inventoryItem.quantity <= 0) {
+            throw new Error(`No stock available for ${equipmentItem.itemName}`);
+        }
+
+        inventoryItem.quantity -= 1;
+
+        const itemIndex = inventoryItem.itemIds.findIndex(
+            (itemDetail) => itemDetail.itemId === equipmentItem.itemId
         );
-
-        if (availableItems.length === 0) {
-            throw new Error(`No available items for ${requestedEquipment.name}`);
+        if (itemIndex !== -1) {
+            inventoryItem.itemIds[itemIndex].checkout = new Date(); // Set checkout time
         }
 
-        // Select a random item from the available items
-        const randomIndex = Math.floor(Math.random() * availableItems.length);
-        const selectedItem = availableItems[randomIndex];
-
-        return {
-            itemName: requestedEquipment.itemName,
-            itemId: selectedItem.itemId, // Add the randomly selected specific item's ID to the order
-        };
-    });
+        await inventoryItem.save();
+    }
 
     const newOrder = new Order({
         orderNumber,
         email,
         checkin: new Date(checkin),
         checkout: new Date(checkout),
-        checkedinStatus: false, // Explicitly set these to false initially
-        checkedoutStatus: false, // Explicitly set these to false initially
+        checkedinStatus: false,
+        checkedoutStatus: false,
         studentName,
-        equipment: formattedEquipment
+        equipment: equipment,
     });
 
     const savedOrder = await newOrder.save();
-    res.status(201).json(savedOrder);
-    // res.status(201).json(items);
 
+    res.status(201).json(savedOrder);
 });
+
 
 
 
@@ -127,7 +117,18 @@ const deleteOrder = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: `Order with number ${req.params.orderNumber} not found.` });
     }
 
-    res.status(200).json({ message: `Order with number ${req.params.orderNumber} deleted successfully.` });
+    // iterate through the equipment in the order and update the inventory quantity
+    for (const item of order.equipment) {
+        const { itemName } = item;
+
+        const inventoryItem = await Item.findOne({ itemName });
+        if (inventoryItem) {
+            inventoryItem.quantity += 1;
+            await inventoryItem.save();
+        }
+    }
+
+    res.status(200).json({ message: `Order with number ${req.params.orderNumber} deleted successfully, and inventory updated.` });
 });
 
 // @desc Update an order by order number
@@ -167,6 +168,42 @@ const updateOrderByOrderNumber = asyncHandler(async (req, res) => {
     }
     if (beenExtended) {
         order.beenExtended = beenExtended
+    }
+
+    for (const item of equipment) {
+        const { itemName, itemId } = item;
+
+        const inventoryItem = await Item.findOne({ itemName });
+        if (!inventoryItem) {
+            return res.status(404).json({ error: `Item with name ${itemName} not found.` });
+        }
+
+        // Find the specific itemId within the item's `itemIds` array
+        const itemIndex = inventoryItem.itemIds.findIndex((i) => i.itemId === itemId);
+        if (itemIndex === -1) {
+            return res.status(404).json({ error: `Item ID ${itemId} not found in item ${itemName}.` });
+        }
+
+        // Check and clear both checkin and checkout fields if both are filled
+        const currentItem = inventoryItem.itemIds[itemIndex];
+
+        // Update checkin or checkout status if provided
+        if (checkedout) {
+            currentItem.checkout = checkedout;
+        }
+        if (checkedin) {
+            currentItem.checkin = checkedin;
+        }
+
+        // Save the updated inventory item
+        await inventoryItem.save();
+
+        if (currentItem.checkin && currentItem.checkout) {
+            currentItem.checkin = null;
+            currentItem.checkout = null;
+            inventoryItem.quantity += 1; // Increase the quantity by 1
+        }
+        await inventoryItem.save();
     }
 
     const updatedOrder = await order.save();

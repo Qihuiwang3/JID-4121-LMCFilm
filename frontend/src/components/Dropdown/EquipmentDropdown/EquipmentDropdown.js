@@ -30,7 +30,8 @@ function EquipmentDropdown({ title, equipment, addItem, showReserve, showQuantit
                 <div className="equipment-dropdown-content">
                     {equipment.filter(option => option.quantity > 0).map((option, index) => (
                         <div className="equipment-dropdown-item" key={index}>
-                            <div> {index + 1}. {option.name} | ${option.price} {showQuantity && ` | Quantity: ${option.quantity}`} </div>
+                            <div> {index + 1}. {option.name} | ${option.price} {showQuantity} </div>
+                            {/* <div> {index + 1}. {option.name} | ${option.price} {showQuantity && ` | Quantity: ${option.quantity}`} </div> */}
 
 
                             {showReserve && (

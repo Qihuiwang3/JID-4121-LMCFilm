@@ -111,7 +111,7 @@ const SearchPopupCheckin = ({ goBack, onClose, orderInfo }) => {
                     </div>
                 </div>
 
-                <h3 className="equipment-header">Equipment Check In</h3>
+                <h3 className="equipment-header">Equipment Checked-in</h3>
 
                 {orderInfo.equipment.map((item, index) => (
                     <div key={index} className="search-row">
