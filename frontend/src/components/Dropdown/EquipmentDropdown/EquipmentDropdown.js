@@ -26,7 +26,8 @@ function EquipmentDropdown({ title, equipment, addItem, showReserve, showQuantit
                     {equipment.filter(option => option.quantity > 0).map((option, index) => (
                         <div className="equipment-dropdown-item" key={index}>
                             <div>
-                                {index + 1}. {option.name} | 
+                                {console.log("option: ", option)}
+                                {index + 1}. {option.displayName ? option.displayName : option.name} | 
                                 {typeof option.price === 'number' && !isNaN(option.price) ? `$${option.price}` : "Special Price"} 
                                 {showQuantity && ` | Quantity: ${option.quantity}`}
                             </div>
