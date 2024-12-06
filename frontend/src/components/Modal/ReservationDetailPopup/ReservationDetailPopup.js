@@ -20,6 +20,9 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
     const [viewExtendIDDate, setViewExtendDate] = useState(null);
     const [viewExtendIDEquipment, setViewExtendEquipment] = useState(null);
 
+    const [showCancelButton, setShowCancelButton] = useState(true);
+    const [showExtendButton, setShowExtendButton] = useState(true);
+
     useEffect(() => {
         const now = new Date();
         const checkoutDate = new Date(reservationDetails.checkout);
@@ -30,6 +33,10 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
 
         setCanCancelOrder(!hasCheckoutDatePassed && canCancel);
         setCantExtendOrder(hasCheckoutDatePassed || reservationDetails.beenExtended);
+
+
+        setShowCancelButton(reservationDetails.checkedin == null && reservationDetails.checkedout == null);
+        setShowExtendButton(reservationDetails.checkedin == null && reservationDetails.checkedout != null);
     }, [reservationDetails.checkout, reservationDetails.checkin, reservationDetails.beenExtended]);
 
     const handleViewCancel = (orderNumber) => {
@@ -140,7 +147,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                         </div>
 
                                     <div className="view-equipment-group">
-                                        <label className="view-equipment-label">Date Checked In</label>
+                                        <label className="view-equipment-label">Date Checked-in</label>
                                         <input
                                             type="text"
                                             className="view-input-field"
@@ -155,22 +162,25 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
 
                     {showButtons && (
                         <div className="modal-footer">
-                            <button
-                                 className={`cancel-reservation ${!canCancelOrder ? 'gray-button' : ''}`}
-                                onClick={() => handleViewCancel(reservationDetails.orderNumber)}
+                            {showCancelButton && (
+                                <button
+                                    className="cancel-reservation"
+                                    onClick={() => handleViewCancel(reservationDetails.orderNumber)}
                                 >
-                                Cancel Reservation
-                            </button>
+                                    Cancel Reservation
+                                </button>
+                            )}
 
-                            <button
-                                className="extend-reservation"
-                                onClick={() =>
-                                    handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkout, reservationDetails.equipment)
-                                }
-                                disabled={cantExtendOrder}
-                            >
-                                Extend Return Date & Time
-                            </button>
+                            {showExtendButton && (
+                                <button
+                                    className="extend-reservation"
+                                    onClick={() =>
+                                        handleViewExtend(reservationDetails.orderNumber, reservationDetails.checkout, reservationDetails.equipment)
+                                    }
+                                >
+                                    Extend Return Date & Time
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
