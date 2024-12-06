@@ -12,29 +12,30 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
     const [uniqueItemNames, setUniqueItemNames] = useState([]); 
     const [databasePrices, setDatabasePrices] = useState([]);
 
+
+    const fetchItems = async () => {
+        try {
+            const items = await getItems();
+
+            const prices = items.flatMap(record =>
+                record.itemIds.map(itemId => ({
+                    itemName: record.itemName,
+                    pricePerItem: record.pricePerItem,
+                }))
+            );
+
+            setDatabasePrices(prices);
+            const uniqueNames = [...new Set(prices.map(item => item.itemName))];
+            setUniqueItemNames(uniqueNames);
+
+        } catch (error) {
+            console.error("Error fetching items:", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchItems = async () => {
-            try {
-                const items = await getItems();
-
-                const prices = items.flatMap(record =>
-                    record.itemIds.map(itemId => ({
-                        itemName: record.itemName,
-                        pricePerItem: record.pricePerItem,
-                    }))
-                );
-
-                setDatabasePrices(prices);
-                const uniqueNames = [...new Set(prices.map(item => item.itemName))];
-                setUniqueItemNames(uniqueNames);
-
-            } catch (error) {
-                console.error("Error fetching items:", error);
-            }
-        };
-
-        fetchItems(); // Call the async function
-    }, []); // Empty array to run only on mount
+        fetchItems(); 
+    }, []); 
 
     const resetFields = () => {
         setItemID('');
@@ -62,6 +63,7 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
             await createGlobalItem(data);
             await onEquipmentUpdated();
             resetFields();
+            fetchItems(); 
             handleClose();
         } catch (error) {
             setError("Failed to add equipment. Please check duplicate ID");

@@ -109,7 +109,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                 </div>
 
                                     <div className="view-equipment-group">
-                                        <label className="view-equipment-label">Date Checked Out</label>
+                                        <label className="view-equipment-label">Date Checked-out</label>
                                         <input
                                             type="text"
                                             className="view-input-field"
