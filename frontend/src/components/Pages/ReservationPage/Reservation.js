@@ -29,6 +29,10 @@ function ReservationPage() {
     const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
+    const [unpackedCartItems, setUnpackedCartItems] = useState([]);
+
+
+
 
     useEffect(() => {
         dispatch(setSelectedDates(pickupDateTime, returnDateTime));
@@ -49,22 +53,60 @@ function ReservationPage() {
     // };
 
     const addToCart = (item) => {
+
         console.log("item: ", item);
     
         const isBundle = !!item.bundleName; // Check if it's a bundle
     
-        const cartItem = isBundle
+        // Determine if the item or bundle already exists in the cart
+        const existingCartItem = isBundle
             ? cartItems.find(cartItem => cartItem.bundleName === item.bundleName)
             : cartItems.find(cartItem => cartItem.name === item.name);
     
-        const updatedCart = !cartItem
-            ? [...cartItems, { ...item, displayName: isBundle ? item.bundleName : item.name }]
-            : cartItems.filter(cartItem => cartItem !== item);
+        // Calculate the quantity of the item currently in the cart
+        const currentQuantity = cartItems.filter(cartItem =>
+            isBundle
+                ? cartItem.bundleName === item.bundleName
+                : cartItem.name === item.name
+        ).length;
     
+        if (existingCartItem && currentQuantity >= item.quantity) {
+            // Item quantity limit reached
+            console.warn(`Cannot add more of ${item.name}. Maximum quantity reached.`);
+            return;
+        }
+    
+        const updatedCart = [...cartItems, { ...item, displayName: isBundle ? item.bundleName : item.name }];
         console.log("updatedCart: ", updatedCart);
     
         setCartItems(updatedCart);
         dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
+    };
+    
+    const removeFromCart = (item) => {
+        console.log("Removing item: ", item);
+
+        const isBundle = !!item.bundleName; // Check if it's a bundle
+
+        // Remove only the first matching item or bundle
+        const updatedCart = [...cartItems];
+        const indexToRemove = updatedCart.findIndex(cartItem =>
+            isBundle
+                ? cartItem.bundleName === item.bundleName
+                : cartItem.name === item.name
+        );
+
+        if (indexToRemove !== -1) {
+            updatedCart.splice(indexToRemove, 1); // Remove the item at the found index
+        }
+
+        console.log("Updated cart after removal: ", updatedCart);
+    
+        setCartItems(updatedCart);
+        dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
+
+        
+
     };
     
     
@@ -85,15 +127,35 @@ function ReservationPage() {
     };
 
     const handleCheckout = async () => {
-        const cartData = { cartItems };
-        dispatch(setReservationCartItems(cartItems));
+        // Unpack bundles into individual items
+        const unpackedItems = cartItems.flatMap(item => {
+            if (item.bundleName && item.items) {
+                // If it's a bundle, return its individual items
+                return item.items.map(bundleItem => ({
+                    ...bundleItem,
+                    displayName: bundleItem.itemName,
+                }));
+            }
+            // If it's a single item, return it as is
+            return item;
+        });
+    
+        console.log("Unpacked cart items: ", unpackedItems);
+    
+        setUnpackedCartItems(unpackedItems); // Update local state with unpacked items
+    
         try {
-            const response = await createCartWithData(cartData);
-            navigate('/CartConfirmation', { state: { cartItems } });
+            // Pass unpackedCartItems to the backend and navigate to confirmation
+            const cartData = { cartItems: unpackedItems };
+            await createCartWithData(cartData);
+            navigate('/CartConfirmation', {
+                state: { unpackedCartItems: unpackedItems, originalCartItems: cartItems },
+            });
         } catch (error) {
             console.error('Error creating cart:', error);
         }
     };
+    
 
     const handleBack = () => {
         dispatch(setClassCode(classCode));
@@ -191,7 +253,7 @@ function ReservationPage() {
                                             <div> ${id.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div className="remove-equipment-item" onClick={() => addToCart(id)}>Remove</div>
+                                            <div className="remove-equipment-item" onClick={() => removeFromCart(id)}>Remove</div>
                                         </div>
                                     </div>
                                 </div>
