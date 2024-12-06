@@ -1,9 +1,7 @@
-// reservationCartReducer.js
-
-import { SET_RESERVATION_CART_ITEMS } from '../actions/reservationCartActions';
+import { SET_RESERVATION_CART_ITEMS, CLEAR_RESERVATION_CART_ITEMS } from '../actions/reservationCartActions';
 
 const initialState = {
-    reservationCartItems: [], // Initialize your state with an empty array
+    reservationCartItems: [],
 };
 
 const reservationCartReducer = (state = initialState, action) => {
@@ -11,10 +9,15 @@ const reservationCartReducer = (state = initialState, action) => {
         case SET_RESERVATION_CART_ITEMS:
             return {
                 ...state,
-                reservationCartItems: action.payload, // Update the state with the new items
+                reservationCartItems: action.payload,
+            };
+        case CLEAR_RESERVATION_CART_ITEMS:
+            return {
+                ...state,
+                reservationCartItems: [],
             };
         default:
-            return state; // Return the current state by default
+            return state;
     }
 };
 

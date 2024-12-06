@@ -8,3 +8,11 @@ export const setReservationCartItems = (items) => {
         payload: items,
     };
 };
+
+export const CLEAR_RESERVATION_CART_ITEMS = 'CLEAR_RESERVATION_CART_ITEMS';
+
+export const clearReservationCartItems = () => {
+    return {
+        type: CLEAR_RESERVATION_CART_ITEMS,
+    };
+};

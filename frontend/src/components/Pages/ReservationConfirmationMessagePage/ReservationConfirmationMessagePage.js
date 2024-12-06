@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './ReservationConfirmationMessagePage.css';
 import Barcode from 'react-barcode';
 import Button from '../../Button/Button';
-import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { clearReservationCartItems } from '../../redux/actions/reservationCartActions';
 
 function ReservationConfirmationMessagePage() {
     const location = useLocation();
     const orderNumber = location.state?.orderNumber || '';
     const navigate = useNavigate(); 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (orderNumber) {
+            // clear cart items when order is successfully created
+            dispatch(clearReservationCartItems());
+        }
+    }, [orderNumber, dispatch]);
 
     const goBack = () => {
         navigate('/Enter');
@@ -38,6 +47,5 @@ function ReservationConfirmationMessagePage() {
         </div>
     );
 }
-
 
 export default ReservationConfirmationMessagePage;
