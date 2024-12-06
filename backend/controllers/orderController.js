@@ -117,7 +117,18 @@ const deleteOrder = asyncHandler(async (req, res) => {
         return res.status(404).json({ error: `Order with number ${req.params.orderNumber} not found.` });
     }
 
-    res.status(200).json({ message: `Order with number ${req.params.orderNumber} deleted successfully.` });
+    // iterate through the equipment in the order and update the inventory quantity
+    for (const item of order.equipment) {
+        const { itemName } = item;
+
+        const inventoryItem = await Item.findOne({ itemName });
+        if (inventoryItem) {
+            inventoryItem.quantity += 1;
+            await inventoryItem.save();
+        }
+    }
+
+    res.status(200).json({ message: `Order with number ${req.params.orderNumber} deleted successfully, and inventory updated.` });
 });
 
 // @desc Update an order by order number
