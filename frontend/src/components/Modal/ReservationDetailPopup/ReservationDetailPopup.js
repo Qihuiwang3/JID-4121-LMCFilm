@@ -91,7 +91,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
 
                     <div className="view-equipment-sections">
                         <div className="view-equipment-checkout">
-                            <h2 className="view-section-header">Equipment Check Out</h2>
+                            <h2 className="view-section-header">Equipment Checked-out</h2>
                             {reservationDetails.equipment.map((item, index) => (
                                 <div key={index} className="view-equipment-row">
                                     <div className="view-equipment-group">
@@ -122,7 +122,7 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                         </div>
 
                         <div className="view-equipment-checkin">
-                            <h2 className="view-section-header">Equipment Check In</h2>
+                            <h2 className="view-section-header">Equipment Checked-in</h2>
                             {reservationDetails.equipment.map((item, index) => (
                                 <div key={index} className="view-equipment-row">
                                     <div className="view-equipment-group">
