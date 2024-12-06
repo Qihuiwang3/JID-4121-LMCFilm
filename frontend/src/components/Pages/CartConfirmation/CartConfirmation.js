@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './CartConfirmation.css';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown';
 import Button from '../../Button/Button';
+import { useSelector } from 'react-redux';
+
 
 function CartConfirmation() {
     const location = useLocation();
@@ -10,6 +12,8 @@ function CartConfirmation() {
 
     const { unpackedCartItems, originalCartItems } = location.state || {};
     const [equipment, setEquipment] = useState([]);
+    const totalValue = useSelector(state => state.reservationCart.totalValue);
+
 
     const handleBack = () => {
         // Navigate back to the ReservationPage with the original cart
@@ -26,12 +30,6 @@ function CartConfirmation() {
         }
     }, [unpackedCartItems]);
 
-    const calculateTotal = () => {
-        return unpackedCartItems
-            ? unpackedCartItems.reduce((total, item) => total + item.price, 0).toFixed(2)
-            : '0.00';
-    };
-
     return (
         <div className="main-content">
             <h1 className="cart-header-text">Cart Confirmation</h1>
@@ -44,7 +42,10 @@ function CartConfirmation() {
                         showReserve={false}
                     />
                 )}
-                <div className="cart-total">Total: ${calculateTotal()}</div>
+                
+                {totalValue && (
+                    <div className="cart-total">Total: ${totalValue}</div>
+                )}
             </div>
             <div className="btnContainer">
                 <Button type="back" onClick={handleBack}>

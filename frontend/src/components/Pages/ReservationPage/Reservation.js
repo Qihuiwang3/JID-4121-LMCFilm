@@ -4,12 +4,12 @@ import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdow
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
-import { setReservationCartItems } from '../../redux/actions/reservationCartActions.js';
+import { setReservationCartItems, setTotalValue } from '../../redux/actions/reservationCartActions.js';
 import { createCartWithData, getSingleItemsByClassCode, getBundleItemsByClassCode, getItemByName } from '../../../connector.js';
 import Button from '../../Button/Button.js';
+
 
 function ReservationPage() {
     const navigate = useNavigate();
@@ -38,19 +38,6 @@ function ReservationPage() {
         dispatch(setSelectedDates(pickupDateTime, returnDateTime));
         setCartItems(reservationCartItems);
     }, [pickupDateTime, returnDateTime, dispatch]);
-
-    // const addToCart = (item) => {
-
-    // const cartItem = cartItems.find(cartItem => cartItem.name === item.name);
-    // const itemQuantityInCart = cartItem ? cartItems.filter(cartItem => cartItem.name === item.name).length : 0;
-    // if (!cartItems.includes(item)) {
-    //     if (itemQuantityInCart < item.quantity) {
-    //         setCartItems([...cartItems, item]);  
-    //     }
-    // } else {
-    //     setCartItems(cartItems.filter(cartItems => cartItems !== item));
-    // }
-    // };
 
     const addToCart = (item) => {
 
@@ -127,25 +114,24 @@ function ReservationPage() {
     };
 
     const handleCheckout = async () => {
-        // Unpack bundles into individual items
         const unpackedItems = cartItems.flatMap(item => {
             if (item.bundleName && item.items) {
-                // If it's a bundle, return its individual items
                 return item.items.map(bundleItem => ({
                     ...bundleItem,
                     displayName: bundleItem.itemName,
                 }));
             }
-            // If it's a single item, return it as is
             return item;
         });
     
         console.log("Unpacked cart items: ", unpackedItems);
     
-        setUnpackedCartItems(unpackedItems); // Update local state with unpacked items
+        setUnpackedCartItems(unpackedItems);
+    
+        const totalValue = calculateTotal();
+        dispatch(setTotalValue(totalValue)); 
     
         try {
-            // Pass unpackedCartItems to the backend and navigate to confirmation
             const cartData = { cartItems: unpackedItems };
             await createCartWithData(cartData);
             navigate('/CartConfirmation', {
