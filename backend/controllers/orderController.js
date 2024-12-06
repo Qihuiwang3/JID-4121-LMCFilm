@@ -64,37 +64,7 @@ const createOrder = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: `Order with number ${orderNumber} already exists.` });
     }
 
-    const items = await Item.find({}); // Retrieve all items from the database
-
-    // Map and validate equipment
-    const formattedEquipment = equipment.map((requestedEquipment) => {
-        const inventoryItem = items.find((invItem) => invItem.itemName === requestedEquipment.itemName);
-
-        if (!inventoryItem || !inventoryItem.itemIds || inventoryItem.itemIds.length === 0) {
-            throw new Error(`No items found in inventory for ${requestedEquipment.itemName}`);
-        }
-
-        // Filter available items
-        const availableItems = inventoryItem.itemIds.filter(
-            (itemDetail) => !itemDetail.hide && !itemDetail.repair
-        );
-
-        if (availableItems.length === 0) {
-            throw new Error(`No available items for ${requestedEquipment.itemName}`);
-        }
-
-        // Select a random available item
-        const randomIndex = Math.floor(Math.random() * availableItems.length);
-        const selectedItem = availableItems[randomIndex];
-
-        return {
-            itemName: requestedEquipment.itemName,
-            itemId: selectedItem.itemId,
-        };
-    });
-
-    // Decrease the quantity for each item being checked out
-    for (const equipmentItem of formattedEquipment) {
+    for (const equipmentItem of equipment) {
         const inventoryItem = await Item.findOne({ itemName: equipmentItem.itemName });
 
         if (!inventoryItem) {
@@ -105,10 +75,8 @@ const createOrder = asyncHandler(async (req, res) => {
             throw new Error(`No stock available for ${equipmentItem.itemName}`);
         }
 
-        // Decrease the quantity by 1
         inventoryItem.quantity -= 1;
 
-        // Update the item's checkout status
         const itemIndex = inventoryItem.itemIds.findIndex(
             (itemDetail) => itemDetail.itemId === equipmentItem.itemId
         );
@@ -119,7 +87,6 @@ const createOrder = asyncHandler(async (req, res) => {
         await inventoryItem.save();
     }
 
-    // Create a new order
     const newOrder = new Order({
         orderNumber,
         email,
@@ -128,7 +95,7 @@ const createOrder = asyncHandler(async (req, res) => {
         checkedinStatus: false,
         checkedoutStatus: false,
         studentName,
-        equipment: formattedEquipment,
+        equipment: equipment,
     });
 
     const savedOrder = await newOrder.save();
