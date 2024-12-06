@@ -9,7 +9,7 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
     const [price, setPrice] = useState(0);
     const [error, setError] = useState('');
 
-    const [uniqueItemNames, setUniqueItemNames] = useState([]); 
+    const [uniqueItemNames, setUniqueItemNames] = useState([]);
     const [databasePrices, setDatabasePrices] = useState([]);
 
 
@@ -93,7 +93,6 @@ const EquipmentPopup = ({ show, handleClose, onEquipmentUpdated }) => {
                     <button className="close-button" onClick={handleClose}>&times;</button>
                 </div>
                 <form onSubmit={handleSubmit} className="edit-item-modal-form">
-
                     <div className="edit-item-modal-info">
                         <label className="edit-item-modal-label">Item Name</label>
                         <input

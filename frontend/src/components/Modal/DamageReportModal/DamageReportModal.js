@@ -202,7 +202,7 @@ const DamageReportModal = ({ show, handleClose, onReportAdded, reportToEdit }) =
                         )}
                     </div>
                     {error && <div className="damage-modal-error-message">{error}</div>}
-                    <div className="damage-modal-footer">
+                    <div className="modal-footer">
                         <button type="submit" className="damage-submit-button">Save</button>
                     </div>
                 </form >
