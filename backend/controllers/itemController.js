@@ -13,9 +13,12 @@ const createGlobalItem = asyncHandler(async (req, res) => {
         return res.status(400).json({ error: "All fields are required." });
     }
 
-    const duplicateId = await Item.findOne({ "itemIds.itemId": { $in: itemIds } });
+    const duplicateItem = await Item.findOne({
+        itemName,
+        "itemIds.itemId": { $in: itemIds },
+    });
 
-    if (duplicateId) {
+    if (duplicateItem) {
         return res.status(400).json({ error: "Item ID already exists." });
     }
     let item = await Item.findOne({ itemName });
