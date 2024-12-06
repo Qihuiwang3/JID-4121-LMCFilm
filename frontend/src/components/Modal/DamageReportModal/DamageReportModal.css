@@ -19,6 +19,12 @@
     overflow-y: auto;
     max-height: 500px;
     position: relative;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.modal-content2::-webkit-scrollbar {
+    display: none;
 }
 
 .modal-header {
@@ -57,7 +63,7 @@
     height: 22px;
     padding: 3px;
     text-align: center;
-   
+
 }
 
 .damage-modal-report {
