@@ -7,10 +7,9 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
-const CodesTable = forwardRef((props, ref) => {
+const CodesTable = forwardRef((ref) => {
     const [records, setRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [generatedCode, setGeneratedCode] = useState('');
     const [availableEquipment, setAvailableEquipment] = useState([]);
@@ -102,7 +101,6 @@ const CodesTable = forwardRef((props, ref) => {
             record.className && record.className.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredRecords(filteredRecords);
-        setSearchQuery(query);
     };
 
     const openAddModal = () => {

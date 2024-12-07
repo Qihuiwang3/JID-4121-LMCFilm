@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './CartConfirmation.css';
@@ -14,7 +14,6 @@ function CartConfirmation() {
     const navigate = useNavigate();
 
     const { unpackedCartItems, originalCartItems } = location.state || {};
-    const [equipment, setEquipment] = useState([]);
     const totalValue = useSelector(state => state.reservationCart.totalValue);
 
     const handleTermsCheckboxChange = (checked) => {
@@ -40,27 +39,15 @@ function CartConfirmation() {
         navigate('/ReservationPage', { state: { cartItems: originalCartItems } });
     };
 
-    useEffect(() => {
-        if (unpackedCartItems) {
-            console.log("unpackedCartItems: ", unpackedCartItems)
-            const equipmentItems = unpackedCartItems
-                .filter(item => !item.bundleName)
-                .sort((a, b) => a.displayName.localeCompare(b.displayName));
-            console.log("equipmentItems: ", equipmentItems)
-
-            setEquipment(equipmentItems);
-        }
-    }, [unpackedCartItems]);
-
     return (
         <div className="main-content">
             <h1 className="cart-header-text">Cart Confirmation</h1>
             <div className="cart-contents-container">
-                {equipment.length > 0 && (
+                {unpackedCartItems.length > 0 && (
                     <EquipmentDropdown
-                        id="equipment"
+                        id="unpackedCartItems"
                         title="Equipment"
-                        equipment={equipment}
+                        equipment={unpackedCartItems}
                         showReserve={false}
                     />
                 )}

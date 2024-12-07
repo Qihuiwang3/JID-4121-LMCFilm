@@ -33,7 +33,8 @@ function ReservationPage() {
     useEffect(() => {
         dispatch(setSelectedDates(pickupDateTime, returnDateTime));
         setCartItems(reservationCartItems);
-    }, [pickupDateTime, returnDateTime, dispatch]);
+    }, [pickupDateTime, returnDateTime, reservationCartItems, dispatch]);
+    
 
     const addToCart = (item) => {
 
@@ -62,7 +63,8 @@ function ReservationPage() {
     
     const removeFromCart = (item) => {
 
-        const isBundle = !!item.bundleName; // Check if it's a bundle
+        const isBundle = !!item.bundleName;
+
 
         const updatedCart = [...cartItems];
         const indexToRemove = updatedCart.findIndex(cartItem =>
@@ -106,15 +108,19 @@ function ReservationPage() {
             }
             return item;
         });
-    
+
+        const sortedUnpackedItems = unpackedItems
+            .filter(item => !item.bundleName)
+            .sort((a, b) => a.displayName.localeCompare(b.displayName));
+
         const totalValue = calculateTotal();
         dispatch(setTotalValue(totalValue)); 
     
         try {
-            const cartData = { cartItems: unpackedItems };
+            const cartData = { cartItems: sortedUnpackedItems };
             await createCartWithData(cartData);
             navigate('/CartConfirmation', {
-                state: { unpackedCartItems: unpackedItems, originalCartItems: cartItems },
+                state: { unpackedCartItems: sortedUnpackedItems, originalCartItems: cartItems },
             });
         } catch (error) {
             console.error('Error creating cart:', error);
