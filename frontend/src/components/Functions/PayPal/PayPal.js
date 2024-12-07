@@ -72,8 +72,6 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
     const createOrderAfterPayment = (cartItems, selectedDates, name, email) => {
         const generatedOrderNumber = generateOrderNumber();
 
-        console.log(cartItems);
-
         const orderData = {
             orderNumber: generatedOrderNumber,
             email: email,
@@ -106,7 +104,6 @@ function Paypal({ cartTotalCost, cartItems, selectedDates, name, email }) {
 
         return createOrder(orderData)
             .then(response => {
-                console.log('Order created successfully:', response);
                 return generatedOrderNumber;
             })
             .catch(error => {

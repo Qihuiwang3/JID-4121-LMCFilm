@@ -45,8 +45,6 @@ class StudentTable extends Component {
                 role: student.role
             }));
 
-            console.log("records: ", records)
-    
             this.setState({
                 records: records,
                 filteredRecords: records,
@@ -159,12 +157,10 @@ class StudentTable extends Component {
     handleViewClass = async (email) => {
         try {
             const classCodes = await getStudentClassCodeByEmail(email);
-            // console.log("classCodes: ", classCodes)
             
             const classInfoForUser = await Promise.all(
                 classCodes.map(async (classCode) => {
                     const classInfo = await getClassInfoByCode(classCode)
-                    console.log("classInfo: ", classInfo) 
                     return {classCode, ...classInfo}
                 })
                 

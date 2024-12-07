@@ -7,10 +7,9 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './CodesTable.css';
 import DeletePopup from "../../Modal/DeletePopupModal/DeletePopup";
 
-const CodesTable = forwardRef((props, ref) => {
+const CodesTable = forwardRef((ref) => {
     const [records, setRecords] = useState([]);
     const [filteredRecords, setFilteredRecords] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [generatedCode, setGeneratedCode] = useState('');
     const [availableEquipment, setAvailableEquipment] = useState([]);
@@ -102,7 +101,6 @@ const CodesTable = forwardRef((props, ref) => {
             record.className && record.className.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredRecords(filteredRecords);
-        setSearchQuery(query);
     };
 
     const openAddModal = () => {
@@ -152,7 +150,6 @@ const CodesTable = forwardRef((props, ref) => {
                 professor: newEntry.professor,
                 className: newEntry.className,
             });
-            console.log('Class code created:', newEntry.code);
 
             // Add single items and build the tempBundle
             const tempBundle = [];
@@ -161,7 +158,6 @@ const CodesTable = forwardRef((props, ref) => {
                     classCode: newEntry.code,
                     itemName: equipmentItem,
                 });
-                console.log('Single item created:', tempItem);
 
                 if (newClass.bundleEquipment.includes(equipmentItem)) {
                     tempBundle.push({
@@ -180,12 +176,10 @@ const CodesTable = forwardRef((props, ref) => {
                     price: newClass.price,
                     bundleName: newClass.bundleName,
                 });
-                console.log('Bundle item created:', newClass.bundleName);
             }
 
             // Reload records after all operations are complete
             await loadRecords();
-            console.log('Records reloaded');
         } catch (error) {
             console.error('Error adding new class code:', error);
         }
@@ -220,7 +214,6 @@ const CodesTable = forwardRef((props, ref) => {
 
     try {
         const bundleItems = await getBundleItemsByClassCode(classToEdit.code);
-        console.log("Fetched bundle items:", bundleItems); // Debug log
 
         // Ensure bundleItems.items is an array before mapping
         if (bundleItems.items && Array.isArray(bundleItems.items)) {
@@ -247,18 +240,11 @@ const CodesTable = forwardRef((props, ref) => {
 
     try {
         singleItems = await getSingleItemsByClassCode(classToEdit.code);
-        console.log("Fetched single items:", singleItems); // Debug log
     } catch (error) {
         console.error("Error fetching single items:", error);
     }
     setInitialEquipment(singleItems || []);
     setEditClassData({
-        ...classToEdit,
-        ...bundleInfo,
-        equipment: singleItems || [],
-    });
-
-    console.log("Updated editClassData:", {
         ...classToEdit,
         ...bundleInfo,
         equipment: singleItems || [],
@@ -281,15 +267,12 @@ const CodesTable = forwardRef((props, ref) => {
 
     const handleSaveEditedClass = async () => {
         try {
-            // Update class data
             await updateClassCode(editClassData);
     
-            // Determine which equipment items have been removed
             const removedEquipment = initialEquipment.filter(
                 initialItem => !editClassData.equipment.some(equipmentItem => equipmentItem.itemName === initialItem.itemName)
             );
     
-            // Remove deselected equipment items
             for (const removedItem of removedEquipment) {
                 const itemToRemove = initialEquipment.find(item => item.itemName === removedItem.itemName);
 
@@ -300,15 +283,11 @@ const CodesTable = forwardRef((props, ref) => {
                 }
             }
     
-            // Filter out new equipment items that were not part of the initial equipment
             const newEquipment = editClassData.equipment.filter(
                 equipmentItem => !initialEquipment.some(initialItem => initialItem.itemName === equipmentItem.itemName)
             );
     
-            // Add only unique new items
             const updatedEquipment = [...new Set([...editClassData.equipment])];
-            console.log("Items in newEquipment:", newEquipment);
-
     
             const tempBundle = [];
             for (const equipmentItem of newEquipment) {
@@ -316,7 +295,6 @@ const CodesTable = forwardRef((props, ref) => {
                     classCode: editClassData.code,
                     itemName: equipmentItem.itemName,
                 });
-                // Add new items to the bundle if they belong to `bundleEquipment`
                 if (editClassData.bundleEquipment.includes(equipmentItem.itemName)) {
                     tempBundle.push({
                         itemName: tempItem.itemName,
@@ -325,7 +303,6 @@ const CodesTable = forwardRef((props, ref) => {
                 }
             }
     
-            // Use a Set to avoid duplicate bundle items
             const bundleSet = new Set(tempBundle.map(item => item.itemName));
             for (const bundleItem of editClassData.bundleEquipment) {
                 if (!bundleSet.has(bundleItem)) {
@@ -334,7 +311,6 @@ const CodesTable = forwardRef((props, ref) => {
                 }
             }
     
-            // Create or update bundle
             if (!hasExistingBundle) {
                 if (editClassData.bundleName && editClassData.price && tempBundle.length > 0) {
                     const newBundle = await createBundleItem({

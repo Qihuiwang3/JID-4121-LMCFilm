@@ -1,7 +1,8 @@
-import { SET_RESERVATION_CART_ITEMS, CLEAR_RESERVATION_CART_ITEMS } from '../actions/reservationCartActions';
+import { SET_RESERVATION_CART_ITEMS, CLEAR_RESERVATION_CART_ITEMS, SET_TOTAL_VALUE } from '../actions/reservationCartActions';
 
 const initialState = {
     reservationCartItems: [],
+    totalValue: 0
 };
 
 const reservationCartReducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ const reservationCartReducer = (state = initialState, action) => {
             return {
                 ...state,
                 reservationCartItems: [],
+            };
+        case SET_TOTAL_VALUE:
+            return {
+                ...state,
+                totalValue: action.payload,
             };
         default:
             return state;
