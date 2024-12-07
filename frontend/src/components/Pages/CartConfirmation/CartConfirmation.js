@@ -42,7 +42,11 @@ function CartConfirmation() {
 
     useEffect(() => {
         if (unpackedCartItems) {
-            const equipmentItems = unpackedCartItems.filter(item => !item.bundleName);
+            console.log("unpackedCartItems: ", unpackedCartItems)
+            const equipmentItems = unpackedCartItems
+                .filter(item => !item.bundleName)
+                .sort((a, b) => a.displayName.localeCompare(b.displayName));
+            console.log("equipmentItems: ", equipmentItems)
 
             setEquipment(equipmentItems);
         }
