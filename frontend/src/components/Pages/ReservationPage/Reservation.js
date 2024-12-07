@@ -38,7 +38,7 @@ function ReservationPage() {
 
     const addToCart = (item) => {
 
-        const isBundle = !!item.bundleName; // Check if it's a bundle
+        const isBundle = !!item.bundleName;
     
         const existingCartItem = isBundle
             ? cartItems.find(cartItem => cartItem.bundleName === item.bundleName)
@@ -55,30 +55,40 @@ function ReservationPage() {
             return;
         }
     
-        const updatedCart = [...cartItems, { ...item, displayName: isBundle ? item.bundleName : item.name }];
+        const updatedCart = [
+            ...cartItems, 
+            { 
+                ...item, 
+                displayName: isBundle ? item.bundleName : item.name,
+                uniqueId: `${item.itemId}-${Date.now()}-${Math.random()}`
+            }
+        ];
+    
+
+        updatedCart.sort((a, b) => a.displayName.localeCompare(b.displayName));
     
         setCartItems(updatedCart);
-        dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
+        dispatch(setReservationCartItems(updatedCart));
     };
     
     const removeFromCart = (item) => {
 
         const isBundle = !!item.bundleName;
 
-
         const updatedCart = [...cartItems];
+
         const indexToRemove = updatedCart.findIndex(cartItem =>
             isBundle
                 ? cartItem.bundleName === item.bundleName
                 : cartItem.name === item.name
         );
-
         if (indexToRemove !== -1) {
-            updatedCart.splice(indexToRemove, 1); // Remove the item at the found index
+            updatedCart.splice(indexToRemove, 1); 
         }
 
+        updatedCart.sort((a, b) => a.displayName.localeCompare(b.displayName));
         setCartItems(updatedCart);
-        dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
+        dispatch(setReservationCartItems(updatedCart));
     };
     
     
@@ -94,8 +104,8 @@ function ReservationPage() {
                 total += item.price;
             });
         }
-
         return total.toFixed(2);
+        
     };
 
     const handleCheckout = async () => {
@@ -207,21 +217,22 @@ function ReservationPage() {
                 <div className="cart-container">
                     <h1 style={{ paddingLeft: "20px", color: "#3361AE" }}>Cart</h1>
                     <div className="all-cart-items">
-                        {cartItems.map(id => (
-                            <div key={id.itemId || id.bundleId}>
+                        {cartItems.map(item => (
+                            <div key={item.uniqueId}>
                                 <div className="cart-item">
                                     <div>
                                         <div className="cart-first-row">
-                                            <div>{id.displayName}</div>
-                                            <div> ${id.price}</div>
+                                            <div>{item.displayName}</div>
+                                            <div>${item.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div className="remove-equipment-item" onClick={() => removeFromCart(id)}>Remove</div>
+                                            <div className="remove-equipment-item" onClick={() => removeFromCart(item)}>Remove</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
+
                     </div>
                     <div style={{ textAlign: "right", paddingRight: "20px" }}>Total: ${calculateTotal()}</div>
                 </div>
