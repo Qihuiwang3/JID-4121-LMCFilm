@@ -4,7 +4,6 @@ import "./StatusModal.css";
 
 const formatDate = (dateTime) => {
     if (!dateTime) return "N/A";
-    console.log(dateTime);
     const date = new Date(dateTime);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");

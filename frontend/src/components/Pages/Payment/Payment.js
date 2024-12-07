@@ -8,10 +8,11 @@ import { sendEmail } from '../../../connector.js';
 import JsBarcode from 'jsbarcode';
 
 
-function Payment({ cartItems, selectedDates, name, email }) {
+function Payment({ selectedDates, name, email }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { cartTotal } = location.state || {};
+    const { cartTotal, unpackedCartItems } = location.state || {};
+
     const orderCreated = useRef(false);
 
     const generateOrderNumber = () => {
@@ -68,7 +69,7 @@ function Payment({ cartItems, selectedDates, name, email }) {
         }
     };
 
-    const createOrderAfterPayment = (cartItems, selectedDates, name, email) => {
+    const createOrderAfterPayment = (equipment, selectedDates, name, email) => {
         const generatedOrderNumber = generateOrderNumber();
 
         const orderData = {
@@ -82,8 +83,8 @@ function Payment({ cartItems, selectedDates, name, email }) {
             checkedoutStatus: false,
             studentName: name,
             createdAt: new Date(),
-            equipment: cartItems.map(item => ({
-                itemName: item.name, 
+            equipment: equipment.map(item => ({
+                itemName: item.displayName, 
                 itemId: '' 
             })),
         };
@@ -99,14 +100,19 @@ function Payment({ cartItems, selectedDates, name, email }) {
             });
     };
 
+    
     useEffect(() => {
-        if (Number(cartTotal) === 0 && !orderCreated.current) {
-            // set the flag to prevent duplicate orders
-            orderCreated.current = true; 
-            createOrderAfterPayment(cartItems, selectedDates, name, email);
-        }
-    }, [cartTotal, cartItems, selectedDates, name, email, navigate]);
+        if (unpackedCartItems) {
+            // Separate unpacked items into equipment and packages
+            const equipmentItems = unpackedCartItems.filter(item => !item.bundleName);
+            if (Number(cartTotal) === 0 && !orderCreated.current) {
+                // set the flag to prevent duplicate orders
+                orderCreated.current = true; 
+                createOrderAfterPayment(equipmentItems, selectedDates, name, email);
+            }
 
+        }
+    }, [unpackedCartItems]);
 
     return (
         <div className="paymentBody">
@@ -118,7 +124,6 @@ function Payment({ cartItems, selectedDates, name, email }) {
 }
 
 const mapStateToProps = (state) => ({
-    cartItems: state.reservationCart.reservationCartItems,
     selectedDates: state.classData.selectedDates,
     email: state.studentData.email,
     name: state.studentData.name,

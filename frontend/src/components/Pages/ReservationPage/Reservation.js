@@ -29,10 +29,6 @@ function ReservationPage() {
     const [bundles, setBundles] = useState([]);
     const [cartItems, setCartItems] = useState([]);
 
-    const [unpackedCartItems, setUnpackedCartItems] = useState([]);
-
-
-
 
     useEffect(() => {
         dispatch(setSelectedDates(pickupDateTime, returnDateTime));
@@ -41,16 +37,12 @@ function ReservationPage() {
 
     const addToCart = (item) => {
 
-        console.log("item: ", item);
-    
         const isBundle = !!item.bundleName; // Check if it's a bundle
     
-        // Determine if the item or bundle already exists in the cart
         const existingCartItem = isBundle
             ? cartItems.find(cartItem => cartItem.bundleName === item.bundleName)
             : cartItems.find(cartItem => cartItem.name === item.name);
     
-        // Calculate the quantity of the item currently in the cart
         const currentQuantity = cartItems.filter(cartItem =>
             isBundle
                 ? cartItem.bundleName === item.bundleName
@@ -58,24 +50,20 @@ function ReservationPage() {
         ).length;
     
         if (existingCartItem && currentQuantity >= item.quantity) {
-            // Item quantity limit reached
             console.warn(`Cannot add more of ${item.name}. Maximum quantity reached.`);
             return;
         }
     
         const updatedCart = [...cartItems, { ...item, displayName: isBundle ? item.bundleName : item.name }];
-        console.log("updatedCart: ", updatedCart);
     
         setCartItems(updatedCart);
         dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
     };
     
     const removeFromCart = (item) => {
-        console.log("Removing item: ", item);
 
         const isBundle = !!item.bundleName; // Check if it's a bundle
 
-        // Remove only the first matching item or bundle
         const updatedCart = [...cartItems];
         const indexToRemove = updatedCart.findIndex(cartItem =>
             isBundle
@@ -87,13 +75,8 @@ function ReservationPage() {
             updatedCart.splice(indexToRemove, 1); // Remove the item at the found index
         }
 
-        console.log("Updated cart after removal: ", updatedCart);
-    
         setCartItems(updatedCart);
         dispatch(setReservationCartItems(updatedCart)); // Sync with Redux
-
-        
-
     };
     
     
@@ -124,10 +107,6 @@ function ReservationPage() {
             return item;
         });
     
-        console.log("Unpacked cart items: ", unpackedItems);
-    
-        setUnpackedCartItems(unpackedItems);
-    
         const totalValue = calculateTotal();
         dispatch(setTotalValue(totalValue)); 
     
@@ -152,7 +131,6 @@ function ReservationPage() {
         const fetchData = async () => {
             if (classCode) {
                 try {
-                    // Fetch single items
                     const singleItems = await getSingleItemsByClassCode(classCode);
                     const promises = singleItems.map(async (singleItem) => {
                         const itemDetails = await getItemByName(singleItem.itemName); // Updated
@@ -166,10 +144,7 @@ function ReservationPage() {
                     const equipmentWithPricesQuantity = await Promise.all(promises);
                     setEquipment(equipmentWithPricesQuantity);
 
-                    // Fetch bundles
                     const bundleItems = await getBundleItemsByClassCode(classCode);
-                    // console.log("bundleItems: ", bundleItems)
-                    // console.log("bundleItems.items: ", bundleItems.items)
                     
                     setBundles(bundleItems);
 
@@ -181,10 +156,6 @@ function ReservationPage() {
 
         fetchData();
     }, [classCode]);
-
-    // console.log("bundles: ", bundles)
-    // console.log("bundles.length > 0 : ", bundles.length > 0 )
-
 
     return (
         <div className="main-content">

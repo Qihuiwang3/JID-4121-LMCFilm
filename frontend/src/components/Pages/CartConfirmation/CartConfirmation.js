@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './CartConfirmation.css';
@@ -9,12 +8,9 @@ import TermsModal from '../../Modal/Terms/TermsModal';
 
 
 function CartConfirmation() {
-    const [isTermsChecked, setIsTermsChecked] = useState(false); // Single source of truth
+    const [isTermsChecked, setIsTermsChecked] = useState(false); 
     const [showTermsModal, setShowTermsModal] = useState(false);
     const location = useLocation();
-    // const reduxStudentInfo = useSelector(state => state.studentData);
-    // const studentInfo = location.state?.studentInfo || reduxStudentInfo;
-
     const navigate = useNavigate();
 
     const { unpackedCartItems, originalCartItems } = location.state || {};
@@ -22,7 +18,7 @@ function CartConfirmation() {
     const totalValue = useSelector(state => state.reservationCart.totalValue);
 
     const handleTermsCheckboxChange = (checked) => {
-        setIsTermsChecked(checked); // Update the main checkbox state
+        setIsTermsChecked(checked);
     };
 
     const openTermsModal = () => {
@@ -34,25 +30,19 @@ function CartConfirmation() {
     };
 
     const handleContinue = () => {
-        // if (studentInfo.role === 'Admin' || studentInfo.role === 'Professor') {
-        //     total = 0;
-        // }
         if (isTermsChecked) {
             const cartTotal = totalValue;
-            navigate('/Payment', { state: { cartTotal } });
+            navigate('/Payment', { state: { cartTotal, unpackedCartItems } });
         }
     };
 
     const handleBack = () => {
-        // Navigate back to the ReservationPage with the original cart
         navigate('/ReservationPage', { state: { cartItems: originalCartItems } });
     };
 
     useEffect(() => {
         if (unpackedCartItems) {
-            // Separate unpacked items into equipment and packages
             const equipmentItems = unpackedCartItems.filter(item => !item.bundleName);
-            console.log("equipmentItems: ", equipmentItems)
 
             setEquipment(equipmentItems);
         }
