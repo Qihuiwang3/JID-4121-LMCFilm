@@ -16,3 +16,10 @@ export const clearReservationCartItems = () => {
         type: CLEAR_RESERVATION_CART_ITEMS,
     };
 };
+
+export const SET_TOTAL_VALUE = 'SET_TOTAL_VALUE';
+
+export const setTotalValue = (totalValue) => ({
+    type: SET_TOTAL_VALUE,
+    payload: totalValue,
+});

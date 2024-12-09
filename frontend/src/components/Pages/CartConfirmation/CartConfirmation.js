@@ -1,31 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './CartConfirmation.css';
 import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdown';
-import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown';
 import Button from '../../Button/Button';
-import { setReservationCartItems } from '../../redux/actions/reservationCartActions';
 import TermsModal from '../../Modal/Terms/TermsModal';
 
+
 function CartConfirmation() {
+    const [isTermsChecked, setIsTermsChecked] = useState(false); 
+    const [showTermsModal, setShowTermsModal] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
-    const reduxStudentInfo = useSelector(state => state.studentData);
-    const studentInfo = location.state?.studentInfo || reduxStudentInfo;
-
-    const dispatch = useDispatch();
-
-    const [equipment, setEquipment] = useState([]);
-    const [packages, setPackages] = useState([]);
-    const [isTermsChecked, setIsTermsChecked] = useState(false); // Single source of truth
-    const [showTermsModal, setShowTermsModal] = useState(false);
-
-    const cartItems = useSelector(state => state.reservationCart.reservationCartItems);
+    const { unpackedCartItems, originalCartItems } = location.state || {};
+    const totalValue = useSelector(state => state.reservationCart.totalValue);
 
     const handleTermsCheckboxChange = (checked) => {
-        setIsTermsChecked(checked); // Update the main checkbox state
+        setIsTermsChecked(checked);
     };
 
     const openTermsModal = () => {
@@ -38,92 +30,57 @@ function CartConfirmation() {
 
     const handleContinue = () => {
         if (isTermsChecked) {
-            const cartTotal = calculateTotal();
-            navigate('/Payment', { state: { cartTotal } });
+            const cartTotal = totalValue;
+            navigate('/Payment', { state: { cartTotal, unpackedCartItems } });
         }
     };
 
     const handleBack = () => {
-        navigate('/ReservationPage');
-        dispatch(setReservationCartItems(cartItems));
+        navigate('/ReservationPage', { state: { cartItems: originalCartItems } });
     };
-
-    const calculateTotal = () => {
-        let total = 0;
-        if (studentInfo.role === 'Admin' || studentInfo.role === 'Professor') {
-            total = 0;
-        } else {
-            cartItems.forEach(item => {
-                total += item.price;
-            });
-        }
-        return total.toFixed(2);
-    };
-
-    const filterCartContent = () => {
-        if (cartItems && cartItems.length > 0) {
-            setEquipment(cartItems.filter(item => item.itemId));
-            setPackages(cartItems.filter(item => item.bundleId));
-        }
-    };
-
-    useEffect(() => {
-        if (cartItems) {
-            filterCartContent();
-        }
-    }, [cartItems]);
 
     return (
-        <>
-            <div className="main-content">
-                <h1 className="cart-header-text">Cart</h1>
-                <div className="cart-contents-container">
-                    {equipment && equipment.length > 0 && (
-                        <EquipmentDropdown
-                            id="equipment"
-                            title="Selected Equipment"
-                            equipment={equipment}
-                            showReserve={false}
-                            showQuantity={false}
-                        />
-                    )}
-                    {packages && packages.length > 0 && (
-                        <PackageDropdown
-                            id="packages"
-                            title="Selected Packages"
-                            pk={packages}
-                            showReserve={false}
-                            showQuantity={false}
-                        />
-                    )}
-                    <div className="cart-total">Total: ${calculateTotal()}</div>
-                    <div className="terms-container">
-                        <input
-                            id="termsCheckbox"
-                            type="checkbox"
-                            checked={isTermsChecked}
-                            onChange={(e) => handleTermsCheckboxChange(e.target.checked)}
-                        />
-                        <span>
-                            I have read and agree to the&nbsp;
-                            <span className="terms-link" onClick={openTermsModal}>
-                                Rental Terms and Conditions
-                            </span>
+        <div className="main-content">
+            <h1 className="cart-header-text">Cart Confirmation</h1>
+            <div className="cart-contents-container">
+                {unpackedCartItems.length > 0 && (
+                    <EquipmentDropdown
+                        id="unpackedCartItems"
+                        title="Equipment"
+                        equipment={unpackedCartItems}
+                        showReserve={false}
+                    />
+                )}
+                {totalValue && (
+                    <div className="cart-total">Total: ${totalValue}</div>
+                )}
+
+                <div className="terms-container">
+                    <input
+                        id="termsCheckbox"
+                        type="checkbox"
+                        checked={isTermsChecked}
+                        onChange={(e) => handleTermsCheckboxChange(e.target.checked)}
+                    />
+                    <span>
+                        I have read and agree to the&nbsp;
+                        <span className="terms-link" onClick={openTermsModal}>
+                            Rental Terms and Conditions
                         </span>
-                    </div>
+                    </span>
                 </div>
-                <div className="btnContainer">
-                    <Button type="back" onClick={handleBack}>
-                        Back
-                    </Button>
-                    <Button
+            </div>
+            <div className="btnContainer">
+                <Button type="back" onClick={handleBack}>
+                    Back
+                </Button>
+                <Button
                         type="next"
                         onClick={handleContinue}
                         disabled={!isTermsChecked} // Disable button when unchecked
                     >
                         Continue
-                    </Button>
-                </div>
+                </Button>
             </div>
             <TermsModal
                 show={showTermsModal}
@@ -131,7 +88,7 @@ function CartConfirmation() {
                 isModalChecked={isTermsChecked} // Pass the state to the modal
                 onCheckboxChange={handleTermsCheckboxChange} // Sync modal checkbox with main checkbox
             />
-        </>
+        </div>
     );
 }
 

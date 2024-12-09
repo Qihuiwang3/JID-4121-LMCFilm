@@ -4,7 +4,7 @@ import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import PackageEquipmentDropdown from '../PackageEquipmentDropdown/PackageEquipmentDropdown.js';
 import './PackageDropdown.css';
 
-function PackageDropdown({ id, title, pk, addItem, showReserve, showQuantity }) {
+function PackageDropdown({ id, title, bundle, addItem, showReserve, showQuantity }) {
     const [isOpen, setIsOpen] = useState(true);
 
     const toggleDropdown = () => {
@@ -24,24 +24,21 @@ function PackageDropdown({ id, title, pk, addItem, showReserve, showQuantity }) 
 
             {isOpen && (
                 <div className="package-dropdown-content">
-                    {pk.map((option, index) => (
-                        <div className="package-dropdown-item" key={index}>
-                            <PackageEquipmentDropdown
-                                id="i"
-                                title={(index + 1) + ". " + option.name + " | $" + option.price}
-                                equipment={option.equipments.map(equipment => ({
-                                    name: equipment.itemName,
-                                    itemID: equipment.itemId,
-                                    quantity: equipment.quantity
-                                }))}
-                                showQuantity={showQuantity}
-                                addItem={addItem}
-                                showReserve={showReserve}
-                                fullpk={option}
-                            />
-
-                        </div>
-                    ))}
+                    <div className="package-dropdown-item">
+                        <PackageEquipmentDropdown
+                            id="bundle"
+                            title={`${bundle.bundleName} | $${bundle.price}`}
+                            equipment={bundle.items.map(equipment => ({
+                                name: equipment.itemName,
+                                quantity: equipment.quantity,
+                                itemID: equipment._id,
+                            }))}
+                            showQuantity={showQuantity}
+                            addItem={addItem}
+                            showReserve={showReserve}
+                            fullpk={bundle}
+                        />
+                    </div>
                 </div>
             )}
         </div>

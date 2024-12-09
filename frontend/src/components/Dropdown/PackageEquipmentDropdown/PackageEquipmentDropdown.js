@@ -18,7 +18,12 @@ function PackageEquipmentDropdown({ id, title, equipment, showQuantity, showRese
                         <button className="package-expand-button" onClick={toggleDropdown}> View Contents </button>
                         {showReserve && (
                             <div className="general-reserve-button">
-                                <button className="package-reserve-button" onClick={() => addItem(fullpk)}> Reserve </button>
+                                <button 
+                                    className="package-reserve-button" 
+                                    onClick={() => addItem(fullpk)}
+                                > 
+                                    Reserve 
+                                </button>
                             </div>
                         )}
                     </div>
@@ -33,7 +38,7 @@ function PackageEquipmentDropdown({ id, title, equipment, showQuantity, showRese
                 <div className="equipment-dropdown-content">
                     {equipment.map((option, index) => (
                         <div className="package-equipment-dropdown-item" key={index}>
-                            {index + 1}. {option.itemID} | {option.name} {showQuantity && ` | Quantity: ${option.quantity}`}
+                            {index + 1}. {option.name} {showQuantity && ` | Quantity: ${option.quantity}`}
                         </div>
                     ))}
                 </div>

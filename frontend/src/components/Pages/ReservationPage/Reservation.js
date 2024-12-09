@@ -4,12 +4,12 @@ import EquipmentDropdown from '../../Dropdown/EquipmentDropdown/EquipmentDropdow
 import PackageDropdown from '../../Dropdown/PackageDropdown/PackageDropdown.js';
 import './Reservation.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { setSelectedDates, setClassCode } from '../../redux/actions/classActions';
-import { setReservationCartItems } from '../../redux/actions/reservationCartActions.js';
+import { setReservationCartItems, setTotalValue } from '../../redux/actions/reservationCartActions.js';
 import { createCartWithData, getSingleItemsByClassCode, getBundleItemsByClassCode, getItemByName } from '../../../connector.js';
 import Button from '../../Button/Button.js';
+
 
 function ReservationPage() {
     const navigate = useNavigate();
@@ -33,25 +33,65 @@ function ReservationPage() {
     useEffect(() => {
         dispatch(setSelectedDates(pickupDateTime, returnDateTime));
         setCartItems(reservationCartItems);
-    }, [pickupDateTime, returnDateTime, dispatch]);
+    }, [pickupDateTime, returnDateTime, reservationCartItems, dispatch]);
+    
 
     const addToCart = (item) => {
-        const cartItem = cartItems.find(cartItem => cartItem.name === item.name);
-        const itemQuantityInCart = cartItem ? cartItems.filter(cartItem => cartItem.name === item.name).length : 0;
-    
-        if (itemQuantityInCart >= item.quantity) {
 
-        
+        const isBundle = !!item.bundleName;
+    
+        const existingCartItem = isBundle
+            ? cartItems.find(cartItem => cartItem.bundleName === item.bundleName)
+            : cartItems.find(cartItem => cartItem.name === item.name);
+    
+        const currentQuantity = cartItems.filter(cartItem =>
+            isBundle
+                ? cartItem.bundleName === item.bundleName
+                : cartItem.name === item.name
+        ).length;
+    
+        if (existingCartItem && currentQuantity >= item.quantity) {
+            console.warn(`Cannot add more of ${item.name}. Maximum quantity reached.`);
+            return;
         }
     
-        if (!cartItems.includes(item)) {
-            if (itemQuantityInCart < item.quantity) {
-                setCartItems([...cartItems, item]);  
+        const updatedCart = [
+            ...cartItems, 
+            { 
+                ...item, 
+                displayName: isBundle ? item.bundleName : item.name,
+                uniqueId: `${item.itemId}-${Date.now()}-${Math.random()}`
             }
-        } else {
-            setCartItems(cartItems.filter(cartItems => cartItems !== item));
-        }
+        ];
+    
+
+        updatedCart.sort((a, b) => a.displayName.localeCompare(b.displayName));
+    
+        setCartItems(updatedCart);
+        dispatch(setReservationCartItems(updatedCart));
     };
+    
+    const removeFromCart = (item) => {
+
+        const isBundle = !!item.bundleName;
+
+        const updatedCart = [...cartItems];
+
+        const indexToRemove = updatedCart.findIndex(cartItem =>
+            isBundle
+                ? cartItem.bundleName === item.bundleName
+                : cartItem.name === item.name
+        );
+        if (indexToRemove !== -1) {
+            updatedCart.splice(indexToRemove, 1); 
+        }
+
+        updatedCart.sort((a, b) => a.displayName.localeCompare(b.displayName));
+        setCartItems(updatedCart);
+        dispatch(setReservationCartItems(updatedCart));
+    };
+    
+    
     
 
     const calculateTotal = () => {
@@ -64,20 +104,39 @@ function ReservationPage() {
                 total += item.price;
             });
         }
-
         return total.toFixed(2);
+        
     };
 
     const handleCheckout = async () => {
-        const cartData = { cartItems };
-        dispatch(setReservationCartItems(cartItems));
+        const unpackedItems = cartItems.flatMap(item => {
+            if (item.bundleName && item.items) {
+                return item.items.map(bundleItem => ({
+                    ...bundleItem,
+                    displayName: bundleItem.itemName,
+                }));
+            }
+            return item;
+        });
+
+        const sortedUnpackedItems = unpackedItems
+            .filter(item => !item.bundleName)
+            .sort((a, b) => a.displayName.localeCompare(b.displayName));
+
+        const totalValue = calculateTotal();
+        dispatch(setTotalValue(totalValue)); 
+    
         try {
-            const response = await createCartWithData(cartData);
-            navigate('/CartConfirmation', { state: { cartItems } });
+            const cartData = { cartItems: sortedUnpackedItems };
+            await createCartWithData(cartData);
+            navigate('/CartConfirmation', {
+                state: { unpackedCartItems: sortedUnpackedItems, originalCartItems: cartItems },
+            });
         } catch (error) {
             console.error('Error creating cart:', error);
         }
     };
+    
 
     const handleBack = () => {
         dispatch(setClassCode(classCode));
@@ -88,7 +147,6 @@ function ReservationPage() {
         const fetchData = async () => {
             if (classCode) {
                 try {
-                    // Fetch single items
                     const singleItems = await getSingleItemsByClassCode(classCode);
                     const promises = singleItems.map(async (singleItem) => {
                         const itemDetails = await getItemByName(singleItem.itemName); // Updated
@@ -102,8 +160,8 @@ function ReservationPage() {
                     const equipmentWithPricesQuantity = await Promise.all(promises);
                     setEquipment(equipmentWithPricesQuantity);
 
-                    // Fetch bundles
                     const bundleItems = await getBundleItemsByClassCode(classCode);
+                    
                     setBundles(bundleItems);
 
                 } catch (error) {
@@ -144,20 +202,14 @@ function ReservationPage() {
                             addItem={addToCart}
                         />
                     )}
-
-                    {bundles && bundles.length > 0 && (
+                    {bundles && bundles.items && (
                         <PackageDropdown
                             id="packages"
-                            title="Available Packages"
-                            pk={bundles.map(bundle => ({
-                                name: bundle.bundleName,
-                                price: bundle.price,
-                                equipments: bundle.items,
-                                bundleId: bundle._id
-                            }))}
+                            title="Available Package"
+                            bundle={bundles} 
+                            addItem={addToCart}
                             showReserve={true}
                             showQuantity={false}
-                            addItem={addToCart}
                         />
                     )}
                 </div>
@@ -165,21 +217,22 @@ function ReservationPage() {
                 <div className="cart-container">
                     <h1 style={{ paddingLeft: "20px", color: "#3361AE" }}>Cart</h1>
                     <div className="all-cart-items">
-                        {cartItems.map(id => (
-                            <div key={id.itemId || id.bundleId}>
+                        {cartItems.map(item => (
+                            <div key={item.uniqueId}>
                                 <div className="cart-item">
                                     <div>
                                         <div className="cart-first-row">
-                                            <div>{id.name}</div>
-                                            <div> ${id.price}</div>
+                                            <div>{item.displayName}</div>
+                                            <div>${item.price}</div>
                                         </div>
                                         <div className="cart-second-row">
-                                            <div className="remove-equipment-item" onClick={() => addToCart(id)}>Remove</div>
+                                            <div className="remove-equipment-item" onClick={() => removeFromCart(item)}>Remove</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
+
                     </div>
                     <div style={{ textAlign: "right", paddingRight: "20px" }}>Total: ${calculateTotal()}</div>
                 </div>

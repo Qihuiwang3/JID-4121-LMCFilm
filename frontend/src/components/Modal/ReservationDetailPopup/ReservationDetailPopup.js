@@ -14,7 +14,6 @@ const formatDate = (dateString) => {
 
 const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled, onOrderExtended, showButtons }) => {
     const [canCancelOrder, setCanCancelOrder] = useState(false);
-    const [cantExtendOrder, setCantExtendOrder] = useState(false);
     const [viewCancelID, setViewCancel] = useState(null);
     const [viewExtendID, setViewExtend] = useState(null);
     const [viewExtendIDDate, setViewExtendDate] = useState(null);
@@ -32,12 +31,10 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
         const canCancel = timeDifferenceToCheckin > 24 * 60 * 60 * 1000;
 
         setCanCancelOrder(!hasCheckoutDatePassed && canCancel);
-        setCantExtendOrder(hasCheckoutDatePassed || reservationDetails.beenExtended);
-
 
         setShowCancelButton(reservationDetails.checkedin == null && reservationDetails.checkedout == null);
         setShowExtendButton(reservationDetails.checkedin == null && reservationDetails.checkedout != null);
-    }, [reservationDetails.checkout, reservationDetails.checkin, reservationDetails.beenExtended]);
+    }, [reservationDetails.checkout, reservationDetails.checkin, reservationDetails.checkedin, reservationDetails.checkedout]);
 
     const handleViewCancel = (orderNumber) => {
         setViewCancel(orderNumber);
@@ -106,15 +103,14 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                         <input type="text" className="view-input-field" defaultValue={item.itemName} readOnly />
                                     </div>
                                     <div className="view-equipment-group">
-                                    <label className="view-equipment-label">Item ID</label>
-                                    <input
-                                        type="text"
-                                        className="view-input-field"
-                                        defaultValue={!reservationDetails.checkedout ? " " : item.itemId}
-                                        readOnly
-                                    />
-                                </div>
-
+                                        <label className="view-equipment-label">Item ID</label>
+                                        <input
+                                            type="text"
+                                            className="view-input-field"
+                                            defaultValue={!reservationDetails.checkedout ? " " : item.itemId}
+                                            readOnly
+                                        />
+                                    </div>
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Date Checked-out</label>
                                         <input
@@ -137,15 +133,14 @@ const ReservationDetailPopup = ({ onClose, reservationDetails, onOrderCancelled,
                                         <input type="text" className="view-input-field" defaultValue={item.itemName} readOnly />
                                     </div>
                                     <div className="view-equipment-group">
-                            <label className="view-equipment-label">Item ID</label>
-                                <input
-                                type="text"
-                                className="view-input-field"
-                                defaultValue={!reservationDetails.checkedin ? " " : item.itemId}
-                                readOnly
-                            />
-                        </div>
-
+                                        <label className="view-equipment-label">Item ID</label>
+                                        <input
+                                            type="text"
+                                            className="view-input-field"
+                                            defaultValue={!reservationDetails.checkedin ? " " : item.itemId}
+                                            readOnly
+                                        />
+                                    </div>
                                     <div className="view-equipment-group">
                                         <label className="view-equipment-label">Date Checked-in</label>
                                         <input
